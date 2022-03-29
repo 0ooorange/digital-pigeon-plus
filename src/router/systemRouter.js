@@ -15,6 +15,13 @@ const routes = [
 		meta: {
 			title: "登录"
 		}
+	},
+	{
+		path: "/navigator",
+		component: () => import(/* webpackChunkName: "login" */ '@/views/navigator/navigator'),
+		meta: {
+			title: "环形目录"
+		}
 	}
 ]
 

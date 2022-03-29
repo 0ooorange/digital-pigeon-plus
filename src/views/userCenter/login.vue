@@ -197,7 +197,7 @@
 				}
 
 				this.$router.replace({
-					path: '/'
+					path: '/navigator'
 				})
 				this.$message.success("Login Success 登录成功")
 				this.islogin = false
