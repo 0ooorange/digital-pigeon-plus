@@ -72,11 +72,11 @@
 					</el-form-item>
 				</el-form>
 
-				<el-divider>{{ $t('login.signInOther') }}</el-divider>
+				<!-- <el-divider>{{ $t('login.signInOther') }}</el-divider> -->
 
-				<div class="login-oauth">
+				<!-- <div class="login-oauth">
 					<el-button size="small" type="success" icon="sc-icon-wechat" circle></el-button>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</div>

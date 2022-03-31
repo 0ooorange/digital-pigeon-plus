@@ -3,7 +3,8 @@ const DEFAULT_CONFIG = {
 	APP_NAME: "SCUI",
 
 	//首页地址
-	DASHBOARD_URL: "/dashboard",
+	// DASHBOARD_URL: "/dashboard",
+	DASHBOARD_URL: "/breedingSystem/breedingStatistics",
 
 	//版本号
 	APP_VER: "1.5.0",
