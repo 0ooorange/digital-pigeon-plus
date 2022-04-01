@@ -1,85 +1,85 @@
 <template>
-  <div>
+  <div class="app">
     <circle-menu :menus="menus"></circle-menu>
   </div>
 </template>
 
 <script>
-  import circleMenu from '@/components/circleMenu/circleMenu.vue';
-  export default {
-    name: "navigator",
-    components: {
-      circleMenu
-    },
-    data() {
-      return {
-        menus: [
+import CircleMenu from '@/components/circleMenu/CircleMenu.vue';
+export default {
+  name: "navigator",
+  components: {
+    CircleMenu
+  },
+  data () {
+    return {
+      menus: [
         {
-          title: '物流管理',
-          iconName: 'icon-a-ziyuan54',
-          path: '/dashboard'
+          name: "养殖系统",
+          path: "/123",
+          iconClass: 'devo'
         },
         {
-          title: 'AI平台',
-          iconName: 'icon-a-ziyuan59',
-          path: '/dashboard'
+          name: "屠宰系统",
+          path: "/123",
         },
         {
-          title: '进销存管理',
-          iconName: 'icon-a-ziyuan61',
-          path: '/dashboard'
+          name: "加工销售",
+          path: "/123",
         },
         {
-          title: '溯源系统',
-          iconName: 'icon-a-ziyuan63',
-          path: '/dashboard'
+          name: "种鸽质量检测",
+          path: "/123",
         },
         {
-          title: '种鸽质量检测',
-          iconName: 'icon-a-ziyuan68',
-          path: '/dashboard'
+          name: "溯源系统",
+          path: "/123",
         },
         {
-          title: '加工销售',
-          iconName: 'icon-a-ziyuan69',
-          path: '/dashboard'
+          name: "进销存管理",
+          path: "/123",
         },
         {
-          title: '屠宰系统',
-          iconName: 'icon-a-ziyuan54',
-          path: '/dashboard'
+          name: "AI平台",
+          path: "/123",
         },
         {
-          title: '养殖系统',
-          iconName: 'icon-a-ziyuan59',
-          path: '/dashboard'
+          name: "物流管理",
+          path: "/123",
         },
         {
-          title: '可视化界面',
-          iconName: 'icon-a-ziyuan61',
-          path: '/dashboard'
+          name: "电商平台",
+          path: "/123",
         },
         {
-          title: '视频监控中心',
-          iconName: 'icon-a-ziyuan63',
-          path: '/dashboard'
+          name: "基础信息管理",
+          path: "/123",
         },
         {
-          title: '基础信息管理',
-          iconName: 'icon-a-ziyuan68',
-          path: '/dashboard'
+          name: "视频监控中心",
+          path: "/123",
         },
         {
-          title: '电商平台',
-          iconName: 'icon-a-ziyuan69',
-          path: '/dashboard'
+          name: "可视化界面",
+          path: "/123",
         },
-      ]
-      }
-    },
-  }
+
+      ],
+    }
+  },
+}
 </script>
 
-<style lang="sass" scoped>
-
+<style  scoped>
+.app {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: url(https://img.qkeep.cn/imgs/pigeon-Pro-nav.png) no-repeat center;
+  background-size: cover;
+  opacity: 0.8;
+}
 </style>
