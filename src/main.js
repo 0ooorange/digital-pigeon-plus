@@ -18,3 +18,5 @@ app.use(scui);
 
 //挂载app
 app.mount('#app');
+
+
