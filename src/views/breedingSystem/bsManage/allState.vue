@@ -213,7 +213,7 @@ export default {
     name: "allStateManage",
     data() {
         return {
-            dialogTableVisible: true,
+            dialogTableVisible: false,
             dialogTitle: "",
             currentStatus: 0,
             methodsArray: ["产蛋", "查蛋", "查仔", "仔异常", "出栏", "回蛋"],
@@ -305,9 +305,9 @@ export default {
             //  flex-wrap: wrap;
             .cage_index {
                 flex-shrink: 0; //使它不被挤压
-                width: 30px;
-                height: 30px;
-                margin-right: 8px;
+                width: 44px;
+                height: 36px;
+                // margin-right: px;
                 margin-bottom: 10px;
                 text-align: center;
                 font-weight: 700;
