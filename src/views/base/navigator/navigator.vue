@@ -1,19 +1,19 @@
 <template>
-  <div>
+  <div class="app">
     <circle-menu :menus="menus"></circle-menu>
   </div>
 </template>
 
 <script>
-  import circleMenu from '@/components/circleMenu/circleMenu.vue';
-  export default {
-    name: "navigator",
-    components: {
-      circleMenu
-    },
-    data() {
-      return {
-        menus: [
+import CircleMenu from '@/components/circleMenu/circleMenu.vue';
+export default {
+  name: "navigator",
+  components: {
+    CircleMenu
+  },
+  data () {
+    return {
+      menus: [
         {
           title: '物流管理',
           iconName: 'icon-a-ziyuan54',
@@ -74,12 +74,23 @@
           iconName: 'icon-a-ziyuan69',
           path: '/breedingSystem/breedingStatistics'
         },
-      ]
-      }
-    },
-  }
+
+      ],
+    }
+  },
+}
 </script>
 
-<style lang="sass" scoped>
-
+<style  scoped>
+.app {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: url(https://img.qkeep.cn/imgs/pigeon-Pro-nav.png) no-repeat center;
+  background-size: cover;
+  opacity: 0.8;
+}
 </style>

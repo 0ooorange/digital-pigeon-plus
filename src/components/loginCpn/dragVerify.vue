@@ -42,6 +42,7 @@ export default {
     },
     // 鼠标按下事件的方法实现
     mousedownHandler(e) {
+      this.ismoving = true
       this.bgColor.style.transition = ''
       this.slider.style.transition = ''
       var e1 = e || window.event || e.which
@@ -78,6 +79,9 @@ export default {
         this.success()
         return
       }
+      if (!this.ismoving) {
+        return
+      }
       console.log('我是鼠标移动事件，我被调用了')
       var e1 = e || window.event || e.which
       var moveX = e1.clientX
@@ -106,9 +110,13 @@ export default {
         this.bgColor.style.transition = 'width 0.8s linear'
         this.slider.style.transition = 'left 0.8s linear'
       }
+      this.ismoving = false
       document.onmousemove = null
       document.onmouseup = null
       console.log('我是鼠标松开事件，我被调用了')
+      document.removeEventListener('mousemove', function () {
+        console.log('我是鼠标移动事件，我被取消了')
+      })
     },
     // 定义一个滑块解锁成功的方法
     success() {

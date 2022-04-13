@@ -21,7 +21,7 @@
           </span>
         </div>
         <span class="secretVerify" style="display: none;">密码错误</span>
-        <drag-verify></drag-verify>
+        <drag-verify style="margin-top: 30px;"></drag-verify>
       </div>
       <div class="form" v-if="loginMethod === 1">
         <div class="inlineForm">
@@ -39,14 +39,13 @@
           <button class="verifyBtn">获取验证码</button>
         </div>
         <span class="secretVerify" style="display: none;">验证码错误</span>
-        <drag-verify></drag-verify>
+        <drag-verify style="margin-top: 30px;"></drag-verify>
       </div>
-      <el-button class="btn">登录</el-button>
-    </div>
-    <div class="turnToOther">
-      <!-- <el-checkbox v-model="checked1" label="记住密码" size="large" /> -->
-      <span class="forgetSecret">忘记密码</span>
-      <span class="signIn">注册账号</span>
+      <div class="turnToOther" v-if="loginMethod === 0">
+        <el-checkbox class="rememberSecret" v-model="rememberSecret" label="记住密码" size="large" />
+        <span class="forgetSecret">忘记密码</span>
+      </div>
+      <el-button class="btn" @click="login">登录</el-button>
     </div>
   </div>
 </template>
@@ -66,6 +65,7 @@ export default {
       moblePhoneMess: '',
       verify: '',
       ismoblePhone: true,
+      rememberSecret: false,
     }
   },
   watch: {
@@ -105,9 +105,9 @@ export default {
       this.loginMethod = 1
     },
     login() {
-      // this.$router.replace({
-      // 	path: '/navigator'
-      // })
+      this.$router.replace({
+      	path: '/navigator'
+      })
     },
   },
 }
@@ -169,7 +169,7 @@ export default {
   }
   .form {
     position: absolute;
-    top: 146px;
+    top: 145px;
     display: flex;
     align-items: flex-end;
     flex-direction: column;
@@ -214,7 +214,7 @@ export default {
   }
   .btn {
     position: absolute;
-    top: 334px;
+    top: 350px;
     height: 40px;
     width: 300px;
     font-size: 16px;
@@ -225,15 +225,17 @@ export default {
 }
 
 .turnToOther {
-  position: absolute;
-  top: 455px;
-  right: 550px;
-  .forgetSecret,
-  .signIn {
-    margin: 0 0 0 4px;
-    position: relative;
-    top: -2px;
+  .rememberSecret {
+    position: absolute;
+    top: 255px;
+    left: 80px;
+  }
+  .forgetSecret {
+    position: absolute;
+    top: 255px;
+    right: 80px;
     cursor: pointer;
+    line-height: 40px;
     font-size: 14px;
     color: #07b1cf;
   }
