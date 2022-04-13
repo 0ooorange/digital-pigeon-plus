@@ -28,7 +28,8 @@
           </el-icon>
         </div>
       </div>
-      <Side-m v-if="ismobile"></Side-m>
+      <!-- sideM 移动端菜单 -->
+      <Side-m v-if="ismobile"></Side-m> 
       <div class="aminui-body el-container">
         <Topbar v-if="!ismobile"></Topbar>
         <div class="adminui-main" id="adminui-main">

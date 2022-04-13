@@ -15,64 +15,64 @@ export default {
     return {
       menus: [
         {
-          title: '物流管理',
+          name: '物流管理',
           iconName: 'icon-a-ziyuan54',
-          path: '/breedingSystem/breedingStatistics'
+          path: '#'
         },
         {
-          title: 'AI平台',
+          name: 'AI平台',
+          iconName: 'icon-a-ziyuan59',
+          path: '#'
+        },
+        {
+          name: '进销存管理',
+          iconName: 'icon-a-ziyuan61',
+          path: '#'
+        },
+        {
+          name: '溯源系统',
+          iconName: 'icon-a-ziyuan63',
+          path: '#'
+        },
+        {
+          name: '种鸽质量检测',
+          iconName: 'icon-a-ziyuan68',
+          path: '#'
+        },
+        {
+          name: '加工销售',
+          iconName: 'icon-a-ziyuan69',
+          path: '#'
+        },
+        {
+          name: '屠宰系统',
+          iconName: 'icon-a-ziyuan54',
+          path: '#'
+        },
+        {
+          name: '养殖系统',
           iconName: 'icon-a-ziyuan59',
           path: '/breedingSystem/breedingStatistics'
         },
         {
-          title: '进销存管理',
+          name: '可视化界面',
           iconName: 'icon-a-ziyuan61',
-          path: '/breedingSystem/breedingStatistics'
+          path: '#'
         },
         {
-          title: '溯源系统',
+          name: '视频监控中心',
           iconName: 'icon-a-ziyuan63',
-          path: '/breedingSystem/breedingStatistics'
+          path: '#'
         },
         {
-          title: '种鸽质量检测',
+          name: '基础信息管理',
           iconName: 'icon-a-ziyuan68',
-          path: '/breedingSystem/breedingStatistics'
+          path: '#'
         },
         {
-          title: '加工销售',
+          name: '电商平台',
           iconName: 'icon-a-ziyuan69',
-          path: '/breedingSystem/breedingStatistics'
-        },
-        {
-          title: '屠宰系统',
-          iconName: 'icon-a-ziyuan54',
-          path: '/breedingSystem/breedingStatistics'
-        },
-        {
-          title: '养殖系统',
-          iconName: 'icon-a-ziyuan59',
-          path: '/breedingSystem/breedingStatistics'
-        },
-        {
-          title: '可视化界面',
-          iconName: 'icon-a-ziyuan61',
-          path: '/breedingSystem/breedingStatistics'
-        },
-        {
-          title: '视频监控中心',
-          iconName: 'icon-a-ziyuan63',
-          path: '/breedingSystem/breedingStatistics'
-        },
-        {
-          title: '基础信息管理',
-          iconName: 'icon-a-ziyuan68',
-          path: '/breedingSystem/breedingStatistics'
-        },
-        {
-          title: '电商平台',
-          iconName: 'icon-a-ziyuan69',
-          path: '/breedingSystem/breedingStatistics'
+          path: '#'
         },
 
       ],
