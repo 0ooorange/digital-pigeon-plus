@@ -6,7 +6,7 @@ const routes = [
 		name: "layout",
 		path: "/",
 		component: () => import(/* webpackChunkName: "layout" */ "@/layout"),
-		redirect: config.DASHBOARD_URL || "//breedingSystem/breedingStatistics",
+		redirect: config.DASHBOARD_URL || "/login",
 		children: [],
 	},
 	{

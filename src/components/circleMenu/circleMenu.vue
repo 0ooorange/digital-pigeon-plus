@@ -11,7 +11,7 @@
                v-for="(item, index) in menus"
                :key="index">
             <router-link class="box"
-                         :to="item.path">
+                         :to="item.path" @click="routerClick(item, index)">
               <div class="content">
                 <span class="title">{{ item.name }}</span>
               </div>
@@ -54,6 +54,11 @@ export default {
         box[i].style.left = Math.sin(ahd * i) * radius + "px";
         box[i].style.top = Math.cos(ahd * i) * radius + "px";
       }
+    },
+    routerClick(item, index) {
+      console.log("我是router-link，我被点击了，我的index值是", index);
+      console.log("我的值是", item.name);
+      localStorage.setItem("currentSystem", JSON.stringify(item));
     }
   },
 };

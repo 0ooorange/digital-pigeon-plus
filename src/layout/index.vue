@@ -2,11 +2,21 @@
   <!-- 经典布局 -->
   <template v-if="layout=='menu'">
     <header class="adminui-header">
-      <div class="adminui-header-left">
+      <div class="panel-item adminui-header-left" @click="toNavigator">
         <div class="logo-bar">
           <img class="logo" src="img/logo.png">
           <span>{{ $CONFIG.APP_NAME }}</span>
         </div>
+      </div>
+      <div class="selectDivs">
+        <span class="selectText">基地：</span>
+        <el-select v-model="currBase" class="m-2" placeholder="Select" size="large">
+          <el-option v-for="item in bases" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+        <span class="selectText">鸽棚：</span>
+        <el-select v-model="currDovecote" class="m-2" placeholder="Select" size="large">
+          <el-option v-for="item in dovecotes" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
       </div>
       <div class="adminui-header-right">
         <userbar></userbar>
@@ -29,7 +39,7 @@
         </div>
       </div>
       <!-- sideM 移动端菜单 -->
-      <Side-m v-if="ismobile"></Side-m> 
+      <Side-m v-if="ismobile"></Side-m>
       <div class="aminui-body el-container">
         <Topbar v-if="!ismobile"></Topbar>
         <div class="adminui-main" id="adminui-main">
@@ -67,9 +77,69 @@ export default {
     userbar,
     iframeView,
   },
+  props: {
+    bases: {
+      type: Array,
+      require: true,
+      default() {
+        return [
+          {
+            value: '梅州市金绿现代农业发展有限公司鸡公桥村基地',
+            label: '梅州市金绿现代农业发展有限公司鸡公桥村基地',
+          },
+          {
+            value: '大坪镇兰塘村农户潘忠琴',
+            label: '大坪镇兰塘村农户潘忠琴',
+          },
+          {
+            value: '梅州市金绿集团羊岭村基地',
+            label: '梅州市金绿集团羊岭村基地',
+          },
+          {
+            value: '金绿集团基地',
+            label: '金绿集团基地',
+          },
+          {
+            value: '小村庄加工厂',
+            label: '小村庄加工厂',
+          },
+        ]
+      },
+    },
+    dovecotes: {
+      type: Array,
+      require: true,
+      default() {
+        return [
+          {
+            value: 'A1仓',
+            label: 'A1仓',
+          },
+          {
+            value: 'A2仓',
+            label: 'A2仓',
+          },
+          {
+            value: 'B1仓',
+            label: 'B1仓',
+          },
+          {
+            value: 'B2仓',
+            label: 'B2仓',
+          },
+          {
+            value: 'C1仓',
+            label: 'C1仓',
+          },
+        ]
+      },
+    }
+  },
   data() {
     return {
       settingDialog: false,
+      currBase: '小村庄加工厂',
+      currDovecote: 'A2仓',
       menu: [
         {
           name: 'bsBreedingStatistics',
@@ -247,7 +317,7 @@ export default {
     this.onLayoutResize()
     window.addEventListener('resize', this.onLayoutResize)
     // var menu = this.$router.sc_getMenu()
-		var menu = this.menu
+    var menu = this.menu
     this.menu = this.filterUrl(menu)
     this.showThis()
   },
@@ -311,6 +381,41 @@ export default {
     exitMaximize() {
       document.getElementById('app').classList.remove('main-maximize')
     },
+    // 返回导航页
+    toNavigator() {
+      this.$router.replace({
+      	path: '/navigator'
+      })
+    }
   },
 }
 </script>
+
+<style lang="less" scoped>
+.adminui-header .panel-item {
+  padding: 0 10px;
+  cursor: pointer;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.adminui-header .panel-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.selectDivs {
+  position: relative;
+  left: -16%;
+  display: flex;
+  align-items: center;
+}
+.selectText {
+  margin-left: 10px;
+}
+
+/deep/ .el-input__inner {
+  width: 150px;
+  height: 28px;
+  line-height: 28px;
+  background-color: rgba(255, 255, 255);
+}
+</style>
