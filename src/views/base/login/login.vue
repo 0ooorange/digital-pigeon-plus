@@ -47,6 +47,19 @@
       </div>
       <el-button class="btn" @click="login">登录</el-button>
     </div>
+    <div class="otherMethods">
+      <div class="text">
+        <del>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</del>
+        <span>其他方式登录</span>
+        <del>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</del>
+      </div>
+      <div class="imgs">
+        <img src="../../../../public/img/weibo.png" alt="ERR">
+        <img src="../../../../public/img/shouji.png" alt="ERR">
+        <img src="../../../../public/img/weixin.png" alt="ERR">
+        <img src="../../../../public/img/zhifubao.png" alt="ERR">
+      </div>
+    </div>
   </div>
 </template>
 
@@ -106,7 +119,7 @@ export default {
     },
     login() {
       this.$router.replace({
-      	path: '/navigator'
+        path: '/navigator',
       })
     },
   },
@@ -121,6 +134,7 @@ export default {
 
 .loginMain {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
@@ -133,6 +147,7 @@ export default {
 .loginContent {
   position: relative;
   display: flex;
+  flex-direction: row;
   justify-content: center;
   width: 33%;
   height: 70%;
@@ -238,6 +253,22 @@ export default {
     line-height: 40px;
     font-size: 14px;
     color: #07b1cf;
+  }
+}
+
+.otherMethods {
+  margin-top: -110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  .text {
+    font-size: 16px;
+    color: #03aefc;
+  }
+  .imgs img {
+    cursor: pointer;
+    margin: 10px 30px 30px 30px;
   }
 }
 
