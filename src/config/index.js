@@ -1,10 +1,10 @@
 const DEFAULT_CONFIG = {
 	//标题
-	APP_NAME: "SCUI",
+	APP_NAME: "数字鸽业精准管控云服务平台",
 
 	//首页地址
 	// DASHBOARD_URL: "/dashboard",
-	DASHBOARD_URL: "/breedingSystem/breedingStatistics",
+	DASHBOARD_URL: "/login",
 
 	//版本号
 	APP_VER: "1.5.0",
