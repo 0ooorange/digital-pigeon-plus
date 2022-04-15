@@ -10,11 +10,11 @@
       </div>
       <div class="selectDivs">
         <span class="selectText">基地：</span>
-        <el-select v-model="currBase" class="m-2" placeholder="Select" size="large">
+        <el-select v-model="currBase" class="m-2" placeholder="Select">
           <el-option v-for="item in bases" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
         <span class="selectText">鸽棚：</span>
-        <el-select v-model="currDovecote" class="m-2" placeholder="Select" size="large">
+        <el-select v-model="currDovecote" class="m-2" placeholder="Select">
           <el-option v-for="item in dovecotes" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </div>
@@ -416,6 +416,5 @@ export default {
   width: 150px;
   height: 28px;
   line-height: 28px;
-  background-color: rgba(255, 255, 255);
 }
 </style>
