@@ -56,6 +56,9 @@ export default {
 
 <style lang="less" scoped>
 @import "@/style/compStyle/tableSlot.less";
+.tableSearch {
+  height: 70px;
+}
 .left, 
 .right {
   float: left;

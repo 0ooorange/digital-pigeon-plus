@@ -25,13 +25,12 @@ export default {
   },
   data() {
     return {
-      // 建议：卡片超过2个就不要放在插槽里
       cardData: [{
         cardText: '仔数',
-        cardNumber: 666
+        cardNumber: '666只'
       }, {
         cardText: '死仔数',
-        cardNumber: 666
+        cardNumber: '666只'
       }],
       searchTypes: [
         {
