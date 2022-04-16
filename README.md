@@ -41,7 +41,7 @@ npm run dev    # 运行项目脚本
 
 ## :pencil2:页面编写
 
-页面在`src/views`下，找到自己的文件夹编写对应代码即可，如无请往下看
+1.页面在`src/views`下，找到自己的文件夹编写对应代码即可，如无请往下看
 
 举个栗子：需求是需要编写加工模块(Process)下的加工过程管理(ProcessManage)，遵循预设的规范
 
@@ -49,6 +49,83 @@ npm run dev    # 运行项目脚本
 - 统一的文件结构
 - 等等
 
+2.提交代码：
+
+提交到`dev-*`，*表示当前开发模块及版本，如下例：
+
+~~~bash
+git pull origin dev-breeding-v1.0
+git push origin dev-breeding-v1.0
+~~~
+
+## 👍风格统一
+
+1.表格查询
+
+~~~vue
+<template>
+  <table-search :searchTypes="searchTypes" :cardData="cardData"  @searchClick="searchClick" @outTable="outTable" />
+</template>
+<script>
+import tableSearch from '@/components/tableSearch/index.vue'
+export default {
+  name: 'abnormalCaseManage',
+  components: {
+    tableSearch
+  },
+  data() {
+    return {
+      // 这是卡片数据数组，一个元素一个卡片
+      // 建议：需要展示的卡片太多就不要传cardData进组件了
+      cardData: [{
+        cardText: '仔数',
+        cardNumber: 666
+      }, {
+        cardText: '死仔数',
+        cardNumber: 666
+      }],
+      // 查询类型下拉框列表的数据，格式固定
+      searchTypes: [{
+        value: '鸽笼编号',
+        label: '鸽笼编号',
+      }, {
+        value: '鸽板编号',
+        label: '鸽板编号',
+      }, {
+        value: '日期',
+        label: '日期',
+      }, {
+        value: '仔数',
+        label: '仔数',
+      }, {
+        value: '死仔数',
+        label: '死仔数',
+      }, {
+        value: '负责人',
+        label: '负责人',
+      }, {
+        value: '操作',
+        label: '操作',
+      }]
+    }
+  },
+  methods: {
+    // 表格查询事件
+    searchClick() {
+      console.log("嘻嘻嘻，我被点击啦")
+    },
+    // 表格导出事件
+    outTable() {
+      console.log("哈哈哈，我被点击了噢");
+    }
+  }
+}
+</script>
+~~~
+
+2.表格
+
+用scTable组件就好，我已经改了一些样式，但是居中还是要使用的时候设置
 
 # :book:简明教程
 
@@ -62,7 +139,7 @@ npm run dev    # 运行项目脚本
 链接远程仓库（为远程仓库起别名）
 
 ```bash
-git remote add origin git@gitee.com:c0dedance/digital-chicken.git
+git remote add origin https://gitee.com/jenny-zhuang/digital-pigeon-plus.git
 ```
 
 ### 二、基本操作
@@ -105,8 +182,6 @@ git push origin  <你的分支名>
 
 # :pushpin:规范
 
-## 组件目录和文件组织规范
-
 ## 代码风格
 
 ### ESLint
@@ -115,7 +190,7 @@ Eslint 是一个可以检验代码，并给出报告的工具。它的目标是�
 
 你需要在你的 VSC 安装插件：eslint
 
-![image-20220404092235901](readme.assets/image-20220404092235901.png)
+![image-20220404092235901](README.assets/image-20220404092235901.png)
 
 ### prettier
 
@@ -123,7 +198,7 @@ Prettier 是一款强大的代码格式化工具
 
 你需要在你的 VSC 安装插件：prettier
 
-![image-20210722214543454](readme.assets/008i3skNgy1gsq2acx21rj30ow057mxp.jpg)
+![image-20210722214543454](README.assets/008i3skNgy1gsq2acx21rj30ow057mxp.jpg)
 
 ### editorconfig
 
@@ -131,9 +206,9 @@ Prettier 是一款强大的代码格式化工具
 
 你需要在你的 VSC 安装插件：EditorConfig for VS Code
 
-<img src="readme.assets/008i3skNgy1gsq2gh989yj30pj05ggmb.jpg" alt="image-20210722215138665" style="zoom:80%;" align="left"/>
+<img src="README.assets/008i3skNgy1gsq2gh989yj30pj05ggmb.jpg" alt="image-20210722215138665" style="zoom:80%;" align="left"/>
 
-## Git 贡献提交规范
+## Git 提交规范
 
 `commit 消息组成：类型 + 冒号 + 空格 + 动宾短语`
 
@@ -158,3 +233,4 @@ fix: 修复了页面无法跳转的 bug
 - `ci` 持续集成
 - `types` 类型定义文件更改
 - `wip` 开发中
+
