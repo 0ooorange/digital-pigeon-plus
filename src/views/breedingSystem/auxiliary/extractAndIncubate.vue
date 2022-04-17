@@ -1,76 +1,52 @@
 <template>
      <div class="container">
-       <header class="header left">
-        <div class="left ">
-           <showtime></showtime>
+        <div class="container111">
+            <div class="card">
+                <el-card class="mini_card">
+                    <i class="el-icon-s-flag" style="font-size: 26px;color:#D32F2F"></i>
+                    总查蛋次数：<i style="font-size: 18px;font-weight:900;color:#03A9F4">999</i>
+                </el-card>
+            </div>
+           <div class="search">
+             <div class="search1">
+                <el-select v-model="value" clearable placeholder="请选择查询类型">
+                 <el-option v-for="item in selectoptions1" :key="item.value" :label="item.label" :value="item.value">
+                 </el-option>
+                </el-select>
+             </div>
+             <div class="search2">
+                 <el-select v-model="value" filterable placeholder="请输入具体内容">
+                 <el-option v-for="item in selectoptions1" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+             </div>
+              <div class="btn">
+                <div class="btnleft">
+                  <el-button type="primary">搜索</el-button>
+                  </div>
+                <div class="btnright">
+                   <el-button type="success">重置</el-button>
+                   <el-button type="info">导出</el-button>
+                </div>
+              </div>
+          </div>
         </div>
-      <div class="header_center left" style="position:relative">
-        <div class="title">
-           <span>智慧数字鸽业系统</span>
-        </div>
-        
-    </div>
-      </header>
-    
-        
-<div class="con left" style="width: 100%;margin-left: 1%;margin-bottom: 25px;">
+ 
+    <el-main class="nopadding">
+						<scTable ref="table" :data="apiObj"   stripe highlightCurrentRow class="tablestyle">
+							<el-table-column label="鸽笼号" prop="pigeonnumber" width="120" class="tablestyle"></el-table-column>
+							<el-table-column label="板子编号" prop="boardnumber" width="120"></el-table-column>
+							<el-table-column label="第一次" prop="firstime" width="120"></el-table-column>
+							<el-table-column label="时间间隔" prop="timeinterval_st" width="120"></el-table-column>
+							<el-table-column label="第二次" prop="secondtime" width="120"></el-table-column>
+							<el-table-column label="时间间隔" prop="timeinterval_nd" width="120"></el-table-column>
+							<el-table-column label="本次推荐" prop="recommendation" width="120"></el-table-column>
+              <el-table-column label="操作员" prop="operator" width="120"></el-table-column>
+              <el-table-column label="备注" prop="remark" width="170"></el-table-column>
+						</scTable>
 
-     <!-- <div class="operate"> -->
-       <div class="nav">
-         <div class="operateleft">
-         <el-button type="primary" plain>孵蛋</el-button>
-        <el-button type="primary" plain>抽蛋</el-button>
-        <el-button  type="primary" plain>全部</el-button>
-       </div>
-      <div class="operateright">
-      <el-button type="primary" plain>亮出</el-button>
-     <el-button type="primary" plain>导出</el-button>
-     <el-button type="primary" plain>打印</el-button>
-      </div>
-</div>
+		</el-main>
 
-    <div class="div_any_child">
-          <div class="table_p" style="height: 350px;margin-top: 20px;">
-					 <table>
-                  <thead><tr>
-                      <th style="width:50px">鸽笼号</th>
-                      <th style="width:60px">板子编号</th>
-                      <th style="width:60px">第一次</th>
-                      <th style="width:70px">时间间隔</th>
-                      <th style="width:60px">第二次</th>
-                      <th style="width:70px">时间间隔</th>
-                      <th style="width:60px">本次推荐</th>
-                      <th style="width:60px">操作员</th>
-                      <th style="width:120px">备注</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                     <tr v-for="item in apiObj" :key="item.index" >
-                       <td v-text="item.pigeonnumber"></td>
-                       <td v-text="item.boardnumber"></td>
-                       <td v-text="item.firstime"></td>            
-                       <td v-text="item.timeinterval_st"></td>
-                       <td v-text="item.secondtime"></td>
-                       <td v-text="item.timeinterval_nd"></td>
-                       <td v-text="item.recommendation"></td>
-                       <td v-text="item.operator"></td>
-                       <td v-text="item.remark"></td>
-                    </tr>
-                  </tbody>
-              </table>
-    </div>
-               <div class="box">
-              <el-pagination
-                @size-change="handleSizeChange"
-               @current-change="handleCurrentChange"
-               :current-page="currentPage4"
-                layout="total, prev, pager, next, jumper"
-               :total="40">
-                </el-pagination>
-  
-      </div>
-    </div>
-</div>
      </div>
     
 
@@ -85,6 +61,28 @@ import showtime from '@/components/showtime/index.vue';
     },
     data() {
       return {
+        inputvalue:'',
+          selectoptions1: [{
+          value: '选项1',
+          label: '鸽笼号'
+        }, {
+          value: '选项2',
+          label: '板子编号'
+        }, {
+          value: '选项3',
+          label: '第一次操作'
+        },{
+          value: '选项4',
+          label: '第二次操作'
+        },{
+          value: '选项5',
+          label: '本次推荐'
+        }, {
+          value: '选项6',
+          label: '操作员'
+        }, ],
+        value: '',
+     
         apiObj:[
             {
                 pigeonnumber: "A10",
@@ -95,9 +93,9 @@ import showtime from '@/components/showtime/index.vue';
                 timeinterval_nd: "10天",
                 recommendation: "抽蛋",
                 operator: "李暖暖",
-                remark: "超过规定一天，干什么吃的"
+                remark: "XXXXX"
             } ,
-             {
+            {
                 pigeonnumber: "A10",
                 boardnumber: "3",
                 firstime: "孵化",
@@ -108,7 +106,7 @@ import showtime from '@/components/showtime/index.vue';
                 operator: "李暖暖",
                 remark: "XXXXX"
             } ,
-             {
+            {
                 pigeonnumber: "A10",
                 boardnumber: "3",
                 firstime: "孵化",
@@ -119,7 +117,7 @@ import showtime from '@/components/showtime/index.vue';
                 operator: "李暖暖",
                 remark: "XXXXX"
             } ,
-             {
+            {
                 pigeonnumber: "A10",
                 boardnumber: "3",
                 firstime: "孵化",
@@ -130,18 +128,7 @@ import showtime from '@/components/showtime/index.vue';
                 operator: "李暖暖",
                 remark: "XXXXX"
             } ,
-             {
-                pigeonnumber: "A10",
-                boardnumber: "3",
-                firstime: "孵化",
-                timeinterval_st: "20天",
-                secondtime: "抽蛋",
-                timeinterval_nd: "10天",
-                recommendation: "抽蛋",
-                operator: "李暖暖",
-                remark: "XXXXX"
-            } ,
-             {
+            {
                 pigeonnumber: "A10",
                 boardnumber: "3",
                 firstime: "孵化",
@@ -196,137 +183,98 @@ import showtime from '@/components/showtime/index.vue';
                 operator: "李暖暖",
                 remark: "XXXXX"
             } ,
-            
+            {
+                pigeonnumber: "A10",
+                boardnumber: "3",
+                firstime: "孵化",
+                timeinterval_st: "20天",
+                secondtime: "抽蛋",
+                timeinterval_nd: "10天",
+                recommendation: "抽蛋",
+                operator: "李暖暖",
+                remark: "XXXXX"
+            } ,
           
             
         ]
     }
     },
-   
   }
 </script>
 
 <style scoped>
 .container{
-   font-size: 100%;
-    height: 100%;
-    background-color: #081832;
-    }
-.left{
-    float: left;
+  margin:20px 20px
 }
-.header{
+.container111{
+  margin-left: 10px;
+  display: flex;
+  flex-direction:row;
+}
+.card{
+  margin-bottom:20px;
+  width:220px;
+}
+.mini_card {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
-    height: 80px;
-    background-color: #030829;
-
+    height: 60px;
+    font-size:20px;
+    color:rgb(5, 0, 0);
+    margin-right: 20px;
 }
-.header_center{
-    width: 30%;
-    position: relative;
-    margin: 0px 76px;
-    color: #FFFFff;
-    text-align: center;
-    height: 80px;
-    background-image: url("../../../assets/icons/images/logoBg.png");
-    background-size: 100% 100%;
-    font-family: "微软雅黑"!important;
-}
-.title{
-  position: absolute;
-  top: 18px;
-  left: 63px;
-}
-.title span{
-  font-size: 28px;
-  font-weight: 700;
-}
-.con{
-    width: 100%;
-    background-color: #081832;
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
-
-.div_any_child{
-    width: 98%;
-    height: 380px;
-    box-shadow: -10px 0px 15px #034c6a inset, 
-    0px -10px 15px #034c6a inset, 
-    10px 0px 15px #034c6a inset, 
-    0px 10px 15px #034c6a inset;
-    border: 1px solid #034c6a;
-    box-sizing: border-box;
-    position: relative;
-    margin-top: 25px;
-}
-.table_p{
-    height: 100%;
-    margin-top: 7%;
-    position: relative;
-}
-.div_table{
-    width: 98%;
-    margin-left: 1%;
-    margin-bottom: 25px;
-    height: 280px;
-}
-.div_table_box{
-    width: 23%;
-    margin-right: 2%;
-}
-.table_p table{
-    width: 100%;
-    height: 100%;
-    border-collapse: collapse;
-    position: absolute;
-    text-align: center;
-}
-.table_p table thead th{
-    color: #61d2f7;
-    font-size: 14px;
-    font-weight: 600;
-    padding-top: 5px;
-    padding-bottom: 5px;
-}
-.table_p table tbody{
-    color: #ffffff;
-   font-size: 13px;
-}
-.table_p table tbody tr:nth-child(2n+1){
-    background-color: #072951;
-    box-shadow: -10px 0px 15px #034c6a inset,
-    10px 0px 15px #034c6a inset;
-}
-.left_table{
-    height: 98%;
-    border-radius: 5px;
-    width:18%!important;
-    background-color:  #081832;
-
-}
-.center_table{
-    height: 100%;
-    border-radius: 5px;
-    width:100%;
-    background-color:  #081832;
-   margin: 0 auto;
-}
-.box {
-	width: 800px;
-	margin: 32px 340px;
-	height: 34px;
-}
-.operateright{
-  margin-left: 755px;
-}
-.nav{
+.search{
+  margin-left: 20px;
+  border:1px solid red;
+  width: 80%;
+  height: 60px;
   display: flex;
   flex-direction: row;
-  padding-left:0;
-  margin-bottom:0;
-  list-style:none;
-
-  }
- 
+  
+}
+.search2{
+  margin-left: 20px;
+}
+.btn{
+   display: flex;
+  flex-direction: row;
+  width: 200px;
+  position: relative;
+  margin-left: 40px;
+  
+}
+.btnright{
+    margin-left: 365px;
+    display: flex;
+    flex-direction: row;
+   
+}
+.topleft{
+  background: cornflowerblue;
+}
+.operate{
+  display: flex;
+  flex-direction: row;
+  margin: 20px 20px;
+  position: relative;
+  text-align: center;
+}
+.operatetip{
+  font-size: 18px;
+  width: 150px;
+  height: 50px;
+  line-height: 50px;
+  border:1px solid royalblue;
+}
+.btn{
+  width: 80px;
+  height: 36px;
+  font-size: 20px;
+}
+.tablestyle{
+  font-size: 18px;
+}
 </style>
