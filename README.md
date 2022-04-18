@@ -19,43 +19,42 @@ npm run dev    # 运行项目脚本
 ```js
 ┌── public				// 静态资源(不会被Webpack打包)
 ├── src					// 源代码
-│	├── services		// API相关文件
+│	├── api     		// 接口
 │	├── assets			// 静态资源(会被打包)
 │	├── components		// 组件库(包括自定义的组件)
+│	├── config          // 配置
+│	├── directives      // 自定义指令
+│	├── layout          // 框架布局视图
 │	├── router			// 路由表(路由相关文件)
-│	├── store			// Redux状态管理
+│	├── store			// VUEX状态管理
+│	├── style           // 全局样式
 │	├── utils			// 全局公用方法/工具函数
-│	├── common			// 通用文件(常量)
-│	├── pages			// 页面，其中每个文件夹按照功能模块(子系统)划分
-│	├── App.tsx			// 入口视图
-│	└── index.js		// 入口文件
+│	├── views			// 视图，其中每个文件夹按照功能模块(子系统)划分
+│	├── App.vue			// 入口视图
+│	└── main.js		    // 入口文件
 ├── .editorconfig		// 统一编辑器样式
-└── .gitignore	    	// git忽略配置
-└── craco.config.js		// 项目webpack配置
+├── .gitignore	    	// git忽略配置
 ├── babel.config.js		// babel配置
-├── package.json		// 包管理
-└── craco.config.js		// webpack配置
-└── pnpm-lock.yaml		// pnpm锁版本文件
-└── tsconfig.json		// ts配置
+└── package.json		// 包管理
 ```
 
 ## :pencil2:页面编写
 
-1.页面在`src/views`下，找到自己的文件夹编写对应代码即可，如无请往下看
+页面在`src/views`下，找到自己的文件夹编写对应代码即可，如无请往下看
 
-举个栗子：需求是需要编写加工模块(Process)下的加工过程管理(ProcessManage)，遵循预设的规范
+举个栗子：需求是需要编写养殖管理系统(breedingSystem)下的养殖统计(breedingStatistics)，遵循预设的规范
 
-- 文件夹命名全部小写，中划线分割
+- 文件夹命名全部以“小驼峰命名法”命名
 - 统一的文件结构
 - 等等
 
-2.提交代码：
+## 🚔提交代码
 
-提交到`dev-*`，*表示当前开发模块及版本，如下例：
+提交到`dev-*`，*表示当前开发模块及版本，如下例：（ZZN为本地分支）
 
 ~~~bash
 git pull origin dev-breeding-v1.0
-git push origin dev-breeding-v1.0
+git push origin ZZN:dev-breeding-v1.0
 ~~~
 
 ## 👍风格统一
@@ -174,10 +173,10 @@ git commit -m "<消息>"
 
 #### 2.4 推送
 
-推送到远程仓库你的分支上
+推送到远程仓库分支上
 
 ```bash
-git push origin  <你的分支名>
+git push origin <远程分支名>: <本地分支名>
 ```
 
 # :pushpin:规范
@@ -188,25 +187,19 @@ git push origin  <你的分支名>
 
 Eslint 是一个可以检验代码，并给出报告的工具。它的目标是保证代码的一致性，避免错误。
 
-你需要在你的 VSC 安装插件：eslint
-
-![image-20220404092235901](README.assets/image-20220404092235901.png)
+你需要在你的 VSC 安装插件：ESLint
 
 ### prettier
 
 Prettier 是一款强大的代码格式化工具
 
-你需要在你的 VSC 安装插件：prettier
-
-![image-20210722214543454](README.assets/008i3skNgy1gsq2acx21rj30ow057mxp.jpg)
+你需要在你的 VSC 安装插件：Prettier-Code formatter
 
 ### editorconfig
 
 约束编辑器代码的风格，消除编码差异：回车符合、缩进距离等
 
 你需要在你的 VSC 安装插件：EditorConfig for VS Code
-
-<img src="README.assets/008i3skNgy1gsq2gh989yj30pj05ggmb.jpg" alt="image-20210722215138665" style="zoom:80%;" align="left"/>
 
 ## Git 提交规范
 
