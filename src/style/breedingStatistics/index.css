@@ -43,6 +43,13 @@ body{
 	height: 100%;
   }
   /* lafite video样式 */
+  .jiankong{
+	  display: flex;
+	  flex-direction: row;
+  }
+  .jiankong h3{
+	  margin-right: 110px;
+  }
 .video-js {
   width: 100%;
   height: 100%;

@@ -23,7 +23,7 @@
              </div>
               <div class="btn">
                 <div class="btnleft">
-                  <el-button type="primary">搜索</el-button>
+                  <el-button type="primary" class="soushuo">搜索</el-button>
                   </div>
                 <div class="btnright">
                    <el-button type="success">重置</el-button>
@@ -36,7 +36,7 @@
     <el-main class="nopadding">
 						 <el-table ref="table" :data="apiObj"  stripe  highlightCurrentRow 
              class="tablestyle" 
-             :header-cell-style="{color:'#666666',fontSize:'18px'}"
+             :header-cell-style="{color:'#000000',fontSize:'18px'}"
              :row-style="{height: '50px'}">
 							<el-table-column label="鸽笼号" prop="pigeonnumber" width="120" align="center"></el-table-column>
 							<el-table-column label="板子编号" prop="boardnumber" width="120" align="center"></el-table-column>
@@ -190,6 +190,7 @@
   flex-direction:row;
 }
 .card{
+  margin-left:10px;
   margin-bottom:20px;
   width:220px;
 }
@@ -205,8 +206,8 @@
     margin-right: 20px;
 }
 .search{
+  margin-top: 20px;
   margin-left: 20px;
-  border:1px solid red;
   width: 80%;
   height: 60px;
   display: flex;
@@ -215,6 +216,7 @@
 }
 .search2{
   margin-left: 20px;
+
 }
 .btn{
    display: flex;
@@ -224,8 +226,11 @@
   margin-left: 40px;
   
 }
+.btnleft{
+  margin-left: -4px;
+}
 .btnright{
-    margin-left: 365px;
+    margin-left: 480px;
     display: flex;
     flex-direction: row;
    
@@ -265,5 +270,10 @@
 .page {
   margin-top: 36px;
   margin-left: 195px;
+}
+.soushuo{
+  color: #fff;
+  background-color: #409eff;
+  border-color:#409eff;
 }
 </style>

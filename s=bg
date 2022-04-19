@@ -1,0 +1,160 @@
+[33mcommit 99732343f51095e7ccc90de1aca3cc8c5000106f[m[33m ([m[1;36mHEAD -> [m[1;32mXSL[m[33m, [m[1;31morigin/XSL[m[33m)[m
+Author: TuTu <9869887+aote--man@user.noreply.gitee.com>
+Date:   Sun Apr 17 20:12:21 2022 +0800
+
+    完成了养殖统计
+
+[33mcommit 9ae898f5112d613a8633e5b4153cb1e79383ba28[m
+Author: TuTu <9869887+aote--man@user.noreply.gitee.com>
+Date:   Sat Apr 16 20:09:46 2022 +0800
+
+    feat: 1
+
+[33mcommit db709d4c64a3403d529dc2c5848f5d88986935d9[m
+Merge: 3c1737a afde586
+Author: 庄珍妮 <9636529+jenny-zhuang@user.noreply.gitee.com>
+Date:   Fri Apr 15 13:43:15 2022 +0000
+
+    !4 修复了浮动导致的问题
+    Merge pull request !4 from 庄珍妮/ZZN
+
+[33mcommit afde58686db748b6bf51bf1ec4b75467c224eed2[m
+Author: 庄珍妮 <9636529+jenny-zhuang@user.noreply.gitee.com>
+Date:   Fri Apr 15 21:41:33 2022 +0800
+
+    完成了登录页
+
+[33mcommit 1ba3e365742c9100b09b50cc20489cafd5d2a780[m
+Author: 庄珍妮 <9636529+jenny-zhuang@user.noreply.gitee.com>
+Date:   Fri Apr 15 21:20:14 2022 +0800
+
+    完成了查仔和异常情况页面
+
+[33mcommit 3c1737a8d804470d1c8f06a82028b21bfd12e1de[m
+Merge: 3e40fd6 d0b34c0
+Author: 庄珍妮 <9636529+jenny-zhuang@user.noreply.gitee.com>
+Date:   Fri Apr 15 08:37:02 2022 +0000
+
+    !3 1111
+    Merge pull request !3 from 庄珍妮/ZZN
+
+[33mcommit d0b34c055b65c74bd1fa9b7b57fc9a63cb9d43f3[m
+Author: 庄珍妮 <9636529+jenny-zhuang@user.noreply.gitee.com>
+Date:   Fri Apr 15 16:34:31 2022 +0800
+
+    封装了表格
+
+[33mcommit 27d178134e41ec35865616020a4ceef992c46c7a[m
+Author: 庄珍妮 <9636529+jenny-zhuang@user.noreply.gitee.com>
+Date:   Thu Apr 14 21:36:56 2022 +0800
+
+    完善了layout组件
+
+[33mcommit 3e40fd6120e33ae95452f90d588d5b1c7c6a3703[m
+Merge: 1c13dd1 149d27a
+Author: 庄珍妮 <9636529+jenny-zhuang@user.noreply.gitee.com>
+Date:   Wed Apr 13 15:54:11 2022 +0000
+
+    !2 改了......
+    Merge pull request !2 from 庄珍妮/ZZN
+
+[33mcommit 149d27a7344a659880682c86a59238b1ba35e9f2[m
+Author: 庄珍妮 <9636529+jenny-zhuang@user.noreply.gitee.com>
+Date:   Wed Apr 13 23:52:27 2022 +0800
+
+    改了不知道什么东西
+
+[33mcommit adf43e65af9c692b5a66ae15baa60b0095673e74[m
+Author: 庄珍妮 <9636529+jenny-zhuang@user.noreply.gitee.com>
+Date:   Wed Apr 13 23:07:26 2022 +0800
+
+    小改总体样式
+
+[33mcommit 9a69b53ca2da5e59bc5c45cb75045e7245f209ba[m
+Merge: 2169d36 0d44fec
+Author: 庄珍妮 <9636529+jenny-zhuang@user.noreply.gitee.com>
+Date:   Wed Apr 13 22:55:22 2022 +0800
+
+    登录页修改+跳转ok
+
+[33mcommit 2169d3614704f0e0346f62a9b20cb6c867dd9260[m
+Merge: 1985c5f 0798ed1
+Author: 庄珍妮 <9636529+jenny-zhuang@user.noreply.gitee.com>
+Date:   Wed Apr 13 18:49:17 2022 +0800
+
+    拉了ZML和XSL分支
+
+[33mcommit 1985c5fa3132a2229ce1c0cea7fe37ec40cfa67b[m
+Merge: 850b047 351f1e9
+Author: 庄珍妮 <9636529+jenny-zhuang@user.noreply.gitee.com>
+Date:   Wed Apr 13 18:38:34 2022 +0800
+
+    Merge branch 'ZMH' of https://gitee.com/c0dedance/digital-pigeon-pro into ZZN
+
+[33mcommit 850b047ccb8b756c9334372e25eade3f9cd95e3c[m
+Author: 庄珍妮 <9636529+jenny-zhuang@user.noreply.gitee.com>
+Date:   Wed Apr 13 18:37:56 2022 +0800
+
+    登录页ok
+
+[33mcommit 351f1e91448bc641e608b10b5e2220c9b95d1ba8[m
+Author: 123 <2587679132@qq.com>
+Date:   Wed Apr 13 18:36:28 2022 +0800
+
+    修改
+
+[33mcommit f8d98b3176c616a83a15b31bd34c5dcab0d1ec97[m
+Author: 123 <2587679132@qq.com>
+Date:   Wed Apr 13 18:28:12 2022 +0800
+
+    修改
+
+[33mcommit 0798ed1c0eef352ec8bb0a2f2a0cebb74b2f5cc6[m
+Author: TuTu <9869887+aote--man@user.noreply.gitee.com>
+Date:   Wed Apr 13 17:04:19 2022 +0800
+
+    养殖辅助跟养殖统计
+
+[33mcommit 5da99800311288366fde5d1451a5330c9fe7bd3c[m
+Author: 123 <2587679132@qq.com>
+Date:   Wed Apr 13 11:08:03 2022 +0800
+
+    修改
+
+[33mcommit 0d44fecc9ce7874964937f9dc581f8567110efe4[m
+Author: c0dedance <2627702283@qq.com>
+Date:   Fri Apr 1 17:49:37 2022 +0800
+
+    add: 完成导航页编写
+
+[33mcommit 1c13dd115309d3f855d1e53268f4856372e63f2b[m
+Merge: 6504d51 84a1497
+Author: 庄珍妮 <9636529+jenny-zhuang@user.noreply.gitee.com>
+Date:   Thu Mar 31 18:08:05 2022 +0000
+
+    !1 处理菜单数据
+    Merge pull request !1 from 庄珍妮/ZZN
+
+[33mcommit 84a1497450f84b9c105883561c5853cdae97e79f[m
+Author: 庄珍妮 <9636529+jenny-zhuang@user.noreply.gitee.com>
+Date:   Fri Apr 1 02:04:05 2022 +0800
+
+    把serve改成dev
+
+[33mcommit 7e200a37bfb87b8a2b9f3cd7ea768c151d237a2f[m
+Author: 庄珍妮 <9636529+jenny-zhuang@user.noreply.gitee.com>
+Date:   Fri Apr 1 01:59:56 2022 +0800
+
+    菜单数据处理
+
+[33mcommit 2c9366260bebc44063f17086f07b554b2229fbdc[m
+Author: 庄珍妮 <9636529+jenny-zhuang@user.noreply.gitee.com>
+Date:   Wed Mar 30 01:29:47 2022 +0800
+
+    完成了登录页->环形菜单->首页
+
+[33mcommit 6504d513e782e32405abb027501533d9e547b858[m
+Author: 庄珍妮 <9636529+jenny-zhuang@user.noreply.gitee.com>
+Date:   Tue Mar 29 22:49:00 2022 +0800
+
+    add: 项目初始化

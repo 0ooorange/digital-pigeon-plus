@@ -2,7 +2,7 @@
 <div>
   <el-table  :header-cell-style="{color:'#000000'}"
     :data="tableData"
-    style="width: 85%;margin-bottom: 20px;"
+    style="width: 83%;margin-bottom: 20px;"
     row-key="id"
     border
     default-expand-all>
@@ -32,41 +32,41 @@
           id: 1,
           pigeonnumber: 'A02',
           boardnumber: '5',
-          noeggspumped: '😎',
-          noeggschecked:'😉',
-          nochildchecked:'😁'
+          noeggspumped: '✔️ ',
+          noeggschecked:'✔️ ',
+          nochildchecked:''
         }, 
         {
           id: 1,
           pigeonnumber: 'A02',
           boardnumber: '5',
-          noeggspumped: '😎',
-          noeggschecked:'😉',
-          nochildchecked:'😁'
+          noeggspumped: '',
+          noeggschecked:'✔️ ',
+          nochildchecked:'✔️ '
         },
         {
           id: 1,
           pigeonnumber: 'A02',
           boardnumber: '5',
-          noeggspumped: '😎',
-          noeggschecked:'😉',
-          nochildchecked:'😁'
+          noeggspumped: '',
+          noeggschecked:'✔️ ',
+          nochildchecked:'✔️ '
         },
         {
           id: 1,
           pigeonnumber: 'A02',
           boardnumber: '5',
-          noeggspumped: '😎',
-          noeggschecked:'😉',
-          nochildchecked:'😁'
+          noeggspumped: '✔️ ',
+          noeggschecked:'',
+          nochildchecked:'✔️ '
         },
         {
           id: 1,
           pigeonnumber: 'A02',
           boardnumber: '5',
-          noeggspumped: '😎',
-          noeggschecked:'😉',
-          nochildchecked:'😁'
+          noeggspumped: '',
+          noeggschecked:'',
+          nochildchecked:'✔️ '
         },],
        
       }

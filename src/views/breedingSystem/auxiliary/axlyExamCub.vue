@@ -1,15 +1,16 @@
 <template>
+
      <div class="container">
         <div class="container111">
             <div class="card">
                 <el-card class="mini_card">
                     <i class="el-icon-s-flag" style="font-size: 26px;color:#D32F2F"></i>
-                    总查仔次数：<i style="font-size: 18px;font-weight:900;color:#03A9F4">666</i>
+                    查仔个数：<i style="font-size: 18px;font-weight:900;color:#03A9F4">888</i>
                 </el-card>
             </div>
            <div class="search">
              <div class="search1">
-                <el-select v-model="value" clearable placeholder="请选择查询类型">
+                <el-select v-model="value" clearable placeholder="请选择查询类型" >
                  <el-option v-for="item in selectoptions1" :key="item.value" :label="item.label" :value="item.value">
                  </el-option>
                 </el-select>
@@ -22,10 +23,10 @@
              </div>
               <div class="btn">
                 <div class="btnleft">
-                  <el-button type="primary">搜索</el-button>
+                  <el-button type="primary" class="soushuo">搜索</el-button>
                   </div>
                 <div class="btnright">
-                   <el-button type="success">重置</el-button>
+                   <el-button type="success" >重置</el-button>
                    <el-button type="info">导出</el-button>
                 </div>
               </div>
@@ -33,33 +34,49 @@
         </div>
  
     <el-main class="nopadding">
-						<scTable ref="table" :data="apiObj"   stripe highlightCurrentRow class="tablestyle">
-							<el-table-column label="鸽笼号" prop="pigeonnumber" width="120" class="tablestyle" align="center"></el-table-column>
+						 <el-table ref="table" :data="apiObj"  stripe  highlightCurrentRow 
+             class="tablestyle" 
+             :header-cell-style="{color:'#000000',fontSize:'18px'}"
+             :row-style="{height: '50px'}">
+							<el-table-column label="鸽笼号" prop="pigeonnumber" width="120" align="center"></el-table-column>
 							<el-table-column label="板子编号" prop="boardnumber" width="120" align="center"></el-table-column>
-							<el-table-column label="生蛋时间" prop="raweggstime" width="180" align="center"></el-table-column>
-              <el-table-column label="生蛋天数" prop="raweggday" width="120" align="center"></el-table-column>
-              <el-table-column label="孵化天数" prop="incubationdays" width="120" align="center"></el-table-column>
-              <el-table-column label="操作员" prop="operator" width="120" align="center"></el-table-column>
-              <el-table-column label="备注" prop="remark" width="170" align="center"></el-table-column>
-						</scTable>
+							<el-table-column label="生蛋时间" prop="raweggstime" width="230" align="center"></el-table-column>
+              <el-table-column label="生蛋天数" prop="raweggday" width="150" align="center"></el-table-column>
+              <el-table-column label="孵化天数" prop="incubationdays" width="150" align="center"></el-table-column>
+              <el-table-column label="操作员" prop="operator" width="150" align="center"></el-table-column>
+              <el-table-column label="备注" prop="remark"  align="center"></el-table-column>
+						</el-table>
+            <el-pagination layout="total, sizes, prev, pager, next, jumper"
+                   :page-sizes="[5, 8, 10, 15]"
+                   :page-size="pageSize"
+                   :current-page="pageNum"
+                   :total="total"
+                   @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   class="page">
+       </el-pagination>
 
 		</el-main>
 
-     </div>
-    
 
+    
+</div>
 </template>
 
 <script>
-import showtime from '@/components/showtime/index.vue';
+
   export default {
     name: "ExtractAndIncubateAuxiliary",
     components: {
-      showtime
+    
+
     },
     data() {
       return {
-        inputvalue:'',
+        pageSize:8,
+        total:100,
+        pageNum:1,
+         inputvalue:'',
           selectoptions1: [{
           value: '选项1',
           label: '鸽笼号'
@@ -119,6 +136,7 @@ import showtime from '@/components/showtime/index.vue';
           
             
         ]
+       
     }
     },
   }
@@ -134,6 +152,7 @@ import showtime from '@/components/showtime/index.vue';
   flex-direction:row;
 }
 .card{
+  margin-left:10px;
   margin-bottom:20px;
   width:220px;
 }
@@ -149,8 +168,8 @@ import showtime from '@/components/showtime/index.vue';
     margin-right: 20px;
 }
 .search{
+  margin-top: 20px;
   margin-left: 20px;
-  border:1px solid red;
   width: 80%;
   height: 60px;
   display: flex;
@@ -159,6 +178,7 @@ import showtime from '@/components/showtime/index.vue';
 }
 .search2{
   margin-left: 20px;
+
 }
 .btn{
    display: flex;
@@ -169,7 +189,7 @@ import showtime from '@/components/showtime/index.vue';
   
 }
 .btnright{
-    margin-left: 365px;
+    margin-left: 480px;
     display: flex;
     flex-direction: row;
    
@@ -196,7 +216,23 @@ import showtime from '@/components/showtime/index.vue';
   height: 36px;
   font-size: 20px;
 }
+.nopadding{
+   margin-top: 10px;
+   padding-top:5px ;
+   margin-left: 20px;
+   width: 95%;
+   height: 680px;
+}
 .tablestyle{
-  font-size: 18px;
+  font-size: 16px;
+}
+.page {
+  margin-top: 36px;
+  margin-left: 195px;
+}
+.soushuo{
+  color: #fff;
+  background-color: #409eff;
+  border-color:#409eff;
 }
 </style>

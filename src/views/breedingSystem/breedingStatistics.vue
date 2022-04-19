@@ -17,7 +17,18 @@
         <div class="leftMain_middle leftMain_bottom">
         	<div class="leftMain_middle_right" style="margin-right:25px">
             	<div class="leftMain_middle_rightIn">
-                	<h3>监控视频区</h3>
+                <div class="jiankong">
+                  <h3>监控视频区</h3>
+                   <el-select v-model="value" placeholder="监控1">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
+                </div>
+                	
                     <div class="biaoge biaoge_bi" style="width:100%; height:28vh">
                     	<div class="contList">
                    <div class="boxVideo">
@@ -140,7 +151,23 @@ export default {
         value1: '',
       	//指定图表的配置项和数据
          chartDom:document.getElementById('main'),
-         
+          options: [{
+          value: '选项1',
+          label: '监控1'
+        }, {
+          value: '选项2',
+          label: '监控2'
+        }, {
+          value: '选项3',
+          label: '监控3'
+        }, {
+          value: '选项4',
+          label: '监控4'
+        }, {
+          value: '选项5',
+          label: '监控5'
+        }],
+        value: ''
       }
     },
     methods:{
