@@ -1,12 +1,6 @@
 <template>
   <div>
-    <table-search :searchTypes="searchTypes" @searchClick="searchClick" @outTable="outTable"></table-search>
-    <div class="numberCards">
-      <el-card v-for="(item, index) in cardData" :key="index">
-        <span class="cardText">{{item.cardText+"："}}</span>
-        <span class="cardNumber">{{item.cardNumber}}</span>
-      </el-card>
-    </div>
+    <table-search :searchTypes="searchTypes" :cardData="cardData" @searchClick="searchClick" @outTable="outTable" />
     <sc-table ref="table" :data="tableData" :pageSize="5" stripe highlightCurrentRow>
       <el-table-column align="center" label="鸽笼编号" prop="pigeonnumber" width="180"></el-table-column>
       <el-table-column align="center" label="鸽板编号" prop="boardnumber" width="180"></el-table-column>

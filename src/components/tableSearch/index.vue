@@ -2,10 +2,12 @@
   <div class="tableSearch">
     <div class="left">
       <slot class="slotCss"></slot>
-      <el-card v-for="(item, index) in cardData" :key="index">
+      <template v-if="isShowBfSearch">
+        <el-card v-for="(item, index) in cardData" :key="index">
         <span class="cardText">{{item.cardText+"："}}</span>
         <span class="cardNumber">{{item.cardNumber}}</span>
       </el-card>
+      </template>
       <span class="searchInputs" >
         <el-select style="width: 100px" v-model="searchType" class="m-2" placeholder="查询类型">
           <el-option v-for="item in searchTypes" :key="item.value" :label="item.label" :value="item.value" />
@@ -19,6 +21,14 @@
       <el-button type="warning" class="outTable" @click="outTable">导出</el-button>
     </div>
   </div>
+  <template v-if="isShowAfSearch">
+    <div class="numberCards">
+      <el-card v-for="(item, index) in cardData" :key="index">
+        <span class="cardText">{{item.cardText+"："}}</span>
+        <span class="cardNumber">{{item.cardNumber}}</span>
+      </el-card>
+    </div>
+  </template>
 </template>
 
 <script>
@@ -39,10 +49,17 @@ export default {
       searchType: '',
       inputStyle: {
         width: '150px',
-      },
+      }
     }
   },
-  mounted() {},
+  computed: {
+    isShowBfSearch() {
+      return this.cardData.length < 3 ? true : false
+    },
+    isShowAfSearch() {
+      return this.cardData.length >= 3 ? true : false
+    }
+  },
   methods: {
     searchClick() {
       this.$emit('searchClick')
@@ -88,5 +105,10 @@ export default {
 }
 .searchInputs {
   margin-left: 15px
+}
+.numberCards {
+  margin-bottom: 10px; 
+  display: flex;
+  flex-direction: row;
 }
 </style>
