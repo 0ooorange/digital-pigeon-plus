@@ -6,13 +6,13 @@
         <span class="cardText">{{item.cardText+"："}}</span>
         <span class="cardNumber">{{item.cardNumber}}</span>
       </el-card>
-      <span class="searchCondition">查询类型:</span>
-      <el-select v-model="searchType" class="m-2" placeholder="请选择">
-        <el-option v-for="item in searchTypes" :key="item.value" :label="item.label" :value="item.value" />
-      </el-select>
-      <span class="searchCondition">查询内容:</span>
-      <el-input v-model="input" placeholder="请输入" class="searchInner" />
-      <el-button type="primary" class="searchBtn" @click="searchClick">查询</el-button>
+      <span class="searchInputs" >
+        <el-select style="width: 100px" v-model="searchType" class="m-2" placeholder="查询类型">
+          <el-option v-for="item in searchTypes" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+        <el-input v-model="searchInner" placeholder="查询内容" class="searchInner" :input-style="inputStyle" />
+        <el-button type="success" class="searchBtn" @click="searchClick">查询</el-button>
+      </span>
     </div>
     <div class="right">
       <el-button type="danger" class="reflashSearch" @click="reflashSearch">重置</el-button>
@@ -23,43 +23,47 @@
 
 <script>
 export default {
-  emits: ["searchClick", "outTable"],
+  emits: ['searchClick', 'outTable'],
   props: {
     searchTypes: {
       type: Array,
-      require: true
+      require: true,
     },
     cardData: {
-      type: Array
-    }
+      type: Array,
+    },
   },
   data() {
     return {
-      input: '',
-      searchType: ''
+      searchInner: '',
+      searchType: '',
+      inputStyle: {
+        width: '150px',
+      },
     }
   },
+  mounted() {},
   methods: {
     searchClick() {
-      this.$emit("searchClick")
+      this.$emit('searchClick')
     },
     reflashSearch() {
       this.input = ''
       this.searchType = ''
     },
     outTable() {
-      this.$emit("outTable")
-    }
-  }
+      this.$emit('outTable')
+    },
+  },
 }
 </script>
 
 <style lang="less" scoped>
-@import "@/style/compStyle/tableSlot.less";
+@import '@/style/compStyle/tableSlot.less';
 .tableSearch {
   height: 70px;
 }
-.left, 
+.left,
 .right {
   float: left;
   display: flex;
@@ -71,18 +75,18 @@ export default {
   float: right !important;
   margin-right: 10px;
 }
-.searchCondition {
-  margin: 10px 10px 10px 10px;
-}
 .searchInner {
   width: 100px;
 }
 .searchBtn {
   height: 27px;
-  margin-left: 55px;
+  margin-left: 2px;
 }
 .reflashSearch,
 .outTable {
   height: 27px;
+}
+.searchInputs {
+  margin-left: 15px
 }
 </style>

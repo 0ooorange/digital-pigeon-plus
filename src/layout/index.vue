@@ -10,11 +10,11 @@
       </div>
       <div class="selectDivs">
         <span class="selectText">基地：</span>
-        <el-select v-model="currBase" class="m-2" placeholder="Select">
+        <el-select style="width: 150px" v-model="currBase" class="m-2" placeholder="Select">
           <el-option v-for="item in bases" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
         <span class="selectText">鸽棚：</span>
-        <el-select v-model="currDovecote" class="m-2" placeholder="Select">
+        <el-select style="width: 150px" v-model="currDovecote" class="m-2" placeholder="Select">
           <el-option v-for="item in dovecotes" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </div>
@@ -391,7 +391,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style scoped>
 .adminui-header .panel-item {
   padding: 0 10px;
   cursor: pointer;
@@ -410,11 +410,5 @@ export default {
 }
 .selectText {
   margin-left: 10px;
-}
-
-/deep/ .el-input__inner {
-  width: 150px;
-  height: 28px;
-  line-height: 28px;
 }
 </style>
