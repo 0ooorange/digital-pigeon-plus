@@ -317,7 +317,13 @@ body{
         transform: translate3d(0, -30vh, 0);
     }
 }
-
+ .jiankong{
+	 display: flex;
+	 flex-direction: row;
+ }
+ .search{
+	 margin-left: 110px;
+ }
 .rightMain .rightMain_bottomIn .biaoge_list ul{
 	display:flex;
 	display: -webkit-flex;
