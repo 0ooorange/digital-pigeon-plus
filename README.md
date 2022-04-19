@@ -68,9 +68,6 @@ git push origin ZZN:dev-breeding-v1.0
 <script>
 export default {
   name: 'abnormalCaseManage',
-  components: {
-    tableSearch
-  },
   data() {
     return {
       // 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方
