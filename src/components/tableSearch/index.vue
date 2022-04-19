@@ -78,18 +78,23 @@ export default {
 <style lang="less" scoped>
 @import '@/style/compStyle/tableSlot.less';
 .tableSearch {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
   height: 70px;
+  min-width: 860px;
 }
-.left,
-.right {
-  float: left;
+.left {
   display: flex;
   flex-direction: row;
   align-items: center;
   height: 70px;
 }
 .right {
-  float: right !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 70px;
   margin-right: 10px;
 }
 .searchInner {
