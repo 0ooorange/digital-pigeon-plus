@@ -1,105 +1,35 @@
 <template>
+
   <div class="bg">
-	<div class="title">智慧数字鸽业</div>
+     <div class=" title">
+      <el-date-picker v-model="value1" type="date" placeholder="选择日期"> </el-date-picker>
+     </div>
+     <div class="tip">
+      	<DovecoteInfo></DovecoteInfo>
+     </div>
     <div class="leftMain">
-    	<div class="leftMain_top">
-        	<div class="leftMain_topIn">
-            	<ul>
-                	<li>
-                        <div class="liIn">
-                            <h3>成鸽数</h3>
-                             <p class="shu"><span class="shu1">2000对</span></p>
-                            <span class="border_bg_leftTop"></span>
-                            <span class="border_bg_rightTop"></span>
-                            <span class="border_bg_leftBottom"></span>
-                            <span class="border_bg_rightBottom"></span>
-                        </div>
-                    </li>
-                	<li>
-                        <div class="liIn">
-                             <h3>幼鸽数</h3>
-                             <p class="shu"><span class="shu1">1000只</span></p>
-                            <span class="border_bg_leftTop"></span>
-                            <span class="border_bg_rightTop"></span>
-                            <span class="border_bg_leftBottom"></span>
-                            <span class="border_bg_rightBottom"></span>
-                        </div>
-                    </li>
-                	<li>
-                        <div class="liIn" >
-                             <h3>抽蛋数</h3>
-                             <p class="shu"><span class="shu1">800枚</span></p>
-                            <span class="border_bg_leftTop"></span>
-                            <span class="border_bg_rightTop"></span>
-                            <span class="border_bg_leftBottom"></span>
-                            <span class="border_bg_rightBottom"></span>
-                        </div>
-                    </li>
-                	<li>
-                        <div class="liIn">
-                             <h3>产蛋数</h3>
-                             <p class="shu"><span class="shu1">600枚</span></p>
-                            <span class="border_bg_leftTop"></span>
-                            <span class="border_bg_rightTop"></span>
-                            <span class="border_bg_leftBottom"></span>
-                            <span class="border_bg_rightBottom"></span>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="liIn">
-                             <h3>出仔数</h3>
-                             <p class="shu"><span class="shu1">400只</span></p> 
-                            <span class="border_bg_leftTop"></span>
-                            <span class="border_bg_rightTop"></span>
-                            <span class="border_bg_leftBottom"></span>
-                            <span class="border_bg_rightBottom"></span>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="liIn">
-                             <h3>出栏数</h3>
-                             <p class="shu"><span class="shu1">800只</span></p>
-                            <span class="border_bg_leftTop"></span>
-                            <span class="border_bg_rightTop"></span>
-                            <span class="border_bg_leftBottom"></span>
-                            <span class="border_bg_rightBottom"></span>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="liIn">
-                             <h3>死仔数</h3>
-                             <p class="shu"><span class="shu1">100只</span></p> 
-                            <span class="border_bg_leftTop"></span>
-                            <span class="border_bg_rightTop"></span>
-                            <span class="border_bg_leftBottom"></span>
-                            <span class="border_bg_rightBottom"></span>
-                        </div>
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-
         <div class="leftMain_middle">
-        	<div class="leftMain_middle_left">
-                <div class="leftMain_middle_leftIn">
-                	<h3>当日工作预警表格</h3>
-                    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-                    <div class="biaoge" style="width:100%; height:25vh" id="chartmain"></div>
-                   
-                    <span class="border_bg_leftTop"></span>
-                    <span class="border_bg_rightTop"></span>
-                    <span class="border_bg_leftBottom"></span>
-                    <span class="border_bg_rightBottom"></span>
-                </div>
-            </div>
+              <div class="leftMain_middle_leftIn">
+                	<h3>当日预警信息</h3>
+                  <TableCustom></TableCustom>      
+             </div>
         </div>
-        <div class="leftMain_middle">
-        	
+        <div class="leftMain_middle leftMain_bottom">
         	<div class="leftMain_middle_right" style="margin-right:25px">
             	<div class="leftMain_middle_rightIn">
-                	<h3>监控视频区</h3>
-                    <div class="biaoge biaoge_bi" style="width:100%; height:25vh">
+                <div class="jiankong">
+                  <h3>监控视频区</h3>
+                   <el-select v-model="value" placeholder="监控1">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
+                </div>
+                	
+                    <div class="biaoge biaoge_bi" style="width:100%; height:28vh">
                     	<div class="contList">
                    <div class="boxVideo">
                   <video class="video-js vjs-big-play-button" data-setup='{}' controls>
@@ -109,45 +39,34 @@
            </div>
 
                     </div>
-                    <span class="border_bg_leftTop"></span>
-                    <span class="border_bg_rightTop"></span>
-                    <span class="border_bg_leftBottom"></span>
-                    <span class="border_bg_rightBottom"></span>
                 </div>
             </div>
-            <div class="leftMain_middle_left">
+            <div class="leftMain_bottom_right">
             	<div class="leftMain_middle_leftIn">
                 	<h3>环境监测数据可视化</h3>
-                    <div class="biaoge" style="width:100%; height:25vh" id="main"></div>
-                    <span class="border_bg_leftTop"></span>
-                    <span class="border_bg_rightTop"></span>
-                    <span class="border_bg_leftBottom"></span>
-                    <span class="border_bg_rightBottom"></span>
+                    <div class="biaoge" style="width:98%; height:32vh" id="main"></div>
                 </div>
             </div>
         </div>
     </div>
     <div class="rightMain">
-         <div class="rightMain_top">
-            <div class="rightMain_topIn">
-                <h3>加料统计</h3>
-                <div class="biaoge" style="width:100%; height:30vh" id="chartmain_bing"></div>
-               
-                <span class="border_bg_leftTop"></span>
-                <span class="border_bg_rightTop"></span>
-                <span class="border_bg_leftBottom"></span>
-                <span class="border_bg_rightBottom"></span>
+        <div class="rightMain_topIn">
+              <h3>加料统计</h3>
+              <div class="bingtu">
+                  <EchartStatistics></EchartStatistics>
+              </div>
+                
             </div>
-         </div>
+  
         <div class="rightMain_bottom">
             <div class="rightMain_bottomIn">
                 <h3>鸽子仓的预警信息</h3>
-                <div class="biaoge biaoge_list" style="width:100%; height:200px">
+                <div class="biaoge biaoge_list" style="width:100%; height:250px">
                 	<div class="biaoge_listIn">
                     	<ul class="ul_title">
-                        	<li style="width:70px">时间</li>
-                            <li style="width:64px">地点</li>
-                            <li style="width:80px">预警信息</li>
+                        	<li style="width:110px">时间</li>
+                            <li style="width:55px">地点</li>
+                            <li style="width:125px">预警信息</li>
                         </ul>
                         <div class="ul_list">
                         	<div class="ul_listIn">
@@ -204,10 +123,6 @@
                    </div>
 
                 </div>
-                <span class="border_bg_leftTop"></span>
-                <span class="border_bg_rightTop"></span>
-                <span class="border_bg_leftBottom"></span>
-                <span class="border_bg_rightBottom"></span>
             </div>
          </div>
     </div>
@@ -217,19 +132,42 @@
 
 <script >
 import * as echarts from 'echarts';
+import DovecoteInfo from "../../components/breedingStatistics/DovecoteInfo.vue";
+import TableCustom from "../../components/breedingStatistics/table-custom.vue";
+import EchartStatistics from "../../components/breedingStatistics/echartStatistics.vue";
+
 
 export default {
+   name: "BreedingStatistics",
+   components: {
+       DovecoteInfo,
+       TableCustom,
+       EchartStatistics
+    },
     
     data(){
       return{
+        value1: '',
       	//指定图表的配置项和数据
          chartDom:document.getElementById('main'),
-         
+          options: [{
+          value: '选项1',
+          label: '监控1'
+        }, {
+          value: '选项2',
+          label: '监控2'
+        }, {
+          value: '选项3',
+          label: '监控3'
+        }, {
+          value: '选项4',
+          label: '监控4'
+        }, {
+          value: '选项5',
+          label: '监控5'
+        }],
+        value: ''
       }
-    },
-    mounted() {
-        this.getstyles();
-        this.initEcharts();
     },
     methods:{
        getstyles(){
@@ -237,17 +175,10 @@ export default {
         },
         initEcharts() {
            const option = {
-//   title: {
-//     text: 'Stacked Line'
-//   },
   tooltip: {
     trigger: 'axis'
   },
   legend: {
-       textStyle:{
-                            fontSize: 18,//字体大小
-                            color: '#ffffff'//字体颜色
-                        },
 
     data: ['温度', '湿度', '二氧化碳', '光照强度', 'PM2.5','氮气']
   },
@@ -266,22 +197,11 @@ export default {
     type: 'category',
     boundaryGap: false,
     data: ['00:00', '4:00', '8:00', '12:00', '16:00', '20:00', '24:00'],
-     axisLine: {
-            lineStyle:{
-                color:'#fff',//x轴的颜色
-                width:2,//轴线的宽度
-            }
-    }
   },
   yAxis: {
     type: 'value',
      data: ['0', '300', '600', '900', '1200', '1500'],
-      axisLine: {
-            lineStyle:{
-                color:'#fff',//x轴的颜色
-                width:2,//轴线的宽度
-            }
-    }
+   
   },
   series: [
     {
@@ -325,7 +245,11 @@ export default {
     const myChart = echarts.init(document.getElementById("main"));// 图标初始化
       myChart.setOption(option);// 渲染页面
         }
-    }
+    },
+     mounted() {
+        this.getstyles();
+        this.initEcharts();
+    },
 }
 </script>
 <style src="@/style/breedingStatistics/index.css" scoped>
