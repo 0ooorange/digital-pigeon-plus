@@ -136,10 +136,16 @@ export default {
   cursor: pointer;
 }
 .timeCss {
+  display: block;
   margin: 0;
   width: 200px;
   height: 58px;
   line-height: 58px;
   font-size: 12px;
+}
+@media (max-width: 992px){ 
+  .timeCss {
+    display: none;
+  }
 }
 </style>

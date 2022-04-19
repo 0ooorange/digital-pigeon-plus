@@ -1,26 +1,32 @@
 <template>
   <!-- 经典布局 -->
   <template v-if="layout=='menu'">
-    <header class="adminui-header">
-      <div class="panel-item adminui-header-left" @click="toNavigator">
-        <div class="logo-bar">
-          <img class="logo" src="img/logo-2.png">
-          <span>{{ $CONFIG.APP_NAME }}</span>
-        </div>
-      </div>
-      <div class="selectDivs">
-        <span class="selectText">基地：</span>
-        <el-select style="width: 150px" v-model="currBase" class="m-2" placeholder="Select">
-          <el-option v-for="item in bases" :key="item.value" :label="item.label" :value="item.value" />
-        </el-select>
-        <span class="selectText">鸽棚：</span>
-        <el-select style="width: 150px" v-model="currDovecote" class="m-2" placeholder="Select">
-          <el-option v-for="item in dovecotes" :key="item.value" :label="item.label" :value="item.value" />
-        </el-select>
-      </div>
-      <div class="adminui-header-right">
-        <userbar></userbar>
-      </div>
+    <header>
+      <el-row class="adminui-header">
+        <el-col :span="firstSpan">
+          <div :class="menuIsCollapse?'panel-item adminui-header-left beCenter':'panel-item adminui-header-left'" @click="toNavigator">
+            <div class="logo-bar">
+              <img class="logo" src="img/logo-2.png">
+              <span class="isShowText" v-if="!menuIsCollapse">{{ $CONFIG.APP_NAME }}</span>
+            </div>
+          </div>
+        </el-col>
+        <el-col :span="secondSpan" style="display:flex; ">
+          <div class="selectDivs">
+            <span class="selectText">基地：</span>
+            <el-select style="width: 150px" v-model="currBase" class="m-2" placeholder="Select">
+              <el-option v-for="item in bases" :key="item.value" :label="item.label" :value="item.value" />
+            </el-select>
+            <span class="selectText">鸽棚：</span>
+            <el-select style="width: 150px" v-model="currDovecote" class="m-2" placeholder="Select">
+              <el-option v-for="item in dovecotes" :key="item.value" :label="item.label" :value="item.value" />
+            </el-select>
+          </div>
+        </el-col>
+        <el-col :span="thirdSpan" class="userbarCss">
+          <userbar></userbar>
+        </el-col>
+      </el-row>
     </header>
     <section class="aminui-wrapper">
       <div v-if="!ismobile" :class="menuIsCollapse?'aminui-side isCollapse':'aminui-side'">
@@ -133,7 +139,7 @@ export default {
           },
         ]
       },
-    }
+    },
   },
   data() {
     return {
@@ -308,6 +314,7 @@ export default {
       nextMenu: [],
       pmenu: {},
       active: '',
+      thirdSpan: 8
     }
   },
   computed: {
@@ -323,6 +330,12 @@ export default {
     menuIsCollapse() {
       return this.$store.state.global.menuIsCollapse
     },
+    firstSpan() {
+      return this.$store.state.global.menuIsCollapse ? 1 : 4
+    },
+    secondSpan() {
+      return this.$store.state.global.menuIsCollapse ? 15 : 12
+    }
   },
   created() {
     this.onLayoutResize()
@@ -395,16 +408,15 @@ export default {
     // 返回导航页
     toNavigator() {
       this.$router.replace({
-      	path: '/navigator'
+        path: '/navigator',
       })
-    }
+    },
   },
 }
 </script>
 
 <style scoped>
 .adminui-header .panel-item {
-  padding: 0 10px;
   cursor: pointer;
   height: 100%;
   display: flex;
@@ -414,12 +426,17 @@ export default {
   background: rgba(255, 255, 255, 0.1);
 }
 .selectDivs {
-  position: relative;
-  left: -16%;
   display: flex;
   align-items: center;
 }
 .selectText {
   margin-left: 10px;
+}
+.userbarCss {
+  display: flex;
+  justify-content: flex-end;
+}
+.beCenter {
+  justify-content: center;
 }
 </style>
