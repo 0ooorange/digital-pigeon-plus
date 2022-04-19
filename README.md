@@ -66,7 +66,6 @@ git push origin ZZN:dev-breeding-v1.0
   <table-search :searchTypes="searchTypes" :cardData="cardData"  @searchClick="searchClick" @outTable="outTable" />
 </template>
 <script>
-import tableSearch from '@/components/tableSearch/index.vue'
 export default {
   name: 'abnormalCaseManage',
   components: {
@@ -74,8 +73,7 @@ export default {
   },
   data() {
     return {
-      // 这是卡片数据数组，一个元素一个卡片
-      // 建议：需要展示的卡片太多就不要传cardData进组件了
+      // 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方
       cardData: [{
         cardText: '仔数',
         cardNumber: 666
