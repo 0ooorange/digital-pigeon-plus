@@ -2,87 +2,119 @@
   <div class="tableSearch">
     <div class="left">
       <slot class="slotCss"></slot>
-      <el-card v-for="(item, index) in cardData" :key="index">
+      <template v-if="isShowBfSearch">
+        <el-card v-for="(item, index) in cardData" :key="index">
         <span class="cardText">{{item.cardText+"："}}</span>
         <span class="cardNumber">{{item.cardNumber}}</span>
       </el-card>
-      <span class="searchCondition">查询类型:</span>
-      <el-select v-model="searchType" class="m-2" placeholder="请选择">
-        <el-option v-for="item in searchTypes" :key="item.value" :label="item.label" :value="item.value" />
-      </el-select>
-      <span class="searchCondition">查询内容:</span>
-      <el-input v-model="input" placeholder="请输入" class="searchInner" />
-      <el-button type="primary" class="searchBtn" @click="searchClick">查询</el-button>
+      </template>
+      <span class="searchInputs" >
+        <el-select style="width: 100px" v-model="searchType" class="m-2" placeholder="查询类型">
+          <el-option v-for="item in searchTypes" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+        <el-input v-model="searchInner" placeholder="查询内容" class="searchInner" :input-style="inputStyle" />
+        <el-button type="success" class="searchBtn" @click="searchClick">查询</el-button>
+      </span>
     </div>
     <div class="right">
       <el-button type="danger" class="reflashSearch" @click="reflashSearch">重置</el-button>
       <el-button type="warning" class="outTable" @click="outTable">导出</el-button>
     </div>
   </div>
+  <template v-if="isShowAfSearch">
+    <div class="numberCards">
+      <el-card v-for="(item, index) in cardData" :key="index">
+        <span class="cardText">{{item.cardText+"："}}</span>
+        <span class="cardNumber">{{item.cardNumber}}</span>
+      </el-card>
+    </div>
+  </template>
 </template>
 
 <script>
 export default {
-  emits: ["searchClick", "outTable"],
+  emits: ['searchClick', 'outTable'],
   props: {
     searchTypes: {
       type: Array,
-      require: true
+      require: true,
     },
     cardData: {
-      type: Array
-    }
+      type: Array,
+    },
   },
   data() {
     return {
-      input: '',
-      searchType: ''
+      searchInner: '',
+      searchType: '',
+      inputStyle: {
+        width: '150px',
+      }
+    }
+  },
+  computed: {
+    isShowBfSearch() {
+      return this.cardData.length < 3 ? true : false
+    },
+    isShowAfSearch() {
+      return this.cardData.length >= 3 ? true : false
     }
   },
   methods: {
     searchClick() {
-      this.$emit("searchClick")
+      this.$emit('searchClick')
     },
     reflashSearch() {
       this.input = ''
       this.searchType = ''
     },
     outTable() {
-      this.$emit("outTable")
-    }
-  }
+      this.$emit('outTable')
+    },
+  },
 }
 </script>
 
 <style lang="less" scoped>
-@import "@/style/compStyle/tableSlot.less";
+@import '@/style/compStyle/tableSlot.less';
 .tableSearch {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
   height: 70px;
+  min-width: 860px;
 }
-.left, 
-.right {
-  float: left;
+.left {
   display: flex;
   flex-direction: row;
   align-items: center;
   height: 70px;
 }
 .right {
-  float: right !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 70px;
   margin-right: 10px;
-}
-.searchCondition {
-  margin: 10px 10px 10px 10px;
 }
 .searchInner {
   width: 100px;
 }
 .searchBtn {
   height: 27px;
-  margin-left: 55px;
+  margin-left: 2px;
 }
 .reflashSearch,
 .outTable {
   height: 27px;
+}
+.searchInputs {
+  margin-left: 15px
+}
+.numberCards {
+  margin-bottom: 10px; 
+  display: flex;
+  flex-direction: row;
+  min-width: 860px;
 }
 </style>

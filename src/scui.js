@@ -30,6 +30,9 @@ import errorHandler from './utils/errorHandler'
 import * as elIcons from '@element-plus/icons'
 import * as scIcons from './assets/icons'
 
+// 封装组件
+import tableSearch from '@/components/tableSearch/index.vue'
+
 export default {
 	install(app) {
 		//挂载全局对象
@@ -56,6 +59,7 @@ export default {
 		app.component('scQrCode', scQrCode);
 		app.component('scStatusIndicator', scStatusIndicator);
 		app.component('scTrend', scTrend);
+		app.component('tableSearch', tableSearch);
 
 		//注册全局指令
 		app.directive('auth', auth)

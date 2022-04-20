@@ -8,14 +8,12 @@
       </div>
       <div class="form" v-if="loginMethod === 0">
         <div class="inlineForm">
-          <span class="text">手机号：</span>
           <span class="input">
-            <el-input v-model="moblePhoneScrt" placeholder="请输入手机号码" />
+            <el-input v-model="moblePhoneScrt" placeholder="请输入手机号码/用户名" />
           </span>
         </div>
         <span id="moblePhoneScrtId" class="phoneVerify" style="display: none;">请输入正确的手机号码格式</span>
         <div class="inlineForm">
-          <span class="text">密码：</span>
           <span class="input">
             <el-input v-model="password" type="password" placeholder="请填写密码" show-password />
           </span>
@@ -25,14 +23,12 @@
       </div>
       <div class="form" v-if="loginMethod === 1">
         <div class="inlineForm">
-          <span class="text">手机号：</span>
           <span class="input">
             <el-input v-model="moblePhoneMess" placeholder="请输入手机号码" />
           </span>
         </div>
         <span id="moblePhoneMessId" class="phoneVerify" style="display: none;">请输入正确的手机号码格式</span>
         <div class="inlineForm">
-          <span class="text">验证码：</span>
           <span class="input verifyInput">
             <el-input v-model="verify" placeholder="请输入验证码" />
           </span>
@@ -186,25 +182,20 @@ export default {
     position: absolute;
     top: 145px;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     flex-direction: column;
     .inlineForm {
       display: flex;
-      .text {
-        font-size: 16px;
-        line-height: 58px;
-        color: #0adfef;
-      }
       .input {
-        margin: 10px 0 10px 10px;
+        margin: 10px 0 ;
         display: inline-block;
-        width: 280px;
+        width: 300px;
       }
       .verifyInput {
-        width: 180px;
+        width: 200px;
       }
       .verifyBtn {
-        margin: 10px 0 10px 1px;
+        margin: 10px 0;
         height: 40px;
         width: 100px;
         cursor: pointer;
@@ -243,12 +234,12 @@ export default {
   .rememberSecret {
     position: absolute;
     top: 255px;
-    left: 80px;
+    left: 110px;
   }
   .forgetSecret {
     position: absolute;
     top: 255px;
-    right: 80px;
+    right: 110px;
     cursor: pointer;
     line-height: 40px;
     font-size: 14px;

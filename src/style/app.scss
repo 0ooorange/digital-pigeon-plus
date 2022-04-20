@@ -16,7 +16,7 @@ a,button,input,textarea{-webkit-tap-highlight-color:rgba(0,0,0,0);box-sizing: bo
 .layout-setting i {font-size: 18px;color: #fff;}
 
 /* 头部 */
-.adminui-header {height: 58px;background: #162657;color: #fff;display: flex;justify-content:space-between;}
+.adminui-header {height: 58px;background: #162657;color: #fff;display: flex;justify-content:space-between;min-width: 860px;}
 .adminui-header-left {display: flex;align-items: center;padding-left:5px;}
 .adminui-header-right {display: flex;align-items: center;}
 .adminui-header .logo-bar {font-size: 14px;font-weight: bold;display: flex;align-items: center;}
@@ -47,14 +47,14 @@ a,button,input,textarea{-webkit-tap-highlight-color:rgba(0,0,0,0);box-sizing: bo
 .adminui-side-split-scroll::-webkit-scrollbar-track {background-color: rgba(255, 255, 255, 0);}
 .adminui-side-split-scroll::-webkit-scrollbar-track:hover {background-color: rgba(255, 255, 255, 0);}
 
-.aminui-side {display: flex;flex-flow: column;flex-shrink:0;width:243px;background: #fff;box-shadow: 2px 0 8px 0 rgba(29,35,41,.05);border-right: 1px solid #e6e6e6;transition:width 0.3s;}
+.aminui-side {display: flex;flex-flow: column;flex-shrink:0;width:16.7%;background: #fff;box-shadow: 2px 0 8px 0 rgba(29,35,41,.05);border-right: 1px solid #e6e6e6;transition:width 0.3s;}
 .adminui-side-top {border-bottom: 1px solid #ebeef5;height:50px;line-height: 50px;}
 .adminui-side-top h2 {padding:0 20px;font-size: 17px;color: #3c4a54;}
 .adminui-side-scroll {overflow: auto;overflow-x:hidden;flex: 1;}
 .adminui-side-bottom {border-top: 1px solid #ebeef5;height:35px;cursor: pointer;display: flex;align-items: center;justify-content: center;}
 .adminui-side-bottom i {font-size: 16px;}
 .adminui-side-bottom:hover {color: var(--el-color-primary);}
-.aminui-side.isCollapse {width: 65px;}
+.aminui-side.isCollapse {width: 4.2%;}
 
 /* 右侧内容 */
 .aminui-body {flex: 1;display: flex;flex-flow: column;}
@@ -78,7 +78,7 @@ a,button,input,textarea{-webkit-tap-highlight-color:rgba(0,0,0,0);box-sizing: bo
 .adminui-tags li.active a {color: #fff;}
 .adminui-tags li.sortable-ghost {opacity: 0;}
 
-.adminui-main {overflow: auto;background-color: #f6f8f9;flex: 1;}
+.adminui-main {padding: 10px; overflow: auto;background-color: #f6f8f9;flex: 1;}
 
 /*页面最大化*/
 .aminui.main-maximize {

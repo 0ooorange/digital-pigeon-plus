@@ -1,26 +1,32 @@
 <template>
   <!-- 经典布局 -->
   <template v-if="layout=='menu'">
-    <header class="adminui-header">
-      <div class="panel-item adminui-header-left" @click="toNavigator">
-        <div class="logo-bar">
-          <img class="logo" src="img/logo.png">
-          <span>{{ $CONFIG.APP_NAME }}</span>
-        </div>
-      </div>
-      <div class="selectDivs">
-        <span class="selectText">基地：</span>
-        <el-select v-model="currBase" class="m-2" placeholder="Select">
-          <el-option v-for="item in bases" :key="item.value" :label="item.label" :value="item.value" />
-        </el-select>
-        <span class="selectText">鸽棚：</span>
-        <el-select v-model="currDovecote" class="m-2" placeholder="Select">
-          <el-option v-for="item in dovecotes" :key="item.value" :label="item.label" :value="item.value" />
-        </el-select>
-      </div>
-      <div class="adminui-header-right">
-        <userbar></userbar>
-      </div>
+    <header>
+      <el-row class="adminui-header">
+        <el-col :span="firstSpan">
+          <div :class="menuIsCollapse?'panel-item adminui-header-left beCenter':'panel-item adminui-header-left'" @click="toNavigator">
+            <div class="logo-bar">
+              <img class="logo" src="img/logo-2.png">
+              <span class="isShowText" v-if="!menuIsCollapse">{{ $CONFIG.APP_NAME }}</span>
+            </div>
+          </div>
+        </el-col>
+        <el-col :span="secondSpan" style="display:flex; ">
+          <div class="selectDivs">
+            <span class="selectText">基地：</span>
+            <el-select style="width: 150px" v-model="currBase" class="m-2" placeholder="Select">
+              <el-option v-for="item in bases" :key="item.value" :label="item.label" :value="item.value" />
+            </el-select>
+            <span class="selectText">鸽棚：</span>
+            <el-select style="width: 150px" v-model="currDovecote" class="m-2" placeholder="Select">
+              <el-option v-for="item in dovecotes" :key="item.value" :label="item.label" :value="item.value" />
+            </el-select>
+          </div>
+        </el-col>
+        <el-col :span="thirdSpan" class="userbarCss">
+          <userbar></userbar>
+        </el-col>
+      </el-row>
     </header>
     <section class="aminui-wrapper">
       <div v-if="!ismobile" :class="menuIsCollapse?'aminui-side isCollapse':'aminui-side'">
@@ -133,7 +139,7 @@ export default {
           },
         ]
       },
-    }
+    },
   },
   data() {
     return {
@@ -146,7 +152,7 @@ export default {
           path: '/breedingSystem/breedingStatistics',
           meta: {
             title: '养殖统计',
-            icon: 'el-icon-info-filled',
+            icon: 'el-icon-histogram',
             type: 'menu',
           },
           component: 'breedingSystem/breedingStatistics',
@@ -156,7 +162,7 @@ export default {
           path: '/breedingSystem/auxiliary',
           meta: {
             title: '养殖辅助',
-            icon: 'el-icon-info-filled',
+            icon: 'el-icon-connection',
             type: 'menu',
           },
           children: [
@@ -165,6 +171,7 @@ export default {
               name: 'ExtractAndIncubateAuxiliary',
               meta: {
                 title: '抽孵辅助',
+                icon: 'el-icon-office-building',
                 type: 'menu',
               },
               component: 'breedingSystem/auxiliary/extractAndIncubate',
@@ -174,6 +181,7 @@ export default {
               name: 'examineEggAuxiliary',
               meta: {
                 title: '查蛋辅助',
+                icon: 'el-icon-office-building',
                 type: 'menu',
               },
               component: 'breedingSystem/auxiliary/axlyExamEgg',
@@ -183,6 +191,7 @@ export default {
               name: 'examineCubAuxiliary',
               meta: {
                 title: '查仔辅助',
+                icon: 'el-icon-office-building',
                 type: 'menu',
               },
               component: 'breedingSystem/auxiliary/axlyExamCub',
@@ -192,6 +201,7 @@ export default {
               name: 'outCageAuxiliary',
               meta: {
                 title: '出栏辅助',
+                icon: 'el-icon-office-building',
                 type: 'menu',
               },
               component: 'breedingSystem/auxiliary/axlyOutCage',
@@ -203,7 +213,7 @@ export default {
           path: '/breedingSystem/bsManage',
           meta: {
             title: '养殖管理',
-            icon: 'el-icon-info-filled',
+            icon: 'el-icon-calendar',
             type: 'menu',
           },
           children: [
@@ -212,6 +222,7 @@ export default {
               name: 'layEggsManage',
               meta: {
                 title: '产蛋',
+                icon: 'el-icon-office-building',
                 type: 'menu',
               },
               component: 'breedingSystem/bsManage/layEggs',
@@ -221,6 +232,7 @@ export default {
               name: 'examineEggManage',
               meta: {
                 title: '查蛋',
+                icon: 'el-icon-office-building',
                 type: 'menu',
               },
               component: 'breedingSystem/bsManage/manageExamEgg',
@@ -230,6 +242,7 @@ export default {
               name: 'examineCubManage',
               meta: {
                 title: '查仔',
+                icon: 'el-icon-office-building',
                 type: 'menu',
               },
               component: 'breedingSystem/bsManage/manageExamCub',
@@ -239,6 +252,7 @@ export default {
               name: 'abnormalCaseManage',
               meta: {
                 title: '异常情况',
+                icon: 'el-icon-office-building',
                 type: 'menu',
               },
               component: 'breedingSystem/bsManage/abnormalCase',
@@ -248,6 +262,7 @@ export default {
               name: 'reEggsManage',
               meta: {
                 title: '回蛋',
+                icon: 'el-icon-office-building',
                 type: 'menu',
               },
               component: 'breedingSystem/bsManage/reEggs',
@@ -257,6 +272,7 @@ export default {
               name: 'allStateManage',
               meta: {
                 title: '鸽笼状态总览',
+                icon: 'el-icon-office-building',
                 type: 'menu',
               },
               component: 'breedingSystem/bsManage/allState',
@@ -268,7 +284,7 @@ export default {
           path: '/breedingSystem/dovePerformance',
           meta: {
             title: '种鸽性能测试',
-            icon: 'el-icon-info-filled',
+            icon: 'el-icon-compass',
             type: 'menu',
           },
           component: 'breedingSystem/dovePerformance',
@@ -278,7 +294,7 @@ export default {
           path: '/breedingSystem/materialStatistics',
           meta: {
             title: '物料统计',
-            icon: 'el-icon-info-filled',
+            icon: 'el-icon-data-line',
             type: 'menu',
           },
           children: [
@@ -287,6 +303,7 @@ export default {
               name: 'fodderStatistics',
               meta: {
                 title: '饲料',
+                icon: 'el-icon-office-building',
                 type: 'menu',
               },
               component: 'breedingSystem/materialStatistics/fodder',
@@ -297,6 +314,7 @@ export default {
       nextMenu: [],
       pmenu: {},
       active: '',
+      thirdSpan: 8
     }
   },
   computed: {
@@ -312,6 +330,12 @@ export default {
     menuIsCollapse() {
       return this.$store.state.global.menuIsCollapse
     },
+    firstSpan() {
+      return this.$store.state.global.menuIsCollapse ? 1 : 4
+    },
+    secondSpan() {
+      return this.$store.state.global.menuIsCollapse ? 15 : 12
+    }
   },
   created() {
     this.onLayoutResize()
@@ -384,16 +408,15 @@ export default {
     // 返回导航页
     toNavigator() {
       this.$router.replace({
-      	path: '/navigator'
+        path: '/navigator',
       })
-    }
+    },
   },
 }
 </script>
 
-<style lang="less" scoped>
+<style scoped>
 .adminui-header .panel-item {
-  padding: 0 10px;
   cursor: pointer;
   height: 100%;
   display: flex;
@@ -403,18 +426,17 @@ export default {
   background: rgba(255, 255, 255, 0.1);
 }
 .selectDivs {
-  position: relative;
-  left: -16%;
   display: flex;
   align-items: center;
 }
 .selectText {
   margin-left: 10px;
 }
-
-/deep/ .el-input__inner {
-  width: 150px;
-  height: 28px;
-  line-height: 28px;
+.userbarCss {
+  display: flex;
+  justify-content: flex-end;
+}
+.beCenter {
+  justify-content: center;
 }
 </style>
