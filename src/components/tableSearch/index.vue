@@ -115,5 +115,6 @@ export default {
   margin-bottom: 10px; 
   display: flex;
   flex-direction: row;
+  min-width: 860px;
 }
 </style>
