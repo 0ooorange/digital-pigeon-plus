@@ -48,7 +48,7 @@ body{
 	  flex-direction: row;
   }
   .jiankong h3{
-	  margin-right: 30px;
+	  margin-right: 70px;
   }
 .video-js {
   width: 100%;
@@ -106,7 +106,7 @@ body{
 	width:350px;
 	height: 100%;
 	margin-left:35px;
-	border:1px solid rgb(5, 2, 0);
+	
  }
 .leftmain-right{
 	margin-left: 20px;
@@ -238,8 +238,12 @@ body{
 .rightMain .rightMain_bottomIn .biaoge{
 	min-height:200px;}
 .rightMain .rightMain_bottomIn .biaoge_list{
+	width:100%;
+	 height:250px;
+	border: 10px solid rgb(119, 172, 166);
 	overflow:hidden;
-	position: relative;}
+	position: relative;
+}
 .rightMain .rightMain_bottomIn .biaoge_list .biaoge_listIn .ul_list{
 	overflow:hidden;
 	position: relative;

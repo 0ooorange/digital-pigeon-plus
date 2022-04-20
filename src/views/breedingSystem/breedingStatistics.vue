@@ -22,7 +22,7 @@
             	<div class="leftMain_middle_rightIn">
                  <div class="jiankong">
                   <h3>监控视频区</h3>
-                   <el-select v-model="value" placeholder="监控1">
+                   <el-select style="width: 100px" v-model="value" placeholder="监控1">
                     <el-option v-for="item in options"  :key="item.value" :label="item.label" :value="item.value"> </el-option>
                    </el-select>
                 </div>
@@ -46,7 +46,7 @@
              <div class="rightMain">
                <div class="rightMain_bottomIn">
                 <h3>鸽子仓的预警信息</h3>
-                <div class="biaoge biaoge_list" style="width:100%; height:250px">
+                <div class="biaoge biaoge_list" >
                 	<div class="biaoge_listIn">
                     	<ul class="ul_title">
                         	<li style="width:110px">时间</li>
@@ -90,16 +90,7 @@
                                     <li>A1仓</li>
                                     <li >温度过高</li>    
                                 </ul>
-                                 <ul class="ul_con">
-                                    <li>2022-4-13</li>
-                                    <li>A1仓</li>
-                                    <li >温度过高</li>    
-                                </ul>
-                                 <ul class="ul_con">
-                                    <li>2022-4-13</li>
-                                    <li>A1仓</li>
-                                    <li >温度过高</li>    
-                                </ul>
+                                 
                             </div>
                        </div>
                    </div>

@@ -88,7 +88,7 @@ export default {
 .fontcolor{
     color: #38424a;
     font-weight: 600;
-    font-size: 13px;
+    font-size: 14px;
 }
 
 </style>
