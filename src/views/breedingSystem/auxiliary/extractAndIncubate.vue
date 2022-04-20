@@ -9,38 +9,28 @@
                  <el-button type="primary" class="soushuo">全部</el-button>
                   </div>
                 <div class="btnright">
-                   <el-button type="success" >亮灯</el-button>
-                   <el-button type="info">导出</el-button>
-                   <el-button type="warning">打印</el-button>
+                   <el-button type="danger" >亮灯</el-button>
+                   <el-button type="warning">导出</el-button>
+                   <el-button type="success">打印</el-button>
                 </div>
      
         
         </div>
  
     <el-main class="nopadding">
-						 <el-table ref="table" :data="apiObj"  stripe  highlightCurrentRow 
+						 <scTable ref="table" :data="apiObj"  stripe  highlightCurrentRow 
              class="tablestyle" 
-             :header-cell-style="{color:'#000000',fontSize:'18px'}"
-             :row-style="{height: '50px'}">
+             >
 							<el-table-column label="鸽笼号" prop="pigeonnumber" width="120" align="center"></el-table-column>
 							<el-table-column label="板子编号" prop="boardnumber" width="120" align="center"></el-table-column>
 							<el-table-column label="第一次操作" prop="firstime" width="120" align="center"></el-table-column>
-              <el-table-column label="时间间隔" prop="timeinterval_st" width="150" align="center"></el-table-column>
-              <el-table-column label="第二次操作" prop="secondtime" width="150" align="center"></el-table-column>
-              <el-table-column label="时间间隔" prop="timeinterval_nd" width="150" align="center"></el-table-column>
-              <el-table-column label="本次推荐" prop="recommendation" width="150" align="center"></el-table-column>
-              <el-table-column label="操作员" prop="operator" width="150" align="center"></el-table-column>
+              <el-table-column label="时间间隔" prop="timeinterval_st" width="120" align="center"></el-table-column>
+              <el-table-column label="第二次操作" prop="secondtime" width="120" align="center"></el-table-column>
+              <el-table-column label="时间间隔" prop="timeinterval_nd" width="120" align="center"></el-table-column>
+              <el-table-column label="本次推荐" prop="recommendation" width="120" align="center"></el-table-column>
+              <el-table-column label="操作员" prop="operator" width="120" align="center"></el-table-column>
               <el-table-column label="备注" prop="remark"  align="center"></el-table-column>
-						</el-table>
-            <el-pagination layout="total, sizes, prev, pager, next, jumper"
-                   :page-sizes="[5, 8, 10, 15]"
-                   :page-size="pageSize"
-                   :current-page="pageNum"
-                   :total="total"
-                   @size-change="handleSizeChange"
-                   @current-change="handleCurrentChange"
-                   class="page">
-       </el-pagination>
+						</scTable>
 
 		</el-main>
 
@@ -50,9 +40,13 @@
 </template>
 
 <script>
-
+import scTable from '../../../components/scTable/index.vue'
   export default {
     name: "ExtractAndIncubateAuxiliary",
+     components: {
+     scTable
+
+    },
     data() {
       return {
         pageSize:8,
@@ -169,28 +163,8 @@
                 operator: "李暖暖",
                 remark: "XXXXX"
             } ,
-            {
-                pigeonnumber: "A10",
-                boardnumber: "3",
-                firstime: "孵化",
-                timeinterval_st: "20天",
-                secondtime: "抽蛋",
-                timeinterval_nd: "10天",
-                recommendation: "抽蛋",
-                operator: "李暖暖",
-                remark: "XXXXX"
-            } ,
-            {
-                pigeonnumber: "A10",
-                boardnumber: "3",
-                firstime: "孵化",
-                timeinterval_st: "20天",
-                secondtime: "抽蛋",
-                timeinterval_nd: "10天",
-                recommendation: "抽蛋",
-                operator: "李暖暖",
-                remark: "XXXXX"
-            } ,
+           
+           
           
             
         ]
@@ -201,8 +175,7 @@
 
 <style scoped>
 .container{
-  background-color: #ffffff;
-  margin:10px 10px
+  margin:20px 20px
 }
 .search{
   padding-top: 25px;
@@ -229,13 +202,6 @@
   height: 36px;
   font-size: 20px;
 }
-.nopadding{
-   margin-top: 10px;
-   padding-top:5px ;
-   margin-left: 20px;
-   width: 95%;
-   height: 680px;
-}
 .tablestyle{
   font-size: 16px;
 }
@@ -247,5 +213,8 @@
   color: #fff;
   background-color: #409eff;
   border-color:#409eff;
+}
+.el-button{
+  height: 27px;
 }
 </style>
