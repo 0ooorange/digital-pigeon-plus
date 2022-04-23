@@ -29,11 +29,11 @@ export default {
       searchTypes: [
         {
           value: '鸽笼编号',
-          label: '鸽笼编号',
+          label: '鸽笼编号'
         },
         {
           value: '鸽板编号',
-          label: '鸽板编号',
+          label: '鸽板编号'
         },
         {
           value: '日期',
