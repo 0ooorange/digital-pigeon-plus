@@ -63,14 +63,18 @@ git push origin ZZN:dev-breeding-v1.0
 
 ~~~vue
 <template>
-  <table-search :searchTypes="searchTypes" :cardData="cardData"  @searchClick="searchClick" @outTable="outTable" />
+  <table-search :cardWidth="cardWidth" :searchTypes="searchTypes" :cardData="cardData"  @searchClick="searchClick" @outTable="outTable">
+  	日期
+  </table-search>
 </template>
 <script>
 export default {
   name: 'abnormalCaseManage',
   data() {
     return {
-      // 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方
+      // cardWidth: 查询组件下方卡片的宽度，默认15%，适用于五个卡片   --非必需
+      cardWidth: '15%',
+      // 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方  --非必需
       cardData: [{
         cardText: '仔数',
         cardNumber: 666
@@ -78,16 +82,15 @@ export default {
         cardText: '死仔数',
         cardNumber: 666
       }],
-      // 查询类型下拉框列表的数据，格式固定
+      // 查询类型下拉框列表的数据，格式固定   --必需
       searchTypes: [{
         value: '鸽笼编号',
         label: '鸽笼编号',
+        children: []  
+        // 如果需要级联选择器可以通过children传入，选中二级以上选择器的input组件会自动禁用，非必传
       }, {
         value: '鸽板编号',
         label: '鸽板编号',
-      }, {
-        value: '日期',
-        label: '日期',
       }, {
         value: '仔数',
         label: '仔数',
