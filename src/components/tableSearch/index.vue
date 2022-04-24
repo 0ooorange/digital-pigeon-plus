@@ -1,16 +1,16 @@
 <template>
   <div class="tableSearch">
     <div class="left">
-      <slot></slot>
       <template v-if="isShowBfSearch">
         <el-card class="lessCard" v-for="(item, index) in cardData" :key="index">
           <span class="cardText">{{item.cardText+"："}}</span>
           <span class="cardNumber" :style="{color: colors[index]}">{{item.cardNumber}}</span>
         </el-card>
       </template>
+      <slot></slot>
       <span class="searchInputs" :style="isShowBfSearch ? 'margin-bottom: 10px;' : 'margin: 10px 0 10px 10px;'">
         <el-cascader v-model="searchType" :options="searchTypes" placeholder="查询类型" @change="handleChange" />
-        <el-input ref="searchInput" v-model="searchInner" placeholder="查询内容" :disabled="isDisabled"/>
+        <el-input ref="searchInput" v-model="searchInner" placeholder="查询内容" :disabled="isDisabled" />
         <el-button type="success" class="searchBtn" @click="searchClick">查询</el-button>
       </span>
     </div>
@@ -50,7 +50,7 @@ export default {
       searchInner: '',
       searchType: '',
       colors: ['#EE4000', '#EE9A49', '#EEE685', '#43CD80', '#76EE00', '#6495ED', '#7D26CD'],
-      isDisabled: false
+      isDisabled: false,
     }
   },
   computed: {
@@ -135,8 +135,10 @@ export default {
   margin: 0px 10px 10px 0;
   width: 180px;
 }
-/deep/ .el-cascader,
-/deep/ .el-input {
+.el-cascader {
+  width: 150px;
+}
+.el-input {
   width: 150px;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <table-search :searchTypes="searchTypes" :cardData="cardData" @searchClick="searchClick" @outTable="outTable" />
-    <sc-table ref="table" :data="tableData" :pageSize="5" stripe highlightCurrentRow>
+    <sc-table ref="table" :data="tableData" stripe highlightCurrentRow>
       <el-table-column align="center" label="鸽笼编号" prop="pigeonnumber" width="130"></el-table-column>
       <el-table-column align="center" label="鸽板编号" prop="boardnumber" width="130"></el-table-column>
       <el-table-column align="center" label="日期" prop="time" width="130"></el-table-column>
@@ -34,10 +34,6 @@ export default {
         {
           value: '鸽板编号',
           label: '鸽板编号'
-        },
-        {
-          value: '日期',
-          label: '日期',
         },
         {
           value: '仔数',
@@ -111,7 +107,52 @@ export default {
           principal: '小橙子',
           operate: '已取走',
           remark: 'XXXXX',
-        },
+        },{
+          pigeonnumber: 'A10',
+          boardnumber: '3',
+          time: '2022年4月14日',
+          cubNumber: 20,
+          dieCubNumber: 0,
+          principal: '小橙子',
+          operate: '已取走',
+          remark: 'XXXXX',
+        },{
+          pigeonnumber: 'A10',
+          boardnumber: '3',
+          time: '2022年4月14日',
+          cubNumber: 20,
+          dieCubNumber: 0,
+          principal: '小橙子',
+          operate: '已取走',
+          remark: 'XXXXX',
+        },{
+          pigeonnumber: 'A10',
+          boardnumber: '3',
+          time: '2022年4月14日',
+          cubNumber: 20,
+          dieCubNumber: 0,
+          principal: '小橙子',
+          operate: '已取走',
+          remark: 'XXXXX',
+        },{
+          pigeonnumber: 'A10',
+          boardnumber: '3',
+          time: '2022年4月14日',
+          cubNumber: 20,
+          dieCubNumber: 0,
+          principal: '小橙子',
+          operate: '已取走',
+          remark: 'XXXXX',
+        },{
+          pigeonnumber: 'A10',
+          boardnumber: '3',
+          time: '2022年4月14日',
+          cubNumber: 20,
+          dieCubNumber: 0,
+          principal: '小橙子',
+          operate: '已取走',
+          remark: 'XXXXX',
+        }
       ],
     }
   },
