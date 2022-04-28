@@ -2,13 +2,19 @@
     <div>
         <table-search
             :searchTypes="searchTypes"
-            :cardData="[]"
+            :cardData="cardData"
+            :cardWidth="cardWidth"
             @searchClick="searchClick"
             @outTable="outTable"
             class="table_search"
         >
             <el-date-picker
-                 style="background-color: #fff; width: 220px; margin-left: 10px"
+                style="
+                    background-color: #fff;
+                    width: 200px;
+                    margin-left: 10px;
+                    flex: 0 0 auto
+                "
                 v-model="dateConcreteValue"
                 type="daterange"
                 start-placeholder="起始时间"
@@ -17,7 +23,7 @@
                 @change="datePickerChange"
             />
         </table-search>
-        <div class="card_list">
+        <!-- <div class="card_list">
             <el-card
                 class="box-card card_list_item"
                 v-for="(item, index) in fodderList"
@@ -33,9 +39,9 @@
                     >{{ item.value }}</span
                 >
             </el-card>
-        </div>
+        </div> -->
         <scTable
-        class="table"
+            class="table"
             ref="table"
             row-key="id"
             :data="tableList"
@@ -82,11 +88,13 @@
     </div>
 </template>
 <script >
-import { defineComponent, reactive,ref } from "vue";
+import { defineComponent, reactive, ref } from "vue";
 export default defineComponent({
     name: "fodderStatistics",
     setup() {
         let searchTypes = reactive([]);
+        let cardData = reactive([]);
+        let cardWidth = ref('14%')
 
         //时间选择器
         // const defaultTime = reactive([
@@ -145,59 +153,87 @@ export default defineComponent({
                 color: "#7D26CD",
             },
         ];
+        cardData = [
+            {
+                cardText: "加料量",
+                cardNumber: "100kg"
+            },
+            {
+                cardText: "食用量",
+                 cardNumber: "80kg"
+            },
+            {
+                cardText: "今天均用量",
+                 cardNumber: "0.4kg"
+            },
+            {
+                cardText: "本月已用量",
+                 cardNumber: "160kg"
+            },
+            {
+                cardText: "当月均用量",
+                 cardNumber: "0.8kg"
+            },
+            {
+                cardText: "上月用量",
+                 cardNumber: "2000kg"
+            },
+            {
+                cardText: "上月均用量",
+                 cardNumber: "1kg"
+            },
+        ];
 
         //表格数据
         let tableList = reactive([]);
 
         tableList = [
             {
-               number: 1,
-               chargeTime: '2022-04-20 09:36:24',
-               chargeAmount: '25kg',
-               weighAgain: '2022-04-20 17:36:24',
-               surplusWeight: '5kg',
-               edibleAmount: '20kg',
-               variety: '混料'
+                number: 1,
+                chargeTime: "2022-04-20 09:36:24",
+                chargeAmount: "25kg",
+                weighAgain: "2022-04-20 17:36:24",
+                surplusWeight: "5kg",
+                edibleAmount: "20kg",
+                variety: "混料",
             },
-                        {
-               number: 2,
-               chargeTime: '2022-04-20 09:36:24',
-               chargeAmount: '25kg',
-               weighAgain: '2022-04-20 17:36:24',
-               surplusWeight: '5kg',
-               edibleAmount: '20kg',
-               variety: '混料'
+            {
+                number: 2,
+                chargeTime: "2022-04-20 09:36:24",
+                chargeAmount: "25kg",
+                weighAgain: "2022-04-20 17:36:24",
+                surplusWeight: "5kg",
+                edibleAmount: "20kg",
+                variety: "混料",
             },
-                        {
-               number: 3,
-               chargeTime: '2022-04-20 09:36:24',
-               chargeAmount: '25kg',
-               weighAgain: '2022-04-20 17:36:24',
-               surplusWeight: '5kg',
-               edibleAmount: '20kg',
-               variety: '混料'
+            {
+                number: 3,
+                chargeTime: "2022-04-20 09:36:24",
+                chargeAmount: "25kg",
+                weighAgain: "2022-04-20 17:36:24",
+                surplusWeight: "5kg",
+                edibleAmount: "20kg",
+                variety: "混料",
             },
-                        {
-               number: 4,
-               chargeTime: '2022-04-20 09:36:24',
-               chargeAmount: '25kg',
-               weighAgain: '2022-04-20 17:36:24',
-               surplusWeight: '5kg',
-               edibleAmount: '20kg',
-               variety: '混料'
+            {
+                number: 4,
+                chargeTime: "2022-04-20 09:36:24",
+                chargeAmount: "25kg",
+                weighAgain: "2022-04-20 17:36:24",
+                surplusWeight: "5kg",
+                edibleAmount: "20kg",
+                variety: "混料",
             },
-                        {
-               number: 5,
-               chargeTime: '2022-04-20 09:36:24',
-               chargeAmount: '25kg',
-               weighAgain: '2022-04-20 17:36:24',
-               surplusWeight: '5kg',
-               edibleAmount: '20kg',
-               variety: '混料'
-            }
-        ]
-
-
+            {
+                number: 5,
+                chargeTime: "2022-04-20 09:36:24",
+                chargeAmount: "25kg",
+                weighAgain: "2022-04-20 17:36:24",
+                surplusWeight: "5kg",
+                edibleAmount: "20kg",
+                variety: "混料",
+            },
+        ];
 
         //日期选择器改变
         const datePickerChange = function (e) {
@@ -214,9 +250,12 @@ export default defineComponent({
         return {
             searchTypes,
             fodderList,
+            cardWidth,
             // defaultTime,
             dateConcreteValue,
             tableList,
+            cardData,
+
             datePickerChange,
             searchClick,
             outTable,
