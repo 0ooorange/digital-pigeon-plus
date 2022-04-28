@@ -29,7 +29,7 @@
 		</div>
 		<div class="scTable-page" v-if="!hidePagination&&!hideDo">
 			<div class="scTable-pagination">
-				<el-pagination v-if="!hidePagination" background :small="true" :layout="paginationLayout" :total="total" :page-size="pageSize" v-model:currentPage="currentPage" @current-change="paginationChange"></el-pagination>
+				<el-pagination v-if="!hidePagination" background :small="true" :layout="paginationLayout" :total="total" :page-sizes="pageSizes" v-model:currentPage="currentPage" v-model:page-size="pageSize" @current-change="paginationChange"></el-pagination>
 			</div>
 		</div>
 	</div>
@@ -53,7 +53,7 @@
 			size: { type: String, default: "default" },
 			border: { type: Boolean, default: false },
 			stripe: { type: Boolean, default: false },
-			pageSize: { type: Number, default: config.pageSize },
+			pageSizes: { type: Array, default: config.pageSize },
 			rowKey: { type: String, default: "" },
 			summaryMethod: { type: Function, default: null },
 			column: { type: Object, default: () => {} },
@@ -64,7 +64,7 @@
 			hideDo: { type: Boolean, default: false },
 			hideRefresh: { type: Boolean, default: false },
 			hideSetting: { type: Boolean, default: false },
-			paginationLayout: { type: String, default: "total, prev, pager, next, jumper" },
+			paginationLayout: { type: String, default: "total, sizes, prev, pager, next, jumper" },
 		},
 		watch: {
 			//监听从props里拿到值了
@@ -90,6 +90,7 @@
 				tableData: [],
 				total: 0,
 				currentPage: 1,
+				pageSize: 10,
 				prop: null,
 				order: null,
 				loading: false,
@@ -318,7 +319,6 @@
 </script>
 
 <style lang="less" scoped>
-	.scTable {}
 	.scTable-table {height: calc(100% - 50px);}
 	.scTable-page {height:50px;display: flex;align-items: center;justify-content: center;padding:0 15px;}
 	.scTable-do {white-space: nowrap;}

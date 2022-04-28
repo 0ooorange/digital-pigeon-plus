@@ -1,43 +1,11 @@
 <template>
 
      <div class="container">
-        <div class="container111">
-            <div class="card">
-                <el-card class="mini_card">
-                    <i class="el-icon-s-flag" style="font-size: 26px;color:#D32F2F"></i>
-                    预计出栏个数：<i style="font-size: 18px;font-weight:900;color:#03A9F4">888</i>
-                </el-card>
-            </div>
-           <div class="search">
-             <div class="search1">
-                <el-select v-model="value" clearable placeholder="请选择查询类型">
-                 <el-option v-for="item in selectoptions1" :key="item.value" :label="item.label" :value="item.value">
-                 </el-option>
-                </el-select>
-             </div>
-             <div class="search2">
-                 <el-select v-model="value" filterable placeholder="请输入具体内容">
-                 <el-option v-for="item in selectoptions1" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
-             </div>
-              <div class="btn">
-                <div class="btnleft">
-                  <el-button type="primary" class="soushuo">搜索</el-button>
-                  </div>
-                <div class="btnright">
-                   <el-button type="success">重置</el-button>
-                   <el-button type="info">导出</el-button>
-                </div>
-              </div>
-          </div>
-        </div>
- 
+         <table-search :searchTypes="searchTypes" :cardData="cardData"  @searchClick="searchClick" @outTable="outTable" />
     <el-main class="nopadding">
-						 <el-table ref="table" :data="apiObj"  stripe  highlightCurrentRow 
+						 <scTable ref="table" :data="apiObj"  stripe  highlightCurrentRow 
              class="tablestyle" 
-             :header-cell-style="{color:'#000000',fontSize:'18px'}"
-             :row-style="{height: '50px'}">
+             >
 							<el-table-column label="鸽笼号" prop="pigeonnumber" width="120" align="center"></el-table-column>
 							<el-table-column label="板子编号" prop="boardnumber" width="120" align="center"></el-table-column>
 							<el-table-column label="出仔时间" prop="cubouttime" width="230" align="center"></el-table-column>
@@ -45,17 +13,7 @@
               <el-table-column label="出栏个数" prop="baroutnumber" width="150" align="center"></el-table-column>
               <el-table-column label="操作员" prop="operator" width="150" align="center"></el-table-column>
               <el-table-column label="备注" prop="remark"  align="center"></el-table-column>
-						</el-table>
-            <el-pagination layout="total, sizes, prev, pager, next, jumper"
-                   :page-sizes="[5, 8, 10, 15]"
-                   :page-size="pageSize"
-                   :current-page="pageNum"
-                   :total="total"
-                   @size-change="handleSizeChange"
-                   @current-change="handleCurrentChange"
-                   class="page">
-       </el-pagination>
-
+						</scTable>
 		</el-main>
 
 
@@ -64,11 +22,13 @@
 </template>
 
 <script>
-
+import tableSearch from "../../../components/tableSearch/index.vue";
+import scTable from '../../../components/scTable/index.vue'
   export default {
     name: "ExtractAndIncubateAuxiliary",
     components: {
-    
+    tableSearch,
+    scTable
 
     },
     data() {
@@ -76,25 +36,34 @@
         pageSize:8,
         total:100,
         pageNum:1,
-        inputvalue:'',
-          selectoptions1: [{
-          value: '选项1',
-          label: '鸽笼号'
-        }, {
-          value: '选项2',
-          label: '板子编号'
-        }, {
-          value: '选项3',
-          label: '生蛋天数'
-        },{
-          value: '选项4',
-          label: '孵化天数'
-        }, {
-          value: '选项5',
-          label: '操作员'
-        }, ],
-        value: '',
-     
+         // 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方
+      cardData: [{
+        cardText: '预计出栏个数',
+        cardNumber: 666
+       },],
+      // 查询类型下拉框列表的数据，格式固定
+      searchTypes: [{
+        value: '鸽笼编号',
+        label: '鸽笼编号',
+      }, {
+        value: '鸽板编号',
+        label: '鸽板编号',
+      }, {
+        value: '日期',
+        label: '日期',
+      }, {
+        value: '仔数',
+        label: '仔数',
+      }, {
+        value: '死仔数',
+        label: '死仔数',
+      }, {
+        value: '负责人',
+        label: '负责人',
+      }, {
+        value: '操作',
+        label: '操作',
+      }],
         apiObj:[
             {
                 pigeonnumber: "A10",
@@ -256,13 +225,6 @@
   width: 80px;
   height: 36px;
   font-size: 20px;
-}
-.nopadding{
-   margin-top: 10px;
-   padding-top:5px ;
-   margin-left: 20px;
-   width: 95%;
-   height: 680px;
 }
 .tablestyle{
   font-size: 16px;

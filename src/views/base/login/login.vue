@@ -3,8 +3,8 @@
     <div class="loginContent">
       <h1 class="title">数字鸽业平台登录</h1>
       <div class="select">
-        <el-button id="pswMethod" class="selectBtn selectBtn-active" type="text" @click="loginByPsw">密码登录</el-button>
-        <el-button id="messMethod" class="selectBtn" type="text" @click="loginByMess">短信登录</el-button>
+        <el-button :class="pswMethodClass" type="text" @click="loginByPsw">密码登录</el-button>
+        <el-button :class="messMethodClass" type="text" @click="loginByMess">短信登录</el-button>
       </div>
       <div class="form" v-if="loginMethod === 0">
         <div class="inlineForm">
@@ -12,7 +12,7 @@
             <el-input v-model="moblePhoneScrt" placeholder="请输入手机号码/用户名" />
           </span>
         </div>
-        <span id="moblePhoneScrtId" class="phoneVerify" style="display: none;">请输入正确的手机号码格式</span>
+        <span ref="moblePhoneScrt" class="phoneVerify" style="display: none;">请输入正确的手机号码格式</span>
         <div class="inlineForm">
           <span class="input">
             <el-input v-model="password" type="password" placeholder="请填写密码" show-password />
@@ -27,7 +27,7 @@
             <el-input v-model="moblePhoneMess" placeholder="请输入手机号码" />
           </span>
         </div>
-        <span id="moblePhoneMessId" class="phoneVerify" style="display: none;">请输入正确的手机号码格式</span>
+        <span ref="moblePhoneMsg" class="phoneVerify" style="display: none;">请输入正确的手机号码格式</span>
         <div class="inlineForm">
           <span class="input verifyInput">
             <el-input v-model="verify" placeholder="请输入验证码" />
@@ -75,43 +75,49 @@ export default {
       verify: '',
       ismoblePhone: true,
       rememberSecret: false,
+      messMethodClass: 'el-button el-button--text el-button--default selectBtn',
+      pswMethodClass: 'el-button el-button--text el-button--default selectBtn selectBtn-active',
     }
   },
   watch: {
-    moblePhoneScrt(newMoblePhone) {
-      var moblePhoneScrtId = document.getElementById('moblePhoneScrtId')
-      var moblePhoneReg = /^(13[0-9]|14[5|7]|15[0|1|2|3|4|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/
-      if (moblePhoneReg.test(newMoblePhone)) {
-        moblePhoneScrtId.style.display = 'none'
-      } else {
-        moblePhoneScrtId.style.display = 'block'
-      }
-    },
+    // moblePhoneScrt(newMoblePhone) {
+    //   var moblePhoneReg = /^(13[0-9]|14[5|7]|15[0|1|2|3|4|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/
+    //   if (moblePhoneReg.test(newMoblePhone)) {
+    //     this.$refs.moblePhoneScrt.style.display = 'none'
+    //   } else {
+    //     this.$refs.moblePhoneScrt.style.display = 'block'
+    //   }
+    // },
     moblePhoneMess(newMoblePhone) {
-      var moblePhoneMessId = document.getElementById('moblePhoneMessId')
       var moblePhoneReg = /^(13[0-9]|14[5|7]|15[0|1|2|3|4|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/
       if (moblePhoneReg.test(newMoblePhone)) {
-        moblePhoneMessId.style.display = 'none'
+        this.$refs.moblePhoneMsg.style.display = 'none'
       } else {
-        moblePhoneMessId.style.display = 'block'
+        this.$refs.moblePhoneMsg.style.display = 'block'
       }
     },
   },
   // el-button el-button--text el-button--default selectBtn selectBtn-active
   methods: {
     loginByPsw() {
-      document.getElementById('pswMethod').className =
-        'el-button el-button--text el-button--default selectBtn selectBtn-active'
-      document.getElementById('messMethod').className =
-        'el-button el-button--text el-button--default selectBtn'
-      this.loginMethod = 0
+      this.$nextTick(() => {
+        console.log(this.$refs.pswMethod)
+        console.log(this.$refs.messMethod)
+        this.pswMethodClass =
+          'el-button el-button--text el-button--default selectBtn selectBtn-active'
+        this.messMethodClass = 'el-button el-button--text el-button--default selectBtn'
+        this.loginMethod = 0
+      })
     },
     loginByMess() {
-      document.getElementById('messMethod').className =
-        'el-button el-button--text el-button--default selectBtn selectBtn-active'
-      document.getElementById('pswMethod').className =
-        'el-button el-button--text el-button--default selectBtn'
-      this.loginMethod = 1
+      this.$nextTick(() => {
+        console.log(this.$refs.pswMethod)
+        console.log(this.$refs.messMethod)
+        this.messMethodClass =
+          'el-button el-button--text el-button--default selectBtn selectBtn-active'
+        this.pswMethodClass = 'el-button el-button--text el-button--default selectBtn'
+        this.loginMethod = 1
+      })
     },
     login() {
       this.$router.replace({
@@ -187,7 +193,7 @@ export default {
     .inlineForm {
       display: flex;
       .input {
-        margin: 10px 0 ;
+        margin: 10px 0;
         display: inline-block;
         width: 300px;
       }
@@ -207,8 +213,6 @@ export default {
     }
     .phoneVerify,
     .secretVerify {
-      position: relative;
-      left: 80px;
       margin: -6px 0;
       display: inline-block;
       align-self: flex-start;

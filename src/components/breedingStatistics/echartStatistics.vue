@@ -1,5 +1,5 @@
 <template>
-    <div class="biaoge" style="width:400px; height:340px" id="chartmain_bing"></div>
+    <div class="biaoge" style="width:380px; height:320px" id="chartmain_bing"></div>
 </template>
 <script>
 import * as echarts from 'echarts';
@@ -57,8 +57,8 @@ export default {
 </script>
 <style scoped>
 .biaoge{
-	position: relative;
-  top:1px;
+	position:absolute;
+  top:-10px;
   left: 2px;
     }
 </style>

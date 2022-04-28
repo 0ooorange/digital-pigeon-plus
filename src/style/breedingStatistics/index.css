@@ -48,7 +48,7 @@ body{
 	  flex-direction: row;
   }
   .jiankong h3{
-	  margin-right: 110px;
+	  margin-right: 70px;
   }
 .video-js {
   width: 100%;
@@ -74,39 +74,55 @@ body{
 	margin-left: 15px;
 	margin-right: 15px;
 	position: relative;
-
+	
 }
 .title{
-	width:100%;
+	width:500px;
 	font-size:0.12rem;
 	line-height:0.3rem;
 	color:rgba(14,253,255,1);
     margin-left: 48px;
 	font-weight:bold;
+	
 	}
 .tip{
 	/* padding: auto; */
 	text-align: center;
 	justify-content: center;
 	align-items: center;
-	width: 99%;
 	height: 10%;
-	margin-left: 60px;
 }
 .leftMain{
-	width:70%;
-	float:left;
 	margin-left: 40px;
+	margin-top: 10px;
+	display: flex;
+	flex-direction: row;
+	height: 335px;
+	width: 1140px;
+
 	}
 
 .rightMain{
 	width:350px;
-	height: 740px;
-	position:absolute;
-	right: 90px;
-	top:75px;
-	padding-top:60px;}
-
+	height: 100%;
+	margin-left:35px;
+	
+ }
+.leftmain-right{
+	margin-left: 20px;
+	width: 375px;
+	height: 323px;
+	
+	position: relative;
+}
+.bottomMain{
+	width:1140px;
+	height: 310px;
+	margin-top: 15px;
+	margin-left: 40px;
+	display: flex;
+	flex-direction: row;
+}
 .leftMain_top{
 	width:100%;
 	}
@@ -125,8 +141,6 @@ body{
 	border:0.008rem solid rgba(0, 8, 8, 0.5);
 	width:100%;
 	min-height:60px;
-	position:relative;
-	padding:0.08rem 0.05rem;
 	text-align: center;
 	}
 .leftMain_top ul li .liIn h3{
@@ -144,128 +158,55 @@ body{
 	font-size:0.04rem;
 	margin-left:0.06rem;
 	font-style:normal;}
-.leftMain_top ul li .liIn .zi{
-	font-size:0.04rem;
-	
-	position:relative;
-	z-index:10;}
-.leftMain_top ul li .liIn .zi .span1{
-	margin-right:0.1rem;}
-
-
 .leftMain_middle{
 	width:100%;
 	height: 345px;
 	padding-bottom:0.1rem;
 	display:flex;
 	display: -webkit-flex;}
-.leftMain .leftMain_bottom{
+.bottomMain .leftMain_bottom{
       margin-top: 24px;
 	  margin-left: -32px;
 }
-
-.leftMain_middle  .leftMain_middle_leftIn{
-	
-	width:100%;
+.bottomMain .leftMain_middle_leftIn{
+	width:530px;
+	height: 300px;
 	min-height:60px;
 	position:relative;
 	}
-.leftMain_middle .leftMain_middle_leftIn h3{
+	.leftMain_middle_leftIn h3{
 	font-size:0.08rem;
-	margin-top: -15px;
+	margin-top: -3px;
 	margin-bottom:0.05rem;
 	}
-.leftMain_middle	.leftMain_bottom_right{
-        width: 630px;
-		height: 290px;
-		
+	.leftmain-right h3{
+		font-size:0.08rem;
+	margin-top: -3px;
+	margin-bottom:0.05rem;
 	}
-.leftMain_middle .leftMain_middle_leftIn .biaoge{
-	min-height:200px;}
+/* .bottomMain .leftMain_middle_leftIn .biaoge{
+	min-height:200px;} */
 
-.leftMain_middle .leftMain_middle_right{
-	width:40%;
+.bottomMain  .leftMain_middle_rightIn{
 	margin-top: -2px;
+	width:300px;
+	height: 260px;
+	margin-right: 30px;
 	}
-.leftMain_middle .leftMain_middle_right .leftMain_middle_rightIn{
-	margin-left: 15px;
-	width:100%;
-	min-height:60px;
-	position:relative;
-	padding-right: 2px;
-	padding-left:2px ;
-	}
-.leftMain_middle .leftMain_middle_right .leftMain_middle_rightIn h3{
+.bottomMain .leftMain_middle_rightIn h3{
 	font-size:0.08rem;
 	
 	margin-bottom:0.05rem;
 	}
-.leftMain_middle .leftMain_middle_right .leftMain_middle_rightIn .biaoge{
-	min-height:200px;}
+/* .bottomMain  .leftMain_middle_rightIn .biaoge{
+	min-height:200px;} */
 /*左边中间部分排行榜*/
-.leftMain_middle .leftMain_middle_right .leftMain_middle_rightIn  .biaoge_pai{
+.bottomMain .leftMain_middle_rightIn  .biaoge_pai{
 	width:100%;
 	overflow:hidden;
 	}
-.leftMain_middle .leftMain_middle_right .leftMain_middle_rightIn  .biaoge_pai ul li .liIn{
-	display:flex;
-	display: -webkit-flex;
-	align-items:center;
-
-	font-size:0.06rem;
-	height:0.18rem;
-	}
-.leftMain_middle .leftMain_middle_right .leftMain_middle_rightIn  .biaoge_pai ul li .liIn .liIn_left{
-	width:25%;
-	position:relative;
-	padding-left:0.14rem;
-	}
-.leftMain_middle .leftMain_middle_right .leftMain_middle_rightIn  .biaoge_pai ul li .liIn .liIn_left .bot{
-	width:0.08rem;
-	height:0.08rem;
-	background:#f78cf3;
-	border-radius:1000px;
-	display:block;
-	position:absolute;
-	left:0.02rem;
-	top:0;
-	bottom:0;
-	margin:auto 0;
-	}
-
-.leftMain_middle .leftMain_middle_right .leftMain_middle_rightIn  .biaoge_pai ul li .liIn .num{
-	width:17%;
-	font-family:dig;
-	padding-left:0.02rem;}
-/*左边底部*/
-.leftMain_middle .leftMain_middle_right .leftMain_middle_rightIn .biaoge_bi ul{
-	display:flex;
-	display: -webkit-flex;
-	flex-wrap:wrap;
-	width:100%;
-	}
-.leftMain_middle .leftMain_middle_right .leftMain_middle_rightIn .biaoge_bi ul li{
-	width:33.3%;
-	text-align:center;
-	margin-bottom:0.05rem;}
-.leftMain_middle .leftMain_middle_right .leftMain_middle_rightIn .biaoge_bi ul li .shu{
-	font-size:0.14rem;
-	color:rgb(0, 3, 3);
-	font-family:dig;
-	padding:0.12rem 0 0.02rem;
-	font-weight:normal;}
-.leftMain_middle .leftMain_middle_right .leftMain_middle_rightIn .biaoge_bi ul li .zi{
-	font-size:0.06rem;
-	}
+	
 /*右边部分*/
-
-.rightMain .rightMain_topIn{
-	width:445px;
-	height:380px;
-	position:relative;
-	top:3px;  
-	left: -4px;
-	}
   .bingtu{
 	  height: 377px;
 	  width: 100%;
@@ -286,25 +227,23 @@ body{
 	height: 100%;
 	min-height:90px;
 	position:relative;
-
 	margin-top: 3px;
 	}
-	.rightMain .rightMain_topIn h3{
-		font-size:0.08rem;
-		
-		margin-bottom:0.05rem;
-		}
+	
 .rightMain .rightMain_bottomIn h3{
 	font-size:0.08rem;
-	
 	margin-bottom:0.05rem;
 	}
 /*右下角表格*/
 .rightMain .rightMain_bottomIn .biaoge{
 	min-height:200px;}
 .rightMain .rightMain_bottomIn .biaoge_list{
+	width:100%;
+	 height:250px;
+	border: 10px solid rgb(119, 172, 166);
 	overflow:hidden;
-	position: relative;}
+	position: relative;
+}
 .rightMain .rightMain_bottomIn .biaoge_list .biaoge_listIn .ul_list{
 	overflow:hidden;
 	position: relative;
@@ -330,18 +269,11 @@ body{
 	display: -webkit-flex;
 	width:100%;
 	}
-.rightMain .rightMain_bottomIn .biaoge_list .ul_title{
-	background: linear-gradient(left, rgba(255,255,255,0.1), rgba(255,255,255,0.5), rgba(255,255,255,0.1));
-        background: -ms-linear-gradient(left, rgba(255,255,255,0.1), rgba(255,255,255,0.5), rgba(255,255,255,0.1));
-        background: -webkit-linear-gradient(left, rgba(255,255,255,0.1), rgba(255,255,255,0.5), rgba(255,255,255,0.1));
-        background: -moz-linear-gradient(left, rgba(255,255,255,0.1), rgba(255,255,255,0.5), rgba(255,255,255,0.1));
-}
 .rightMain .rightMain_bottomIn .biaoge_list .ul_con{
 	border-bottom:0.008rem solid rgba(10, 10, 10, 0.5);}
 .rightMain .rightMain_bottomIn .biaoge_list ul li{
 	width:90px;
 	text-align:center;
-
 	font-size:0.06rem;
 	height:0.2rem;
 	line-height:0.2rem;}
