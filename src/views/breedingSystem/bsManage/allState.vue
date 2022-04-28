@@ -27,140 +27,136 @@
             </div>
         </div>
         <div class="dialog_box">
-            <div class="cage_row">
-                <div
-                    class="cage_index"
-                    v-for="(item2, index2) in cageArray0[0]"
-                    :key="index2"
-                >
-                    {{ index2 + 1 }}
-                </div>
+            <div>
+                <div class="cage_commom"></div>
+                <div class="cage_commom" v-for="(item,index) in clomeIndex" :key="index" :style="{'margin-bottom': (index == 1 || index == 3 || index == 5) ? '20px': '10px'}">{{item}}</div>
+                <div class="cage_commom"></div>
             </div>
-            <div
-                class="cage_row"
-                v-for="(item, index) in cageArray0"
-                :key="index"
-                :style="{
-                    'margin-bottom': index % 2 === 0 ? '0px' : '10px',
-                }"
-            >
+            <div>
+                <div class="cage_row">
+                    <div
+                        class="cage_index"
+                        v-for="(item2, index2) in cageArray0[0]"
+                        :key="index2"
+                    >
+                        {{ index2 + 1 }}
+                    </div>
+                </div>
                 <div
-                    class="cage_item"
-                    v-for="(item1, index1) in item"
-                    :key="index1"
+                    class="cage_row"
+                    v-for="(item, index) in cageArray1"
+                    :key="index"
                     :style="{
-                        'background-color': item1 === 1 ? '#5cacee' : '#e5e5e5',
+                        'margin-bottom': index % 2 === 0 ? '10px' : '0px',
                     }"
-                ></div>
-            </div>
-            <div style="height: 20px; width: 100%">
-                <div
-                    style="
-                        width: 60px;
-                        margin: auto;
-                        height: 100%;
-                        font-weight: 700;
-                        font-size: 16px;
-                        color: #a1a1a1;
-                    "
                 >
-                    > >
+                    <div
+                        class="cage_item"
+                        v-for="(item1, index1) in item"
+                        :key="index1"
+                        :style="{
+                            'background-color':
+                                item1 === 1 ? '#5cacee' : '#e5e5e5',
+                        }"
+                    ></div>
                 </div>
-            </div>
-            <div
-                class="cage_row"
-                v-for="(item, index) in cageArray1"
-                :key="index"
-                :style="{
-                    'margin-bottom': index % 2 === 0 ? '10px' : '0px',
-                }"
-            >
+                <div style="height: 20px; width: 100%">
+                    <div
+                        style="
+                            width: 60px;
+                            margin: auto;
+                            height: 100%;
+                            font-weight: 700;
+                            font-size: 16px;
+                            color: #a1a1a1;
+                        "
+                    >
+                        > >
+                    </div>
+                </div>
                 <div
-                    class="cage_item"
-                    v-for="(item1, index1) in item"
-                    :key="index1"
+                    class="cage_row"
+                    v-for="(item, index) in cageArray1"
+                    :key="index"
                     :style="{
-                        'background-color': item1 === 1 ? '#5cacee' : '#e5e5e5',
+                        'margin-bottom': index % 2 === 0 ? '10px' : '0px',
                     }"
-                ></div>
-            </div>
-            <div style="height: 20px; width: 100%">
-                <div
-                    style="
-                        width: 60px;
-                        margin: auto;
-                        height: 100%;
-                        font-weight: 700;
-                        font-size: 16px;
-                        color: #a1a1a1;
-                    "
                 >
-                    > >
+                    <div
+                        class="cage_item"
+                        v-for="(item1, index1) in item"
+                        :key="index1"
+                        :style="{
+                            'background-color':
+                                item1 === 1 ? '#5cacee' : '#e5e5e5',
+                        }"
+                    ></div>
                 </div>
-            </div>
-            <div
-                class="cage_row"
-                v-for="(item, index) in cageArray1"
-                :key="index"
-                :style="{
-                    'margin-bottom': index % 2 === 0 ? '10px' : '0px',
-                }"
-            >
+                <div style="height: 20px; width: 100%">
+                    <div
+                        style="
+                            width: 60px;
+                            margin: auto;
+                            height: 100%;
+                            font-weight: 700;
+                            font-size: 16px;
+                            color: #a1a1a1;
+                        "
+                    >
+                        > >
+                    </div>
+                </div>
                 <div
-                    class="cage_item"
-                    v-for="(item1, index1) in item"
-                    :key="index1"
+                    class="cage_row"
+                    v-for="(item, index) in cageArray1"
+                    :key="index"
                     :style="{
-                        'background-color': item1 === 1 ? '#5cacee' : '#e5e5e5',
+                        'margin-bottom': index % 2 === 0 ? '10px' : '0px',
                     }"
-                ></div>
-            </div>
-            <div style="height: 20px; width: 100%">
-                <div
-                    style="
-                        width: 60px;
-                        margin: auto;
-                        height: 100%;
-                        font-weight: 700;
-                        font-size: 16px;
-                        color: #a1a1a1;
-                    "
                 >
-                    > >
+                    <div
+                        class="cage_item"
+                        v-for="(item1, index1) in item"
+                        :key="index1"
+                        :style="{
+                            'background-color':
+                                item1 === 1 ? '#5cacee' : '#e5e5e5',
+                        }"
+                    ></div>
                 </div>
-            </div>
-            <div
-                class="cage_row"
-                v-for="(item, index) in cageArray1"
-                :key="index"
-                :style="{
-                    'margin-bottom': index % 2 === 0 ? '10px' : '0px',
-                }"
-            >
+                <div style="height: 20px; width: 100%">
+                    <div
+                        style="
+                            width: 60px;
+                            margin: auto;
+                            height: 100%;
+                            font-weight: 700;
+                            font-size: 16px;
+                            color: #a1a1a1;
+                        "
+                    >
+                        > >
+                    </div>
+                </div>
                 <div
-                    class="cage_item"
-                    v-for="(item1, index1) in item"
-                    :key="index1"
+                    class="cage_row"
+                    v-for="(item, index) in cageArray1"
+                    :key="index"
                     :style="{
-                        'background-color': item1 === 1 ? '#5cacee' : '#e5e5e5',
+                        'margin-bottom': index % 2 === 0 ? '10px' : '0px',
                     }"
-                ></div>
-            </div>
-            <div style="height: 20px; width: 100%">
-                <div
-                    style="
-                        width: 60px;
-                        margin: auto;
-                        height: 100%;
-                        font-weight: 700;
-                        font-size: 16px;
-                        color: #a1a1a1;
-                    "
                 >
-                    > >
+                    <div
+                        class="cage_item"
+                        v-for="(item1, index1) in item"
+                        :key="index1"
+                        :style="{
+                            'background-color':
+                                item1 === 1 ? '#5cacee' : '#e5e5e5',
+                        }"
+                    ></div>
                 </div>
-            </div>
-            <div
+                <!-- <div
                 class="cage_row"
                 v-for="(item, index) in cageArray0"
                 :key="index"
@@ -173,15 +169,19 @@
                         'background-color': item1 === 1 ? '#5cacee' : '#e5e5e5',
                     }"
                 ></div>
-            </div>
+            </div> -->
 
-            <div class="cage_row" style="margin-top: 10px; margin-bottom: 0px">
                 <div
-                    class="cage_index"
-                    v-for="(item2, index2) in cageArray0[0]"
-                    :key="index2"
+                    class="cage_row"
+                    style="margin-top: 10px; margin-bottom: 0px"
                 >
-                    {{ index2 + 1 }}
+                    <div
+                        class="cage_index"
+                        v-for="(item2, index2) in cageArray0[0]"
+                        :key="index2"
+                    >
+                        {{ index2 + 1 }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -233,7 +233,7 @@
                             >
                         </el-card>
                     </div>
-                                        <div class="row">
+                    <div class="row">
                         <el-card class="box-card card_list_item">
                             <span style="font-size: 14px">产蛋数:</span>
                             <span
@@ -271,6 +271,7 @@ export default {
             currentLever: 0,
             methodsArray: ["产蛋", "查蛋", "查仔", "仔异常", "出栏", "回蛋"],
             lever: ["上", "中", "下"],
+            clomeIndex:['A1','A2','A3','A4','A5','A6','A7','A8'],
             cageArray0: [
                 [
                     0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1,
@@ -321,7 +322,6 @@ export default {
 .page {
     position: relative;
     height: 100%;
-   
 
     .top_button {
         display: flex;
@@ -379,7 +379,13 @@ export default {
             color: #fff;
         }
     }
-
+    .cage_commom {
+        width: 20px;
+        height: 20px;
+         margin-bottom: 10px;
+        margin-right: 4px;
+        // background-color: #e5e5e5;
+    }
     .cage_item {
         flex-shrink: 0; //使它不被挤压
         width: 20px;
@@ -397,6 +403,7 @@ export default {
         padding: 10px;
         margin-top: 10px;
         overflow-y: auto;
+        display: flex;
         white-space: nowrap;
 
         .cage_row {
@@ -438,6 +445,7 @@ export default {
         margin-left: 20px;
         display: flex;
         .left_footer {
+            flex: 3;
             .left_footer_item {
                 display: flex;
                 font-size: 14px;
@@ -446,8 +454,9 @@ export default {
             }
         }
         .right_footer {
+              flex: 5;
             margin-left: 250px;
-             padding-bottom: 20px;
+            padding-bottom: 20px;
             .dataList {
                 margin-top: 10px;
                 .row {
