@@ -135,7 +135,7 @@ export default {
   margin: 0px 10px 10px 0;
   width: 180px;
 }
-.el-cascader {
+/deep/ .el-cascader {
   width: 150px;
 }
 .el-input {

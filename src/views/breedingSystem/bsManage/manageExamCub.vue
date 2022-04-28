@@ -1,6 +1,8 @@
 <template>
   <div>
-    <table-search cardWidth="15%" :searchTypes="searchTypes" :cardData="cardData" @searchClick="searchClick" @outTable="outTable" />
+    <table-search cardWidth="15%" :searchTypes="searchTypes" :cardData="cardData" @searchClick="searchClick" @outTable="outTable">
+      <el-date-picker v-if="showDatePicker" style="background-color: #fff; width: 220px; margin-left: 10px" v-model="dateConcreteValue" type="daterange" start-placeholder="起始时间" end-placeholder="最终时间" :default-time="defaultTime" @change="datePickerChange" />
+    </table-search>
     <sc-table ref="table" :data="tableData" stripe highlightCurrentRow>
       <el-table-column align="center" sortable label="鸽笼编号" prop="pigeonnumber" width="180"></el-table-column>
       <el-table-column align="center" sortable label="鸽板编号" prop="boardnumber" width="180"></el-table-column>
@@ -17,27 +19,30 @@ export default {
   name: 'examineCubManage',
   data() {
     return {
+      dateConcreteValue: "",
+      defaultTime: "",
+      showDatePicker: true,
       cardData: [
         {
           cardText: '正常仔',
-          cardNumber: '1622只'
+          cardNumber: '1622只',
         },
         {
           cardText: '冷蛋',
-          cardNumber: '364枚'
+          cardNumber: '364枚',
         },
         {
           cardText: '冷蛋1',
-          cardNumber: '264枚'
+          cardNumber: '264枚',
         },
         {
           cardText: '冷蛋2',
-          cardNumber: '100枚'
+          cardNumber: '100枚',
         },
         {
           cardText: '孵化箱',
-          cardNumber: '260只'
-        }
+          cardNumber: '260只',
+        },
       ],
       searchTypes: [
         {
@@ -51,13 +56,16 @@ export default {
         {
           value: '异常情况',
           label: '异常情况',
-          children: [{
-            value: '冷蛋',
-            label: '冷蛋',
-          }, {
-            value: '冷蛋2',
-            label: '冷蛋2',
-          }]
+          children: [
+            {
+              value: '冷蛋',
+              label: '冷蛋',
+            },
+            {
+              value: '冷蛋2',
+              label: '冷蛋2',
+            },
+          ],
         },
         {
           value: '负责人',
@@ -125,6 +133,7 @@ export default {
     outTable() {
       console.log('哈哈哈，我被点击了噢')
     },
+    datePickerChange() {}
   },
 }
 </script>

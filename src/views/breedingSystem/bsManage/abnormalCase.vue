@@ -1,6 +1,8 @@
 <template>
   <div>
-    <table-search :searchTypes="searchTypes" :cardData="cardData" @searchClick="searchClick" @outTable="outTable" />
+    <table-search :searchTypes="searchTypes" :cardData="cardData" @searchClick="searchClick" @outTable="outTable">
+      <el-date-picker v-if="showDatePicker" style="background-color: #fff; width: 220px; margin-left: 10px" v-model="dateConcreteValue" type="daterange" start-placeholder="起始时间" end-placeholder="最终时间" :default-time="defaultTime" @change="datePickerChange" />
+    </table-search>
     <sc-table ref="table" :data="tableData" stripe highlightCurrentRow>
       <el-table-column align="center" label="鸽笼编号" prop="pigeonnumber" width="130"></el-table-column>
       <el-table-column align="center" label="鸽板编号" prop="boardnumber" width="130"></el-table-column>
@@ -19,6 +21,9 @@ export default {
   name: 'abnormalCaseManage',
   data() {
     return {
+      dateConcreteValue: "",
+      defaultTime: "",
+      showDatePicker: true,
       cardData: [{
         cardText: '仔数',
         cardNumber: '666只'
@@ -164,7 +169,8 @@ export default {
     // 表格导出
     outTable() {
       console.log("哈哈哈，我被点击了噢");
-    }
+    },
+    datePickerChange() {}
   },
 }
 </script>
