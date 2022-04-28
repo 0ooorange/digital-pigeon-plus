@@ -4,12 +4,15 @@ import TableSearch from '@/components/tableSearch/index.vue'
 
 export default defineComponent({
   name: 'reEggsManage',
+  components: {
+    TableSearch
+  },
   setup() {
     const eggsList = [
       {
         pigeonnumber: 'A1',
         boardnumber: '1',
-        actionTime: '2022年4月14日',
+        actionTime: '2022年4月14日16:06:34',
         action: '已取走',
         principal: '益达',
         remark: '无'
@@ -17,7 +20,7 @@ export default defineComponent({
       {
         pigeonnumber: 'A8',
         boardnumber: '2',
-        actionTime: '2022年4月14日',
+        actionTime: '2022年4月14日16:06:34',
         action: '已取走',
         principal: '益达',
         remark: '无'
@@ -25,7 +28,7 @@ export default defineComponent({
       {
         pigeonnumber: 'B10',
         boardnumber: '3',
-        actionTime: '2022年4月14日',
+        actionTime: '2022年4月14日16:06:34',
         action: '已取走',
         principal: '益达',
         remark: '无'
@@ -33,7 +36,7 @@ export default defineComponent({
       {
         pigeonnumber: 'A15',
         boardnumber: '4',
-        actionTime: '2022年4月14日',
+        actionTime: '2022年4月14日16:06:34',
         action: '已取走',
         principal: '益达',
         remark: '无'
@@ -41,7 +44,7 @@ export default defineComponent({
       {
         pigeonnumber: 'B1',
         boardnumber: '5',
-        actionTime: '2022年4月14日',
+        actionTime: '2022年4月14日16:06:34',
         action: '未取走',
         principal: '益达',
         remark: '无'
@@ -49,7 +52,7 @@ export default defineComponent({
       {
         pigeonnumber: 'B10',
         boardnumber: '6',
-        actionTime: '2022年4月14日',
+        actionTime: '2022年4月14日16:06:34',
         action: '已取走',
         principal: '益达',
         remark: '无'
@@ -57,7 +60,7 @@ export default defineComponent({
       {
         pigeonnumber: 'C4',
         boardnumber: '7',
-        actionTime: '2022年4月14日',
+        actionTime: '2022年4月14日16:06:34',
         action: '已取走',
         principal: '益达',
         remark: '无'
@@ -103,14 +106,21 @@ export default defineComponent({
     ]
     return () => (
       <>
-        <TableSearch searchTypes={searchTypes} cardData={cardList} />
+        <table-search searchTypes={searchTypes} cardData={cardList} />
         <sc-table ref="table" data={eggsList} pageSize={5} stripe highlightCurrentRow>
-          <el-table-column align="center" label="鸽笼编号" prop="pigeonnumber" width="130"></el-table-column>
-          <el-table-column align="center" label="面板编号" prop="boardnumber" width="130"></el-table-column>
-          <el-table-column align="center" label="回蛋时间" prop="actionTime" width="130"></el-table-column>
-          <el-table-column align="center" label="负责人" prop="principal" width="130"></el-table-column>
-          <el-table-column align="center" label="操作" prop="action" width="130"></el-table-column>
-          <el-table-column align="center" label="备注" prop="remark"></el-table-column>
+          <el-table-column align="center" label="鸽笼编号" prop="pigeonnumber" width="150" sortable />
+          <el-table-column align="center" label="面板编号" prop="boardnumber" width="150" sortable />
+          <el-table-column align="center" label="回蛋时间" prop="actionTime" width="200" sortable />
+          <el-table-column align="center" label="负责人" prop="principal" width="150" />
+          <el-table-column
+            align="center"
+            label="操作"
+            width="150"
+            v-slots={{
+              default: ({ row }) => <el-tag type={row.action === '未取走' ? '' : 'danger'}>{row.action}</el-tag>
+            }}
+          />
+          <el-table-column align="center" label="备注" prop="remark" />
         </sc-table>
       </>
     )

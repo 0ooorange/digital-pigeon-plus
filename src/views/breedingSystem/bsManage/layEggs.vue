@@ -11,7 +11,7 @@ export default defineComponent({
       {
         pigeonnumber: 'A1',
         boardnumber: '1',
-        actionTime: '2022年4月14日',
+        actionTime: '2022年4月14日16:06:34',
         actionType: '抽蛋',
         principal: '益达',
         remark: '无'
@@ -19,7 +19,7 @@ export default defineComponent({
       {
         pigeonnumber: 'A8',
         boardnumber: '2',
-        actionTime: '2022年4月14日',
+        actionTime: '2022年4月14日16:06:34',
         actionType: '孵化',
         principal: '益达',
         remark: '无'
@@ -27,7 +27,7 @@ export default defineComponent({
       {
         pigeonnumber: 'B10',
         boardnumber: '3',
-        actionTime: '2022年4月14日',
+        actionTime: '2022年4月14日16:06:34',
         actionType: '抽蛋',
         principal: '益达',
         remark: '无'
@@ -35,7 +35,7 @@ export default defineComponent({
       {
         pigeonnumber: 'A15',
         boardnumber: '4',
-        actionTime: '2022年4月14日',
+        actionTime: '2022年4月14日16:06:34',
         actionType: '孵化',
         principal: '益达',
         remark: '无'
@@ -43,7 +43,7 @@ export default defineComponent({
       {
         pigeonnumber: 'B1',
         boardnumber: '5',
-        actionTime: '2022年4月14日',
+        actionTime: '2022年4月14日16:06:34',
         actionType: '孵化',
         principal: '益达',
         remark: '无'
@@ -51,7 +51,7 @@ export default defineComponent({
       {
         pigeonnumber: 'B10',
         boardnumber: '6',
-        actionTime: '2022年4月14日',
+        actionTime: '2022年4月14日16:06:34',
         actionType: '抽蛋',
         principal: '益达',
         remark: '无'
@@ -59,7 +59,7 @@ export default defineComponent({
       {
         pigeonnumber: 'C4',
         boardnumber: '7',
-        actionTime: '2022年4月14日',
+        actionTime: '2022年4月14日16:06:34',
         actionType: '抽蛋',
         principal: '益达',
         remark: '无'
@@ -78,13 +78,15 @@ export default defineComponent({
       },
       {
         value: '操作时间',
-        label: '操作时间',
-        type: 'date-picker'
+        label: '操作时间'
       },
       {
-        value: '抽蛋/孵化',
-        label: '抽蛋/孵化',
-        type: 'select'
+        value: '抽蛋',
+        label: '抽蛋'
+      },
+      {
+        value: '孵化',
+        label: '孵化'
       },
       {
         value: '操作员',
@@ -92,8 +94,7 @@ export default defineComponent({
       },
       {
         value: '备注',
-        label: '备注',
-        type: 'input'
+        label: '备注'
       }
     ]
     const cardList = [
@@ -104,11 +105,11 @@ export default defineComponent({
     ]
     return () => (
       <>
-        <TableSearch searchTypes={searchTypes} cardData={cardList} />
+        <table-search searchTypes={searchTypes} cardData={cardList} />
         <sc-table ref="table" data={eggsList} pageSize={5} stripe highlightCurrentRow>
-          <el-table-column align="center" label="鸽笼编号" prop="pigeonnumber" width="130" />
-          <el-table-column align="center" label="面板编号" prop="boardnumber" width="130" />
-          <el-table-column align="center" label="操作时间" prop="actionTime" width="130" />
+          <el-table-column align="center" label="鸽笼编号" prop="pigeonnumber" width="150" sortable />
+          <el-table-column align="center" label="面板编号" prop="boardnumber" width="150" sortable />
+          <el-table-column align="center" label="操作时间" prop="actionTime" width="200" sortable />
           <el-table-column
             align="center"
             label="抽蛋/孵化"
@@ -117,7 +118,7 @@ export default defineComponent({
               default: ({ row }) => <el-tag type={row.actionType === '抽蛋' ? '' : 'warning'}>{row.actionType}</el-tag>
             }}
           />
-          <el-table-column align="center" label="操作员" prop="principal" width="130" />
+          <el-table-column align="center" label="操作员" prop="principal" width="150" />
           <el-table-column align="center" label="备注" prop="remark" />
         </sc-table>
       </>
@@ -125,3 +126,8 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="less" scoped>
+/deep/ .scTable .scTable-table {
+  height: 0 !important;
+}
+</style>

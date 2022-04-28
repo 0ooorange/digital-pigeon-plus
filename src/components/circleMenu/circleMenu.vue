@@ -2,16 +2,20 @@
   <div class="nav-box">
     <div class="circle-box">
       <div class="nav-logo"></div>
-      <div class="circle"
-           :style="`width:${circle_w}px;height:${circle_h}px`">
-        <div class="origin"
-             :style="`width:${box_w}px;height:${box_h}px;transform: rotate(${stard}deg);`">
-          <div :style="`width:${box_w}px;height:${box_h}px;transform: rotate(${-stard}deg);`"
-               class="img-box"
-               v-for="(item, index) in menus"
-               :key="index">
-            <router-link class="box"
-                         :to="item.path" @click="routerClick(item, index)">
+      <div class="circle" :style="`width:${circle_w}px;height:${circle_h}px`">
+        <div class="origin" :style="`width:${box_w}px;height:${box_h}px;transform: rotate(${stard}deg);`">
+          <div
+            :style="`width:${box_w}px;height:${box_h}px;transform: rotate(${-stard}deg);`"
+            class="img-box"
+            v-for="(item, index) in menus"
+            :key="index"
+          >
+            <router-link
+              class="box"
+              :style="{ backgroundImage: `url(${require(`/src/assets/icons/${item.icon}.png`)})`, backgroundSize: `${item.size}%` }"
+              :to="item.path"
+              @click="routerClick(item, index)"
+            >
               <div class="content">
                 <span class="title">{{ item.name }}</span>
               </div>
@@ -25,8 +29,8 @@
 
 <script>
 export default {
-  props: ["menus"], //菜单数据
-  data () {
+  props: ['menus'], //菜单数据
+  data() {
     return {
       circle_w: parseInt(window.innerHeight * 0.9), //圆盘的宽
       circle_h: parseInt(window.innerHeight * 0.9), //圆盘的高
@@ -35,33 +39,33 @@ export default {
       PI: 360, //分布角度，默认为360deg
       stard: -180, //起始角度
       boxNum: 6, //圆盘上覆盖的小圆点个数
-      descTitle: "", //模块描述标题
-      descContent: "", //模块描述内容
-      activeIndex: 0, //默认下标
-    };
+      descTitle: '', //模块描述标题
+      descContent: '', //模块描述内容
+      activeIndex: 0 //默认下标
+    }
   },
-  mounted () {
-    this.init();
+  mounted() {
+    this.init()
   },
   methods: {
     //初始化小圆点，根据计算使其分布到对应位置
-    init () {
-      let box = document.querySelectorAll(".img-box");
-      let avd = this.PI / box.length; //每一个 img-box 对应的角度
-      let ahd = (avd * Math.PI) / 180; //每一个 img-box 对应的弧度
-      let radius = this.circle_w / 2; //圆的半径
+    init() {
+      let box = document.querySelectorAll('.img-box')
+      let avd = this.PI / box.length //每一个 img-box 对应的角度
+      let ahd = (avd * Math.PI) / 180 //每一个 img-box 对应的弧度
+      let radius = this.circle_w / 2 //圆的半径
       for (let i = 0; i < box.length; i++) {
-        box[i].style.left = Math.sin(ahd * i) * radius + "px";
-        box[i].style.top = Math.cos(ahd * i) * radius + "px";
+        box[i].style.left = Math.sin(ahd * i) * radius + 'px'
+        box[i].style.top = Math.cos(ahd * i) * radius + 'px'
       }
     },
     routerClick(item, index) {
-      console.log("我是router-link，我被点击了，我的index值是", index);
-      console.log("我的值是", item.name);
-      localStorage.setItem("currentSystem", JSON.stringify(item));
+      console.log('我是router-link，我被点击了，我的index值是', index)
+      console.log('我的值是', item.name)
+      localStorage.setItem('currentSystem', JSON.stringify(item))
     }
-  },
-};
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -124,13 +128,12 @@ export default {
           position: absolute;
           left: 0;
           top: 0;
-          border-radius: 50%;
+          /* border-radius: 50%; */
           /* transform: scale(0.1); */
           cursor: pointer;
           /* border: 1px solid orange; */
-          background: url(https://img.qkeep.cn/imgs/下载.png) no-repeat center
-            center;
-          background-size: 100%;
+          background: no-repeat center center;
+          /* background-size: 90%; */
           /* overflow: hidden; */
           /* 获得焦点的item */
           &:hover {
