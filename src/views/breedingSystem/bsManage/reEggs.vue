@@ -8,6 +8,8 @@ export default defineComponent({
     TableSearch
   },
   setup() {
+    const dateConcreteValue = ''
+    const defaultTime = ''
     const eggsList = [
       {
         pigeonnumber: 'A1',
@@ -101,12 +103,21 @@ export default defineComponent({
     const cardList = [
       {
         cardText: '回蛋总数',
-        cardNumber: 1600
+        cardNumber: '1600只'
       }
     ]
     return () => (
       <>
-        <table-search searchTypes={searchTypes} cardData={cardList} />
+        <table-search searchTypes={searchTypes} cardData={cardList}>
+          <el-date-picker
+            style="background-color: #fff; width: 220px; margin: 0 10px 10px 0"
+            v-model={dateConcreteValue}
+            type="daterange"
+            start-placeholder="起始时间"
+            end-placeholder="最终时间"
+            default-time={defaultTime}
+          />
+        </table-search>
         <sc-table ref="table" data={eggsList} pageSize={5} stripe highlightCurrentRow>
           <el-table-column align="center" label="鸽笼编号" prop="pigeonnumber" width="150" sortable />
           <el-table-column align="center" label="面板编号" prop="boardnumber" width="150" sortable />
@@ -117,7 +128,7 @@ export default defineComponent({
             label="操作"
             width="150"
             v-slots={{
-              default: ({ row }) => <el-tag type={row.action === '未取走' ? '' : 'danger'}>{row.action}</el-tag>
+              default: ({ row }) => <el-tag type={row.action === '未取走' ? 'danger' : ''}>{row.action}</el-tag>
             }}
           />
           <el-table-column align="center" label="备注" prop="remark" />

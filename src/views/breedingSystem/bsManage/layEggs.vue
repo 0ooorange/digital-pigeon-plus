@@ -4,9 +4,11 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'layEggsManage',
   components: {
-    TableSearch
+    TableSearch,
   },
   setup() {
+    const dateConcreteValue = ''
+    const defaultTime = ''
     const eggsList = [
       {
         pigeonnumber: 'A1',
@@ -14,7 +16,7 @@ export default defineComponent({
         actionTime: '2022年4月14日16:06:34',
         actionType: '抽蛋',
         principal: '益达',
-        remark: '无'
+        remark: '无',
       },
       {
         pigeonnumber: 'A8',
@@ -22,7 +24,7 @@ export default defineComponent({
         actionTime: '2022年4月14日16:06:34',
         actionType: '孵化',
         principal: '益达',
-        remark: '无'
+        remark: '无',
       },
       {
         pigeonnumber: 'B10',
@@ -30,7 +32,7 @@ export default defineComponent({
         actionTime: '2022年4月14日16:06:34',
         actionType: '抽蛋',
         principal: '益达',
-        remark: '无'
+        remark: '无',
       },
       {
         pigeonnumber: 'A15',
@@ -38,7 +40,7 @@ export default defineComponent({
         actionTime: '2022年4月14日16:06:34',
         actionType: '孵化',
         principal: '益达',
-        remark: '无'
+        remark: '无',
       },
       {
         pigeonnumber: 'B1',
@@ -46,7 +48,7 @@ export default defineComponent({
         actionTime: '2022年4月14日16:06:34',
         actionType: '孵化',
         principal: '益达',
-        remark: '无'
+        remark: '无',
       },
       {
         pigeonnumber: 'B10',
@@ -54,7 +56,7 @@ export default defineComponent({
         actionTime: '2022年4月14日16:06:34',
         actionType: '抽蛋',
         principal: '益达',
-        remark: '无'
+        remark: '无',
       },
       {
         pigeonnumber: 'C4',
@@ -62,60 +64,83 @@ export default defineComponent({
         actionTime: '2022年4月14日16:06:34',
         actionType: '抽蛋',
         principal: '益达',
-        remark: '无'
-      }
+        remark: '无',
+      },
     ]
     // 查询类型下拉框列表的数据，格式固定
     const searchTypes = [
       {
         value: '鸽笼编号',
-        label: '鸽笼编号'
+        label: '鸽笼编号',
       },
       {
         value: '面板编号',
         label: '面板编号',
-        type: ''
+        type: '',
       },
       {
         value: '操作时间',
-        label: '操作时间'
+        label: '操作时间',
       },
       {
         value: '抽蛋',
-        label: '抽蛋'
+        label: '抽蛋',
       },
       {
         value: '孵化',
-        label: '孵化'
+        label: '孵化',
       },
       {
         value: '操作员',
-        label: '操作员'
+        label: '操作员',
       },
       {
         value: '备注',
-        label: '备注'
-      }
+        label: '备注',
+      },
     ]
     const cardList = [
       {
         cardText: '总产蛋数',
-        cardNumber: 800
-      }
+        cardNumber: '800只',
+      },
     ]
     return () => (
       <>
-        <table-search searchTypes={searchTypes} cardData={cardList} />
+        <table-search searchTypes={searchTypes} cardData={cardList}>
+          <el-date-picker
+            style="background-color: #fff; width: 220px; margin: 0 10px 10px 0"
+            v-model={dateConcreteValue}
+            type="daterange"
+            start-placeholder="起始时间"
+            end-placeholder="最终时间"
+            default-time={defaultTime}
+          />
+        </table-search>
         <sc-table ref="table" data={eggsList} pageSize={5} stripe highlightCurrentRow>
-          <el-table-column align="center" label="鸽笼编号" prop="pigeonnumber" width="150" sortable />
-          <el-table-column align="center" label="面板编号" prop="boardnumber" width="150" sortable />
+          <el-table-column
+            align="center"
+            label="鸽笼编号"
+            prop="pigeonnumber"
+            width="150"
+            sortable
+          />
+          <el-table-column
+            align="center"
+            label="面板编号"
+            prop="boardnumber"
+            width="150"
+            sortable
+          />
           <el-table-column align="center" label="操作时间" prop="actionTime" width="200" sortable />
           <el-table-column
             align="center"
             label="抽蛋/孵化"
             width="130"
             v-slots={{
-              default: ({ row }) => <el-tag type={row.actionType === '抽蛋' ? '' : 'warning'}>{row.actionType}</el-tag>
+              default: ({ row }) => (
+                <el-tag type={row.actionType === '抽蛋' ? '' : 'warning'}>{row.actionType}</el-tag>
+              ),
             }}
           />
           <el-table-column align="center" label="操作员" prop="principal" width="150" />
@@ -123,7 +148,7 @@ export default defineComponent({
         </sc-table>
       </>
     )
-  }
+  },
 })
 </script>
 <style lang="less" scoped>

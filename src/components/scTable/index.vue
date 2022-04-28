@@ -319,7 +319,7 @@
 </script>
 
 <style lang="less" scoped>
-	.scTable-table {height: calc(100% - 50px);}
+	// .scTable-table {height: calc(100% - 50px);}
 	.scTable-page {height:50px;display: flex;align-items: center;justify-content: center;padding:0 15px;}
 	.scTable-do {white-space: nowrap;}
 	.scTable:deep(.el-table__footer) .cell {font-weight: bold;}

@@ -7,7 +7,11 @@
       <el-table-column align="center" sortable label="鸽笼编号" prop="pigeonnumber" width="180"></el-table-column>
       <el-table-column align="center" sortable label="鸽板编号" prop="boardnumber" width="180"></el-table-column>
       <el-table-column align="center" sortable label="出仔日期" prop="time" width="180"></el-table-column>
-      <el-table-column align="center" label="异常情况" prop="normalCase" width="180"></el-table-column>
+      <el-table-column align="center" label="异常情况" prop="normalCase" width="180">
+        <template v-slot="scope">
+          <el-tag type="danger">{{scope.row.normalCase}}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="负责人" prop="principal" width="180"></el-table-column>
       <el-table-column align="center" label="备注" prop="remark"></el-table-column>
     </sc-table>
@@ -19,8 +23,8 @@ export default {
   name: 'examineCubManage',
   data() {
     return {
-      dateConcreteValue: "",
-      defaultTime: "",
+      dateConcreteValue: '',
+      defaultTime: '',
       showDatePicker: true,
       cardData: [
         {
@@ -133,7 +137,7 @@ export default {
     outTable() {
       console.log('哈哈哈，我被点击了噢')
     },
-    datePickerChange() {}
+    datePickerChange() {},
   },
 }
 </script>
