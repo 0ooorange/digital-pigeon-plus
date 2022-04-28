@@ -1,5 +1,5 @@
 <template>
-  <div class="loginMain">
+  <div class="loginMain" :style="{backgroundImage: `url(${require('../../../assets/images/loginBgImg.png')})`}">
     <div class="loginContent">
       <h1 class="title">数字鸽业平台登录</h1>
       <div class="select">
@@ -50,16 +50,21 @@
         <del>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</del>
       </div>
       <div class="imgs">
-        <img src="../../../../public/img/weibo.png" alt="ERR">
-        <img src="../../../../public/img/shouji.png" alt="ERR">
-        <img src="../../../../public/img/weixin.png" alt="ERR">
-        <img src="../../../../public/img/zhifubao.png" alt="ERR">
+        <img :src="weibo" alt="ERR">
+        <img :src="shouji" alt="ERR">
+        <img :src="weixin" alt="ERR">
+        <img :src="zhifubao" alt="ERR">
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import weibo from "../../../assets/images/weibo.png";
+import shouji from "../../../assets/images/shouji.png";
+import weixin from "../../../assets/images/weixin.png";
+import zhifubao from "../../../assets/images/zhifubao.png";
+import bgImg from '../../../assets/images/loginBgImg.png'
 import dragVerify from '@/components/loginCpn/dragVerify.vue'
 export default {
   components: {
@@ -67,10 +72,15 @@ export default {
   },
   data() {
     return {
+      weibo: weibo,
+      shouji: shouji,
+      weixin: weixin,
+      zhifubao: zhifubao,
+      bgImg: bgImg,
       username: '',
-      password: '',
+      password: 'admin',
       loginMethod: 0,
-      moblePhoneScrt: '',
+      moblePhoneScrt: 'admin',
       moblePhoneMess: '',
       verify: '',
       ismoblePhone: true,
@@ -119,10 +129,31 @@ export default {
         this.loginMethod = 1
       })
     },
-    login() {
-      this.$router.replace({
-        path: '/navigator',
-      })
+    async login() {
+      // var validate = await this.$refs.loginForm.validate().catch(()=>{})
+			// 	if(!validate){ return false }
+
+				this.islogin = true
+				var data = {
+					username: this.moblePhoneScrt,
+					password: this.password
+				}
+				//获取token
+				var user = await this.$API.auth.token.post(data)
+				if(user.code == 200){
+					this.$TOOL.data.set("TOKEN", user.data.token)
+					this.$TOOL.data.set("USER_INFO", user.data.userInfo)
+				}else{
+					this.islogin = false
+					this.$message.warning(user.message)
+					return false
+				}
+
+				this.$router.replace({
+					path: '/navigator'
+				})
+				this.$message.success("Login Success 登录成功")
+				this.islogin = false
     },
   },
 }
@@ -141,7 +172,7 @@ export default {
   justify-content: center;
   width: 100%;
   height: 100%;
-  background: url(../../../../public/img/loginBgImg.png) no-repeat center top;
+  background: no-repeat center top;
   background-size: 100%;
   /* background-attachment: fixed; */
 }
