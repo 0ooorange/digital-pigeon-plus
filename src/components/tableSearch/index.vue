@@ -133,7 +133,8 @@ export default {
 }
 .lessCard {
   margin: 0px 10px 10px 0;
-  width: 200px;
+  width: 180px;
+  max-width: 200px;
 }
 /deep/ .el-cascader {
   width: 150px;
