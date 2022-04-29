@@ -5,13 +5,14 @@
     
     <el-main class="nopadding">
 						 <scTable ref="table" :data="apiObj"  stripe  highlightCurrentRow 
-             class="tablestyle" 
+             class="tablestyle"
+             :default-sort = "{prop: 'date', order: 'descending'}" 
             >
-							<el-table-column label="鸽笼号" prop="pigeonnumber" width="120" align="center"></el-table-column>
+							<el-table-column label="鸽笼号" prop="pigeonnumber" sortable width="120" align="center"></el-table-column>
 							<el-table-column label="板子编号" prop="boardnumber" width="120" align="center"></el-table-column>
-							<el-table-column label="生蛋时间" prop="raweggstime" width="230" align="center"></el-table-column>
+							<el-table-column label="生蛋时间" prop="raweggstime" sortable width="230" align="center"></el-table-column>
               <el-table-column label="本次推荐" prop="recommendation" width="150" align="center"></el-table-column>
-              <el-table-column label="生蛋天数" prop="raweggday" width="150" align="center"></el-table-column>
+              <el-table-column label="生蛋天数" prop="raweggday" sortable width="150" align="center"></el-table-column>
               <el-table-column label="操作员" prop="operator" width="150" align="center"></el-table-column>
               <el-table-column label="备注" prop="remark"  align="center"></el-table-column>
 						</scTable>
@@ -39,7 +40,7 @@ import scTable from '../../../components/scTable/index.vue'
         // 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方
       cardData: [{
         cardText: '查蛋个数',
-        cardNumber: 666
+        cardNumber: "888只"
        },],
       // 查询类型下拉框列表的数据，格式固定
       searchTypes: [{
@@ -67,9 +68,9 @@ import scTable from '../../../components/scTable/index.vue'
      
         apiObj:[
             {
-                pigeonnumber: "A10",
+                pigeonnumber: "A02",
                 boardnumber: "3",
-                raweggstime: "2022-4-1 20:21:23",
+                raweggstime: "2022-04-11 20:21:23",
                 recommendation: "抽蛋",
                 raweggday: "10天",
                 operator: "李暖暖",
@@ -78,45 +79,45 @@ import scTable from '../../../components/scTable/index.vue'
             {
                 pigeonnumber: "A10",
                 boardnumber: "3",
-                raweggstime: "2022-4-1 20:21:23",
+                raweggstime: "2022-03-11 20:21:23",
                 recommendation: "抽蛋",
                 raweggday: "10天",
                 operator: "李暖暖",
                 remark: "XXXXX"
             } ,
             {
-                pigeonnumber: "A10",
+                pigeonnumber: "A08",
                 boardnumber: "3",
-                raweggstime: "2022-4-1 20:21:23",
+                raweggstime: "2022-11-11 20:21:23",
+                recommendation: "抽蛋",
+                raweggday: "13天",
+                operator: "李暖暖",
+                remark: "XXXXX"
+            } ,
+            {
+                pigeonnumber: "A01",
+                boardnumber: "3",
+                raweggstime: "2022-04-21 20:21:23",
                 recommendation: "抽蛋",
                 raweggday: "10天",
                 operator: "李暖暖",
                 remark: "XXXXX"
             } ,
             {
-                pigeonnumber: "A10",
+                pigeonnumber: "A11",
                 boardnumber: "3",
-                raweggstime: "2022-4-1 20:21:23",
+                raweggstime: "2022-09-21 20:21:23",
                 recommendation: "抽蛋",
-                raweggday: "10天",
+                raweggday: "21天",
                 operator: "李暖暖",
                 remark: "XXXXX"
             } ,
             {
                 pigeonnumber: "A10",
                 boardnumber: "3",
-                raweggstime: "2022-4-1 20:21:23",
+                raweggstime: "2022-04-21 20:21:23",
                 recommendation: "抽蛋",
-                raweggday: "10天",
-                operator: "李暖暖",
-                remark: "XXXXX"
-            } ,
-            {
-                pigeonnumber: "A10",
-                boardnumber: "3",
-                raweggstime: "2022-4-1 20:21:23",
-                recommendation: "抽蛋",
-                raweggday: "10天",
+                raweggday: "8天",
                 operator: "李暖暖",
                 remark: "XXXXX"
             } ,
