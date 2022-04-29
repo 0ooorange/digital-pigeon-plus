@@ -5,11 +5,12 @@
     <el-main class="nopadding">
 						 <scTable ref="table" :data="apiObj"  stripe  highlightCurrentRow 
              class="tablestyle" 
+              :default-sort = "{prop: 'date', order: 'descending'}"
              >
-							<el-table-column label="鸽笼号" prop="pigeonnumber" width="120" align="center"></el-table-column>
+							<el-table-column label="鸽笼号" prop="pigeonnumber" sortable width="120" align="center"></el-table-column>
 							<el-table-column label="板子编号" prop="boardnumber" width="120" align="center"></el-table-column>
-							<el-table-column label="出仔时间" prop="cubouttime" width="230" align="center"></el-table-column>
-              <el-table-column label="喂养天数" prop="feedday" width="150" align="center"></el-table-column>
+							<el-table-column label="出仔时间" prop="cubouttime" sortable width="230" align="center"></el-table-column>
+              <el-table-column label="喂养天数" prop="feedday" sortable width="150" align="center"></el-table-column>
               <el-table-column label="出栏个数" prop="baroutnumber" width="150" align="center"></el-table-column>
               <el-table-column label="操作员" prop="operator" width="150" align="center"></el-table-column>
               <el-table-column label="备注" prop="remark"  align="center"></el-table-column>
@@ -39,7 +40,7 @@ import scTable from '../../../components/scTable/index.vue'
          // 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方
       cardData: [{
         cardText: '预计出栏个数',
-        cardNumber: 666
+        cardNumber: "999个"
        },],
       // 查询类型下拉框列表的数据，格式固定
       searchTypes: [{
@@ -66,18 +67,27 @@ import scTable from '../../../components/scTable/index.vue'
       }],
         apiObj:[
             {
-                pigeonnumber: "A10",
+                pigeonnumber: "A12",
                 boardnumber: "3",
-                cubouttime: "2022-4-1 20:21:23",
+                cubouttime: "2022-04-12 20:21:23",
                 feedday: "10天",
                 baroutnumber: "199只",
                 operator: "李暖暖",
                 remark: "XXXXX"
             } ,
            {
-                pigeonnumber: "A10",
+                pigeonnumber: "A02",
                 boardnumber: "3",
-                cubouttime: "2022-4-1 20:21:23",
+                cubouttime: "2022-11-12 20:21:23",
+                feedday: "10天",
+                baroutnumber: "199只",
+                operator: "李暖暖",
+                remark: "XXXXX"
+            } ,
+            {
+                pigeonnumber: "A12",
+                boardnumber: "3",
+                cubouttime: "2022-04-12 20:21:23",
                 feedday: "10天",
                 baroutnumber: "199只",
                 operator: "李暖暖",
@@ -86,8 +96,8 @@ import scTable from '../../../components/scTable/index.vue'
             {
                 pigeonnumber: "A10",
                 boardnumber: "3",
-                cubouttime: "2022-4-1 20:21:23",
-                feedday: "10天",
+                cubouttime: "2022-06-12 20:21:23",
+                feedday: "8天",
                 baroutnumber: "199只",
                 operator: "李暖暖",
                 remark: "XXXXX"
@@ -95,35 +105,16 @@ import scTable from '../../../components/scTable/index.vue'
             {
                 pigeonnumber: "A10",
                 boardnumber: "3",
-                cubouttime: "2022-4-1 20:21:23",
+                cubouttime: "2022-04-30 20:21:23",
                 feedday: "10天",
                 baroutnumber: "199只",
                 operator: "李暖暖",
                 remark: "XXXXX"
             } ,
             {
-                pigeonnumber: "A10",
+                pigeonnumber: "A12",
                 boardnumber: "3",
-                cubouttime: "2022-4-1 20:21:23",
-                feedday: "10天",
-                baroutnumber: "199只",
-                operator: "李暖暖",
-                remark: "XXXXX"
-            } ,
-            {
-                pigeonnumber: "A10",
-                boardnumber: "3",
-                cubouttime: "2022-4-1 20:21:23",
-                feedday: "10天",
-                baroutnumber: "199只",
-                operator: "李暖暖",
-                remark: "XXXXX"
-            } ,
-            
-            {
-                pigeonnumber: "A10",
-                boardnumber: "3",
-                cubouttime: "2022-4-1 20:21:23",
+                cubouttime: "2022-04-11 20:21:23",
                 feedday: "10天",
                 baroutnumber: "199只",
                 operator: "李暖暖",
@@ -131,9 +122,19 @@ import scTable from '../../../components/scTable/index.vue'
             } ,
             
             {
-                pigeonnumber: "A10",
+                pigeonnumber: "A03",
                 boardnumber: "3",
-                cubouttime: "2022-4-1 20:21:23",
+                cubouttime: "2022-04-21 20:21:23",
+                feedday: "13天",
+                baroutnumber: "199只",
+                operator: "李暖暖",
+                remark: "XXXXX"
+            } ,
+            
+            {
+                pigeonnumber: "A06",
+                boardnumber: "3",
+                cubouttime: "2022-05-12 20:21:23",
                 feedday: "10天",
                 baroutnumber: "199只",
                 operator: "李暖暖",

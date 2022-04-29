@@ -20,13 +20,14 @@
     <el-main class="nopadding">
 						 <scTable ref="table" :data="apiObj"  stripe  highlightCurrentRow 
              class="tablestyle" 
+             :default-sort = "{prop: 'date', order: 'descending'}"
              >
-							<el-table-column label="鸽笼号" prop="pigeonnumber" width="120" align="center"></el-table-column>
+							<el-table-column label="鸽笼号" prop="pigeonnumber"  sortable width="120" align="center"></el-table-column>
 							<el-table-column label="板子编号" prop="boardnumber" width="120" align="center"></el-table-column>
 							<el-table-column label="第一次操作" prop="firstime" width="120" align="center"></el-table-column>
-              <el-table-column label="时间间隔" prop="timeinterval_st" width="120" align="center"></el-table-column>
+              <el-table-column label="时间间隔" prop="timeinterval_st" sortable  width="120" align="center"></el-table-column>
               <el-table-column label="第二次操作" prop="secondtime" width="120" align="center"></el-table-column>
-              <el-table-column label="时间间隔" prop="timeinterval_nd" width="120" align="center"></el-table-column>
+              <el-table-column label="时间间隔" prop="timeinterval_nd" sortable width="120" align="center"></el-table-column>
               <el-table-column label="本次推荐" prop="recommendation" width="120" align="center"></el-table-column>
               <el-table-column label="操作员" prop="operator" width="120" align="center"></el-table-column>
               <el-table-column label="备注" prop="remark"  align="center"></el-table-column>
@@ -76,10 +77,43 @@ import scTable from '../../../components/scTable/index.vue'
      
         apiObj:[
             {
-                pigeonnumber: "A10",
+                pigeonnumber: "A01",
+                boardnumber: "3",
+                firstime: "孵化",
+                timeinterval_st: "2天",
+                secondtime: "抽蛋",
+                timeinterval_nd: "10天",
+                recommendation: "抽蛋",
+                operator: "李暖暖",
+                remark: "XXXXX"
+            } ,
+            {
+                pigeonnumber: "A08",
+                boardnumber: "3",
+                firstime: "孵化",
+                timeinterval_st: "21天",
+                secondtime: "抽蛋",
+                timeinterval_nd: "10天",
+                recommendation: "抽蛋",
+                operator: "李暖暖",
+                remark: "XXXXX"
+            } ,
+            {
+                pigeonnumber: "A03",
                 boardnumber: "3",
                 firstime: "孵化",
                 timeinterval_st: "20天",
+                secondtime: "抽蛋",
+                timeinterval_nd: "10天",
+                recommendation: "抽蛋",
+                operator: "李暖暖",
+                remark: "XXXXX"
+            } ,
+            {
+                pigeonnumber: "A11",
+                boardnumber: "3",
+                firstime: "孵化",
+                timeinterval_st: "18天",
                 secondtime: "抽蛋",
                 timeinterval_nd: "10天",
                 recommendation: "抽蛋",
@@ -98,10 +132,10 @@ import scTable from '../../../components/scTable/index.vue'
                 remark: "XXXXX"
             } ,
             {
-                pigeonnumber: "A10",
+                pigeonnumber: "A07",
                 boardnumber: "3",
                 firstime: "孵化",
-                timeinterval_st: "20天",
+                timeinterval_st: "10天",
                 secondtime: "抽蛋",
                 timeinterval_nd: "10天",
                 recommendation: "抽蛋",
@@ -112,7 +146,7 @@ import scTable from '../../../components/scTable/index.vue'
                 pigeonnumber: "A10",
                 boardnumber: "3",
                 firstime: "孵化",
-                timeinterval_st: "20天",
+                timeinterval_st: "21天",
                 secondtime: "抽蛋",
                 timeinterval_nd: "10天",
                 recommendation: "抽蛋",
@@ -123,42 +157,9 @@ import scTable from '../../../components/scTable/index.vue'
                 pigeonnumber: "A10",
                 boardnumber: "3",
                 firstime: "孵化",
-                timeinterval_st: "20天",
+                timeinterval_st: "2天",
                 secondtime: "抽蛋",
-                timeinterval_nd: "10天",
-                recommendation: "抽蛋",
-                operator: "李暖暖",
-                remark: "XXXXX"
-            } ,
-            {
-                pigeonnumber: "A10",
-                boardnumber: "3",
-                firstime: "孵化",
-                timeinterval_st: "20天",
-                secondtime: "抽蛋",
-                timeinterval_nd: "10天",
-                recommendation: "抽蛋",
-                operator: "李暖暖",
-                remark: "XXXXX"
-            } ,
-            {
-                pigeonnumber: "A10",
-                boardnumber: "3",
-                firstime: "孵化",
-                timeinterval_st: "20天",
-                secondtime: "抽蛋",
-                timeinterval_nd: "10天",
-                recommendation: "抽蛋",
-                operator: "李暖暖",
-                remark: "XXXXX"
-            } ,
-            {
-                pigeonnumber: "A10",
-                boardnumber: "3",
-                firstime: "孵化",
-                timeinterval_st: "20天",
-                secondtime: "抽蛋",
-                timeinterval_nd: "10天",
+                timeinterval_nd: "18天",
                 recommendation: "抽蛋",
                 operator: "李暖暖",
                 remark: "XXXXX"
