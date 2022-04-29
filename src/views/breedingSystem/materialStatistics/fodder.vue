@@ -98,7 +98,6 @@
                 label="饲料品种"
                 prop="variety"
                 width="160"
-                 sortable
             ></el-table-column>
         </scTable>
     </div>

@@ -9,7 +9,7 @@
              :default-sort = "{prop: 'date', order: 'descending'}" 
             >
 							<el-table-column label="鸽笼号" prop="pigeonnumber" sortable width="120" align="center"></el-table-column>
-							<el-table-column label="板子编号" prop="boardnumber" width="120" align="center"></el-table-column>
+							<el-table-column label="板子编号" prop="boardnumber" sortable width="120" align="center"></el-table-column>
 							<el-table-column label="生蛋时间" prop="raweggstime" sortable width="230" align="center"></el-table-column>
               <el-table-column label="本次推荐" prop="recommendation" width="150" align="center"></el-table-column>
               <el-table-column label="生蛋天数" prop="raweggday" sortable width="150" align="center"></el-table-column>

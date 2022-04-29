@@ -118,13 +118,11 @@
                 label="淘汰建议"
                 prop="suggest"
                 width="110"
-                 sortable
             ></el-table-column>
             <el-table-column
             align="center"
                 label="备注"
                 prop="remark"
-                 sortable
                 width="140"
                 show-overflow-tooltip
             ></el-table-column>

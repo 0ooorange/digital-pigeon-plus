@@ -23,7 +23,7 @@
              :default-sort = "{prop: 'date', order: 'descending'}"
              >
 							<el-table-column label="鸽笼号" prop="pigeonnumber"  sortable width="120" align="center"></el-table-column>
-							<el-table-column label="板子编号" prop="boardnumber" width="120" align="center"></el-table-column>
+							<el-table-column label="板子编号" prop="boardnumber" sortable width="120" align="center"></el-table-column>
 							<el-table-column label="第一次操作" prop="firstime" width="120" align="center"></el-table-column>
               <el-table-column label="时间间隔" prop="timeinterval_st" sortable  width="120" align="center"></el-table-column>
               <el-table-column label="第二次操作" prop="secondtime" width="120" align="center"></el-table-column>
