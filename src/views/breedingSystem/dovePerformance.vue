@@ -42,40 +42,40 @@
             stripe
              highlightCurrentRow
         >
-            <el-table-column type="selection" width="50"></el-table-column>
+            <el-table-column type="selection" width="40"></el-table-column>
             <el-table-column
             align="center"
                 label="鸽笼号"
                 prop="cageNumber"
-                width="120"
+                width="100"
                  sortable
             ></el-table-column>
             <el-table-column
             align="center"
                 label="板子编号"
                 prop="boardNumber"
-                width="120"
+                width="110"
                  sortable
             ></el-table-column>
             <el-table-column
             align="center"
                 label="一个月未下蛋"
                 prop="oneMonNoLayEgg"
-                width="120"
+                width="140"
                  sortable
             ></el-table-column>
             <el-table-column
             align="center"
                 label="生蛋间隔"
                 prop="layEggInterval"
-                width="90"
+                width="110"
                  sortable
             ></el-table-column>
             <el-table-column
             align="center"
                 label="回蛋次数"
                 prop="backEggAmount"
-                width="80"
+                width="110"
                  sortable
             ></el-table-column>
             <el-table-column
@@ -117,7 +117,7 @@
             align="center"
                 label="淘汰建议"
                 prop="suggest"
-                width="80"
+                width="110"
                  sortable
             ></el-table-column>
             <el-table-column
@@ -125,7 +125,7 @@
                 label="备注"
                 prop="remark"
                  sortable
-                width="160"
+                width="140"
                 show-overflow-tooltip
             ></el-table-column>
         </scTable>
