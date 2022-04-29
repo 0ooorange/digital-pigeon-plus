@@ -6,7 +6,7 @@
         <el-col :span="firstSpan">
           <div :class="menuIsCollapse?'panel-item adminui-header-left beCenter':'panel-item adminui-header-left'" @click="toNavigator">
             <div class="logo-bar">
-              <img class="logo" src="img/logo-2.png">
+              <img class="logo" :src="smallLogo">
               <span class="isShowText" v-if="!menuIsCollapse">{{ $CONFIG.APP_NAME }}</span>
             </div>
           </div>
@@ -73,6 +73,8 @@ import Topbar from './components/topbar.vue'
 import NavMenu from './components/NavMenu.vue'
 import userbar from './components/userbar.vue'
 import iframeView from './components/iframeView.vue'
+import smallLogo from '../assets/images/logo-2.png'
+
 
 export default {
   name: 'index',
@@ -143,6 +145,7 @@ export default {
   },
   data() {
     return {
+      smallLogo: smallLogo,
       settingDialog: false,
       currBase: '小村庄加工厂',
       currDovecote: 'A2仓',
