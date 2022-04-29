@@ -8,7 +8,7 @@
             class="table_search"
         >
             <el-select
-                style="width: 150px"
+                style="width: 150px;flex: 0 0 auto;margin-bottom:9px;margin-right:10px"
                 v-model="dateValue"
                 class="m-2"
                 placeholder="统计时间"
@@ -39,67 +39,92 @@
             row-key="id"
             :data="tableList"
             @selection-change="selectionChange"
-            hidePagination
+            stripe
+             highlightCurrentRow
         >
             <el-table-column type="selection" width="50"></el-table-column>
             <el-table-column
+            align="center"
                 label="鸽笼号"
                 prop="cageNumber"
                 width="120"
+                 sortable
             ></el-table-column>
             <el-table-column
+            align="center"
                 label="板子编号"
                 prop="boardNumber"
                 width="120"
+                 sortable
             ></el-table-column>
             <el-table-column
+            align="center"
                 label="一个月未下蛋"
                 prop="oneMonNoLayEgg"
                 width="120"
+                 sortable
             ></el-table-column>
             <el-table-column
+            align="center"
                 label="生蛋间隔"
                 prop="layEggInterval"
                 width="90"
+                 sortable
             ></el-table-column>
             <el-table-column
+            align="center"
                 label="回蛋次数"
                 prop="backEggAmount"
                 width="80"
+                 sortable
             ></el-table-column>
             <el-table-column
+            align="center"
                 label="光蛋"
                 prop="lightEgg"
                 width="80"
+                 sortable
             ></el-table-column>
             <el-table-column
+            align="center"
                 label="冷蛋"
                 prop="coolEgg"
                 width="80"
+                 sortable
             ></el-table-column>
             <el-table-column
+            align="center"
                 label="单蛋"
                 prop="aloneEgg"
                 width="80"
+                 sortable
             ></el-table-column>
             <el-table-column
+            align="center"
                 label="踩蛋"
                 prop="stampEgg"
                 width="80"
+                 sortable
             ></el-table-column>
             <el-table-column
+            align="center"
                 label="死仔"
                 prop="deathChild"
                 width="80"
+                 sortable
             ></el-table-column>
             <el-table-column
+            align="center"
                 label="淘汰建议"
                 prop="suggest"
                 width="80"
+                 sortable
             ></el-table-column>
             <el-table-column
+            align="center"
                 label="备注"
                 prop="remark"
+                 sortable
                 width="160"
                 show-overflow-tooltip
             ></el-table-column>

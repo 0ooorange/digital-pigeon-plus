@@ -44,45 +44,61 @@
             class="table"
             ref="table"
             row-key="id"
+            stripe
+            highlightCurrentRow
             :data="tableList"
             @selection-change="selectionChange"
-            hidePagination
+            
         >
             <el-table-column type="selection" width="80"></el-table-column>
             <el-table-column
+             align="center"
                 label="料槽编号"
                 prop="number"
                 width="140"
+                 sortable
             ></el-table-column>
             <el-table-column
+             align="center"
                 label="加料时间"
                 prop="chargeTime"
                 width="180"
+                 sortable
             ></el-table-column>
             <el-table-column
+             align="center"
                 label="加料量"
                 prop="chargeAmount"
                 width="160"
+                 sortable
             ></el-table-column>
             <el-table-column
+             align="center"
                 label="复称时间"
                 prop="weighAgain"
                 width="180"
+                 sortable
             ></el-table-column>
             <el-table-column
+             align="center"
                 label="剩余量"
                 prop="surplusWeight"
                 width="160"
+                 sortable
             ></el-table-column>
             <el-table-column
+             align="center"
                 label="食用量"
                 prop="edibleAmount"
                 width="160"
+                 sortable
             ></el-table-column>
             <el-table-column
+             align="center"
                 label="饲料品种"
                 prop="variety"
                 width="160"
+                 sortable
             ></el-table-column>
         </scTable>
     </div>
