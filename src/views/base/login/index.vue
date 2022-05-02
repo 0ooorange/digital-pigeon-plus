@@ -65,7 +65,7 @@ import shouji from "../../../assets/images/shouji.png";
 import weixin from "../../../assets/images/weixin.png";
 import zhifubao from "../../../assets/images/zhifubao.png";
 import bgImg from '../../../assets/images/loginBgImg.png'
-import dragVerify from '@/components/loginCpn/dragVerify.vue'
+import dragVerify from './components/dragVerify.vue'
 export default {
   components: {
     dragVerify,
