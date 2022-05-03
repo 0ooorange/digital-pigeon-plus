@@ -83,8 +83,8 @@ export default {
   position: relative;
   .nav-logo {
     position: absolute;
-    top: 49%;
-    left: 51%;
+    top: 46%;
+    left: 50%;
     transform: translate(-50%, -50%);
     width: 300px;
     height: 300px;
@@ -133,7 +133,7 @@ export default {
           cursor: pointer;
           /* border: 1px solid orange; */
           background: no-repeat center center;
-          /* background-size: 90%; */
+          background-size: 75%;
           /* overflow: hidden; */
           /* 获得焦点的item */
           &:hover {
