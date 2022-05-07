@@ -17,6 +17,11 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
+    const searchTypes = reactive(props.searchTypes)
+    searchTypes.push({
+        value: '高级检索',
+        label: '高级检索',
+      })
     const dateValue = ref('')
     const selectType = ref([''])
     const isShowMore = ref(false)
@@ -81,7 +86,7 @@ export default defineComponent({
     const renderMore = () => (
       <>
         <el-form label-width="70px" inline>
-          {props.searchTypes.map((item) =>
+          {searchTypes.map((item) =>
             item.label !== '高级检索' ? (
               <el-form-item label={item.label} key={item.label}>
                 <el-input
@@ -139,7 +144,7 @@ export default defineComponent({
             <span>
               <el-cascader
                 v-model={selectType}
-                options={props.searchTypes}
+                options={searchTypes}
                 onChange={handleChange}
                 placeholder="查询类型"
               />

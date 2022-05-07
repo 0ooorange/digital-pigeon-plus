@@ -11,7 +11,6 @@ export default defineComponent({
         layEggdays: '10天',
         hatchEggdays: '19天',
         actionType: '抽蛋',
-        principal: '益达',
         remark: '无',
       },
       {
@@ -21,7 +20,6 @@ export default defineComponent({
         layEggdays: '10天',
         hatchEggdays: '19天',
         actionType: '孵化',
-        principal: '益达',
         remark: '无',
       },
       {
@@ -31,7 +29,6 @@ export default defineComponent({
         layEggdays: '10天',
         hatchEggdays: '19天',
         actionType: '抽蛋',
-        principal: '益达',
         remark: '无',
       },
       {
@@ -41,7 +38,6 @@ export default defineComponent({
         layEggdays: '10天',
         hatchEggdays: '19天',
         actionType: '孵化',
-        principal: '益达',
         remark: '无',
       },
       {
@@ -51,7 +47,6 @@ export default defineComponent({
         layEggdays: '10天',
         hatchEggdays: '19天',
         actionType: '孵化',
-        principal: '益达',
         remark: '无',
       },
       {
@@ -61,7 +56,6 @@ export default defineComponent({
         layEggdays: '10天',
         hatchEggdays: '19天',
         actionType: '抽蛋',
-        principal: '益达',
         remark: '无',
       },
       {
@@ -71,7 +65,6 @@ export default defineComponent({
         layEggdays: '10天',
         hatchEggdays: '19天',
         actionType: '抽蛋',
-        principal: '益达',
         remark: '无',
       },
     ]
@@ -92,19 +85,7 @@ export default defineComponent({
       {
         value: '孵化天数',
         label: '孵化天数',
-      },
-      {
-        value: '操作员',
-        label: '操作员',
-      },
-      {
-        value: '备注',
-        label: '备注',
-      },
-      {
-        value: '高级检索',
-        label: '高级检索',
-      },
+      }
     ]
 
     const searchClick = () => {
@@ -128,12 +109,11 @@ export default defineComponent({
           onOutTable={outTable}
         ></table-search>
         <sc-table ref="table" data={eggsList} pageSize={5} stripe highlightCurrentRow>
-          <el-table-column align="center" label="鸽笼号" prop="pigeonnumber" width="130" />
-          <el-table-column align="center" label="板子号" prop="boardnumber" width="130" />
-          <el-table-column align="center" label="生蛋时间" prop="layEggDate" width="180" />
-          <el-table-column align="center" label="生蛋天数" prop="layEggdays" width="150" />
-          <el-table-column align="center" label="孵化天数" prop="hatchEggdays" width="150" />
-          <el-table-column align="center" label="操作员" prop="principal" width="150" />
+          <el-table-column align="center" label="鸽笼号" prop="pigeonnumber" width="180" />
+          <el-table-column align="center" label="板子号" prop="boardnumber" width="180" />
+          <el-table-column align="center" label="生蛋时间" prop="layEggDate" width="200" />
+          <el-table-column align="center" label="生蛋天数" prop="layEggdays" width="180" />
+          <el-table-column align="center" label="孵化天数" prop="hatchEggdays" width="180" />
           <el-table-column align="center" label="备注" prop="remark" />
         </sc-table>
       </div>
