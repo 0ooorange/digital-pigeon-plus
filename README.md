@@ -193,7 +193,7 @@ export default defineComponent({
           onReset={reset}
           onOutTable={outTable}
         ></table-search>
-      </div>
+      </>
     )
   },
 })
