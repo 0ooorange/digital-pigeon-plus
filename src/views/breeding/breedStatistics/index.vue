@@ -123,10 +123,10 @@
 </template>
 
 <script>
-import DovecoteInfo from "../breeding/breedStatistics/components/DovecoteInfo.vue";
-import TableCustom from "../breeding/breedStatistics/components/table-custom.vue";
-import EchartStatistics from "../breeding/breedStatistics/components/echartStatistics.vue";
-import EchartsEnvironment from "../breeding/breedStatistics/components/echartsEnvironment.vue";
+import DovecoteInfo from "./components/DovecoteInfo.vue";
+import TableCustom from "./components/table-custom.vue";
+import EchartStatistics from "./components/echartStatistics.vue";
+import EchartsEnvironment from "./components/echartsEnvironment.vue";
 
 export default {
 	name: "bsBreedingStatistics",
@@ -209,4 +209,4 @@ export default {
 	},
 };
 </script>
-<style src="@/style/breedingStatistics/index.css" scoped></style>
+<style src="./index.css" scoped></style>

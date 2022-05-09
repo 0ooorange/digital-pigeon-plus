@@ -11,7 +11,7 @@ const routes = [
 	},
 	{
 		path: "/login",
-		component: () => import(/* webpackChunkName: "login" */ "@/views/base/login/login"),
+		component: () => import(/* webpackChunkName: "login" */ "@/views/base/login/index"),
 		// component: () => import(/* webpackChunkName: "login" */ '@/views/userCenter/login'),
 		meta: {
 			title: "登录",
@@ -21,7 +21,7 @@ const routes = [
 		path: "/navigator",
 		component: () =>
 			import(
-				/* webpackChunkName: "login" */ "@/views/base/navigator/navigator"
+				/* webpackChunkName: "login" */ "@/views/base/navigator/index"
 			),
 		meta: {
 			title: "环形目录",

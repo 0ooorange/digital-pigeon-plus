@@ -6,7 +6,7 @@
         <el-col :span="firstSpan">
           <div :class="menuIsCollapse?'panel-item adminui-header-left beCenter':'panel-item adminui-header-left'" @click="toNavigator">
             <div class="logo-bar">
-              <img class="logo" src="img/logo-2.png">
+              <img class="logo" :src="smallLogo">
               <span class="isShowText" v-if="!menuIsCollapse">{{ $CONFIG.APP_NAME }}</span>
             </div>
           </div>
@@ -73,6 +73,7 @@ import Topbar from './components/topbar.vue'
 import NavMenu from './components/NavMenu.vue'
 import userbar from './components/userbar.vue'
 import iframeView from './components/iframeView.vue'
+import smallLogo from '../assets/images/logo-2.png'
 
 export default {
   name: 'index',
@@ -143,23 +144,24 @@ export default {
   },
   data() {
     return {
+      smallLogo: smallLogo,
       settingDialog: false,
       currBase: '小村庄加工厂',
       currDovecote: 'A2仓',
       menu: [
         {
-          name: 'bsBreedingStatistics',
-          path: '/breedingSystem/breedingStatistics',
+          name: 'breedStatistics',
+          path: '/breeding/breedStatistics',
           meta: {
             title: '养殖统计',
             icon: 'el-icon-histogram',
             type: 'menu',
           },
-          component: 'breedingSystem/breedingStatistics',
+          component: 'breeding/breedStatistics/index',
         },
         {
-          name: 'bsAuxiliary',
-          path: '/breedingSystem/auxiliary',
+          name: 'breedingAuxiliary',
+          path: '/breeding/auxiliary',
           meta: {
             title: '养殖辅助',
             icon: 'el-icon-connection',
@@ -167,50 +169,50 @@ export default {
           },
           children: [
             {
-              path: '/breedingSystem/auxiliary/extractAndIncubate',
-              name: 'ExtractAndIncubateAuxiliary',
+              path: '/breeding/auxiliary/incubate',
+              name: 'incubateAuxiliary',
               meta: {
                 title: '抽孵辅助',
                 icon: 'el-icon-office-building',
                 type: 'menu',
               },
-              component: 'breedingSystem/auxiliary/extractAndIncubate',
+              component: 'breeding/auxiliary/incubate/index',
             },
             {
-              path: '/breedingSystem/auxiliary/axlyExamEgg',
-              name: 'examineEggAuxiliary',
+              path: '/breeding/auxiliary/examEgg',
+              name: 'examEggAuxiliary',
               meta: {
                 title: '查蛋辅助',
                 icon: 'el-icon-office-building',
                 type: 'menu',
               },
-              component: 'breedingSystem/auxiliary/axlyExamEgg',
+              component: 'breeding/auxiliary/examEgg/index',
             },
             {
-              path: '/breedingSystem/auxiliary/axlyExamCub',
-              name: 'examineCubAuxiliary',
+              path: '/breeding/auxiliary/examCub',
+              name: 'examCubAuxiliary',
               meta: {
                 title: '查仔辅助',
                 icon: 'el-icon-office-building',
                 type: 'menu',
               },
-              component: 'breedingSystem/auxiliary/axlyExamCub',
+              component: 'breeding/auxiliary/examCub/index',
             },
             {
-              path: '/breedingSystem/auxiliary/axlyOutCage',
+              path: '/breeding/auxiliary/outCage',
               name: 'outCageAuxiliary',
               meta: {
                 title: '出栏辅助',
                 icon: 'el-icon-office-building',
                 type: 'menu',
               },
-              component: 'breedingSystem/auxiliary/axlyOutCage',
+              component: 'breeding/auxiliary/outCage/index',
             },
           ],
         },
         {
-          name: 'bsManage',
-          path: '/breedingSystem/bsManage',
+          name: 'breedingManage',
+          path: '/breeding/manage',
           meta: {
             title: '养殖管理',
             icon: 'el-icon-calendar',
@@ -218,80 +220,50 @@ export default {
           },
           children: [
             {
-              path: '/breedingSystem/bsManage/layEggs',
-              name: 'layEggsManage',
+              path: '/breeding/manage/detail',
+              name: 'breedingDetail',
               meta: {
-                title: '产蛋',
+                title: '养殖明细',
                 icon: 'el-icon-office-building',
                 type: 'menu',
               },
-              component: 'breedingSystem/bsManage/layEggs',
+              component: 'breeding/manage/detail/index',
             },
             {
-              path: '/breedingSystem/bsManage/manageExamEgg',
-              name: 'examineEggManage',
-              meta: {
-                title: '查蛋',
-                icon: 'el-icon-office-building',
-                type: 'menu',
-              },
-              component: 'breedingSystem/bsManage/manageExamEgg',
-            },
-            {
-              path: '/breedingSystem/bsManage/manageExamCub',
-              name: 'examineCubManage',
-              meta: {
-                title: '查仔',
-                icon: 'el-icon-office-building',
-                type: 'menu',
-              },
-              component: 'breedingSystem/bsManage/manageExamCub',
-            },
-            {
-              path: '/breedingSystem/bsManage/abnormalCase',
-              name: 'abnormalCaseManage',
-              meta: {
-                title: '异常情况',
-                icon: 'el-icon-office-building',
-                type: 'menu',
-              },
-              component: 'breedingSystem/bsManage/abnormalCase',
-            },
-            {
-              path: '/breedingSystem/bsManage/reEggs',
-              name: 'reEggsManage',
-              meta: {
-                title: '回蛋',
-                icon: 'el-icon-office-building',
-                type: 'menu',
-              },
-              component: 'breedingSystem/bsManage/reEggs',
-            },
-            {
-              path: '/breedingSystem/bsManage/allState',
+              path: '/breeding/manage/allState',
               name: 'allStateManage',
               meta: {
-                title: '鸽笼状态总览',
+                title: '鸽棚总览',
                 icon: 'el-icon-office-building',
                 type: 'menu',
               },
-              component: 'breedingSystem/bsManage/allState',
+              component: 'breeding/manage/allState/index',
             },
           ],
         },
         {
           name: 'dovePerformance',
-          path: '/breedingSystem/dovePerformance',
+          path: '/breeding/performance',
           meta: {
             title: '种鸽性能测试',
             icon: 'el-icon-compass',
             type: 'menu',
           },
-          component: 'breedingSystem/dovePerformance',
+          component: 'breeding/performance/index',
+        },
+        {
+          name: 'operateLog',
+          path: '/breeding/operateLog',
+          meta: {
+            title: '操作日志和统计',
+            icon: 'el-icon-document',
+            type: 'menu',
+          },
+          component: 'breeding/operateLog/index',
         },
         {
           name: 'materialStatistics',
-          path: '/breedingSystem/materialStatistics',
+          path: '/breeding/materialStatistics',
           meta: {
             title: '物料统计',
             icon: 'el-icon-data-line',
@@ -299,14 +271,14 @@ export default {
           },
           children: [
             {
-              path: '/breedingSystem/materialStatistics/fodder',
+              path: '/breeding/materialStatistics/fodder',
               name: 'fodderStatistics',
               meta: {
-                title: '饲料',
+                title: '饲料统计',
                 icon: 'el-icon-office-building',
                 type: 'menu',
               },
-              component: 'breedingSystem/materialStatistics/fodder',
+              component: 'breeding/materialStatistics/fodder/index',
             },
           ],
         },
@@ -314,7 +286,7 @@ export default {
       nextMenu: [],
       pmenu: {},
       active: '',
-      thirdSpan: 8
+      thirdSpan: 8,
     }
   },
   computed: {
@@ -335,7 +307,7 @@ export default {
     },
     secondSpan() {
       return this.$store.state.global.menuIsCollapse ? 15 : 12
-    }
+    },
   },
   created() {
     this.onLayoutResize()
