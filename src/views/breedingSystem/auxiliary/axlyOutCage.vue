@@ -10,10 +10,9 @@
 							<el-table-column label="鸽笼号" prop="pigeonnumber" sortable width="120" align="center"></el-table-column>
 							<el-table-column label="板子编号" prop="boardnumber" width="120" align="center"></el-table-column>
 							<el-table-column label="出仔时间" prop="cubouttime" sortable width="230" align="center"></el-table-column>
-              <el-table-column label="喂养天数" prop="feedday" sortable width="150" align="center"></el-table-column>
-              <el-table-column label="出栏个数" prop="baroutnumber" width="150" align="center"></el-table-column>
-              <el-table-column label="操作员" prop="operator" width="150" align="center"></el-table-column>
-              <el-table-column label="备注" prop="remark"  align="center"></el-table-column>
+              <el-table-column label="喂养天数" prop="feedday" sortable width="180" align="center"></el-table-column>
+              <el-table-column label="出栏个数" prop="baroutnumber" width="180" align="center"></el-table-column>
+              <el-table-column label="备注" prop="remark" width="240" align="center"></el-table-column>
 						</scTable>
 		</el-main>
 
@@ -39,7 +38,7 @@ import scTable from '../../../components/scTable/index.vue'
         pageNum:1,
          // 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方
       cardData: [{
-        cardText: '预计出栏个数',
+        cardText: '出栏个数',
         cardNumber: "999个"
        },],
       // 查询类型下拉框列表的数据，格式固定

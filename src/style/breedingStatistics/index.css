@@ -83,7 +83,7 @@ body{
 	color:rgba(14,253,255,1);
     margin-left: 48px;
 	font-weight:bold;
-	
+	margin-top: -16px;
 	}
 .tip{
 	/* padding: auto; */
@@ -94,7 +94,7 @@ body{
 }
 .leftMain{
 	margin-left: 40px;
-	margin-top: 10px;
+	margin-top: 22px;
 	display: flex;
 	flex-direction: row;
 	height: 335px;
@@ -109,14 +109,14 @@ body{
 	
  }
 .leftmain-right{
-	margin-left: 20px;
+	margin-left: 90px;
 	width: 375px;
 	height: 323px;
 	
 	position: relative;
 }
 .bottomMain{
-	width:1140px;
+
 	height: 310px;
 	margin-top: 15px;
 	margin-left: 40px;

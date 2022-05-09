@@ -8,13 +8,11 @@
              class="tablestyle" 
              :default-sort = "{prop: 'date', order: 'descending'}"
               >
-							<el-table-column label="鸽笼号" prop="pigeonnumber" sortable width="120" align="center"></el-table-column>
-							<el-table-column label="板子编号" prop="boardnumber" width="120" align="center"></el-table-column>
+							<el-table-column label="鸽笼号" prop="pigeonnumber" sortable width="140" align="center"></el-table-column>
+							<el-table-column label="板子编号" prop="boardnumber" width="140" align="center"></el-table-column>
 							<el-table-column label="生蛋时间" prop="raweggstime" sortable width="230" align="center"></el-table-column>
-              <el-table-column label="生蛋天数" prop="raweggday" sortable width="150" align="center"></el-table-column>
-              <el-table-column label="孵化天数" prop="incubationdays" width="150" align="center"></el-table-column>
-              <el-table-column label="操作员" prop="operator" width="150" align="center"></el-table-column>
-              <el-table-column label="备注" prop="remark"  align="center"></el-table-column>
+              <el-table-column label="孵化天数" prop="incubationdays" width="180" align="center"></el-table-column>
+              <el-table-column label="备注" prop="remark" align="center" width="250"  ></el-table-column>
 						</scTable>
       
 		</el-main>
@@ -43,7 +41,6 @@ import scTable from '../../../components/scTable/index.vue'
                 pigeonnumber: "A05",
                 boardnumber: "3",
                 raweggstime: "2022-4-11 20:21:23",
-                raweggday: "10天",
                 incubationdays: "19天",
                 operator: "李暖暖",
                 remark: "XXXXX"
@@ -51,8 +48,7 @@ import scTable from '../../../components/scTable/index.vue'
             {
                 pigeonnumber: "A03",
                 boardnumber: "3",
-                raweggstime: "2022-04-21 20:21:23",
-                raweggday: "10天",
+                raweggstime: "2022-04-21 20:21:23",                
                 incubationdays: "19天",
                 operator: "李暖暖",
                 remark: "XXXXX"
@@ -61,7 +57,6 @@ import scTable from '../../../components/scTable/index.vue'
                 pigeonnumber: "A06",
                 boardnumber: "3",
                 raweggstime: "2022-03-01 20:21:23",
-                raweggday: "10天",
                 incubationdays: "19天",
                 operator: "李暖暖",
                 remark: "XXXXX"
@@ -69,8 +64,7 @@ import scTable from '../../../components/scTable/index.vue'
             {
                 pigeonnumber: "A10",
                 boardnumber: "3",
-                raweggstime: "2022-02-23 20:21:23",
-                raweggday: "10天",
+                raweggstime: "2022-02-23 20:21:23",             
                 incubationdays: "19天",
                 operator: "李暖暖",
                 remark: "XXXXX"
