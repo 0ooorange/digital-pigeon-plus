@@ -43,7 +43,6 @@
 							class="m-2"
 							placeholder="抽蛋"
               style="width: 90px"
-
               @change="showscope(scope)"
 						>
 							<el-option
