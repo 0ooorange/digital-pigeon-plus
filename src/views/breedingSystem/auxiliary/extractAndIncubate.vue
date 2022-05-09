@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import scTable from "../../../../components/scTable/index.vue";
+import scTable from "../../../components/scTable/index.vue";
 export default {
 	name: "ExtractAndIncubateAuxiliary",
 	components: {
