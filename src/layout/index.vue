@@ -21,6 +21,10 @@
             <el-select style="width: 150px" v-model="currDovecote" class="m-2" placeholder="Select">
               <el-option v-for="item in dovecotes" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
+            <span class="selectText">操作员：</span>
+            <el-select style="width: 150px" v-model="currOperator" class="m-2" placeholder="Select">
+              <el-option v-for="item in operators" :key="item.value" :label="item.label" :value="item.value" />
+            </el-select>
           </div>
         </el-col>
         <el-col :span="thirdSpan" class="userbarCss">
@@ -141,6 +145,18 @@ export default {
         ]
       },
     },
+    operators: {
+      type: Array,
+      require: true,
+      default() {
+        return [
+          {
+            value: '张三',
+            label: '张三',
+          }
+        ]
+      },
+    },
   },
   data() {
     return {
@@ -148,6 +164,7 @@ export default {
       settingDialog: false,
       currBase: '小村庄加工厂',
       currDovecote: 'A2仓',
+      currOperator: '张三',
       menu: [
         {
           name: 'breedStatistics',
