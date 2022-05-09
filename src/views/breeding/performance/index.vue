@@ -12,7 +12,7 @@
       <el-table-column align="center" label="鸽笼号" prop="cageNumber" width="100" sortable></el-table-column>
       <el-table-column align="center" label="板子编号" prop="boardNumber" width="110" sortable></el-table-column>
       <el-table-column align="center" label="一个月未下蛋" prop="oneMonNoLayEgg" width="140" sortable></el-table-column>
-      <el-table-column align="center" label="生蛋间隔" prop="layEggInterval" width="110" sortable></el-table-column>
+      <el-table-column align="center" label="生蛋次数" prop="layEggInterval" width="110" sortable></el-table-column>
       <el-table-column align="center" label="回蛋次数" prop="backEggAmount" width="110" sortable></el-table-column>
       <el-table-column align="center" label="光蛋" prop="lightEgg" width="80" sortable></el-table-column>
       <el-table-column align="center" label="冷蛋" prop="coolEgg" width="80" sortable></el-table-column>
