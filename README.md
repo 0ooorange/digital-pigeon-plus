@@ -61,64 +61,146 @@ git push origin ZZN:dev-breeding-v1.0
 
 1.表格查询
 
+（1）用法一
+
 ~~~vue
 <template>
-  <table-search :cardWidth="cardWidth" :searchTypes="searchTypes" :cardData="cardData"  @searchClick="searchClick" @outTable="outTable">
-  	日期
-  </table-search>
+  <table-search :searchTypes="searchTypes" :cardData="cardData"  @searchClick="searchClick" 
+                @reset="reset" @outTable="outTable" />
 </template>
 <script>
-export default {
-  name: 'abnormalCaseManage',
-  data() {
-    return {
-      // cardWidth: 查询组件下方卡片的宽度，默认15%，适用于五个卡片   --非必需
-      cardWidth: '15%',
-      // 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方  --非必需
-      cardData: [{
-        cardText: '仔数',
-        cardNumber: 666
-      }, {
-        cardText: '死仔数',
-        cardNumber: 666
-      }],
-      // 查询类型下拉框列表的数据，格式固定   --必需
-      searchTypes: [{
-        value: '鸽笼编号',
-        label: '鸽笼编号',
-        children: []  
-        // 如果需要级联选择器可以通过children传入，选中二级以上选择器的input组件会自动禁用，非必传
-      }, {
-        value: '鸽板编号',
-        label: '鸽板编号',
-      }, {
-        value: '仔数',
-        label: '仔数',
-      }, {
-        value: '死仔数',
-        label: '死仔数',
-      }, {
-        value: '负责人',
-        label: '负责人',
-      }, {
-        value: '操作',
-        label: '操作',
-      }]
-    }
-  },
-  methods: {
-    // 表格查询事件
-    searchClick() {
-      console.log("嘻嘻嘻，我被点击啦")
-    },
-    // 表格导出事件
-    outTable() {
-      console.log("哈哈哈，我被点击了噢");
-    }
+import { defineComponent } from 'vue'
+export default defineComponent({
+  setup() {
+    // 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方
+    cardData: [
+      {
+        cardText: '查仔个数',
+        cardNumber: '666只',
+      },
+      {
+        cardText: '查仔个数',
+        cardNumber: '666只',
+      },
+      {
+        cardText: '查仔个数',
+        cardNumber: '666只',
+      }
+    ],
+    // 查询类型下拉框列表的数据示例，value和label为必传，其他需求可自行添加
+    const searchTypes = [
+      {
+        value: '鸽笼号',
+        label: '鸽笼号',
+      },
+      {
+        value: '板子号',
+        label: '板子号',
+      },
+      {
+        value: '生蛋天数',
+        label: '生蛋天数',
+      },
+      {
+        value: '孵化天数',
+        label: '孵化天数',
+      }
+    ]
+  }
+  
+  const searchClick = () => {
+    console.log('点击查询')
+  }
+
+  const reset = () => {
+    console.log('点击重置')
+  }
+
+  const outTable = () => {
+    console.log('点击导出')
+  }
+  
+  return {
+    searchTypes,
+    cardData,
+    searchClick,
+    reset,
+    outTable
   }
 }
 </script>
 ~~~
+
+（2）用法二
+
+~~~vue
+<script>
+import { defineComponent } from 'vue'
+export default defineComponent({
+  setup() {
+    // 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方
+    cardData: [
+      {
+        cardText: '查仔个数',
+        cardNumber: '666只',
+      },
+      {
+        cardText: '查仔个数',
+        cardNumber: '666只',
+      },
+      {
+        cardText: '查仔个数',
+        cardNumber: '666只',
+      }
+    ],
+    // 查询类型下拉框列表的数据，value和label为必传，其他需求可自行添加
+    const searchTypes = [
+      {
+        value: '鸽笼号',
+        label: '鸽笼号',
+      },
+      {
+        value: '板子号',
+        label: '板子号',
+      },
+      {
+        value: '生蛋天数',
+        label: '生蛋天数',
+      },
+      {
+        value: '孵化天数',
+        label: '孵化天数',
+      }
+    ]
+
+    const searchClick = () => {
+      console.log('点击查询')
+    }
+
+    const reset = () => {
+      console.log('点击重置')
+    }
+
+    const outTable = () => {
+      console.log('点击导出')
+    }
+
+    return () => (
+      <>
+        <table-search
+          searchTypes={searchTypes}
+          onSearchClick={searchClick}
+          onReset={reset}
+          onOutTable={outTable}
+        ></table-search>
+      </>
+    )
+  },
+})
+</script>
+~~~
+
+
 
 2.表格
 

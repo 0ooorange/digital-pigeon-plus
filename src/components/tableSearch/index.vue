@@ -1,87 +1,173 @@
-<template>
-  <div class="tableSearch">
-    <div class="left">
-      <template v-if="isShowBfSearch">
-        <el-card class="lessCard" v-for="(item, index) in cardData" :key="index">
-          <span class="cardText">{{item.cardText+"："}}</span>
-          <span class="cardNumber" :style="{color: colors[index]}">{{item.cardNumber}}</span>
-        </el-card>
-      </template>
-      <slot></slot>
-      <span class="searchInputs" :style="isShowBfSearch ? 'margin-bottom: 10px;' : 'margin: 10px 0 10px 10px;'">
-        <el-cascader v-model="searchType" :options="searchTypes" placeholder="查询类型" @change="handleChange" />
-        <el-input ref="searchInput" v-model="searchInner" placeholder="查询内容" :disabled="isDisabled" />
-        <el-button type="success" class="searchBtn" @click="searchClick">查询</el-button>
-      </span>
-    </div>
-    <div class="right">
-      <el-button type="danger" class="reflashSearch" @click="reflashSearch">重置</el-button>
-      <el-button type="warning" class="outTable" @click="outTable">导出</el-button>
-    </div>
-  </div>
-  <template v-if="isShowAfSearch">
-    <div class="numberCards">
-      <el-card class="moreCard" :style="{width: cardWidth}" v-for="(item, index) in cardData" :key="index">
-        <span class="cardText">{{item.cardText+"："}}</span>
-        <span class="cardNumber" :style="{color: colors[index]}">{{item.cardNumber}}</span>
-      </el-card>
-    </div>
-  </template>
-</template>
-
 <script>
-export default {
-  emits: ['searchClick', 'outTable'],
+import { defineComponent, reactive, ref } from 'vue'
+export default defineComponent({
   props: {
     searchTypes: {
       type: Array,
-      require: true,
+      required: true,
+      default() {
+        return []
+      },
     },
     cardData: {
       type: Array,
-    },
-    cardWidth: {
-      type: String,
-      default: '15%',
-    },
-  },
-  data() {
-    return {
-      searchInner: '',
-      searchType: '',
-      colors: ['#EE4000', '#EE9A49', '#EEE685', '#43CD80', '#76EE00', '#6495ED', '#7D26CD'],
-      isDisabled: false,
-    }
-  },
-  computed: {
-    isShowBfSearch() {
-      return this.cardData.length < 3 ? true : false
-    },
-    isShowAfSearch() {
-      return this.cardData.length >= 3 ? true : false
+      default() {
+        return []
+      },
     },
   },
-  methods: {
-    searchClick() {
-      this.$emit('searchClick')
-    },
-    reflashSearch() {
-      this.input = ''
-      this.searchType = ''
-    },
-    outTable() {
-      this.$emit('outTable')
-    },
-    handleChange(e) {
-      if (e.length === 1) {
-        console.log(this.$refs.searchInput, 111)
-        this.isDisabled = false
-        return
+  setup(props, { emit }) {
+    const searchTypes = reactive(props.searchTypes)
+    searchTypes.push({
+        value: '高级检索',
+        label: '高级检索',
+      })
+    const dateValue = ref('')
+    const selectType = ref([''])
+    const isShowMore = ref(false)
+    const isShowBfSearch = props.cardData.length < 2 ? ref(true) : ref(false)
+    const colors = ['#EE4000', '#EE9A49', '#EEE685', '#43CD80', '#76EE00', '#6495ED', '#7D26CD']
+    const cardWidth = 100 / parseInt(props.cardData.length + 1) + '%'
+    const shortcuts = [
+      {
+        text: '近一周',
+        value: () => {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+          return [start, end]
+        },
+      },
+      {
+        text: '近一个月',
+        value: () => {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+          return [start, end]
+        },
+      },
+      {
+        text: '近3个月',
+        value: () => {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+          return [start, end]
+        },
+      },
+    ]
+
+    const searchForm = reactive({})
+
+    const handleChange = (val) => {
+      if (val == '高级检索') {
+        return (isShowMore.value = true)
       }
-      this.isDisabled = true
-    },
+      isShowMore.value = false
+    }
+
+    // 搜索
+    const searchClick = () => {
+      emit('searchClick')
+    }
+
+    // 重置
+    const reset = () => {
+      emit('reset')
+    }
+
+    // 导出
+    const outTable = () => {
+      emit('outTable')
+    }
+
+    // 高级检索模块
+    const renderMore = () => (
+      <>
+        <el-form label-width="70px" inline>
+          {searchTypes.map((item) =>
+            item.label !== '高级检索' ? (
+              <el-form-item label={item.label} key={item.label}>
+                <el-input
+                  v-model={searchForm[item.value]}
+                  placeholder={'请输入' + item.label}
+                  clearable
+                />
+              </el-form-item>
+            ) : null
+          )}
+        </el-form>
+      </>
+    )
+
+    // 卡片
+    const renderCards = () => (
+      <div class={isShowBfSearch.value ? '' : 'numberCards'}>
+        {props.cardData.map((item, index) => {
+          return (
+            <>
+              <el-card
+                class={isShowBfSearch.value ? 'lessCard' : 'moreCard'}
+                style={{ width: cardWidth }}
+              >
+                <span class="cardText">{item.cardText + '：'}</span>
+                <span class="cardNumber" style={{ color: colors[index] }}>
+                  {item.cardNumber}
+                </span>
+              </el-card>
+            </>
+          )
+        })}
+      </div>
+    )
+
+    return () => (
+      <div>
+        {isShowMore.value && renderMore()}
+        <div class="tableSearch">
+          {isShowBfSearch.value && renderCards()}
+          <div class="datePickerCss">
+            <el-date-picker
+              v-model={dateValue.value}
+              type="daterange"
+              format="YYYY-MM-DD"
+              unlink-panels
+              range-separator="-"
+              start-placeholder="起始时间"
+              end-placeholder="结束时间"
+              shortcuts={shortcuts}
+              style={{ width: '200px' }}
+            />
+          </div>
+          <div class="left">
+            <span>
+              <el-cascader
+                v-model={selectType}
+                options={searchTypes}
+                onChange={handleChange}
+                placeholder="查询类型"
+              />
+              <el-input ref="searchInput" placeholder="查询内容" disabled={isShowMore.value} />
+              <el-button type="success" class="searchBtn" onClick={searchClick}>
+                查询
+              </el-button>
+            </span>
+          </div>
+          <div class="right">
+            <el-button type="danger" class="reflashSearch" onClick={reset}>
+              重置
+            </el-button>
+            <el-button type="warning" class="outTable" onClick={outTable}>
+              导出
+            </el-button>
+          </div>
+        </div>
+        {!isShowBfSearch.value && renderCards()}
+      </div>
+    )
   },
-}
+})
 </script>
 
 <style lang="less" scoped>
@@ -90,6 +176,7 @@ export default {
   justify-content: space-between;
   flex-direction: row;
   min-width: 950px;
+  margin: 0 0 10px 12px;
   .left {
     display: flex;
     flex-direction: row;
@@ -110,6 +197,11 @@ export default {
       height: 27px;
     }
   }
+}
+.datePickerCss {
+  margin-right: '10px';
+  display: flex;
+  align-items: center;
 }
 .numberCards {
   margin: 10px 0;
@@ -132,11 +224,10 @@ export default {
   }
 }
 .lessCard {
-  margin: 0px 10px 10px 0;
-  width: 180px;
-  max-width: 200px;
+  margin: 0px 10px 0 0;
+  min-width: 200px;
 }
-/deep/ .el-cascader {
+.el-cascader {
   width: 150px;
 }
 .el-input {
