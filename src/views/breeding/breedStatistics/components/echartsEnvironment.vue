@@ -7,9 +7,7 @@ export default {
       methods:{
           initEcharts() {
            const option = {
-  tooltip: {
-    trigger: 'axis'
-  },
+ 
   legend: {
 
     data: ['温度', '湿度', '二氧化碳', '光照强度', 'PM2.5','氮气']
@@ -20,6 +18,62 @@ export default {
     bottom: '3%',
     containLabel: true
   },
+  
+          tooltip: {
+	trigger: 'axis', // 坐标轴触发
+	formatter: (params)=> {
+		let templete = '';
+		for (let i = 0 ; i<params.length; i++) {
+			let item=params[i];
+			if (item.componentIndex === 0) {
+        templete+=( `<span style="display: inline-block;padding: 5px 0;" >
+                <i style="display: inline-block;width: 10px;height: 10px;background: `+
+                item.color +
+                `;border-radius: 50%;}"></i><span style="width:15px; display:inline-block;">
+                </span>`+item.seriesName+`:` +`<span style="font-weight:800;margin-left:18px">`+item.data+' '+'°c'+`</span>`+`</span>`
+                +`</span>`)+'<br>'
+
+			} else if(item.componentIndex === 1){
+         templete+=( `<span style="display: inline-block;padding: 5px 0;" >
+                <i style="display: inline-block;width: 10px;height: 10px;background: `+
+                item.color +
+                `;border-radius: 50%;}"></i><span style="width:15px; display:inline-block;">
+                </span>`+item.seriesName+`:` +`<span style="font-weight:800;margin-left:18px">`+item.data+' '+'%rh'+`</span>`+`</span>`
+                +`</span>`)+'<br>'
+      }else if(item.componentIndex ===2 ){
+         templete+=( `<span style="display: inline-block;padding: 5px 0;" >
+                <i style="display: inline-block;width: 10px;height: 10px;background: `+
+                item.color +
+                `;border-radius: 50%;}"></i><span style="width:15px; display:inline-block;">
+                </span>`+item.seriesName+`:` +`<span style="font-weight:800;margin-left:18px">`+item.data+' '+'ppm'+`</span>`+`</span>`
+                +`</span>`)+'<br>'
+      }else if(item.componentIndex ===3 ){
+         templete+=( `<span style="display: inline-block;padding: 5px 0;" >
+                <i style="display: inline-block;width: 10px;height: 10px;background: `+
+                item.color +
+                `;border-radius: 50%;}"></i><span style="width:15px; display:inline-block;">
+                </span>`+item.seriesName+`:` +`<span style="font-weight:800;margin-left:18px">`+item.data+' '+'lx'+`</span>`+`</span>`
+                +`</span>`)+'<br>'
+      }else if(item.componentIndex === 4){
+         templete+=( `<span style="display: inline-block;padding: 5px 0;" >
+                <i style="display: inline-block;width: 10px;height: 10px;background: `+
+                item.color +
+                `;border-radius: 50%;}"></i><span style="width:15px; display:inline-block;">
+                </span>`+item.seriesName+`:` +`<span style="font-weight:800;margin-left:18px">`+item.data+' '+'μg/m3'+`</span>`+`</span>`
+                +`</span>`)+'<br>'
+      }
+      else {
+         templete+=( `<span style="display: inline-block;padding: 5px 0;" >
+                <i style="display: inline-block;width: 10px;height: 10px;background: `+
+                item.color +
+                `;border-radius: 50%;}"></i><span style="width:15px; display:inline-block;">
+                </span>`+item.seriesName+`:` +`<span style="font-weight:800;margin-left:18px">`+item.data+' '+'Nm³/h'+`</span>`+`</span>`
+                +`</span>`)+'<br>'
+			}
+		}
+		return templete
+	},
+},
   toolbox: {
     feature: {
       saveAsImage: {}
@@ -40,19 +94,19 @@ export default {
       name: '温度',
       type: 'line',
       stack: 'Total',
-      data: [10, 20, 40, 60, 10, 90, 50]
+      data: ["100", "70", "40", "60", "50", "90", "80"], 
     },
     {
       name: '湿度',
       type: 'line',
       stack: 'Total',
-      data: [20, 12, 11, 64, 90, 53, 100]
+      data: ["20", "62", "31", "64", "90", "73", "100"], 
     },
     {
       name: '二氧化碳',
       type: 'line',
       stack: 'Total',
-      data: [150, 232, 201, 154, 190, 330, 410]
+      data: ["30", "232", "201", "154", "190", "330", "410"],
     },
     {
       name: '光照强度',
