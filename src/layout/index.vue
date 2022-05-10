@@ -21,10 +21,7 @@
             <el-select style="width: 150px" v-model="currDovecote" class="m-2" placeholder="Select">
               <el-option v-for="item in dovecotes" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
-            <span class="selectText">操作员：</span>
-            <el-select style="width: 150px" v-model="currOperator" class="m-2" placeholder="Select">
-              <el-option v-for="item in operators" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
+            <span class="selectText">操作员：<span class="operatorCss">{{currOperator}}</span></span>
           </div>
         </el-col>
         <el-col :span="thirdSpan" class="userbarCss">
@@ -145,17 +142,10 @@ export default {
         ]
       },
     },
-    operators: {
-      type: Array,
+    currOperator: {
+      type: String,
       require: true,
-      default() {
-        return [
-          {
-            value: '张三',
-            label: '张三',
-          }
-        ]
-      },
+      default: "姜昕梦"
     },
   },
   data() {
@@ -164,7 +154,6 @@ export default {
       settingDialog: false,
       currBase: '小村庄加工厂',
       currDovecote: 'A2仓',
-      currOperator: '张三',
       menu: [
         {
           name: 'breedStatistics',
@@ -427,5 +416,9 @@ export default {
 }
 .beCenter {
   justify-content: center;
+}
+.operatorCss {
+  font-size: 16px;
+  font-weight: 700;
 }
 </style>

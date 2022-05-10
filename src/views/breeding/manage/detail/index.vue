@@ -134,9 +134,13 @@ export default defineComponent({
       console.log('点击导出')
     }
 
+    const printTable = () => {
+      console.log('点击打印')
+    }
+
     return () => (
       <div>
-        <table-search searchTypes={searchTypes} onSearchClick={searchClick} onReset={reset} onOutTable={outTable} />
+        <table-search searchTypes={searchTypes} onSearchClick={searchClick} onReset={reset} onOutTable={outTable} onPrintTable={printTable} />
         <sc-table ref="table" column={column} data={eggsList} pageSize={5} stripe highlightCurrentRow />
       </div>
     )

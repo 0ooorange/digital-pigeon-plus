@@ -15,27 +15,6 @@ export default {
     return {
       menus: [
         {
-          index: 0,
-          name: '溯源系统',
-          icon: 'nav_block',
-          size: '',
-          path: '#',
-        },
-        {
-          index: 1,
-          name: '物流管理',
-          icon: 'nav_wuliu',
-          size: '',
-          path: '#',
-        },
-        {
-          index: 2,
-          name: '种鸽质量检测',
-          icon: 'nav_ai',
-          size: '',
-          path: '#',
-        },
-        {
           index: 3,
           name: '养殖系统',
           icon: 'nav_yangzhi',
@@ -57,6 +36,35 @@ export default {
           path: '#',
         },
         {
+          index: 1,
+          name: '物流管理',
+          icon: 'nav_wuliu',
+          size: '',
+          path: '#',
+        },
+        {
+          index: 2,
+          name: '种鸽质量检测',
+          icon: 'nav_ai',
+          size: '',
+          path: '#',
+        },
+        {
+          index: 0,
+          name: '溯源系统',
+          icon: 'nav_block',
+          size: '',
+          path: '#',
+        },
+        
+        {
+          index: 11,
+          name: '电商平台',
+          icon: 'nav_jiagong',
+          size: '',
+          path: '#',
+        },
+        {
           index: 6,
           name: '可视化界面',
           icon: 'nav_see',
@@ -65,7 +73,7 @@ export default {
         },
         {
           index: 7,
-          name: '视频监控中心',
+          name: '设备/视频',
           icon: 'nav_video',
           size: '',
           path: '#',
@@ -88,13 +96,6 @@ export default {
           index: 10,
           name: '基础信息管理',
           icon: 'nav_info',
-          size: '',
-          path: '#',
-        },
-        {
-          index: 11,
-          name: '电商平台',
-          icon: 'nav_jiagong',
           size: '',
           path: '#',
         },
