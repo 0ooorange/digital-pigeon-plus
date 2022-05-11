@@ -28,9 +28,12 @@ const router = createRouter({
 document.title = config.APP_NAME;
 
 //判断是否已加载过动态/静态路由
-var isGetRouter = false;
+tool.data.set("IS_GET_ROUTER", true);
+tool.data.set("CURR_MENU_INDEX", 0);
+tool.data.set("CURR_MENU", []);
 
 router.beforeEach(async (to, from, next) => {
+	let isGetRouter = tool.data.get("IS_GET_ROUTER");
 	NProgress.start();
 	//动态标题
 	document.title = to.meta.title
@@ -44,7 +47,7 @@ router.beforeEach(async (to, from, next) => {
 		router.addRoute(routes[0]);
 		//删除路由(404)
 		routes_404_r();
-		isGetRouter = false;
+		tool.data.set("IS_GET_ROUTER", false);
 		next();
 		return false;
 	}
@@ -60,145 +63,189 @@ router.beforeEach(async (to, from, next) => {
 	if (to.meta.fullpage) {
 		to.matched = [to.matched[to.matched.length - 1]];
 	}
+
 	//加载动态/静态路由
 	if (!isGetRouter) {
 		// let apiMenu = tool.data.get("MENU") || []
-		let apiMenu = [
+		let totalMenus = [
 			{
-				name: "breedStatistics",
-				path: "/breeding/breedStatistics",
-				meta: {
-					title: "养殖统计",
-					icon: "el-icon-histogram",
-					type: "menu",
-				},
-				component: "breeding/breedStatistics/index",
+				menuIndex: 0,
+				systemName: "breeding",
+				menus: [
+					{
+						name: "breedStatistics",
+						path: "/breeding/breedStatistics",
+						meta: {
+							title: "养殖统计",
+							icon: "el-icon-histogram",
+							type: "menu",
+						},
+						component: "breeding/breedStatistics/index",
+					},
+					{
+						name: "breedingAuxiliary",
+						path: "/breeding/auxiliary",
+						meta: {
+							title: "养殖辅助",
+							icon: "el-icon-connection",
+							type: "menu",
+						},
+						children: [
+							{
+								path: "/breeding/auxiliary/incubate",
+								name: "incubateAuxiliary",
+								meta: {
+									title: "抽孵辅助",
+									icon: "el-icon-office-building",
+									type: "menu",
+								},
+								component: "breeding/auxiliary/incubate/index",
+							},
+							{
+								path: "/breeding/auxiliary/examEgg",
+								name: "examEggAuxiliary",
+								meta: {
+									title: "查蛋辅助",
+									icon: "el-icon-office-building",
+									type: "menu",
+								},
+								component: "breeding/auxiliary/examEgg/index",
+							},
+							{
+								path: "/breeding/auxiliary/examCub",
+								name: "examCubAuxiliary",
+								meta: {
+									title: "查仔辅助",
+									icon: "el-icon-office-building",
+									type: "menu",
+								},
+								component: "breeding/auxiliary/examCub/index",
+							},
+							{
+								path: "/breeding/auxiliary/outCage",
+								name: "outCageAuxiliary",
+								meta: {
+									title: "出栏辅助",
+									icon: "el-icon-office-building",
+									type: "menu",
+								},
+								component: "breeding/auxiliary/outCage/index",
+							},
+						],
+					},
+					{
+						name: "breedingManage",
+						path: "/breeding/manage",
+						meta: {
+							title: "养殖管理",
+							icon: "el-icon-calendar",
+							type: "menu",
+						},
+						children: [
+							{
+								path: "/breeding/manage/detail",
+								name: "breedingDetail",
+								meta: {
+									title: "养殖明细",
+									icon: "el-icon-office-building",
+									type: "menu",
+								},
+								component: "breeding/manage/detail/index",
+							},
+							{
+								path: "/breeding/manage/allState",
+								name: "allStateManage",
+								meta: {
+									title: "鸽棚总览",
+									icon: "el-icon-office-building",
+									type: "menu",
+								},
+								component: "breeding/manage/allState/index",
+							},
+						],
+					},
+					{
+						name: "dovePerformance",
+						path: "/breeding/performance",
+						meta: {
+							title: "种鸽性能测试",
+							icon: "el-icon-compass",
+							type: "menu",
+						},
+						component: "breeding/performance/index",
+					},
+					{
+						name: "operateLog",
+						path: "/breeding/operateLog",
+						meta: {
+							title: "操作日志和统计",
+							icon: "el-icon-document",
+							type: "menu",
+						},
+						component: "breeding/operateLog/index",
+					},
+					{
+						name: "materialStatistics",
+						path: "/breeding/materialStatistics",
+						meta: {
+							title: "物料统计",
+							icon: "el-icon-data-line",
+							type: "menu",
+						},
+						children: [
+							{
+								path: "/breeding/materialStatistics/fodder",
+								name: "fodderStatistics",
+								meta: {
+									title: "饲料统计",
+									icon: "el-icon-office-building",
+									type: "menu",
+								},
+								component:
+									"breeding/materialStatistics/fodder/index",
+							},
+						],
+					},
+				],
 			},
+			{},
+			{},
+			{},
+			{},
+			{},
+			{},
 			{
-				name: "breedingAuxiliary",
-				path: "/breeding/auxiliary",
-				meta: {
-					title: "养殖辅助",
-					icon: "el-icon-connection",
-					type: "menu",
-				},
-				children: [
+				menuIndex: 7,
+				systemName: "dataVisual",
+				menus: [
 					{
-						path: "/breeding/auxiliary/incubate",
-						name: "incubateAuxiliary",
-						meta: {
-							title: "抽孵辅助",
-							icon: "el-icon-office-building",
-							type: "menu",
-						},
-						component: "breeding/auxiliary/incubate/index",
-					},
-					{
-						path: "/breeding/auxiliary/examEgg",
-						name: "examEggAuxiliary",
-						meta: {
-							title: "查蛋辅助",
-							icon: "el-icon-office-building",
-							type: "menu",
-						},
-						component: "breeding/auxiliary/examEgg/index",
-					},
-					{
-						path: "/breeding/auxiliary/examCub",
-						name: "examCubAuxiliary",
-						meta: {
-							title: "查仔辅助",
-							icon: "el-icon-office-building",
-							type: "menu",
-						},
-						component: "breeding/auxiliary/examCub/index",
-					},
-					{
-						path: "/breeding/auxiliary/outCage",
-						name: "outCageAuxiliary",
-						meta: {
-							title: "出栏辅助",
-							icon: "el-icon-office-building",
-							type: "menu",
-						},
-						component: "breeding/auxiliary/outCage/index",
+						name: "dataVisual",
+						path: "/dataVisual",
+						component: "dataVisual/index",
 					},
 				],
 			},
 			{
-				name: "breedingManage",
-				path: "/breeding/manage",
-				meta: {
-					title: "养殖管理",
-					icon: "el-icon-calendar",
-					type: "menu",
-				},
-				children: [
+				menuIndex: 8,
+				systemName: "equipVideo",
+				menus: [
 					{
-						path: "/breeding/manage/detail",
-						name: "breedingDetail",
+						name: "videoManage",
+						path: "/equipVideo/videoManage",
 						meta: {
-							title: "养殖明细",
-							icon: "el-icon-office-building",
+							title: "视频管理",
+							icon: "el-icon-histogram",
 							type: "menu",
 						},
-						component: "breeding/manage/detail/index",
-					},
-					{
-						path: "/breeding/manage/allState",
-						name: "allStateManage",
-						meta: {
-							title: "鸽棚总览",
-							icon: "el-icon-office-building",
-							type: "menu",
-						},
-						component: "breeding/manage/allState/index",
-					},
-				],
-			},
-			{
-				name: "dovePerformance",
-				path: "/breeding/performance",
-				meta: {
-					title: "种鸽性能测试",
-					icon: "el-icon-compass",
-					type: "menu",
-				},
-				component: "breeding/performance/index",
-			},
-			{
-				name: "operateLog",
-				path: "/breeding/operateLog",
-				meta: {
-					title: "操作日志和统计",
-					icon: "el-icon-document",
-					type: "menu",
-				},
-				component: "breeding/operateLog/index",
-			},
-			{
-				name: "materialStatistics",
-				path: "/breeding/materialStatistics",
-				meta: {
-					title: "物料统计",
-					icon: "el-icon-data-line",
-					type: "menu",
-				},
-				children: [
-					{
-						path: "/breeding/materialStatistics/fodder",
-						name: "fodderStatistics",
-						meta: {
-							title: "饲料统计",
-							icon: "el-icon-office-building",
-							type: "menu",
-						},
-						component:
-							"breeding/materialStatistics/fodder/index",
+						component: "equipVideo/videoManage/index",
 					},
 				],
 			},
 		];
+		// 获取当前菜单
+		let currMenuIndex = tool.data.get("CURR_MENU_INDEX");
+		let currMenu = totalMenus[currMenuIndex].menus;
+		tool.data.set("CURR_MENU", currMenu);
 		let userInfo = tool.data.get("USER_INFO");
 		let userMenu = treeFilter(userRoutes, (node) => {
 			return node.meta.role
@@ -207,17 +254,20 @@ router.beforeEach(async (to, from, next) => {
 				  ).length > 0
 				: true;
 		});
-		let menu = [...userMenu, ...apiMenu];
+		let menu = [...userMenu, ...currMenu];
 		var menuRouter = filterAsyncRouter(menu);
+		console.log(menuRouter, 11);
 		menuRouter = flatAsyncRoutes(menuRouter);
+		console.log(menuRouter, 22);
 		menuRouter.forEach((item) => {
+			console.log(item, "item");
 			router.addRoute("layout", item);
 		});
 		routes_404_r = router.addRoute(routes_404);
 		if (to.matched.length == 0) {
 			router.push(to.fullPath);
 		}
-		isGetRouter = true;
+		tool.data.set("IS_GET_ROUTER", true);
 	}
 	beforeEach(to, from);
 	next();
@@ -238,7 +288,184 @@ router.onError((error) => {
 
 //入侵追加自定义方法、对象
 router.sc_getMenu = () => {
-	var apiMenu = tool.data.get("MENU") || [];
+	// var apiMenu = tool.data.get("MENU") || [];
+	let totalMenus = [
+		{
+			menuIndex: 0,
+			systemName: "breeding",
+			menus: [
+				{
+					name: "breedStatistics",
+					path: "/breeding/breedStatistics",
+					meta: {
+						title: "养殖统计",
+						icon: "el-icon-histogram",
+						type: "menu",
+					},
+					component: "breeding/breedStatistics/index",
+				},
+				{
+					name: "breedingAuxiliary",
+					path: "/breeding/auxiliary",
+					meta: {
+						title: "养殖辅助",
+						icon: "el-icon-connection",
+						type: "menu",
+					},
+					children: [
+						{
+							path: "/breeding/auxiliary/incubate",
+							name: "incubateAuxiliary",
+							meta: {
+								title: "抽孵辅助",
+								icon: "el-icon-office-building",
+								type: "menu",
+							},
+							component: "breeding/auxiliary/incubate/index",
+						},
+						{
+							path: "/breeding/auxiliary/examEgg",
+							name: "examEggAuxiliary",
+							meta: {
+								title: "查蛋辅助",
+								icon: "el-icon-office-building",
+								type: "menu",
+							},
+							component: "breeding/auxiliary/examEgg/index",
+						},
+						{
+							path: "/breeding/auxiliary/examCub",
+							name: "examCubAuxiliary",
+							meta: {
+								title: "查仔辅助",
+								icon: "el-icon-office-building",
+								type: "menu",
+							},
+							component: "breeding/auxiliary/examCub/index",
+						},
+						{
+							path: "/breeding/auxiliary/outCage",
+							name: "outCageAuxiliary",
+							meta: {
+								title: "出栏辅助",
+								icon: "el-icon-office-building",
+								type: "menu",
+							},
+							component: "breeding/auxiliary/outCage/index",
+						},
+					],
+				},
+				{
+					name: "breedingManage",
+					path: "/breeding/manage",
+					meta: {
+						title: "养殖管理",
+						icon: "el-icon-calendar",
+						type: "menu",
+					},
+					children: [
+						{
+							path: "/breeding/manage/detail",
+							name: "breedingDetail",
+							meta: {
+								title: "养殖明细",
+								icon: "el-icon-office-building",
+								type: "menu",
+							},
+							component: "breeding/manage/detail/index",
+						},
+						{
+							path: "/breeding/manage/allState",
+							name: "allStateManage",
+							meta: {
+								title: "鸽棚总览",
+								icon: "el-icon-office-building",
+								type: "menu",
+							},
+							component: "breeding/manage/allState/index",
+						},
+					],
+				},
+				{
+					name: "dovePerformance",
+					path: "/breeding/performance",
+					meta: {
+						title: "种鸽性能测试",
+						icon: "el-icon-compass",
+						type: "menu",
+					},
+					component: "breeding/performance/index",
+				},
+				{
+					name: "operateLog",
+					path: "/breeding/operateLog",
+					meta: {
+						title: "操作日志和统计",
+						icon: "el-icon-document",
+						type: "menu",
+					},
+					component: "breeding/operateLog/index",
+				},
+				{
+					name: "materialStatistics",
+					path: "/breeding/materialStatistics",
+					meta: {
+						title: "物料统计",
+						icon: "el-icon-data-line",
+						type: "menu",
+					},
+					children: [
+						{
+							path: "/breeding/materialStatistics/fodder",
+							name: "fodderStatistics",
+							meta: {
+								title: "饲料统计",
+								icon: "el-icon-office-building",
+								type: "menu",
+							},
+							component:
+								"breeding/materialStatistics/fodder/index",
+						},
+					],
+				},
+			],
+		},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{
+			menuIndex: 7,
+			systemName: "dataVisual",
+			menus: [
+				{
+					name: "dataVisual",
+					path: "/dataVisual",
+					component: "dataVisual/index",
+				},
+			],
+		},
+		{
+			menuIndex: 8,
+			systemName: "equipVideo",
+			menus: [
+				{
+					name: "videoManage",
+					path: "/equipVideo/videoManage",
+					meta: {
+						title: "视频管理",
+						icon: "el-icon-histogram",
+						type: "menu",
+					},
+					component: "equipVideo/videoManage/index",
+				},
+			],
+		},
+	];
+	let currMenuIndex = tool.data.get("CURR_MENU_INDEX");
+	let currMenu = totalMenus[currMenuIndex].menus;
 	let userInfo = tool.data.get("USER_INFO");
 	let userMenu = treeFilter(userRoutes, (node) => {
 		return node.meta.role
@@ -246,7 +473,7 @@ router.sc_getMenu = () => {
 					.length > 0
 			: true;
 	});
-	var menu = [...userMenu, ...apiMenu];
+	var menu = [...userMenu, ...currMenu];
 	return menu;
 };
 

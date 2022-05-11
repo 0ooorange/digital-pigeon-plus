@@ -69,6 +69,7 @@
 </template>
 
 <script>
+import tool from "../utils/tool";
 import SideM from './components/sideM.vue'
 import Topbar from './components/topbar.vue'
 import NavMenu from './components/NavMenu.vue'
@@ -154,141 +155,7 @@ export default {
       settingDialog: false,
       currBase: '小村庄加工厂',
       currDovecote: 'A2仓',
-      menu: [
-        {
-          name: 'breedStatistics',
-          path: '/breeding/breedStatistics',
-          meta: {
-            title: '养殖统计',
-            icon: 'el-icon-histogram',
-            type: 'menu',
-          },
-          component: 'breeding/breedStatistics/index',
-        },
-        {
-          name: 'breedingAuxiliary',
-          path: '/breeding/auxiliary',
-          meta: {
-            title: '养殖辅助',
-            icon: 'el-icon-connection',
-            type: 'menu',
-          },
-          children: [
-            {
-              path: '/breeding/auxiliary/incubate',
-              name: 'incubateAuxiliary',
-              meta: {
-                title: '抽孵辅助',
-                icon: 'el-icon-office-building',
-                type: 'menu',
-              },
-              component: 'breeding/auxiliary/incubate/index',
-            },
-            {
-              path: '/breeding/auxiliary/examEgg',
-              name: 'examEggAuxiliary',
-              meta: {
-                title: '查蛋辅助',
-                icon: 'el-icon-office-building',
-                type: 'menu',
-              },
-              component: 'breeding/auxiliary/examEgg/index',
-            },
-            {
-              path: '/breeding/auxiliary/examCub',
-              name: 'examCubAuxiliary',
-              meta: {
-                title: '查仔辅助',
-                icon: 'el-icon-office-building',
-                type: 'menu',
-              },
-              component: 'breeding/auxiliary/examCub/index',
-            },
-            {
-              path: '/breeding/auxiliary/outCage',
-              name: 'outCageAuxiliary',
-              meta: {
-                title: '出栏辅助',
-                icon: 'el-icon-office-building',
-                type: 'menu',
-              },
-              component: 'breeding/auxiliary/outCage/index',
-            },
-          ],
-        },
-        {
-          name: 'breedingManage',
-          path: '/breeding/manage',
-          meta: {
-            title: '养殖管理',
-            icon: 'el-icon-calendar',
-            type: 'menu',
-          },
-          children: [
-            {
-              path: '/breeding/manage/detail',
-              name: 'breedingDetail',
-              meta: {
-                title: '养殖明细',
-                icon: 'el-icon-office-building',
-                type: 'menu',
-              },
-              component: 'breeding/manage/detail/index',
-            },
-            {
-              path: '/breeding/manage/allState',
-              name: 'allStateManage',
-              meta: {
-                title: '鸽棚总览',
-                icon: 'el-icon-office-building',
-                type: 'menu',
-              },
-              component: 'breeding/manage/allState/index',
-            },
-          ],
-        },
-        {
-          name: 'dovePerformance',
-          path: '/breeding/performance',
-          meta: {
-            title: '种鸽性能测试',
-            icon: 'el-icon-compass',
-            type: 'menu',
-          },
-          component: 'breeding/performance/index',
-        },
-        {
-          name: 'operateLog',
-          path: '/breeding/operateLog',
-          meta: {
-            title: '操作日志和统计',
-            icon: 'el-icon-document',
-            type: 'menu',
-          },
-          component: 'breeding/operateLog/index',
-        },
-        {
-          name: 'materialStatistics',
-          path: '/breeding/materialStatistics',
-          meta: {
-            title: '物料统计',
-            icon: 'el-icon-data-line',
-            type: 'menu',
-          },
-          children: [
-            {
-              path: '/breeding/materialStatistics/fodder',
-              name: 'fodderStatistics',
-              meta: {
-                title: '饲料统计',
-                icon: 'el-icon-office-building',
-                type: 'menu',
-              },
-              component: 'breeding/materialStatistics/fodder/index',
-            },
-          ],
-        },
-      ],
+      menu: [],
       nextMenu: [],
       pmenu: {},
       active: '',
@@ -319,7 +186,7 @@ export default {
     this.onLayoutResize()
     window.addEventListener('resize', this.onLayoutResize)
     // var menu = this.$router.sc_getMenu()
-    var menu = this.menu
+    var menu = tool.data.get("CURR_MENU")
     this.menu = this.filterUrl(menu)
     this.showThis()
   },
