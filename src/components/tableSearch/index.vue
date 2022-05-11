@@ -24,7 +24,7 @@ export default defineComponent({
       default() {
         let end = new Date()
         let start = new Date()
-        start.setTime(start.getTime() - 3600 * 1000 * 24 * 178)
+        start.setTime(start.getTime() - 3600 * 1000 * 24 * 183)
         let defaultValue = [start, end]
         return defaultValue
       }
