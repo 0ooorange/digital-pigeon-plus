@@ -4,7 +4,6 @@ export default defineComponent({
   props: {
     searchTypes: {
       type: Array,
-      required: true,
       default() {
         return []
       },
