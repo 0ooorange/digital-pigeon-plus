@@ -67,12 +67,15 @@ git push origin ZZN:dev-breeding-v1.0
 <template>
   <table-search :searchTypes="searchTypes" :cardData="cardData" :dateDefault="dateDefault"
                 @searchClick="searchClick" @reset="reset" @outTable="outTable" 
-                @printTable="printTable"/>
+                @printTable="printTable" :showSearch="showSearch"/>
 </template>
 <script>
 import { defineComponent } from 'vue'
 export default defineComponent({
   setup() {
+    // 是否展示查询部分，即类别选择器+输入框+查询按钮+重置按钮
+    // 默认为true
+    const showSearch = false
     // 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方，超过7个两行显示
     cardData: [
       {
@@ -132,6 +135,7 @@ export default defineComponent({
   }
   
   return {
+    showSearch,
     searchTypes,
     cardData,
     searchClick,
