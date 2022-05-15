@@ -27,7 +27,11 @@ export default defineComponent({
         start.setTime(start.getTime() - 3600 * 1000 * 24 * 183)
         let defaultValue = [start, end]
         return defaultValue
-      }
+      },
+    },
+    showSearch: {
+      type: Boolean,
+      default: true,
     },
   },
   setup(props, { emit }) {
@@ -114,34 +118,50 @@ export default defineComponent({
     )
 
     const selectType = ref([''])
-    const searchClick = () => { emit('searchClick') } // 搜索
-    const reset = () => { emit('reset') } // 重置
-    const outTable = () => { emit('outTable') } // 导出
+    const searchClick = () => {
+      emit('searchClick')
+    } // 搜索
+    const reset = () => {
+      emit('reset')
+    } // 重置
+    const outTable = () => {
+      emit('outTable')
+    } // 导出
+    const printTable = () => {
+      emit('printTable')
+    } // 打印
     return () => (
       <div>
         <div class="tableSearch">
-          {isShowBfSearch.value && renderCards()}
-          {props.showDatePk && datePicker()}
           <div class="left">
-            <span>
-              <el-cascader
-                v-model={selectType}
-                options={props.searchTypes}
-                placeholder="查询类型"
-                style={{width: '150px'}}
-              />
-              <el-input ref="searchInput" placeholder="查询内容" style={{width: '150px'}} />
-              <el-button type="success" class="searchBtn" onClick={searchClick}>
-                查询
-              </el-button>
-            </span>
+            {isShowBfSearch.value && renderCards()}
+            {props.showDatePk && datePicker()}
+            {props.showSearch ? (
+              <span>
+                <el-cascader
+                  v-model={selectType}
+                  options={props.searchTypes}
+                  placeholder="查询类型"
+                  style={{ width: '150px' }}
+                />
+                <el-input ref="searchInput" placeholder="查询内容" style={{ width: '150px' }} />
+                <el-button type="success" class="searchBtn" onClick={searchClick}>
+                  查询
+                </el-button>
+              </span>
+            ) : null}
           </div>
           <div class="right">
-            <el-button type="danger" class="reflashSearch" onClick={reset}>
-              重置
-            </el-button>
+            {props.showSearch ? (
+              <el-button type="danger" class="reflashSearch" onClick={reset}>
+                重置
+              </el-button>
+            ) : null}
             <el-button type="warning" class="outTable" onClick={outTable}>
               导出
+            </el-button>
+            <el-button class="printTable" onClick={printTable}>
+              打印
             </el-button>
           </div>
         </div>
