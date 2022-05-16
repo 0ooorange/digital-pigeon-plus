@@ -74,8 +74,8 @@
 </template>
 
 <script>
-import tableSearch from "../../../../components/tableSearch/index.vue";
-import scTable from "../../../../components/scTable/index.vue";
+import tableSearch from "../../../components/tableSearch/index.vue";
+import scTable from "../../../components/scTable/index.vue";
 export default {
 	name: "examineEggAuxiliary",
 	components: {

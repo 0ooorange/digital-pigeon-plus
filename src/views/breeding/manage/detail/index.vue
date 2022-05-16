@@ -85,7 +85,41 @@ export default defineComponent({
       {
         value: '孵化天数',
         label: '孵化天数',
-      }
+      },
+    ]
+    const column = [
+      {
+        label: '鸽笼号',
+        prop: 'pigeonnumber',
+        width: '180',
+        sortable: true
+      },
+      {
+        label: '板子号',
+        prop: 'boardnumber',
+        width: '180',
+        sortable: true
+      },
+      {
+        label: '生蛋时间',
+        prop: 'layEggDate',
+        width: '200',
+        sortable: true
+      },
+      {
+        label: '生蛋天数',
+        prop: 'layEggdays',
+        width: '180'
+      },
+      {
+        label: '孵化天数',
+        prop: 'hatchEggdays',
+        width: '180'
+      },
+      {
+        label: '备注',
+        prop: 'remark'
+      },
     ]
 
     const searchClick = () => {
@@ -100,22 +134,14 @@ export default defineComponent({
       console.log('点击导出')
     }
 
+    const printTable = () => {
+      console.log('点击打印')
+    }
+
     return () => (
       <div>
-        <table-search
-          searchTypes={searchTypes}
-          onSearchClick={searchClick}
-          onReset={reset}
-          onOutTable={outTable}
-        ></table-search>
-        <sc-table ref="table" data={eggsList} pageSize={5} stripe highlightCurrentRow>
-          <el-table-column align="center" label="鸽笼号" prop="pigeonnumber" width="180" />
-          <el-table-column align="center" label="板子号" prop="boardnumber" width="180" />
-          <el-table-column align="center" label="生蛋时间" prop="layEggDate" width="200" />
-          <el-table-column align="center" label="生蛋天数" prop="layEggdays" width="180" />
-          <el-table-column align="center" label="孵化天数" prop="hatchEggdays" width="180" />
-          <el-table-column align="center" label="备注" prop="remark" />
-        </sc-table>
+        <table-search searchTypes={searchTypes} onSearchClick={searchClick} onReset={reset} onOutTable={outTable} onPrintTable={printTable} />
+        <sc-table ref="table" column={column} data={eggsList} pageSize={5} stripe highlightCurrentRow />
       </div>
     )
   },

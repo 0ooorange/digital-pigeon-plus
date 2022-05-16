@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import tool from '../../../../utils/tool'
 export default {
   props: ['menus'], //菜单数据
   data() {
@@ -62,7 +63,7 @@ export default {
     routerClick(item, index) {
       console.log('我是router-link，我被点击了，我的index值是', index)
       console.log('我的值是', item.name)
-      localStorage.setItem('currentSystem', JSON.stringify(item))
+      tool.data.set("CURR_MENU_INDEX", index)
     }
   }
 }

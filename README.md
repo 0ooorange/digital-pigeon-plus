@@ -65,14 +65,18 @@ git push origin ZZN:dev-breeding-v1.0
 
 ~~~vue
 <template>
-  <table-search :searchTypes="searchTypes" :cardData="cardData"  @searchClick="searchClick" 
-                @reset="reset" @outTable="outTable" />
+  <table-search :searchTypes="searchTypes" :cardData="cardData" :dateDefault="dateDefault"
+                @searchClick="searchClick" @reset="reset" @outTable="outTable" 
+                @printTable="printTable" :showSearch="showSearch"/>
 </template>
 <script>
 import { defineComponent } from 'vue'
 export default defineComponent({
   setup() {
-    // 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方
+    // 是否展示查询部分，即类别选择器+输入框+查询按钮+重置按钮
+    // 默认为true
+    const showSearch = false
+    // 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方，超过7个两行显示
     cardData: [
       {
         cardText: '查仔个数',
@@ -108,6 +112,12 @@ export default defineComponent({
     ]
   }
   
+  // 设置默认时间段，组件内默认半年
+  let end = new Date()
+  let start = new Date()
+  start.setTime(start.getTime() - 3600 * 1000 * 24 * 183) // 半年
+  let dateDefault = [start, end]
+  
   const searchClick = () => {
     console.log('点击查询')
   }
@@ -120,87 +130,23 @@ export default defineComponent({
     console.log('点击导出')
   }
   
+  const printTable = () => {
+    console.log('点击打印')
+  }
+  
   return {
+    showSearch,
     searchTypes,
     cardData,
     searchClick,
     reset,
-    outTable
+    outTable,
+    printTable,
+    dateDefault
   }
 }
 </script>
 ~~~
-
-（2）用法二
-
-~~~vue
-<script>
-import { defineComponent } from 'vue'
-export default defineComponent({
-  setup() {
-    // 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方
-    cardData: [
-      {
-        cardText: '查仔个数',
-        cardNumber: '666只',
-      },
-      {
-        cardText: '查仔个数',
-        cardNumber: '666只',
-      },
-      {
-        cardText: '查仔个数',
-        cardNumber: '666只',
-      }
-    ],
-    // 查询类型下拉框列表的数据，value和label为必传，其他需求可自行添加
-    const searchTypes = [
-      {
-        value: '鸽笼号',
-        label: '鸽笼号',
-      },
-      {
-        value: '板子号',
-        label: '板子号',
-      },
-      {
-        value: '生蛋天数',
-        label: '生蛋天数',
-      },
-      {
-        value: '孵化天数',
-        label: '孵化天数',
-      }
-    ]
-
-    const searchClick = () => {
-      console.log('点击查询')
-    }
-
-    const reset = () => {
-      console.log('点击重置')
-    }
-
-    const outTable = () => {
-      console.log('点击导出')
-    }
-
-    return () => (
-      <>
-        <table-search
-          searchTypes={searchTypes}
-          onSearchClick={searchClick}
-          onReset={reset}
-          onOutTable={outTable}
-        ></table-search>
-      </>
-    )
-  },
-})
-</script>
-~~~
-
-
 
 2.表格
 
