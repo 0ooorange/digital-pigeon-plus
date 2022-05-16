@@ -37,7 +37,7 @@ router.beforeEach(async (to, from, next) => {
 		? `${to.meta.title} - ${config.APP_NAME}`
 		: `${config.APP_NAME}`;
 
-	let token = tool.data.get("TOKEN");
+	let token = tool.cookie.get("TOKEN");
 
 	if (to.path === "/login") {
 		//删除路由(替换当前layout路由)

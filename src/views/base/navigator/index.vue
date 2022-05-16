@@ -57,7 +57,7 @@ export default {
           size: '',
           path: '#',
         },
-        
+
         {
           index: 6,
           name: '电商平台',
@@ -103,9 +103,19 @@ export default {
       ],
     }
   },
-  created() {
-    tool.data.set("IS_GET_ROUTER", false)
-  }
+  async created() {
+    tool.data.set('IS_GET_ROUTER', false)
+    tool.data.set('CURR_MENU_INDEX', 0)
+    // 获取基本信息
+    var homeInfRes = await this.$API.login.getHomeInf.get()
+    console.log(homeInfRes, '000')
+    if (homeInfRes.code == 200) {
+      this.$TOOL.data.set('USER_INFO', homeInfRes.data.user)
+    } else {
+      this.$message.warning(homeInfRes.message)
+      return false
+    }
+  },
 }
 </script>
 

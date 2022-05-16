@@ -7,14 +7,9 @@
         <el-button :class="messMethodClass" type="text" @click="loginByMess">短信登录</el-button>
       </div>
       <div class="form">
-        <SecretLogin ref="SecretLogin" v-if="loginMethod === 0" />
-        <PswLogin ref="PswLogin" v-if="loginMethod === 1" />
+        <SecretLogin ref="SecretLoginRef" v-if="loginMethod === 0" />
+        <PswLogin ref="PswLoginRef" v-if="loginMethod === 1" />
       </div>
-      <div class="turnToOther" v-if="loginMethod === 0">
-        <el-checkbox class="rememberSecret" v-model="rememberSecret" label="记住密码" size="large" />
-        <span class="forgetSecret">忘记密码</span>
-      </div>
-      <el-button class="btn" @click="login">登录</el-button>
     </div>
     <div class="otherMethods">
       <div class="text">
@@ -42,13 +37,11 @@ import bgImg from '../../../assets/images/loginBgImg.png'
 import SecretLogin from './components/secretLogin.vue'
 import PswLogin from './components/pswLogin.vue'
 
-import { ref, nextTick, getCurrentInstance } from 'vue'
+import { ref, nextTick } from 'vue'
 
 export default {
   components: { SecretLogin, PswLogin },
   setup() {
-    const { proxy } = getCurrentInstance()
-
     const rememberSecret = ref(false)
 
     const loginMethod = ref(0)
@@ -79,33 +72,6 @@ export default {
       })
     }
 
-    // 登录
-    const islogin = ref(true)
-    const login = async function () {
-      // var validate = await proxy.$refs.loginForm.validate().catch(()=>{})
-      // 	if(!validate){ return false }
-      islogin.value = true
-      var data = {
-        username: proxy.$refs.moblePhoneScrt,
-        password: proxy.$refs.password,
-      }
-      //获取token
-      var user = await proxy.$API.auth.token.post(data)
-      if (user.code == 200) {
-        proxy.$TOOL.data.set('TOKEN', user.data.token)
-        proxy.$TOOL.data.set('USER_INFO', user.data.userInfo)
-      } else {
-        islogin.value = false
-        proxy.$message.warning(user.message)
-        return false
-      }
-      proxy.$router.replace({
-        path: '/navigator',
-      })
-      proxy.$message.success('Login Success 登录成功')
-      islogin.value = false
-    }
-
     return {
       bgImg,
       weibo,
@@ -118,7 +84,6 @@ export default {
       pswMethodClass, // 登录css
       loginByPsw,
       loginByMess,
-      login,
     }
   },
 }
@@ -186,33 +151,6 @@ export default {
     display: flex;
     align-items: center;
     flex-direction: column;
-  }
-  .btn {
-    position: absolute;
-    top: 350px;
-    height: 40px;
-    width: 300px;
-    font-size: 16px;
-    background-color: #03aefc;
-    border: 0;
-    color: #d8f9fc;
-  }
-}
-
-.turnToOther {
-  .rememberSecret {
-    position: absolute;
-    top: 255px;
-    left: 110px;
-  }
-  .forgetSecret {
-    position: absolute;
-    top: 255px;
-    right: 110px;
-    cursor: pointer;
-    line-height: 40px;
-    font-size: 14px;
-    color: #07b1cf;
   }
 }
 
