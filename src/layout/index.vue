@@ -21,6 +21,7 @@
             <el-select style="width: 150px" v-model="currDovecote" class="m-2" placeholder="Select">
               <el-option v-for="item in dovecotes" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
+            <span class="selectText">操作员：<span class="operatorCss">{{currOperator}}</span></span>
           </div>
         </el-col>
         <el-col :span="thirdSpan" class="userbarCss">
@@ -140,6 +141,11 @@ export default {
           },
         ]
       },
+    },
+    currOperator: {
+      type: String,
+      require: true,
+      default: "姜昕梦"
     },
   },
   data() {
@@ -410,5 +416,9 @@ export default {
 }
 .beCenter {
   justify-content: center;
+}
+.operatorCss {
+  font-size: 16px;
+  font-weight: 700;
 }
 </style>
