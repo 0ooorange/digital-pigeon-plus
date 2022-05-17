@@ -26,17 +26,19 @@
         </table-search>
         <div class="table_box">
             <div class="table_item">
-                <el-card class="item_title" style="color: #6959CD"> 操作记录 </el-card>
+                <el-card class="item_title" style="color: #6959cd">
+                    操作记录
+                </el-card>
                 <!-- <div class="item_title"></div> -->
                 <scTable
                     class="table"
-                    :height="400"
+                    :height="600"
                     ref="table"
                     row-key="id"
                     stripe
                     highlightCurrentRow
-                    hidePagination
                     :data="tableListOption"
+                    hidePagination
                     @selection-change="selectionChange"
                 >
                     <el-table-column
@@ -50,7 +52,7 @@
                         align="center"
                         label="鸽笼编号"
                         prop="number"
-                        width="140"
+                        width="120"
                         sortable
                     ></el-table-column>
                     <el-table-column
@@ -60,9 +62,21 @@
                         width="100"
                     ></el-table-column>
                 </scTable>
+                <el-pagination
+                    background
+                    :small="true"
+                    :layout="paginationLayout"
+                    :total="total"
+                    :page-sizes="pageSizes"
+                    v-model:currentPage="currentPage"
+                    v-model:page-size="pageSize"
+                    @current-change="paginationChange"
+                ></el-pagination>
             </div>
             <div class="table_item">
-                <el-card class="item_title" style="color:#CD0000"> 异常信息 </el-card>
+                <el-card class="item_title" style="color: #cd0000">
+                    异常信息
+                </el-card>
                 <!-- <div class="item_title"></div> -->
                 <scTable
                     class="table"
@@ -70,8 +84,9 @@
                     row-key="id"
                     stripe
                     highlightCurrentRow
-                    hidePagination
+                    :height="600"
                     :data="tableListAbnormal"
+                    hidePagination
                     @selection-change="selectionChange"
                 >
                     <el-table-column
@@ -85,7 +100,7 @@
                         align="center"
                         label="鸽笼编号"
                         prop="number"
-                        width="140"
+                        width="120"
                         sortable
                     ></el-table-column>
                     <el-table-column
@@ -95,14 +110,27 @@
                         width="100"
                     ></el-table-column>
                 </scTable>
+                <el-pagination
+                    background
+                    :small="true"
+                    :layout="paginationLayout"
+                    :total="totalAnother"
+                    :page-sizes="pageSizesAnother"
+                    v-model:currentPage="currentPageAnother"
+                    v-model:page-size="pageSizeAnother"
+                    @current-change="paginationChange"
+                ></el-pagination>
             </div>
             <div class="table_item">
-                <el-card class="item_title" style="color: 	#8FBC8F"> 数据统计 </el-card>
+                <el-card class="item_title" style="color: #8fbc8f">
+                    数据统计
+                </el-card>
                 <!-- <div class="item_title"></div> -->
                 <scTable
                     class="table"
                     ref="table"
                     row-key="id"
+                    :height="300"
                     stripe
                     highlightCurrentRow
                     hidePagination
@@ -113,16 +141,48 @@
                         align="center"
                         label="类别"
                         prop="dataTitle"
-                        width="190"
+                        width="140"
                     ></el-table-column>
                     <el-table-column
                         align="center"
                         label="数量"
                         prop="count"
-                        width="190"
+                        width="150"
                         sortable
                     ></el-table-column>
                 </scTable>
+                <div
+                    class="dataList"
+                    style="
+                        height: 260px;
+                        width: 100%;
+                        padding-top: 10px;
+                        padding-bottom: 10px;
+                        background-color: #fff;
+                        margin-top: 40px;
+                    "
+                >
+                    <el-carousel
+                        trigger="click"
+                        height="100%"
+                        style="height: 100%; width: 100%; padding: 10px"
+                    >
+                        <el-carousel-item
+                            v-for="item in 3"
+                            :key="item"
+                            style="height: 100%; width: 100%"
+                        >
+                            <img
+                                src="../../../assets/images/pigeon2.jpg"
+                                style="height: 100%; width: 100%"
+                            />
+                        </el-carousel-item>
+                    </el-carousel>
+                    <!-- <img
+                            src="@/assets/images/pigeon.png"
+                            style="height: 100%"
+                        /> -->
+                </div>
             </div>
         </div>
     </div>
@@ -160,8 +220,32 @@ export default defineComponent({
         let tableListOption = reactive([]);
         let tableListAbnormal = reactive([]);
         let dataCount = reactive([]);
+        let total = ref(12);
+        let pageSizes = ref(10);
+        let currentPage = ref(1);
+        let pageSize = ref(10);
+
+        let totalAnother = ref(10);
+        let pageSizesAnother = ref(10);
+        let currentPageAnother = ref(1);
+        let pageSizeAnother = ref(10);
 
         tableListOption = [
+            {
+                time: "2022-04-21",
+                number: "A01",
+                option: "查蛋(抽取)",
+            },
+            {
+                time: "2022-04-21",
+                number: "A01",
+                option: "查蛋(抽取)",
+            },
+            {
+                time: "2022-04-21",
+                number: "A01",
+                option: "查蛋(抽取)",
+            },
             {
                 time: "2022-04-21",
                 number: "A01",
@@ -245,6 +329,21 @@ export default defineComponent({
                 number: "A01",
                 abnormal: "仔异常(冷蛋)",
             },
+            {
+                time: "2022-04-21",
+                number: "A01",
+                abnormal: "仔异常(冷蛋)",
+            },
+            {
+                time: "2022-04-21",
+                number: "A01",
+                abnormal: "仔异常(冷蛋)",
+            },
+            {
+                time: "2022-04-21",
+                number: "A01",
+                abnormal: "仔异常(冷蛋)",
+            },
         ];
 
         dataCount = [
@@ -296,6 +395,14 @@ export default defineComponent({
             tableListOption,
             cardData,
             dataCount,
+            total,
+            pageSizes,
+            currentPage,
+            pageSize,
+            totalAnother,
+            pageSizesAnother,
+            currentPageAnother,
+            pageSizeAnother,
             datePickerChange,
             searchClick,
             outTable,
@@ -318,14 +425,21 @@ export default defineComponent({
     display: flex;
     // margin-left: 1%;
     .table_item {
-        width: 30%;
+        width: 32%;
         margin-right: 4%;
         .item_title {
-            width: 80%;
+            height: 55px;
+            line-height: 30px;
+            width: 60%;
             margin: auto;
             margin-bottom: 10px;
             text-align: center;
-            font-size: 20px;
+            font-size: 18px;
+            :deep(.el-card__body) {
+                height: 100%;
+                padding: 10px !important;
+                // background-color: #d9f0f7;
+            }
         }
         .table {
             width: 100%;

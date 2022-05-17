@@ -45,70 +45,44 @@
             </div>
             <div class="right_buttom">
                 <div class="right_buttom_top">
-                    <div class="box_shadow"></div>
-                    <div class="right_buttom_top_box" style="display: flex">
-                        <div
-                            @click="changeCurrentBox(index0)"
-                            class="right_buttom_top_box_first"
-                            :class="{
-                                current_box_show: index0 === currentBox,
-                            }"
-                            v-for="(item0, index0) in [0, 1, 2]"
-                            :key="index0"
-                        >
+                    <div class="right_buttom_top_box">
+                        <div class="box_shadow"></div>
+                        <div class="right_buttom_top_box_min" style="">
                             <div
-                                v-for="(item, index) in [0, 1, 2, 3, 4, 5]"
-                                :key="index"
-                                class="right_buttom_top_box_row"
-                                :style="{
-                                    'margin-bottom':
-                                        index == 1 || index == 3
-                                            ? '3px'
-                                            : '2px',
-                                    'margin-top': index == 0 ? '3px' : '0px',
+                                @click="changeCurrentBox(index0)"
+                                class="right_buttom_top_box_first"
+                                :class="{
+                                    current_box_show: index0 === currentBox,
                                 }"
+                                v-for="(item0, index0) in [0, 1, 2]"
+                                :key="index0"
                             >
                                 <div
-                                    class="right_buttom_top_box_item"
-                                    v-for="(item1, index1) in [
-                                        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-                                    ]"
-                                    :key="index1"
-                                ></div>
+                                    v-for="(item, index) in [0, 1, 2, 3, 4, 5]"
+                                    :key="index"
+                                    class="right_buttom_top_box_row"
+                                    :style="{
+                                        'margin-bottom':
+                                            index == 1 || index == 3
+                                                ? '3px'
+                                                : '2px',
+                                        'margin-top':
+                                            index == 0 ? '3px' : '0px',
+                                    }"
+                                >
+                                    <div
+                                        class="right_buttom_top_box_item"
+                                        v-for="(item1, index1) in [
+                                            0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+                                        ]"
+                                        :key="index1"
+                                    ></div>
+                                </div>
+                                <!-- <div class="shadow"></div> -->
                             </div>
-                            <!-- <div class="shadow"></div> -->
                         </div>
-                        <!-- <div
-                            v-for="(item, index) in [0, 1, 2, 3, 4, 5]"
-                            :key="index"
-                            class="right_buttom_top_box_row"
-                            :style="{
-                                'margin-bottom':
-                                    index == 1 || index == 3 ? '3px' : '2px',
-                                    'margin-top': index == 0 ?'3px': '0px'
-                            }"
-                        >
-                            <div
-                                class="right_buttom_top_box_item"
-                                v-for="(item1, index1) in [
-                                    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-                                    13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
-                                    24, 25, 26, 27, 28, 29
-                                ]"
-                                :key="index1"
-                            ></div>
-                        </div> -->
                     </div>
-                </div>
-                <div class="right_buttom_bottom">
-                    <div
-                        style="
-                            display: flex;
-                            position: absolute;
-                            right: 10px;
-                            bottom: 4px;
-                        "
-                    >
+                    <div class="right_buttom_bottom">
                         <div
                             :class="{
                                 right_buttom_item: true,
@@ -322,7 +296,7 @@
                             align="center"
                             label="时间"
                             prop="time"
-                            width="220"
+                            width="150"
                             sortable
                         ></el-table-column>
                         <!-- <el-table-column
@@ -336,7 +310,7 @@
                             align="center"
                             label="操作记录"
                             prop="option"
-                            width="220"
+                            width="150"
                         ></el-table-column>
                     </scTable>
                 </div>
@@ -359,7 +333,7 @@
                             align="center"
                             label="时间"
                             prop="time"
-                            width="220"
+                             width="150"
                             sortable
                         ></el-table-column>
                         <!-- <el-table-column
@@ -373,9 +347,77 @@
                             align="center"
                             label="异常信息"
                             prop="abnormal"
-                            width="220"
+                            width="150"
                         ></el-table-column>
                     </scTable>
+                </div>
+                <div class="table_item">
+                    <el-card class="item_title" style="color: #6495ed">
+                        鸽笼数据
+                    </el-card>
+                    <!-- <div class="item_title"></div> -->
+                    <div class="dataList" style="height: 150px">
+                        <div class="row">
+                            <el-card class="box-card card_list_item">
+                                <span style="font-size: 10px">成鸽数:</span>
+                                <span
+                                    :style="'font-size:12px;padding-left:5px; font-weight: 700;color:#EE4000'"
+                                    >1对</span
+                                >
+                            </el-card>
+                            <el-card class="box-card card_list_item">
+                                <span style="font-size: 10px">幼鸽数:</span>
+                                <span
+                                    :style="'font-size:12px;padding-left:5px;  font-weight: 700;color:#EE9A49'"
+                                    >1只</span
+                                >
+                            </el-card>
+                            <el-card class="box-card card_list_item">
+                                <span style="font-size: 10px">抽蛋数:</span>
+                                <span
+                                    :style="'font-size:12px;padding-left:5px;  font-weight: 700;color:#43CD80'"
+                                    >1个</span
+                                >
+                            </el-card>
+                        </div>
+                        <div class="row">
+                            <el-card class="box-card card_list_item">
+                                <span style="font-size: 10px">产蛋数:</span>
+                                <span
+                                    :style="'font-size:12px;padding-left:5px;  font-weight: 700;color:#76EE00'"
+                                    >2个</span
+                                >
+                            </el-card>
+                            <el-card class="box-card card_list_item">
+                                <span style="font-size: 10px">出仔数:</span>
+                                <span
+                                    :style="'font-size:12px;padding-left:5px;  font-weight: 700;color:#6495ED'"
+                                    >0只</span
+                                >
+                            </el-card>
+                            <el-card class="box-card card_list_item">
+                                <span style="font-size: 10px">出栏数:</span>
+                                <span
+                                    :style="'font-size:12px;padding-left:5px;  font-weight: 700;color:#7D26CD'"
+                                    >0只</span
+                                >
+                            </el-card>
+                        </div>
+                    </div>
+                    <div class="dataList" style="height: 260px;width:100%;padding-top: 0px;padding-bottom: 0px;">
+                        <el-carousel trigger="click" height="100%" style="height:100%;width:100%;padding:10px">
+                            <el-carousel-item v-for="item in 3" :key="item" style="height:100%;width:100%;">
+                                                        <img
+                            src="../../../../assets/images/pigeon2.jpg"
+                            style="height: 100%;width:100%"
+                        />
+                            </el-carousel-item>
+                        </el-carousel>
+                        <!-- <img
+                            src="@/assets/images/pigeon.png"
+                            style="height: 100%"
+                        /> -->
+                    </div>
                 </div>
 
                 <!-- <div class="right_footer">
@@ -431,71 +473,6 @@
                     </div>
                 </div>
             </div> -->
-            </div>
-            <div class="left_footer_row">
-                <div class="table_item">
-                    <el-card class="item_title" style="color:#6495ED">
-                        鸽笼数据
-                    </el-card>
-                    <!-- <div class="item_title"></div> -->
-                    <div class="dataList">
-                        <div class="row">
-                            <el-card class="box-card card_list_item">
-                                <span style="font-size: 14px">成鸽数:</span>
-                                <span
-                                    :style="'font-size:17px;padding-left:5px; font-weight: 700;color:#EE4000'"
-                                    >1对</span
-                                >
-                            </el-card>
-                            <el-card class="box-card card_list_item">
-                                <span style="font-size: 14px">幼鸽数:</span>
-                                <span
-                                    :style="'font-size:17px;padding-left:5px;  font-weight: 700;color:#EE9A49'"
-                                    >1只</span
-                                >
-                            </el-card>
-                            <el-card class="box-card card_list_item">
-                                <span style="font-size: 14px">抽蛋数:</span>
-                                <span
-                                    :style="'font-size:17px;padding-left:5px;  font-weight: 700;color:#43CD80'"
-                                    >1个</span
-                                >
-                            </el-card>
-                        </div>
-                        <div class="row">
-                            <el-card class="box-card card_list_item">
-                                <span style="font-size: 14px">产蛋数:</span>
-                                <span
-                                    :style="'font-size:17px;padding-left:5px;  font-weight: 700;color:#76EE00'"
-                                    >2个</span
-                                >
-                            </el-card>
-                            <el-card class="box-card card_list_item">
-                                <span style="font-size: 14px">出仔数:</span>
-                                <span
-                                    :style="'font-size:17px;padding-left:5px;  font-weight: 700;color:#6495ED'"
-                                    >0只</span
-                                >
-                            </el-card>
-                            <el-card class="box-card card_list_item">
-                                <span style="font-size: 14px">出栏数:</span>
-                                <span
-                                    :style="'font-size:17px;padding-left:5px;  font-weight: 700;color:#7D26CD'"
-                                    >0只</span
-                                >
-                            </el-card>
-                        </div>
-                    </div>
-                </div>
-                <div class="table_item">
-                    <el-card class="item_title" style="color:#43CD80">
-                        近期照片
-                    </el-card>
-                    <!-- <div class="item_title"></div> -->
-                    <div class="dataList">
-                      <img src="@/assets/images/pigeon.png" style="height:100%">
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -563,6 +540,21 @@ export default {
                     number: "A01",
                     option: "查蛋(抽取)",
                 },
+                {
+                    time: "2022-04-21",
+                    number: "A01",
+                    option: "查蛋(抽取)",
+                },
+                {
+                    time: "2022-04-21",
+                    number: "A01",
+                    option: "查蛋(抽取)",
+                },
+                {
+                    time: "2022-04-21",
+                    number: "A01",
+                    option: "查蛋(抽取)",
+                },
             ],
             tableListAbnormal: [
                 {
@@ -590,7 +582,22 @@ export default {
                     number: "A01",
                     abnormal: "蛋异常(单蛋)",
                 },
-            ],
+                {
+                    time: "2022-04-21",
+                    number: "A01",
+                    abnormal: "蛋异常(单蛋)",
+                },
+                {
+                    time: "2022-04-21",
+                    number: "A01",
+                    abnormal: "蛋异常(单蛋)",
+                },
+                {
+                    time: "2022-04-21",
+                    number: "A01",
+                    abnormal: "蛋异常(单蛋)",
+                },
+            ]
         };
     },
     methods: {
@@ -686,29 +693,36 @@ export default {
             height: 100%;
             text-align: right;
             display: flex;
+            justify-content: space-between;
             flex-direction: column;
             .right_buttom_top {
                 height: 73%;
                 width: 100%;
-                text-align: right;
+                // text-align: right;
                 position: relative;
                 display: flex;
                 justify-content: flex-end;
-                .box_shadow {
-                    position: absolute;
-                    width: 70%;
-                    height: 100%;
-                    right: 0px;
-                    // z-index:1 ;
-                    background: rgba(0, 0, 0, 0.3);
-                }
+
                 .right_buttom_top_box {
-                    width: 70%;
+                    width: 68%;
                     height: 100%;
                     // background-color: pink;
-                    justify-content: space-between;
-                    padding: 4px;
+
                     position: relative;
+                    .right_buttom_top_box_min {
+                        display: flex;
+                        justify-content: space-between;
+                        width: 100%;
+                        padding: 4px;
+                    }
+                    .box_shadow {
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        left: 0px;
+                        // z-index:1 ;
+                        background: rgba(0, 0, 0, 0.3);
+                    }
                     .current_box_show {
                         background: rgba(0, 0, 0, 0.08);
                     }
@@ -727,37 +741,33 @@ export default {
                                 // margin-bottom: 2px;
                             }
                         }
-                        .shadow {
-                            position: absolute;
-                            width: 100%;
-                            height: 100%;
-                            background-color: pink;
-                        }
+                    }
+                }
+
+                .right_buttom_bottom {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    margin-left: 10px;
+                    .right_buttom_item {
+                        width: 38px;
+                        height: 20px;
+                        margin-right: 10px;
+                        // background-color: pink;
+                        font-weight: 500;
+                        color: #5cacee;
+                        box-shadow: 1px 4px 10px #dbdbdb;
+                        text-align: center;
+                        font-size: 13px;
+                        cursor: pointer;
+                    }
+                    .right_buttom_item_active {
+                        background-color: #5cacee;
+                        color: #fff;
                     }
                 }
             }
-            .right_buttom_bottom {
-                height: 27%;
-                display: flex;
-                position: relative;
-                // background-color: blue;
-                .right_buttom_item {
-                    width: 50px;
-                    height: 100%;
-                    margin-right: 10px;
-                    // background-color: pink;
-                    font-weight: 500;
-                    color: #5cacee;
-                    box-shadow: 1px 4px 10px #dbdbdb;
-                    text-align: center;
-                    font-size: 16px;
-                    cursor: pointer;
-                }
-                .right_buttom_item_active {
-                    background-color: #5cacee;
-                    color: #fff;
-                }
-            }
+
             // position: absolute;
             // display: flex;
             // align-items: center;
@@ -813,6 +823,7 @@ export default {
     .dialog_box {
         height: 410px;
         border-top: 4px solid #5cacee;
+        border-bottom: 4px solid #5cacee;
         border-radius: 30px;
         padding: 10px;
         padding-left: 0px;
@@ -820,7 +831,7 @@ export default {
         overflow-y: auto;
         display: flex;
         white-space: nowrap;
-
+        scrollbar-width: none;
         .cage_row {
             display: flex;
             //  flex-wrap: wrap;
@@ -842,6 +853,7 @@ export default {
         width: 100%;
         height: 10px;
         // background-color: pink;
+        display: none; //隐藏滚动条
     }
     .dialog_box::-webkit-scrollbar-track {
         box-shadow: inset 0 0 0px rgba(240, 240, 240, 0.5);
@@ -858,21 +870,22 @@ export default {
 
     .footer {
         margin-top: 20px;
-        margin-left: 20px;
+        // margin-left: 20px;
         padding-bottom: 20px;
         .left_footer_row {
             display: flex;
             flex-wrap: wrap;
+            justify-content: space-around;
             margin-bottom: 40px;
             .table_item {
-                width: 46%;
-                margin-right: 4%;
+                width: 30%;
+                // margin-right: 4%;
                 .item_title {
-                    width: 70%;
+                    width: 45%;
                     margin: auto;
                     margin-bottom: 10px;
                     text-align: center;
-                    font-size: 20px;
+                    font-size: 14px;
                 }
                 .table {
                     width: 100%;
@@ -887,12 +900,22 @@ export default {
                     align-items: center;
                     padding-top: 20px;
                     padding-bottom: 20px;
-                    height: 300px;
+                    height: 700px;
+                    width: 100%;
                     .row {
                         display: flex;
+                        justify-content: space-around;
                         margin-top: 10px;
+                        width: 100%;
                         .card_list_item {
-                            margin-left: 20px;
+                            // margin-left: 20px;
+                            width: 28%;
+
+                            :deep(.el-card__body) {
+                                height: 100%;
+                                padding: 10px !important;
+                                // background-color: #d9f0f7;
+                            }
                         }
                     }
                 }
@@ -913,7 +936,7 @@ export default {
             margin-left: 250px;
             padding-bottom: 20px;
             .dataList {
-              height: 400px;
+                height: 400px;
                 margin-top: 10px;
                 .row {
                     display: flex;
