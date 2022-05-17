@@ -1,8 +1,9 @@
 <template>
 	<div class="container">
 		<table-search
-			:searchTypes="searchTypes"
 			:cardData="cardData"
+			:showSearch="false"
+			:showDatePk="false"
 			@searchClick="searchClick"
 			@outTable="outTable"
 		/>
@@ -36,21 +37,24 @@
 					width="230"
 					align="center"
 				></el-table-column>
-				<el-table-column label="本次推荐" prop="recommendation" width="170" align="center">
+				<el-table-column
+					label="本次推荐"
+					prop="recommendation"
+					width="170"
+					align="center"
+				>
 					<template v-slot="scope">
 						<el-select
 							v-model="scope.row.value"
 							class="m-2"
 							placeholder="抽蛋"
-              style="width: 90px"
-              @change="showscope(scope)"
+							style="width: 90px"
 						>
 							<el-option
 								v-for="item in options"
 								:key="item.value"
 								:label="item.label"
 								:value="item.value"
-                
 							/>
 						</el-select>
 					</template>
@@ -65,7 +69,7 @@
 				<el-table-column
 					label="备注"
 					prop="remark"
-          	width="270"
+					width="270"
 					align="center"
 				></el-table-column>
 			</scTable>
@@ -74,139 +78,98 @@
 </template>
 
 <script>
-import tableSearch from "../../../../components/tableSearch/index.vue";
-import scTable from "../../../../components/scTable/index.vue";
-export default {
-	name: "examineEggAuxiliary",
-	components: {
-		tableSearch,
-		scTable,
-	},
-	data() {
-		return {
-			pageSize: 8,
-			total: 100,
-			pageNum: 1,
-			// 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方
-			cardData: [
-				{
-					cardText: "查蛋个数",
-					cardNumber: "888只",
-				},
-			],
-			// 查询类型下拉框列表的数据，格式固定
-			searchTypes: [
-				{
-					value: "鸽笼编号",
-					label: "鸽笼编号",
-				},
-				{
-					value: "鸽板编号",
-					label: "鸽板编号",
-				},
-				{
-					value: "日期",
-					label: "日期",
-				},
-				{
-					value: "仔数",
-					label: "仔数",
-				},
-				{
-					value: "死仔数",
-					label: "死仔数",
-				},
-				{
-					value: "负责人",
-					label: "负责人",
-				},
-				{
-					value: "操作",
-					label: "操作",
-				},
-			],
+import { defineComponent } from "vue";
 
-			apiObj: [
-				{
-					pigeonnumber: "A02",
-					boardnumber: "3",
-					raweggstime: "2022-04-11 20:21:23",
-				
-					raweggday: "10天",
-					operator: "李暖暖",
-					remark: "XXXXX",
-				},
-				{
-					pigeonnumber: "A10",
-					boardnumber: "3",
-					raweggstime: "2022-03-11 20:21:23",
-	
-					raweggday: "10天",
-					operator: "李暖暖",
-					remark: "XXXXX",
-				},
-				{
-					pigeonnumber: "A08",
-					boardnumber: "3",
-					raweggstime: "2022-11-11 20:21:23",
-					recommendation: "抽蛋",
-					raweggday: "13天",
-					operator: "李暖暖",
-					remark: "XXXXX",
-				},
-				{
-					pigeonnumber: "A01",
-					boardnumber: "3",
-					raweggstime: "2022-04-21 20:21:23",
-					recommendation: "抽蛋",
-					raweggday: "10天",
-					operator: "李暖暖",
-					remark: "XXXXX",
-				},
-				{
-					pigeonnumber: "A11",
-					boardnumber: "3",
-					raweggstime: "2022-09-21 20:21:23",
-					recommendation: "抽蛋",
-					raweggday: "21天",
-					operator: "李暖暖",
-					remark: "XXXXX",
-				},
-				{
-					pigeonnumber: "A10",
-					boardnumber: "3",
-					raweggstime: "2022-04-21 20:21:23",
-					recommendation: "抽蛋",
-					raweggday: "8天",
-					operator: "李暖暖",
-					remark: "XXXXX",
-				},
-			],
-      value:[],
-			options: [
-				{
-					value: "Option1",
-					label: "抽蛋",
-				},
-				{
-					value: "Option2",
-					label: "孵化",
-				},
-			],
+export default defineComponent({
+	name: "examineEggAuxiliary",
+	setup() {
+		let cardData = [];
+		cardData = [
+			{
+				cardText: "查蛋个数",
+				cardNumber: "888只",
+			},
+		];
+		let apiObj = [];
+		apiObj = [
+			{
+				pigeonnumber: "A02",
+				boardnumber: "3",
+				raweggstime: "2022-04-11 20:21:23",
+				raweggday: "10天",
+				operator: "李暖暖",
+				remark: "XXXXX",
+			},
+			{
+				pigeonnumber: "A10",
+				boardnumber: "3",
+				raweggstime: "2022-03-11 20:21:23",
+				raweggday: "10天",
+				operator: "李暖暖",
+				remark: "XXXXX",
+			},
+			{
+				pigeonnumber: "A08",
+				boardnumber: "3",
+				raweggstime: "2022-11-11 20:21:23",
+				raweggday: "13天",
+				operator: "李暖暖",
+				remark: "XXXXX",
+			},
+			{
+				pigeonnumber: "A01",
+				boardnumber: "3",
+				raweggstime: "2022-04-21 20:21:23",
+				raweggday: "10天",
+				operator: "李暖暖",
+				remark: "XXXXX",
+			},
+			{
+				pigeonnumber: "A11",
+				boardnumber: "3",
+				raweggstime: "2022-09-21 20:21:23",
+				raweggday: "21天",
+				operator: "李暖暖",
+				remark: "XXXXX",
+			},
+			{
+				pigeonnumber: "A10",
+				boardnumber: "3",
+				raweggstime: "2022-04-21 20:21:23",
+				raweggday: "8天",
+				operator: "李暖暖",
+				remark: "XXXXX",
+			},
+		];
+		let value = "";
+		let options = [];
+		options = [
+			{
+				value: "Option1",
+				label: "抽蛋",
+			},
+			{
+				value: "Option2",
+				label: "孵化",
+			},
+		];
+		const searchClick = function () {
+			console.log("嘻嘻嘻，我被点击啦");
+		};
+
+		const outTable = function () {
+			console.log("哈哈哈，我被点击了噢");
+		};
+		return {
+			cardData,
+			apiObj,
+			value,
+			options,
+			searchClick,
+			outTable,
 		};
 	},
-	methods: {
-		// 表格查询事件
-		searchClick() {
-			console.log("嘻嘻嘻，我被点击啦");
-		},
-		// 表格导出事件
-		outTable() {
-			console.log("哈哈哈，我被点击了噢");
-		},
-
-	},
-};
+});
 </script>
 
 <style scoped>

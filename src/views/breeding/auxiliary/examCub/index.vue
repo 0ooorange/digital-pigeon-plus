@@ -1,7 +1,13 @@
 <template>
 
      <div class="container">
-      <table-search :searchTypes="searchTypes" :cardData="cardData"  @searchClick="searchClick" @outTable="outTable" />
+     <table-search
+			:cardData="cardData"
+			:showSearch="false"
+			:showDatePk="false"
+			@searchClick="searchClick" 
+			@outTable="outTable" 
+		/>
  
     <el-main class="nopadding">
 						 <scTable ref="table" :data="apiObj"  stripe  highlightCurrentRow 
@@ -16,27 +22,24 @@
 						</scTable>
       
 		</el-main>
-
-
     
 </div>
 </template>
 
 <script>
-import tableSearch from "../../../../components/tableSearch/index.vue";
-import scTable from '../../../../components/scTable/index.vue'
-  export default {
+import { defineComponent} from "vue";
+  export default defineComponent({
     name: "AxlyExamCub",
-    components: {
-    tableSearch,
-    scTable
-    },
-    data() {
-      return {
-        pageSize:8,
-        total:100,
-        pageNum:1,
-        apiObj:[
+    setup(){
+      let cardData = [];
+		cardData = [
+			{
+				cardText: "查仔个数",
+				cardNumber: "666只",
+			},
+		];
+      let apiObj=[];
+       apiObj=[
             {
                 pigeonnumber: "A05",
                 boardnumber: "3",
@@ -71,50 +74,107 @@ import scTable from '../../../../components/scTable/index.vue'
             } ,
             
           
+             ];
+             	const searchClick = function () {
+       console.log('嘻嘻嘻，我被点击啦')
+    }
+
+      const outTable = function () {
+       console.log('哈哈哈，我被点击了噢')
+    }
+	return {
+		cardData,
+		apiObj,
+
+		searchClick,
+		 outTable
+	}
+     
+    }
+    // data() {
+    //   return {
+    //     pageSize:8,
+    //     total:100,
+    //     pageNum:1,
+    //     apiObj:[
+    //         {
+    //             pigeonnumber: "A05",
+    //             boardnumber: "3",
+    //             raweggstime: "2022-4-11 20:21:23",
+    //             incubationdays: "19天",
+    //             operator: "李暖暖",
+    //             remark: "XXXXX"
+    //         } ,
+    //         {
+    //             pigeonnumber: "A03",
+    //             boardnumber: "3",
+    //             raweggstime: "2022-04-21 20:21:23",                
+    //             incubationdays: "19天",
+    //             operator: "李暖暖",
+    //             remark: "XXXXX"
+    //         } ,
+    //         {
+    //             pigeonnumber: "A06",
+    //             boardnumber: "3",
+    //             raweggstime: "2022-03-01 20:21:23",
+    //             incubationdays: "19天",
+    //             operator: "李暖暖",
+    //             remark: "XXXXX"
+    //         } ,
+    //         {
+    //             pigeonnumber: "A10",
+    //             boardnumber: "3",
+    //             raweggstime: "2022-02-23 20:21:23",             
+    //             incubationdays: "19天",
+    //             operator: "李暖暖",
+    //             remark: "XXXXX"
+    //         } ,
             
-        ],
-        // 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方
-      cardData: [{
-        cardText: '查仔个数',
-        cardNumber: "666只"
-       },],
-      // 查询类型下拉框列表的数据，格式固定
-      searchTypes: [{
-        value: '鸽笼编号',
-        label: '鸽笼编号',
-      }, {
-        value: '鸽板编号',
-        label: '鸽板编号',
-      }, {
-        value: '日期',
-        label: '日期',
-      }, {
-        value: '仔数',
-        label: '仔数',
-      }, {
-        value: '死仔数',
-        label: '死仔数',
-      }, {
-        value: '负责人',
-        label: '负责人',
-      }, {
-        value: '操作',
-        label: '操作',
-      }]
+          
+            
+    //     ],
+    //     // 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方
+    //   cardData: [{
+    //     cardText: '查仔个数',
+    //     cardNumber: "666只"
+    //    },],
+    //   // 查询类型下拉框列表的数据，格式固定
+    //   searchTypes: [{
+    //     value: '鸽笼编号',
+    //     label: '鸽笼编号',
+    //   }, {
+    //     value: '鸽板编号',
+    //     label: '鸽板编号',
+    //   }, {
+    //     value: '日期',
+    //     label: '日期',
+    //   }, {
+    //     value: '仔数',
+    //     label: '仔数',
+    //   }, {
+    //     value: '死仔数',
+    //     label: '死仔数',
+    //   }, {
+    //     value: '负责人',
+    //     label: '负责人',
+    //   }, {
+    //     value: '操作',
+    //     label: '操作',
+    //   }]
        
-    }
-    },
-    methods:{
-       // 表格查询事件
-    searchClick() {
-      console.log("嘻嘻嘻，我被点击啦")
-    },
-    // 表格导出事件
-    outTable() {
-      console.log("哈哈哈，我被点击了噢");
-    }
-    }
-  }
+    // }
+    // },
+    // methods:{
+    //    // 表格查询事件
+    // searchClick() {
+    //   console.log("嘻嘻嘻，我被点击啦")
+    // },
+    // // 表格导出事件
+    // outTable() {
+    //   console.log("哈哈哈，我被点击了噢");
+    // }
+    // }
+  })
 </script>
 
 <style scoped>
