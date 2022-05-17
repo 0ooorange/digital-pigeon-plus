@@ -43,7 +43,7 @@
 					width="170"
 					align="center"
 				>
-					<template v-slot="scope">
+					<!-- <template v-slot="scope">
 						<el-select
 							v-model="scope.row.value"
 							class="m-2"
@@ -57,7 +57,7 @@
 								:value="item.value"
 							/>
 						</el-select>
-					</template>
+					</template> -->
 				</el-table-column>
 				<el-table-column
 					label="生蛋天数"
@@ -97,6 +97,7 @@ export default defineComponent({
 				boardnumber: "3",
 				raweggstime: "2022-04-11 20:21:23",
 				raweggday: "10天",
+				recommendation:"孵化",
 				operator: "李暖暖",
 				remark: "XXXXX",
 			},
@@ -105,6 +106,7 @@ export default defineComponent({
 				boardnumber: "3",
 				raweggstime: "2022-03-11 20:21:23",
 				raweggday: "10天",
+				recommendation:"抽蛋",
 				operator: "李暖暖",
 				remark: "XXXXX",
 			},
@@ -113,6 +115,7 @@ export default defineComponent({
 				boardnumber: "3",
 				raweggstime: "2022-11-11 20:21:23",
 				raweggday: "13天",
+				recommendation:"孵化",
 				operator: "李暖暖",
 				remark: "XXXXX",
 			},
@@ -121,6 +124,7 @@ export default defineComponent({
 				boardnumber: "3",
 				raweggstime: "2022-04-21 20:21:23",
 				raweggday: "10天",
+				recommendation:"抽蛋",
 				operator: "李暖暖",
 				remark: "XXXXX",
 			},
@@ -129,6 +133,7 @@ export default defineComponent({
 				boardnumber: "3",
 				raweggstime: "2022-09-21 20:21:23",
 				raweggday: "21天",
+				recommendation:"抽蛋",
 				operator: "李暖暖",
 				remark: "XXXXX",
 			},
@@ -137,6 +142,7 @@ export default defineComponent({
 				boardnumber: "3",
 				raweggstime: "2022-04-21 20:21:23",
 				raweggday: "8天",
+				recommendation:"抽蛋",
 				operator: "李暖暖",
 				remark: "XXXXX",
 			},
