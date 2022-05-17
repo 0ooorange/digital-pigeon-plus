@@ -49,7 +49,6 @@
             :data="tableList"
             @selection-change="selectionChange"
         >
-            <el-table-column type="selection" width="80"></el-table-column>
             <el-table-column
                 align="center"
                 label="料槽编号"

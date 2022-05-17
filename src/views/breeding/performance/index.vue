@@ -8,7 +8,7 @@
     </table-search>
 
     <scTable class="table" ref="table" row-key="id" :data="tableList" @selection-change="selectionChange" stripe highlightCurrentRow>
-      <el-table-column type="selection" width="40"></el-table-column>
+      <!-- <el-table-column type="selection" width="40"></el-table-column> -->
       <el-table-column align="center" label="鸽笼号" prop="cageNumber" width="100" sortable></el-table-column>
       <el-table-column align="center" label="板子编号" prop="boardNumber" width="110" sortable></el-table-column>
       <el-table-column align="center" label="一个月未下蛋" prop="oneMonNoLayEgg" width="140" sortable></el-table-column>
