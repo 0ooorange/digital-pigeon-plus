@@ -174,12 +174,12 @@ export default defineComponent({
                 cardNumber: "100kg",
             },
             {
-                cardText: "食用量",
-                cardNumber: "80kg",
+                cardText: "复称量",
+                cardNumber: "20kg",
             },
             {
-                cardText: "今天均用量",
-                cardNumber: "0.4kg",
+                cardText: "食用量",
+                cardNumber: "80kg",
             },
             {
                 cardText: "本月已用量",
@@ -188,6 +188,18 @@ export default defineComponent({
             {
                 cardText: "当月均用量",
                 cardNumber: "0.8kg",
+            },
+            {
+                cardText: "饲料1剩余量",
+                cardNumber: "80kg",
+            },
+            {
+                cardText: "饲料2剩余量",
+                cardNumber: "80kg",
+            },
+            {
+                cardText: "饲料3剩余量",
+                cardNumber: "80kg",
             },
             {
                 cardText: "上月用量",
