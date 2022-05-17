@@ -34,6 +34,14 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
+    // 搜索类型
+    var isShowSearchType = ref(true)
+    if (props.searchTypes.length <= 1) {
+      isShowSearchType.value = false
+      console.log(props.searchTypes[0], '<=1')
+    } else {
+      isShowSearchType.value = true
+    }
     // 卡片
     const isShowBfSearch = props.cardData.length < 2 ? ref(true) : ref(false)
     const colors = ['#EE4000', '#EE9A49', '#EEE685', '#43CD80', '#76EE00', '#6495ED', '#7D26CD']
@@ -137,12 +145,17 @@ export default defineComponent({
             {props.showDatePk && datePicker()}
             {props.showSearch ? (
               <span>
-                <el-cascader
-                  v-model={selectType}
-                  options={props.searchTypes}
-                  placeholder="查询类型"
-                  style={{ width: '150px' }}
-                />
+                {isShowSearchType.value ? (
+                  <el-cascader
+                    v-model={selectType}
+                    options={props.searchTypes}
+                    placeholder="查询类型"
+                    style={{ width: '150px' }}
+                  />
+                ) : (
+                  <span class="selectTypeText">{props.searchTypes[0].value}:</span>
+                )}
+
                 <el-input ref="searchInput" placeholder="查询内容" style={{ width: '150px' }} />
                 <el-button type="success" class="searchBtn" onClick={searchClick}>
                   查询
@@ -198,6 +211,9 @@ export default defineComponent({
       height: 27px;
     }
   }
+}
+.selectTypeText {
+  padding: 0 10px;
 }
 .datePickerCss {
   display: flex;
