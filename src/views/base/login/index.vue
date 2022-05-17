@@ -37,11 +37,20 @@ import bgImg from '../../../assets/images/loginBgImg.png'
 import SecretLogin from './components/secretLogin.vue'
 import PswLogin from './components/pswLogin.vue'
 
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, getCurrentInstance } from 'vue'
 
 export default {
   components: { SecretLogin, PswLogin },
   setup() {
+    const { proxy } = getCurrentInstance()
+    proxy.$TOOL.cookie.remove('TOKEN')
+    proxy.$TOOL.data.remove('BASE_INFO')
+    proxy.$TOOL.data.remove('CURR_INFO')
+    proxy.$TOOL.data.remove('IS_GET_ROUTER')
+    proxy.$TOOL.data.remove('CURR_MENU_INDEX')
+    proxy.$store.commit('clearViewTags')
+    proxy.$store.commit('clearKeepLive')
+    proxy.$store.commit('clearIframeList')
     const rememberSecret = ref(false)
 
     const loginMethod = ref(0)

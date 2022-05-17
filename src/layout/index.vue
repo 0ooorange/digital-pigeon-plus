@@ -14,12 +14,12 @@
         <el-col :span="secondSpan" style="display:flex; ">
           <div class="selectDivs">
             <span class="selectText">基地：</span>
-            <el-select style="width: 150px" v-model="currBase" class="m-2" placeholder="Select">
-              <el-option v-for="item in bases" :key="item.value" :label="item.label" :value="item.value" />
+            <el-select style="width: 150px" v-model="currBase.name" class="m-2" placeholder="Select" @change="currBaseChange">
+              <el-option v-for="item in bases" :key="item.id" :label="item.name" :value="item.name" />
             </el-select>
             <span class="selectText">鸽棚：</span>
-            <el-select style="width: 150px" v-model="currDovecote" class="m-2" placeholder="Select">
-              <el-option v-for="item in dovecotes" :key="item.value" :label="item.label" :value="item.value" />
+            <el-select style="width: 150px" v-model="currShed.code" class="m-2" placeholder="Select" @change="currShedChange">
+              <el-option v-for="item in dovecotes" :key="item.id" :label="item.code" :value="item.code" />
             </el-select>
             <span class="selectText">操作员：<span class="operatorCss">{{currOperator}}</span></span>
           </div>
@@ -85,75 +85,16 @@ export default {
     userbar,
     iframeView,
   },
-  props: {
-    bases: {
-      type: Array,
-      require: true,
-      default() {
-        return [
-          {
-            value: '梅州市金绿现代农业发展有限公司鸡公桥村基地',
-            label: '梅州市金绿现代农业发展有限公司鸡公桥村基地',
-          },
-          {
-            value: '大坪镇兰塘村农户潘忠琴',
-            label: '大坪镇兰塘村农户潘忠琴',
-          },
-          {
-            value: '梅州市金绿集团羊岭村基地',
-            label: '梅州市金绿集团羊岭村基地',
-          },
-          {
-            value: '金绿集团基地',
-            label: '金绿集团基地',
-          },
-          {
-            value: '小村庄加工厂',
-            label: '小村庄加工厂',
-          },
-        ]
-      },
-    },
-    dovecotes: {
-      type: Array,
-      require: true,
-      default() {
-        return [
-          {
-            value: 'A1仓',
-            label: 'A1仓',
-          },
-          {
-            value: 'A2仓',
-            label: 'A2仓',
-          },
-          {
-            value: 'B1仓',
-            label: 'B1仓',
-          },
-          {
-            value: 'B2仓',
-            label: 'B2仓',
-          },
-          {
-            value: 'C1仓',
-            label: 'C1仓',
-          },
-        ]
-      },
-    },
-    currOperator: {
-      type: String,
-      require: true,
-      default: "姜昕梦"
-    },
-  },
+  props: {},
   data() {
     return {
       smallLogo: smallLogo,
       settingDialog: false,
-      currBase: '小村庄加工厂',
-      currDovecote: 'A2仓',
+      currBase: {},
+      currShed: {},
+      currOperator: '',
+      bases: [],
+      dovecotes: [],
       menu: [
         {
           name: 'breedStatistics',
@@ -316,6 +257,27 @@ export default {
     },
   },
   created() {
+    this.baseInfo = this.$TOOL.data.get('BASE_INFO')
+    this.bases = this.baseInfo.base
+    this.dovecotes = this.baseInfo.shed
+    var currInfo = this.$TOOL.data.get('CURR_INFO')
+    if (currInfo) {
+      this.currBase = currInfo.CURR_BASE
+      this.currShed = currInfo.CURR_SHED
+      this.currOperator = currInfo.CHARGE_NAME
+    } else {
+      this.currBase = this.bases[0]
+      this.currShed = this.dovecotes[0]
+      this.currOperator = this.baseInfo.chargeName
+    }
+
+    this.currInfo = {
+      CURR_BASE: this.currBase,
+      CURR_SHED: this.currShed,
+      CHARGE_NAME: this.currOperator,
+    }
+    this.$TOOL.data.set('CURR_INFO', this.currInfo)
+
     this.onLayoutResize()
     window.addEventListener('resize', this.onLayoutResize)
     // var menu = this.$router.sc_getMenu()
@@ -388,6 +350,41 @@ export default {
       this.$router.replace({
         path: '/navigator',
       })
+    },
+    // 切换基地
+    async currBaseChange() {
+      var { data: changeBaseRes } = await this.$API.layout.changeBase.post(this.currBase.id)
+      var { data: changeShedRes } = await this.$API.layout.getChargeName.post(
+        this.currShed.chargeId
+      )
+      this.dovecotes = changeBaseRes.shed
+      this.currOperator = changeShedRes.chargeName
+      this.currInfo = {
+        CURR_BASE: this.currBase,
+        CURR_SHED: this.currShed,
+        CHARGE_NAME: this.currOperator,
+      }
+      this.$TOOL.data.set('CURR_INFO', this.currInfo)
+      // changeBaseRes.
+    },
+    // 切换鸽棚
+    async currShedChange(currShedName) {
+      var { data: changeShedRes } = await this.$API.layout.getChargeName.post(
+        this.currShed.chargeId
+      )
+      this.currOperator = changeShedRes.chargeName
+      for (var i = 0; i < this.dovecotes.length; i++) {
+        for (var key in this.dovecotes[i]) {
+          if (key === currShedName) 
+           this.currShed = this.dovecotes[i]
+        }
+      }
+      this.currInfo = {
+        CURR_BASE: this.currBase,
+        CURR_SHED: this.currShed,
+        CHARGE_NAME: this.currOperator,
+      }
+      this.$TOOL.data.set('CURR_INFO', this.currInfo)
     },
   },
 }

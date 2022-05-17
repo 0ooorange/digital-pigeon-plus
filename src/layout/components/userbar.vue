@@ -44,7 +44,7 @@ export default {
     }
   },
   created() {
-    var userInfo = this.$TOOL.data.get('USER_INFO')
+    var userInfo = this.$TOOL.data.get('BASE_INFO').user
     this.userName = userInfo.name
     this.userNameF = this.userName.substring(0, 1)
     this.userAvatar = userInfo.avatar

@@ -27,13 +27,6 @@ const rememberSecret = ref(false)
 const NameOrPhone = ref('刘双印')
 const password = ref('123456')
 
-proxy.$TOOL.cookie.remove('TOKEN')
-proxy.$TOOL.data.remove('USER_INFO')
-proxy.$TOOL.data.remove('IS_GET_ROUTER')
-proxy.$TOOL.data.remove('CURR_MENU_INDEX')
-proxy.$store.commit('clearViewTags')
-proxy.$store.commit('clearKeepLive')
-proxy.$store.commit('clearIframeList')
 
 // 登录
 const islogin = ref(true)
