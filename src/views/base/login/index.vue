@@ -63,8 +63,6 @@ export default {
     // 密码登录
     const loginByPsw = () => {
       nextTick(() => {
-        // console.log(proxy.$refs.pswMethod);
-        // console.log(proxy.$refs.messMethod);
         pswMethodClass.value =
           'el-button el-button--text el-button--default selectBtn selectBtn-active'
         messMethodClass.value = 'el-button el-button--text el-button--default selectBtn'
@@ -74,8 +72,6 @@ export default {
     // 短信登录
     const loginByMess = () => {
       nextTick(() => {
-        // console.log(proxy.$refs.pswMethod)
-        // console.log(proxy.$refs.messMethod)
         messMethodClass.value =
           'el-button el-button--text el-button--default selectBtn selectBtn-active'
         pswMethodClass.value = 'el-button el-button--text el-button--default selectBtn'

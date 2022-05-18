@@ -82,7 +82,6 @@ export default {
       if (!this.ismoving) {
         return
       }
-      console.log('我是鼠标移动事件，我被调用了')
       var e1 = e || window.event || e.which
       var moveX = e1.clientX
       var offsetX = this.getOffsetX(moveX - this.downX, 0, this.successMoveDistance)
@@ -90,14 +89,11 @@ export default {
         this.bgColor.style.width = this.successMoveDistance + 'px'
         this.slider.style.left = this.successMoveDistance + 'px'
         this.success()
-        document.removeEventListener('mousemove', function () {
-          console.log('我是鼠标移动事件，我被取消了')
-        })
+        document.removeEventListener('mousemove', function () {})
         return
       }
       this.bgColor.style.width = offsetX + 'px'
       this.slider.style.left = offsetX + 'px'
-      console.log('offsetX: ', offsetX, '  this.successMoveDistance: ', this.successMoveDistance)
 
       // 如果不设置滑块滑动时会出现问题
       e1.preventDefault()
@@ -113,10 +109,7 @@ export default {
       this.ismoving = false
       document.onmousemove = null
       document.onmouseup = null
-      console.log('我是鼠标松开事件，我被调用了')
-      document.removeEventListener('mousemove', function () {
-        console.log('我是鼠标移动事件，我被取消了')
-      })
+      document.removeEventListener('mousemove', function () {})
     },
     // 定义一个滑块解锁成功的方法
     success() {
@@ -127,9 +120,7 @@ export default {
       this.icon.className = 'iconfont icon-xuanzhong'
       //滑动成功时，移除鼠标按下事件和鼠标移动事件
       this.slider.onmousedown = null
-      document.removeEventListener('mousemove', function () {
-        console.log('我是鼠标移动事件，我被取消了')
-      })
+      document.removeEventListener('mousemove', function () {})
     },
   },
 }

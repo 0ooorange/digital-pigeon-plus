@@ -108,7 +108,6 @@ export default {
     tool.data.set('CURR_MENU_INDEX', 0)
     // 获取基本信息
     var homeInfRes = await this.$API.login.getHomeInf.get()
-    console.log(homeInfRes, '000')
     if (homeInfRes.code == 200) {
       this.$TOOL.data.set('BASE_INFO', homeInfRes.data)
     } else {

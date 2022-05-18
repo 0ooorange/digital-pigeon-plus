@@ -38,7 +38,6 @@ const login = async function () {
     NameOrPhone: NameOrPhone.value,
     password: password.value,
   }
-  console.log(data)
   //获取token
   var login = await proxy.$API.login.token.post(data)
   if (login.code == 200) {

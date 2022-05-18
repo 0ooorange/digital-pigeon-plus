@@ -100,7 +100,6 @@ export default {
     },
     // 刷新页面
     refreshPage() {
-      console.log(1)
       location.reload()
     },
   },
