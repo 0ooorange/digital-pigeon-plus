@@ -27,6 +27,16 @@ const routes = [
 			title: "环形目录",
 		},
 	},
+	{
+		path: "/dataVisual",
+		component: () =>
+			import(
+				/* webpackChunkName: "login" */ "@/views/dataVisual/index"
+			),
+		meta: {
+			title: "可视化",
+		}
+	}
 ];
 
 export default routes;

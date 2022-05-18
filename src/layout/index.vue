@@ -69,6 +69,7 @@
 </template>
 
 <script>
+import tool from "../utils/tool";
 import SideM from './components/sideM.vue'
 import Topbar from './components/topbar.vue'
 import NavMenu from './components/NavMenu.vue'
@@ -281,7 +282,7 @@ export default {
     this.onLayoutResize()
     window.addEventListener('resize', this.onLayoutResize)
     // var menu = this.$router.sc_getMenu()
-    var menu = this.menu
+    var menu = tool.data.get("CURR_MENU")
     this.menu = this.filterUrl(menu)
     this.showThis()
   },
@@ -375,7 +376,7 @@ export default {
       this.currOperator = changeShedRes.chargeName
       for (var i = 0; i < this.dovecotes.length; i++) {
         for (var key in this.dovecotes[i]) {
-          if (key === currShedName) 
+          if (key === currShedName)
            this.currShed = this.dovecotes[i]
         }
       }
