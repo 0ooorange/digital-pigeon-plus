@@ -37,20 +37,22 @@ import bgImg from '../../../assets/images/loginBgImg.png'
 import SecretLogin from './components/secretLogin.vue'
 import PswLogin from './components/pswLogin.vue'
 
-import { ref, nextTick, getCurrentInstance } from 'vue'
+import tool from '../../../utils/tool'
+import store from '../../../store'
+import { ref, nextTick } from 'vue'
 
 export default {
   components: { SecretLogin, PswLogin },
   setup() {
-    const { proxy } = getCurrentInstance()
-    proxy.$TOOL.cookie.remove('TOKEN')
-    proxy.$TOOL.data.remove('BASE_INFO')
-    proxy.$TOOL.data.remove('CURR_INFO')
-    proxy.$TOOL.data.remove('IS_GET_ROUTER')
-    proxy.$TOOL.data.remove('CURR_MENU_INDEX')
-    proxy.$store.commit('clearViewTags')
-    proxy.$store.commit('clearKeepLive')
-    proxy.$store.commit('clearIframeList')
+    tool.data.set('IS_GET_ROUTER', true)
+    tool.data.set('CURR_MENU_INDEX', 0)
+    tool.data.set('CURR_MENU', [])
+    tool.cookie.remove('TOKEN')
+    tool.data.remove('BASE_INFO')
+    tool.data.remove('CURR_INFO')
+    store.commit('clearViewTags')
+    store.commit('clearKeepLive')
+    store.commit('clearIframeList')
     const rememberSecret = ref(false)
 
     const loginMethod = ref(0)
@@ -61,8 +63,6 @@ export default {
     // 密码登录
     const loginByPsw = () => {
       nextTick(() => {
-        // console.log(proxy.$refs.pswMethod);
-        // console.log(proxy.$refs.messMethod);
         pswMethodClass.value =
           'el-button el-button--text el-button--default selectBtn selectBtn-active'
         messMethodClass.value = 'el-button el-button--text el-button--default selectBtn'
@@ -72,8 +72,6 @@ export default {
     // 短信登录
     const loginByMess = () => {
       nextTick(() => {
-        // console.log(proxy.$refs.pswMethod)
-        // console.log(proxy.$refs.messMethod)
         messMethodClass.value =
           'el-button el-button--text el-button--default selectBtn selectBtn-active'
         pswMethodClass.value = 'el-button el-button--text el-button--default selectBtn'

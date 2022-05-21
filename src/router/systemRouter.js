@@ -5,14 +5,12 @@ const routes = [
 	{
 		name: "layout",
 		path: "/",
-		component: () => import(/* webpackChunkName: "layout" */ "@/layout"),
+		component: () => import(/* webpackChunkName: "layout-chunk" */ "@/layout"),
 		redirect: config.DASHBOARD_URL || "/login",
-		children: [],
 	},
 	{
 		path: "/login",
-		component: () => import(/* webpackChunkName: "login" */ "@/views/base/login/index"),
-		// component: () => import(/* webpackChunkName: "login" */ '@/views/userCenter/login'),
+		component: () => import(/* webpackChunkName: "login-chunk" */ "@/views/base/login"),
 		meta: {
 			title: "登录",
 		},
@@ -21,7 +19,7 @@ const routes = [
 		path: "/navigator",
 		component: () =>
 			import(
-				/* webpackChunkName: "login" */ "@/views/base/navigator/index"
+				/* webpackChunkName: "navigator-chunk" */ "@/views/base/navigator"
 			),
 		meta: {
 			title: "环形目录",
@@ -31,7 +29,7 @@ const routes = [
 		path: "/dataVisual",
 		component: () =>
 			import(
-				/* webpackChunkName: "login" */ "@/views/dataVisual/index"
+				/* webpackChunkName: "dataVisual-chunk" */ "@/views/dataVisual"
 			),
 		meta: {
 			title: "可视化",

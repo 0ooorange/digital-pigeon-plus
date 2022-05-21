@@ -10,7 +10,6 @@ import { beforeEach, afterEach } from "./scrollBehavior";
 
 //系统路由
 const routes = systemRouter;
-
 //系统特殊路由
 const routes_404 = {
 	path: "/:pathMatch(.*)*",
@@ -20,19 +19,16 @@ const routes_404 = {
 let routes_404_r = () => {};
 
 const router = createRouter({
-	history: createWebHashHistory(),
 	routes: routes,
+	history: createWebHashHistory(),
 });
 
 //设置标题
 document.title = config.APP_NAME;
 
 //判断是否已加载过动态/静态路由
-tool.data.set("IS_GET_ROUTER", true);
-tool.data.set("CURR_MENU_INDEX", 0);
-tool.data.set("CURR_MENU", []);
-
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, from) => {
+	console.log('to:', to)
 	let isGetRouter = tool.data.get("IS_GET_ROUTER");
 	NProgress.start();
 	//动态标题
@@ -48,25 +44,19 @@ router.beforeEach(async (to, from, next) => {
 		//删除路由(404)
 		routes_404_r();
 		tool.data.set("IS_GET_ROUTER", false);
-		next();
-		return false;
+		return;
 	}
 
 	if (!token) {
-		next({
-			path: "/login",
-		});
-		return false;
+		return "/login";
 	}
 
 	//整页路由处理
 	if (to.meta.fullpage) {
 		to.matched = [to.matched[to.matched.length - 1]];
 	}
-
 	//加载动态/静态路由
 	if (!isGetRouter) {
-		// let apiMenu = tool.data.get("MENU") || []
 		let totalMenus = [
 			{
 				menuIndex: 0,
@@ -206,6 +196,50 @@ router.beforeEach(async (to, from, next) => {
 							},
 						],
 					},
+					{
+						name: "registration",
+						path: "/breeding/registration",
+						meta: {
+							title: "信息登记",
+							icon: "el-icon-data-line",
+							type: "menu",
+						},
+						children: [
+							{
+								path: "/breeding/registration/regOutCage",
+								name: "outCageRegistration",
+								meta: {
+									title: "出栏登记",
+									icon: "el-icon-office-building",
+									type: "menu",
+								},
+								component:
+									"breeding/registration/regOutCage/index",
+							},
+							{
+								path: "/breeding/registration/regDove",
+								name: "doveRegistration",
+								meta: {
+									title: "鸽子登记",
+									icon: "el-icon-office-building",
+									type: "menu",
+								},
+								component:
+									"breeding/registration/regDove/index",
+							},
+							{
+								path: "/breeding/registration/regFodder",
+								name: "fodderRegistration",
+								meta: {
+									title: "饲料登记",
+									icon: "el-icon-office-building",
+									type: "menu",
+								},
+								component:
+									"breeding/registration/regFodder/index",
+							},
+						],
+					},
 				],
 			},
 			{},
@@ -246,21 +280,18 @@ router.beforeEach(async (to, from, next) => {
 		let currMenuIndex = tool.data.get("CURR_MENU_INDEX");
 		let currMenu = totalMenus[currMenuIndex].menus;
 		tool.data.set("CURR_MENU", currMenu);
-		let userInfo = tool.data.get("USER_INFO");
-		let userMenu = treeFilter(userRoutes, (node) => {
-			return node.meta.role
-				? node.meta.role.filter(
-						(item) => userInfo.role.indexOf(item) > -1
-				  ).length > 0
-				: true;
-		});
-		let menu = [...userMenu, ...currMenu];
-		var menuRouter = filterAsyncRouter(menu);
-		console.log(menuRouter, 11);
+		// let userInfo = tool.data.get("USER_INFO");
+		// let userMenu = treeFilter(userRoutes, (node) => {
+		// 	return node.meta.role
+		// 		? node.meta.role.filter(
+		// 				(item) => userInfo.role.indexOf(item) > -1
+		// 		  ).length > 0
+		// 		: true;
+		// });
+		// let menu = [...userMenu, ...currMenu];
+		var menuRouter = filterAsyncRouter(currMenu);
 		menuRouter = flatAsyncRoutes(menuRouter);
-		console.log(menuRouter, 22);
 		menuRouter.forEach((item) => {
-			console.log(item, "item");
 			router.addRoute("layout", item);
 		});
 		routes_404_r = router.addRoute(routes_404);
@@ -270,7 +301,7 @@ router.beforeEach(async (to, from, next) => {
 		tool.data.set("IS_GET_ROUTER", true);
 	}
 	beforeEach(to, from);
-	next();
+	return;
 });
 
 router.afterEach((to, from) => {
@@ -425,6 +456,50 @@ router.sc_getMenu = () => {
 							},
 							component:
 								"breeding/materialStatistics/fodder/index",
+						},
+					],
+				},
+				{
+					name: "registration",
+					path: "/breeding/registration",
+					meta: {
+						title: "信息登记",
+						icon: "el-icon-data-line",
+						type: "menu",
+					},
+					children: [
+						{
+							path: "/breeding/registration/regOutCage",
+							name: "outCageRegistration",
+							meta: {
+								title: "出栏登记",
+								icon: "el-icon-office-building",
+								type: "menu",
+							},
+							component:
+								"breeding/registration/regOutCage/index",
+						},
+						{
+							path: "/breeding/registration/regDove",
+							name: "doveRegistration",
+							meta: {
+								title: "鸽子登记",
+								icon: "el-icon-office-building",
+								type: "menu",
+							},
+							component:
+								"breeding/registration/regDove/index",
+						},
+						{
+							path: "/breeding/registration/regFodder",
+							name: "fodderRegistration",
+							meta: {
+								title: "饲料登记",
+								icon: "el-icon-office-building",
+								type: "menu",
+							},
+							component:
+								"breeding/registration/regFodder/index",
 						},
 					],
 				},
