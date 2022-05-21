@@ -130,7 +130,7 @@
                 </div>
                 <div
                     class="cage_row"
-                    v-for="(item, index) in cageArray1"
+                    v-for="(item, index) in cageArray3"
                     :key="index"
                     :style="{
                         'margin-bottom': index % 2 === 0 ? '10px' : '0px',
@@ -142,11 +142,11 @@
                         :key="index1"
                         :style="{
                             'background-color':
-                                item1 === 1 ? '#5cacee' : '#e5e5e5',
+                                item1.state === 1 ? '#5cacee' : '#e5e5e5',
                         }"
                     ></div>
                 </div>
-                <div style="height: 20px; width: 100%">
+                <!-- <div style="height: 20px; width: 100%">
                     <div
                         style="
                             width: 60px;
@@ -241,7 +241,7 @@
                                 item1 === 1 ? '#5cacee' : '#e5e5e5',
                         }"
                     ></div>
-                </div>
+                </div> -->
                 <!-- <div
                 class="cage_row"
                 v-for="(item, index) in cageArray0"
@@ -513,6 +513,26 @@ export default {
                     0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1,
                     0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1,
                 ],
+            ],
+            cageArray3: [
+                [
+                    {
+                        codes: "A002",
+                        state: 0                    },
+                                            {
+                        codes: "A002",
+                        state: 1                    },
+                                            {
+                        codes: "A002",
+                        state: 0                    }
+                ],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
             ],
             tableListOption: [
                 {
@@ -834,6 +854,7 @@ export default {
         scrollbar-width: none;
         .cage_row {
             display: flex;
+            height: 28px;
             //  flex-wrap: wrap;
             .cage_index {
                 flex-shrink: 0; //使它不被挤压
