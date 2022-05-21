@@ -461,7 +461,7 @@ export default {
       this.currOperator = changeShedRes.chargeName
       for (var i = 0; i < this.dovecotes.length; i++) {
         for (var key in this.dovecotes[i]) {
-          if (key === currShedName) 
+          if (key === currShedName)
            this.currShed = this.dovecotes[i]
         }
       }

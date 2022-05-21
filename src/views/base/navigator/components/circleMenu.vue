@@ -61,9 +61,9 @@ export default {
       }
     },
     routerClick(item, index) {
-      console.log('我是router-link，我被点击了，我的index值是', index)
-      console.log('我的值是', item.name)
-      tool.data.set("CURR_MENU_INDEX", index)
+      console.log('item的值是', item)
+      const menu = tool.data.get('MENU')
+      tool.data.set('CURR_MENU', menu[item.system])
     }
   }
 }
