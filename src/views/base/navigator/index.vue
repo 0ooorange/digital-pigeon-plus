@@ -106,14 +106,54 @@ export default {
   async created() {
     tool.data.set('IS_GET_ROUTER', false)
     tool.data.set('CURR_MENU_INDEX', 0)
-    // 获取基本信息
-    var homeInfRes = await this.$API.login.getHomeInf.get()
-    if (homeInfRes.code == 200) {
-      this.$TOOL.data.set('BASE_INFO', homeInfRes.data)
-    } else {
-      this.$message.warning(homeInfRes.message)
-      return false
+
+    // 基本数据（假数据）
+    const baseInfo = {
+      chargeName: '姜匀昕',
+      user: {
+        name: '刘双印',
+        avatar: '',
+        chargeName: '姜匀昕',
+      },
+      base: [
+        {
+          name: '基地A',
+          id: '010101',
+        },
+        {
+          name: '基地B',
+          id: '020202',
+        },
+        {
+          name: '基地C',
+          id: '030303',
+        },
+      ],
+      shed: [
+        {
+          code: 'A1仓',
+          id: '1111',
+        },
+        {
+          code: 'A2仓',
+          id: '2222',
+        },
+        {
+          code: 'A3仓',
+          id: '3333',
+        },
+      ],
     }
+    this.$TOOL.data.set('BASE_INFO', baseInfo)
+
+    // 获取基本信息
+    // var homeInfRes = await this.$API.login.getHomeInf.get()
+    // if (homeInfRes.code == 200) {
+    // this.$TOOL.data.set('BASE_INFO', homeInfRes.data)
+    // } else {
+    // this.$message.warning(homeInfRes.message)
+    // return false
+    // }
   },
 }
 </script>

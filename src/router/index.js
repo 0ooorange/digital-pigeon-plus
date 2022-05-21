@@ -27,10 +27,6 @@ const router = createRouter({
 document.title = config.APP_NAME;
 
 //判断是否已加载过动态/静态路由
-tool.data.set("IS_GET_ROUTER", true);
-tool.data.set("CURR_MENU_INDEX", 0);
-tool.data.set("CURR_MENU", []);
-
 router.beforeEach(async (to, from) => {
 	console.log('to:', to)
 	let isGetRouter = tool.data.get("IS_GET_ROUTER");
