@@ -60,7 +60,7 @@ export default {
         box[i].style.top = Math.cos(ahd * i) * radius + 'px'
       }
     },
-    routerClick(item, index) {
+    routerClick(item) {
       console.log('item的值是', item)
       const menu = tool.data.get('MENU')
       tool.data.set('CURR_MENU', menu[item.system])

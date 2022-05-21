@@ -343,28 +343,28 @@ function menuMapRoutes(menu = []) {
   return routes
 }
 
-function filterAsyncRouter(routerMap) {
-  const accessedRouters = []
-  routerMap.forEach((item) => {
-    item.meta = item.meta ? item.meta : {}
-    //处理外部链接特殊路由
-    if (item.meta.type == 'iframe') {
-      item.meta.url = item.path
-      item.path = `/i/${item.name}`
-    }
-    //MAP转路由对象
-    var route = {
-      path: item.path,
-      name: item.name,
-      meta: item.meta,
-      redirect: item.redirect,
-      children: item.children ? filterAsyncRouter(item.children) : null,
-      component: loadComponent(item.component)
-    }
-    accessedRouters.push(route)
-  })
-  return accessedRouters
-}
+// function filterAsyncRouter(routerMap) {
+//   const accessedRouters = []
+//   routerMap.forEach((item) => {
+//     item.meta = item.meta ? item.meta : {}
+//     //处理外部链接特殊路由
+//     if (item.meta.type == 'iframe') {
+//       item.meta.url = item.path
+//       item.path = `/i/${item.name}`
+//     }
+//     //MAP转路由对象
+//     var route = {
+//       path: item.path,
+//       name: item.name,
+//       meta: item.meta,
+//       redirect: item.redirect,
+//       children: item.children ? filterAsyncRouter(item.children) : null,
+//       component: loadComponent(item.component)
+//     }
+//     accessedRouters.push(route)
+//   })
+//   return accessedRouters
+// }
 function loadComponent(component) {
   if (component) {
     return () => import(/* webpackChunkName: "[request]" */ `@/views/${component}`)
@@ -373,31 +373,31 @@ function loadComponent(component) {
   }
 }
 
-//路由扁平化
-function flatAsyncRoutes(routes, breadcrumb = []) {
-  let res = []
-  routes.forEach((route) => {
-    const tmp = { ...route }
-    if (tmp.children) {
-      let childrenBreadcrumb = [...breadcrumb]
-      childrenBreadcrumb.push(route)
-      let tmpRoute = { ...route }
-      tmpRoute.meta.breadcrumb = childrenBreadcrumb
-      delete tmpRoute.children
-      res.push(tmpRoute)
-      let childrenRoutes = flatAsyncRoutes(tmp.children, childrenBreadcrumb)
-      childrenRoutes.map((item) => {
-        res.push(item)
-      })
-    } else {
-      let tmpBreadcrumb = [...breadcrumb]
-      tmpBreadcrumb.push(tmp)
-      tmp.meta.breadcrumb = tmpBreadcrumb
-      res.push(tmp)
-    }
-  })
-  return res
-}
+// //路由扁平化
+// function flatAsyncRoutes(routes, breadcrumb = []) {
+//   let res = []
+//   routes.forEach((route) => {
+//     const tmp = { ...route }
+//     if (tmp.children) {
+//       let childrenBreadcrumb = [...breadcrumb]
+//       childrenBreadcrumb.push(route)
+//       let tmpRoute = { ...route }
+//       tmpRoute.meta.breadcrumb = childrenBreadcrumb
+//       delete tmpRoute.children
+//       res.push(tmpRoute)
+//       let childrenRoutes = flatAsyncRoutes(tmp.children, childrenBreadcrumb)
+//       childrenRoutes.map((item) => {
+//         res.push(item)
+//       })
+//     } else {
+//       let tmpBreadcrumb = [...breadcrumb]
+//       tmpBreadcrumb.push(tmp)
+//       tmp.meta.breadcrumb = tmpBreadcrumb
+//       res.push(tmp)
+//     }
+//   })
+//   return res
+// }
 
 //过滤树
 function treeFilter(tree, func) {
