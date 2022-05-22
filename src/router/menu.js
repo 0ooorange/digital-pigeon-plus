@@ -178,6 +178,16 @@ export default {
   ],
   equipVideo: [
     {
+      name: 'eauipManage',
+      path: '/equipVideo/equipManage',
+      meta: {
+        title: '设备管理',
+        icon: 'el-icon-histogram',
+        type: 'menu'
+      },
+      component: 'equipVideo/equipManage/index'
+    },
+    {
       name: 'videoManage',
       path: '/equipVideo/videoManage',
       meta: {
