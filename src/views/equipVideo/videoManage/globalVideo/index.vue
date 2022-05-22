@@ -1,12 +1,12 @@
 <template>
   <div>
-    设备管理
+    全局监控
   </div>
 </template>
 
 <script>
   export default {
-    name: "equipManage"
+    name: "globalVideo"
   }
 </script>
 

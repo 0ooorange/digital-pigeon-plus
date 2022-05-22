@@ -79,7 +79,7 @@ export default {
           system: 'equipVideo',
           icon: 'nav_video',
           size: '',
-          path: '/equipVideo/videoManage'
+          path: '/equipVideo/equipManage/breeding/doveBoard'
         },
         {
           index: 9,

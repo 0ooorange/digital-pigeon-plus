@@ -1,15 +1,14 @@
 <template>
   <div>
-    视频管理
+    鸽板
   </div>
 </template>
 
 <script>
-  export default {
-    name: "videoManage"
-  }
+export default {
+  name: 'doceBoard', // 鸽板
+}
 </script>
 
 <style scoped>
-
 </style>
