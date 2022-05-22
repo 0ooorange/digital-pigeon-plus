@@ -74,7 +74,7 @@ router.beforeEach(async (to, from) => {
     if (to.matched.length == 0) {
       router.push(to.fullPath)
     }
-    tool.data.set('IS_GET_ROUTER', true)
+    isGetRouter = true
   }
   beforeEach(to, from)
   return
