@@ -47,6 +47,7 @@ const login = async function () {
     proxy.$message.warning(login.message)
     return false
   }
+  proxy.$TOOL.cookie.set('TOKEN', "token")
   proxy.$router.replace({
     path: '/navigator',
   })

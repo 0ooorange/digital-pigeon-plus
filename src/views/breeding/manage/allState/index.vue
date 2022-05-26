@@ -58,7 +58,7 @@
                                 :key="index0"
                             >
                                 <div
-                                    v-for="(item, index) in [0, 1, 2, 3, 4, 5]"
+                                    v-for="(item, index) in [0, 1, 2, 3,4]"
                                     :key="index"
                                     class="right_buttom_top_box_row"
                                     :style="{
@@ -73,7 +73,7 @@
                                     <div
                                         class="right_buttom_top_box_item"
                                         v-for="(item1, index1) in [
-                                            0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+                                            0, 1, 2, 3, 4, 5, 6, 7
                                         ]"
                                         :key="index1"
                                     ></div>
@@ -130,7 +130,7 @@
                 </div>
                 <div
                     class="cage_row"
-                    v-for="(item, index) in cageArray1"
+                    v-for="(item, index) in cageArray3"
                     :key="index"
                     :style="{
                         'margin-bottom': index % 2 === 0 ? '10px' : '0px',
@@ -142,11 +142,11 @@
                         :key="index1"
                         :style="{
                             'background-color':
-                                item1 === 1 ? '#5cacee' : '#e5e5e5',
+                                item1.state === 1 ? '#5cacee' : '#e5e5e5',
                         }"
                     ></div>
                 </div>
-                <div style="height: 20px; width: 100%">
+                <!-- <div style="height: 20px; width: 100%">
                     <div
                         style="
                             width: 60px;
@@ -241,7 +241,7 @@
                                 item1 === 1 ? '#5cacee' : '#e5e5e5',
                         }"
                     ></div>
-                </div>
+                </div> -->
                 <!-- <div
                 class="cage_row"
                 v-for="(item, index) in cageArray0"
@@ -514,6 +514,26 @@ export default {
                     0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1,
                 ],
             ],
+            cageArray3: [
+                [
+                    {
+                        codes: "A002",
+                        state: 0                    },
+                                            {
+                        codes: "A002",
+                        state: 1                    },
+                                            {
+                        codes: "A002",
+                        state: 0                    }
+                ],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
+            ],
             tableListOption: [
                 {
                     time: "2022-04-21",
@@ -721,10 +741,10 @@ export default {
                         height: 100%;
                         left: 0px;
                         // z-index:1 ;
-                        background: rgba(0, 0, 0, 0.3);
+                        background: rgba(0, 0, 0, 0.1);
                     }
                     .current_box_show {
-                        background: rgba(0, 0, 0, 0.08);
+                        background: rgba(0, 0, 0, 0.06);
                     }
                     .right_buttom_top_box_first {
                         position: relative;
@@ -734,8 +754,8 @@ export default {
                             align-items: center;
                             flex-wrap: wrap;
                             .right_buttom_top_box_item {
-                                width: 10px;
-                                height: 10px;
+                                width: 14px;
+                                height: 14px;
                                 border: 1px solid #5cacee;
                                 margin-right: 2px;
                                 // margin-bottom: 2px;
@@ -834,6 +854,7 @@ export default {
         scrollbar-width: none;
         .cage_row {
             display: flex;
+            height: 28px;
             //  flex-wrap: wrap;
             .cage_index {
                 flex-shrink: 0; //使它不被挤压
