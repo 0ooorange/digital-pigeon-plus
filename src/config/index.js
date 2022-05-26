@@ -13,16 +13,16 @@ const DEFAULT_CONFIG = {
 	CORE_VER: "1.5.0",
 
 	//接口地址
-	API_URL: "/api",
+	API_URL: "http://172.17.98.87:8000",
 
 	//请求超时
 	TIMEOUT: 10000,
 
 	//TokenName
-	TOKEN_NAME: "Authorization",
+	TOKEN_NAME: "token",
 
 	//Token前缀，注意最后有个空格，如不需要需设置空字符串
-	TOKEN_PREFIX: "Bearer ",
+	TOKEN_PREFIX: "",
 
 	//追加其他头
 	HEADERS: {},

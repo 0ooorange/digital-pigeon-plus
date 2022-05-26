@@ -58,7 +58,7 @@
                                 :key="index0"
                             >
                                 <div
-                                    v-for="(item, index) in [0, 1, 2, 3, 4, 5]"
+                                    v-for="(item, index) in [0, 1, 2, 3,4]"
                                     :key="index"
                                     class="right_buttom_top_box_row"
                                     :style="{
@@ -73,7 +73,7 @@
                                     <div
                                         class="right_buttom_top_box_item"
                                         v-for="(item1, index1) in [
-                                            0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+                                            0, 1, 2, 3, 4, 5, 6, 7
                                         ]"
                                         :key="index1"
                                     ></div>
@@ -741,10 +741,10 @@ export default {
                         height: 100%;
                         left: 0px;
                         // z-index:1 ;
-                        background: rgba(0, 0, 0, 0.3);
+                        background: rgba(0, 0, 0, 0.1);
                     }
                     .current_box_show {
-                        background: rgba(0, 0, 0, 0.08);
+                        background: rgba(0, 0, 0, 0.06);
                     }
                     .right_buttom_top_box_first {
                         position: relative;
@@ -754,8 +754,8 @@ export default {
                             align-items: center;
                             flex-wrap: wrap;
                             .right_buttom_top_box_item {
-                                width: 10px;
-                                height: 10px;
+                                width: 14px;
+                                height: 14px;
                                 border: 1px solid #5cacee;
                                 margin-right: 2px;
                                 // margin-bottom: 2px;

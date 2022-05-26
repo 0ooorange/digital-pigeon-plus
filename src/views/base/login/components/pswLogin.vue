@@ -12,7 +12,8 @@
     <button class="verifyBtn">获取验证码</button>
   </div>
   <span class="secretVerify" style="display: none;">验证码错误</span>
-  <DragVerify style="margin-top: 30px;"></DragVerify>
+  <DragVerify />
+  <el-button class="btn" @click="login">登录</el-button>
 </template>
 
 <script setup>
@@ -38,6 +39,7 @@ watch(
 <style lang="scss" scoped>
 .inlineForm {
   display: flex;
+  align-items: center;
   .input {
     margin: 10px 0;
     display: inline-block;
@@ -47,7 +49,6 @@ watch(
     width: 200px;
   }
   .verifyBtn {
-    margin: 10px 0;
     height: 40px;
     width: 100px;
     cursor: pointer;
@@ -66,5 +67,14 @@ watch(
   font-size: 12px;
   line-height: 12px;
   color: #f5514c;
+}
+.btn {
+  margin-top: 10px;
+  height: 40px;
+  width: 300px;
+  font-size: 16px;
+  background-color: #03aefc;
+  border: 0;
+  color: #d8f9fc;
 }
 </style>
