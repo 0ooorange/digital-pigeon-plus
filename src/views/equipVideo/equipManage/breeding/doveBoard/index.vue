@@ -303,4 +303,7 @@ export default defineComponent({
 .table {
     margin-top: 30px;
 }
+.table_search {
+    flex: 1
+}
 </style>
