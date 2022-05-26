@@ -34,19 +34,19 @@ const login = async function () {
   // var validate = await proxy.$refs.loginForm.validate().catch(()=>{})
   // 	if(!validate){ return false }
   islogin.value = true
-  // var data = {
-  //   NameOrPhone: NameOrPhone.value,
-  //   password: password.value,
-  // }
+  var data = {
+    NameOrPhone: NameOrPhone.value,
+    password: password.value,
+  }
   //获取token
-  // var login = await proxy.$API.login.token.post(data)
-  // if (login.code == 200) {
-  //   proxy.$TOOL.cookie.set('TOKEN', login.data.token)
-  // } else {
-  //   islogin.value = false
-  //   proxy.$message.warning(login.message)
-  //   return false
-  // }
+  var login = await proxy.$API.login.token.post(data)
+  if (login.code == 200) {
+    proxy.$TOOL.cookie.set('TOKEN', login.data.token)
+  } else {
+    islogin.value = false
+    proxy.$message.warning(login.message)
+    return false
+  }
   proxy.$TOOL.cookie.set('TOKEN', "token")
   proxy.$router.replace({
     path: '/navigator',
