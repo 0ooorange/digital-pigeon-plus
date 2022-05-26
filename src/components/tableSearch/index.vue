@@ -43,11 +43,11 @@ export default defineComponent({
       isShowSearchType.value = true
     }
     // 卡片
-    const isShowBfSearch = props.cardData.length < 4 ? ref(true) : ref(false)
+    const isShowBfSearch = props.cardData.length < 2 ? ref(true) : ref(false)
     const colors = ['#EE4000', '#EE9A49', '#EEE685', '#43CD80', '#76EE00', '#6495ED', '#7D26CD']
     const cardWidth = 100 / parseInt(props.cardData.length + 1) + '%'
     const renderCards = () => (
-      <div class='numberCards'>
+      <div class={isShowBfSearch.value ? '' : 'numberCards'}>
         {props.cardData.map((item, index) =>
           props.cardData.length <= 7 ? (
             <>

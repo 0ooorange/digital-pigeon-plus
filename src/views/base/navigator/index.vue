@@ -1,5 +1,6 @@
 <template>
   <div class="app">
+    <span class="rightTop"><span>刘双印，欢迎您！</span><router-link to="/login">注销</router-link></span>
     <circle-menu ref="ccMenu" :menus="menus"></circle-menu>
   </div>
 </template>
@@ -160,7 +161,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .app {
   width: 100%;
   height: 100%;
@@ -171,5 +172,18 @@ export default {
   background: url(https://img.qkeep.cn/imgs/pigeon-Pro-nav.png) no-repeat center;
   background-size: cover;
   opacity: 0.8;
+}
+.rightTop {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 16px;
+  color: white;
+  span {
+    margin-right: 15px;
+  }
+  a {
+    color: #03aefc;
+  }
 }
 </style>
