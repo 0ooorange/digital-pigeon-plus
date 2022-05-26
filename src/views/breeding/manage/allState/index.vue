@@ -58,7 +58,7 @@
                                 :key="index0"
                             >
                                 <div
-                                    v-for="(item, index) in [0, 1, 2, 3,4]"
+                                    v-for="(item, index) in [0, 1, 2, 3, 4]"
                                     :key="index"
                                     class="right_buttom_top_box_row"
                                     :style="{
@@ -73,7 +73,7 @@
                                     <div
                                         class="right_buttom_top_box_item"
                                         v-for="(item1, index1) in [
-                                            0, 1, 2, 3, 4, 5, 6, 7
+                                            0, 1, 2, 3, 4, 5, 6, 7,
                                         ]"
                                         :key="index1"
                                     ></div>
@@ -102,7 +102,7 @@
 
         <div class="dialog_box" ref="dialogBox">
             <div>
-                <div class="cage_commom" style="height: 18px"></div>
+                <div class="cage_commom"></div>
                 <div
                     class="cage_commom"
                     v-for="(item, index) in clomeIndex"
@@ -110,160 +110,75 @@
                     :style="{
                         'margin-bottom':
                             index == 1 || index == 3 || index == 5
-                                ? '20px'
-                                : '10px',
+                                ? '16px'
+                                : '8px',
                     }"
                 >
                     {{ item }}
                 </div>
                 <div class="cage_commom"></div>
             </div>
-            <div>
-                <div class="cage_row">
-                    <div
-                        class="cage_index"
-                        v-for="(item2, index2) in cageArray0[0]"
-                        :key="index2"
-                    >
-                        {{ index2 + 1 }}
-                    </div>
-                </div>
-                <div
-                    class="cage_row"
-                    v-for="(item, index) in cageArray3"
-                    :key="index"
-                    :style="{
-                        'margin-bottom': index % 2 === 0 ? '10px' : '0px',
-                    }"
-                >
-                    <div
-                        class="cage_item"
-                        v-for="(item1, index1) in item"
-                        :key="index1"
-                        :style="{
-                            'background-color':
-                                item1.state === 1 ? '#5cacee' : '#e5e5e5',
-                        }"
-                    ></div>
-                </div>
-                <!-- <div style="height: 20px; width: 100%">
-                    <div
-                        style="
-                            width: 60px;
-                            margin: auto;
-                            height: 100%;
-                            font-weight: 700;
-                            font-size: 16px;
-                            color: #a1a1a1;
-                        "
-                    >
-                        > >
-                    </div>
-                </div>
-                <div
-                    class="cage_row"
-                    v-for="(item, index) in cageArray1"
-                    :key="index"
-                    :style="{
-                        'margin-bottom': index % 2 === 0 ? '10px' : '0px',
-                    }"
-                >
-                    <div
-                        class="cage_item"
-                        v-for="(item1, index1) in item"
-                        :key="index1"
-                        :style="{
-                            'background-color':
-                                item1 === 1 ? '#5cacee' : '#e5e5e5',
-                        }"
-                    ></div>
-                </div>
-                <div style="height: 20px; width: 100%">
-                    <div
-                        style="
-                            width: 60px;
-                            margin: auto;
-                            height: 100%;
-                            font-weight: 700;
-                            font-size: 16px;
-                            color: #a1a1a1;
-                        "
-                    >
-                        > >
-                    </div>
-                </div>
-                <div
-                    class="cage_row"
-                    v-for="(item, index) in cageArray1"
-                    :key="index"
-                    :style="{
-                        'margin-bottom': index % 2 === 0 ? '10px' : '0px',
-                    }"
-                >
-                    <div
-                        class="cage_item"
-                        v-for="(item1, index1) in item"
-                        :key="index1"
-                        :style="{
-                            'background-color':
-                                item1 === 1 ? '#5cacee' : '#e5e5e5',
-                        }"
-                    ></div>
-                </div>
-                <div style="height: 20px; width: 100%">
-                    <div
-                        style="
-                            width: 60px;
-                            margin: auto;
-                            height: 100%;
-                            font-weight: 700;
-                            font-size: 16px;
-                            color: #a1a1a1;
-                        "
-                    >
-                        > >
-                    </div>
-                </div>
-                <div
-                    class="cage_row"
-                    v-for="(item, index) in cageArray1"
-                    :key="index"
-                    :style="{
-                        'margin-bottom': index % 2 === 0 ? '10px' : '0px',
-                    }"
-                >
-                    <div
-                        class="cage_item"
-                        v-for="(item1, index1) in item"
-                        :key="index1"
-                        :style="{
-                            'background-color':
-                                item1 === 1 ? '#5cacee' : '#e5e5e5',
-                        }"
-                    ></div>
-                </div> -->
-                <!-- <div
-                class="cage_row"
-                v-for="(item, index) in cageArray0"
-                :key="index"
-            >
-                <div
-                    class="cage_item"
-                    v-for="(item1, index1) in item"
-                    :key="index1"
-                    :style="{
-                        'background-color': item1 === 1 ? '#5cacee' : '#e5e5e5',
-                    }"
-                ></div>
-            </div> -->
 
+            <div>
                 <div
                     class="cage_row"
                     style="margin-top: 10px; margin-bottom: 0px"
                 >
                     <div
                         class="cage_index"
-                        v-for="(item2, index2) in cageArray0[0]"
+                        v-for="(item2, index2) in cageArray[0]"
+                        :key="index2"
+                    >
+                        {{ index2 + 1 }}
+                    </div>
+                </div>
+                <div>
+                    <div
+                        class=""
+                        v-for="(item, index) in cageArray"
+                        :key="index + 'a'"
+                    >
+                        <div
+                            class="cage_row"
+                            :style="{
+                                'margin-bottom':
+                                    index % 2 === 0 ? '8px' : '16px',
+                            }"
+                        >
+                            <div
+                                class="cage_item"
+                                v-for="(item1, index1) in item"
+                                :key="index1"
+                                :style="{
+                                    'background-color':
+                                        item1 === 1 ? '#5cacee' : '#e5e5e5',
+                                }"
+                                @click="clickCage"
+                            ></div>
+                        </div>
+                        <!-- <div style="height: 20px; width: 700px" v-if="index % 2 === 0">
+                                <div
+                                    style="
+                                        width: 60px;
+                                        height: 100%;
+                                        font-weight: 700;
+                                        font-size: 16px;
+                                        color: #a1a1a1;
+                                        line-height:20px;
+                                    "
+                                >
+                                    > >
+                                </div>
+                            </div> -->
+                    </div>
+                </div>
+                <div
+                    class="cage_row"
+                    style="margin-top: 10px; margin-bottom: 0px"
+                >
+                    <div
+                        class="cage_index"
+                        v-for="(item2, index2) in cageArray[0]"
                         :key="index2"
                     >
                         {{ index2 + 1 }}
@@ -333,7 +248,7 @@
                             align="center"
                             label="时间"
                             prop="time"
-                             width="150"
+                            width="150"
                             sortable
                         ></el-table-column>
                         <!-- <el-table-column
@@ -404,13 +319,29 @@
                             </el-card>
                         </div>
                     </div>
-                    <div class="dataList" style="height: 260px;width:100%;padding-top: 0px;padding-bottom: 0px;">
-                        <el-carousel trigger="click" height="100%" style="height:100%;width:100%;padding:10px">
-                            <el-carousel-item v-for="item in 3" :key="item" style="height:100%;width:100%;">
-                                                        <img
-                            src="../../../../assets/images/pigeon2.jpg"
-                            style="height: 100%;width:100%"
-                        />
+                    <div
+                        class="dataList"
+                        style="
+                            height: 260px;
+                            width: 100%;
+                            padding-top: 0px;
+                            padding-bottom: 0px;
+                        "
+                    >
+                        <el-carousel
+                            trigger="click"
+                            height="100%"
+                            style="height: 100%; width: 100%; padding: 10px"
+                        >
+                            <el-carousel-item
+                                v-for="item in 3"
+                                :key="item"
+                                style="height: 100%; width: 100%"
+                            >
+                                <img
+                                    src="../../../../assets/images/pigeon2.jpg"
+                                    style="height: 100%; width: 100%"
+                                />
                             </el-carousel-item>
                         </el-carousel>
                         <!-- <img
@@ -489,42 +420,78 @@ export default {
             methodsArray: ["产蛋", "查蛋", "查仔", "仔异常", "出栏", "回蛋"],
             lever: ["上", "中", "下"],
             clomeIndex: ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"],
-            cageArray0: [
+            cageArray: [
                 [
-                    0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1,
-                    0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1,
-                    0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1,
-                    0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1,
-                    0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1,
-                ],
-            ],
-            cageArray1: [
-                [
-                    0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1,
-                    0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1,
-                    0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1,
-                    0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1,
-                    0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
                 ],
                 [
-                    0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1,
-                    0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1,
-                    0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1,
-                    0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1,
-                    0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
+                ],
+                [
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
+                ],
+                [
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
+                ],
+                [
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
+                ],
+                [
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
+                ],
+                [
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
+                ],
+                [
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
                 ],
             ],
             cageArray3: [
                 [
                     {
                         codes: "A002",
-                        state: 0                    },
-                                            {
+                        state: 0,
+                    },
+                    {
                         codes: "A002",
-                        state: 1                    },
-                                            {
+                        state: 1,
+                    },
+                    {
                         codes: "A002",
-                        state: 0                    }
+                        state: 0,
+                    },
                 ],
                 [],
                 [],
@@ -532,7 +499,7 @@ export default {
                 [],
                 [],
                 [],
-                []
+                [],
             ],
             tableListOption: [
                 {
@@ -617,7 +584,7 @@ export default {
                     number: "A01",
                     abnormal: "蛋异常(单蛋)",
                 },
-            ]
+            ],
         };
     },
     methods: {
