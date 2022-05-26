@@ -1,32 +1,48 @@
-import config from "@/config";
+import config from '@/config'
 
+// 子系统需要菜单栏，指定component = Layout
+const Layout = () => import(/* webpackChunkName: "layout-chunk" */ '@/layout')
 //系统路由
 const routes = [
-	{
-		name: "layout",
-		path: "/",
-		component: () => import(/* webpackChunkName: "layout" */ "@/layout"),
-		redirect: config.DASHBOARD_URL || "/login",
-		children: [],
-	},
-	{
-		path: "/login",
-		// component: () => import(/* webpackChunkName: "login" */ "@/views/base/login/login"),
-		component: () => import(/* webpackChunkName: "login" */ '@/views/userCenter/login'),
-		meta: {
-			title: "登录",
-		},
-	},
-	{
-		path: "/navigator",
-		component: () =>
-			import(
-				/* webpackChunkName: "login" */ "@/views/base/navigator/navigator"
-			),
-		meta: {
-			title: "环形目录",
-		},
-	},
-];
+  {
+    name: 'layout',
+    path: '/',
+    component: Layout,
+    redirect: config.DASHBOARD_URL || '/login'
+  },
+  {
+    name: 'breeding',
+    path: '/breeding',
+    component: Layout
+  },
+  {
+    name: 'equipVideo',
+    path: '/equipVideo',
+    component: Layout
+  },
+  {
+    path: '/login',
+    component: () => import(/* webpackChunkName: "login-chunk" */ '@/views/base/login'),
+    meta: {
+      title: '登录'
+    }
+  },
+  {
+    name: 'navigator',
+    path: '/navigator',
+    component: () => import(/* webpackChunkName: "navigator-chunk" */ '@/views/base/navigator'),
+    meta: {
+      title: '环形目录'
+    }
+  },
+  {
+    name: 'dataVisual',
+    path: '/dataVisual',
+    component: () => import(/* webpackChunkName: "dataVisual-chunk" */ '@/views/dataVisual'),
+    meta: {
+      title: '可视化'
+    }
+  }
+]
 
-export default routes;
+export default routes

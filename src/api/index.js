@@ -2,10 +2,12 @@
  * @description 自动import导入所有 api 模块
  */
 
-const files = require.context('./model', false, /\.js$/)
+const files = require.context('./model', true, /\.js$/)
+
 const modules = {}
 files.keys().forEach((key) => {
-	modules[key.replace(/(\.\/|\.js)/g, '')] = files(key).default
+	const newKey = key.split('/')
+	modules[newKey[newKey.length - 1].replace(/(\.\/|\.js)/g, '')] = files(key).default
 })
 
 export default modules

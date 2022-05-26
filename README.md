@@ -61,60 +61,88 @@ git push origin ZZN:dev-breeding-v1.0
 
 1.表格查询
 
+（1）用法一
+
 ~~~vue
 <template>
-  <table-search :searchTypes="searchTypes" :cardData="cardData"  @searchClick="searchClick" @outTable="outTable" />
+  <table-search :searchTypes="searchTypes" :cardData="cardData" :dateDefault="dateDefault"
+                @searchClick="searchClick" @reset="reset" @outTable="outTable" 
+                @printTable="printTable" :showSearch="showSearch"/>
 </template>
 <script>
-export default {
-  name: 'abnormalCaseManage',
-  components: {
-    tableSearch
-  },
-  data() {
-    return {
-      // 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方
-      cardData: [{
-        cardText: '仔数',
-        cardNumber: 666
-      }, {
-        cardText: '死仔数',
-        cardNumber: 666
-      }],
-      // 查询类型下拉框列表的数据，格式固定
-      searchTypes: [{
-        value: '鸽笼编号',
-        label: '鸽笼编号',
-      }, {
-        value: '鸽板编号',
-        label: '鸽板编号',
-      }, {
-        value: '日期',
-        label: '日期',
-      }, {
-        value: '仔数',
-        label: '仔数',
-      }, {
-        value: '死仔数',
-        label: '死仔数',
-      }, {
-        value: '负责人',
-        label: '负责人',
-      }, {
-        value: '操作',
-        label: '操作',
-      }]
-    }
-  },
-  methods: {
-    // 表格查询事件
-    searchClick() {
-      console.log("嘻嘻嘻，我被点击啦")
-    },
-    // 表格导出事件
-    outTable() {
-      console.log("哈哈哈，我被点击了噢");
-    }
+import { defineComponent } from 'vue'
+export default defineComponent({
+  setup() {
+    // 是否展示查询部分，即类别选择器+输入框+查询按钮+重置按钮
+    // 默认为true
+    const showSearch = false
+    // 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方，超过7个两行显示
+    cardData: [
+      {
+        cardText: '查仔个数',
+        cardNumber: '666只',
+      },
+      {
+        cardText: '查仔个数',
+        cardNumber: '666只',
+      },
+      {
+        cardText: '查仔个数',
+        cardNumber: '666只',
+      }
+    ],
+    // 查询类型下拉框列表的数据示例，value和label为必传，其他需求可自行添加
+    const searchTypes = [
+      {
+        value: '鸽笼号',
+        label: '鸽笼号',
+      },
+      {
+        value: '板子号',
+        label: '板子号',
+      },
+      {
+        value: '生蛋天数',
+        label: '生蛋天数',
+      },
+      {
+        value: '孵化天数',
+        label: '孵化天数',
+      }
+    ]
+  }
+  
+  // 设置默认时间段，组件内默认半年
+  let end = new Date()
+  let start = new Date()
+  start.setTime(start.getTime() - 3600 * 1000 * 24 * 183) // 半年
+  let dateDefault = [start, end]
+  
+  const searchClick = () => {
+    console.log('点击查询')
+  }
+
+  const reset = () => {
+    console.log('点击重置')
+  }
+
+  const outTable = () => {
+    console.log('点击导出')
+  }
+  
+  const printTable = () => {
+    console.log('点击打印')
+  }
+  
+  return {
+    showSearch,
+    searchTypes,
+    cardData,
+    searchClick,
+    reset,
+    outTable,
+    printTable,
+    dateDefault
   }
 }
 </script>

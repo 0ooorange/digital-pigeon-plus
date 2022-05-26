@@ -1,26 +1,33 @@
 <template>
   <!-- 经典布局 -->
   <template v-if="layout=='menu'">
-    <header class="adminui-header">
-      <div class="panel-item adminui-header-left" @click="toNavigator">
-        <div class="logo-bar">
-          <img class="logo" src="img/logo.png">
-          <span>{{ $CONFIG.APP_NAME }}</span>
-        </div>
-      </div>
-      <div class="selectDivs">
-        <span class="selectText">基地：</span>
-        <el-select style="width: 150px" v-model="currBase" class="m-2" placeholder="Select">
-          <el-option v-for="item in bases" :key="item.value" :label="item.label" :value="item.value" />
-        </el-select>
-        <span class="selectText">鸽棚：</span>
-        <el-select style="width: 150px" v-model="currDovecote" class="m-2" placeholder="Select">
-          <el-option v-for="item in dovecotes" :key="item.value" :label="item.label" :value="item.value" />
-        </el-select>
-      </div>
-      <div class="adminui-header-right">
-        <userbar></userbar>
-      </div>
+    <header>
+      <el-row class="adminui-header">
+        <el-col :span="firstSpan">
+          <div :class="menuIsCollapse?'panel-item adminui-header-left beCenter':'panel-item adminui-header-left'" @click="toNavigator">
+            <div class="logo-bar">
+              <img class="logo" :src="smallLogo">
+              <span class="isShowText" v-if="!menuIsCollapse">{{ $CONFIG.APP_NAME }}</span>
+            </div>
+          </div>
+        </el-col>
+        <el-col :span="secondSpan" style="display:flex; ">
+          <div class="selectDivs">
+            <span class="selectText">基地：</span>
+            <el-select style="width: 150px" v-model="currBase.name" class="m-2" placeholder="Select" @change="currBaseChange">
+              <el-option v-for="item in bases" :key="item.id" :label="item.name" :value="item.name" />
+            </el-select>
+            <span class="selectText">鸽棚：</span>
+            <el-select style="width: 150px" v-model="currShed.code" class="m-2" placeholder="Select" @change="currShedChange">
+              <el-option v-for="item in dovecotes" :key="item.id" :label="item.code" :value="item.code" />
+            </el-select>
+            <span class="selectText">操作员：<span class="operatorCss">{{currOperator}}</span></span>
+          </div>
+        </el-col>
+        <el-col :span="thirdSpan" class="userbarCss">
+          <userbar></userbar>
+        </el-col>
+      </el-row>
     </header>
     <section class="aminui-wrapper">
       <div v-if="!ismobile" :class="menuIsCollapse?'aminui-side isCollapse':'aminui-side'">
@@ -62,11 +69,13 @@
 </template>
 
 <script>
+import tool from "../utils/tool";
 import SideM from './components/sideM.vue'
 import Topbar from './components/topbar.vue'
 import NavMenu from './components/NavMenu.vue'
 import userbar from './components/userbar.vue'
 import iframeView from './components/iframeView.vue'
+import smallLogo from '../assets/images/logo-2.png'
 
 export default {
   name: 'index',
@@ -77,226 +86,21 @@ export default {
     userbar,
     iframeView,
   },
-  props: {
-    bases: {
-      type: Array,
-      require: true,
-      default() {
-        return [
-          {
-            value: '梅州市金绿现代农业发展有限公司鸡公桥村基地',
-            label: '梅州市金绿现代农业发展有限公司鸡公桥村基地',
-          },
-          {
-            value: '大坪镇兰塘村农户潘忠琴',
-            label: '大坪镇兰塘村农户潘忠琴',
-          },
-          {
-            value: '梅州市金绿集团羊岭村基地',
-            label: '梅州市金绿集团羊岭村基地',
-          },
-          {
-            value: '金绿集团基地',
-            label: '金绿集团基地',
-          },
-          {
-            value: '小村庄加工厂',
-            label: '小村庄加工厂',
-          },
-        ]
-      },
-    },
-    dovecotes: {
-      type: Array,
-      require: true,
-      default() {
-        return [
-          {
-            value: 'A1仓',
-            label: 'A1仓',
-          },
-          {
-            value: 'A2仓',
-            label: 'A2仓',
-          },
-          {
-            value: 'B1仓',
-            label: 'B1仓',
-          },
-          {
-            value: 'B2仓',
-            label: 'B2仓',
-          },
-          {
-            value: 'C1仓',
-            label: 'C1仓',
-          },
-        ]
-      },
-    }
-  },
+  props: {},
   data() {
     return {
+      smallLogo: smallLogo,
       settingDialog: false,
-      currBase: '小村庄加工厂',
-      currDovecote: 'A2仓',
-      menu: [
-        {
-          name: 'bsBreedingStatistics',
-          path: '/breedingSystem/breedingStatistics',
-          meta: {
-            title: '养殖统计',
-            icon: 'el-icon-info-filled',
-            type: 'menu',
-          },
-          component: 'breedingSystem/breedingStatistics',
-        },
-        {
-          name: 'bsAuxiliary',
-          path: '/breedingSystem/auxiliary',
-          meta: {
-            title: '养殖辅助',
-            icon: 'el-icon-info-filled',
-            type: 'menu',
-          },
-          children: [
-            {
-              path: '/breedingSystem/auxiliary/extractAndIncubate',
-              name: 'ExtractAndIncubateAuxiliary',
-              meta: {
-                title: '抽孵辅助',
-                type: 'menu',
-              },
-              component: 'breedingSystem/auxiliary/extractAndIncubate',
-            },
-            {
-              path: '/breedingSystem/auxiliary/axlyExamEgg',
-              name: 'examineEggAuxiliary',
-              meta: {
-                title: '查蛋辅助',
-                type: 'menu',
-              },
-              component: 'breedingSystem/auxiliary/axlyExamEgg',
-            },
-            {
-              path: '/breedingSystem/auxiliary/axlyExamCub',
-              name: 'examineCubAuxiliary',
-              meta: {
-                title: '查仔辅助',
-                type: 'menu',
-              },
-              component: 'breedingSystem/auxiliary/axlyExamCub',
-            },
-            {
-              path: '/breedingSystem/auxiliary/axlyOutCage',
-              name: 'outCageAuxiliary',
-              meta: {
-                title: '出栏辅助',
-                type: 'menu',
-              },
-              component: 'breedingSystem/auxiliary/axlyOutCage',
-            },
-          ],
-        },
-        {
-          name: 'bsManage',
-          path: '/breedingSystem/bsManage',
-          meta: {
-            title: '养殖管理',
-            icon: 'el-icon-info-filled',
-            type: 'menu',
-          },
-          children: [
-            {
-              path: '/breedingSystem/bsManage/layEggs',
-              name: 'layEggsManage',
-              meta: {
-                title: '产蛋',
-                type: 'menu',
-              },
-              component: 'breedingSystem/bsManage/layEggs',
-            },
-            {
-              path: '/breedingSystem/bsManage/manageExamEgg',
-              name: 'examineEggManage',
-              meta: {
-                title: '查蛋',
-                type: 'menu',
-              },
-              component: 'breedingSystem/bsManage/manageExamEgg',
-            },
-            {
-              path: '/breedingSystem/bsManage/manageExamCub',
-              name: 'examineCubManage',
-              meta: {
-                title: '查仔',
-                type: 'menu',
-              },
-              component: 'breedingSystem/bsManage/manageExamCub',
-            },
-            {
-              path: '/breedingSystem/bsManage/abnormalCase',
-              name: 'abnormalCaseManage',
-              meta: {
-                title: '异常情况',
-                type: 'menu',
-              },
-              component: 'breedingSystem/bsManage/abnormalCase',
-            },
-            {
-              path: '/breedingSystem/bsManage/reEggs',
-              name: 'reEggsManage',
-              meta: {
-                title: '回蛋',
-                type: 'menu',
-              },
-              component: 'breedingSystem/bsManage/reEggs',
-            },
-            {
-              path: '/breedingSystem/bsManage/allState',
-              name: 'allStateManage',
-              meta: {
-                title: '鸽笼状态总览',
-                type: 'menu',
-              },
-              component: 'breedingSystem/bsManage/allState',
-            },
-          ],
-        },
-        {
-          name: 'dovePerformance',
-          path: '/breedingSystem/dovePerformance',
-          meta: {
-            title: '种鸽性能测试',
-            icon: 'el-icon-info-filled',
-            type: 'menu',
-          },
-          component: 'breedingSystem/dovePerformance',
-        },
-        {
-          name: 'materialStatistics',
-          path: '/breedingSystem/materialStatistics',
-          meta: {
-            title: '物料统计',
-            icon: 'el-icon-info-filled',
-            type: 'menu',
-          },
-          children: [
-            {
-              path: '/breedingSystem/materialStatistics/fodder',
-              name: 'fodderStatistics',
-              meta: {
-                title: '饲料',
-                type: 'menu',
-              },
-              component: 'breedingSystem/materialStatistics/fodder',
-            },
-          ],
-        },
-      ],
+      currBase: {},
+      currShed: {},
+      currOperator: '',
+      bases: [],
+      dovecotes: [],
+      menu: [],
       nextMenu: [],
       pmenu: {},
       active: '',
+      thirdSpan: 8,
     }
   },
   computed: {
@@ -312,12 +116,39 @@ export default {
     menuIsCollapse() {
       return this.$store.state.global.menuIsCollapse
     },
+    firstSpan() {
+      return this.$store.state.global.menuIsCollapse ? 1 : 4
+    },
+    secondSpan() {
+      return this.$store.state.global.menuIsCollapse ? 15 : 12
+    },
   },
   created() {
+    this.baseInfo = this.$TOOL.data.get('BASE_INFO')
+    this.bases = this.baseInfo.base
+    this.dovecotes = this.baseInfo.shed
+    var currInfo = this.$TOOL.data.get('CURR_INFO')
+    if (currInfo) {
+      this.currBase = currInfo.CURR_BASE
+      this.currShed = currInfo.CURR_SHED
+      this.currOperator = currInfo.CHARGE_NAME
+    } else {
+      this.currBase = this.bases[0]
+      this.currShed = this.dovecotes[0]
+      this.currOperator = this.baseInfo.chargeName
+    }
+
+    this.currInfo = {
+      CURR_BASE: this.currBase,
+      CURR_SHED: this.currShed,
+      CHARGE_NAME: this.currOperator,
+    }
+    this.$TOOL.data.set('CURR_INFO', this.currInfo)
+
     this.onLayoutResize()
     window.addEventListener('resize', this.onLayoutResize)
     // var menu = this.$router.sc_getMenu()
-    var menu = this.menu
+    var menu = tool.data.get("CURR_MENU")
     this.menu = this.filterUrl(menu)
     this.showThis()
   },
@@ -384,16 +215,50 @@ export default {
     // 返回导航页
     toNavigator() {
       this.$router.replace({
-      	path: '/navigator'
+        path: '/navigator',
       })
-    }
+    },
+    // 切换基地
+    async currBaseChange() {
+      var { data: changeBaseRes } = await this.$API.layout.changeBase.post(this.currBase.id)
+      var { data: changeShedRes } = await this.$API.layout.getChargeName.post(
+        this.currShed.chargeId
+      )
+      this.dovecotes = changeBaseRes.shed
+      this.currOperator = changeShedRes.chargeName
+      this.currInfo = {
+        CURR_BASE: this.currBase,
+        CURR_SHED: this.currShed,
+        CHARGE_NAME: this.currOperator,
+      }
+      this.$TOOL.data.set('CURR_INFO', this.currInfo)
+      // changeBaseRes.
+    },
+    // 切换鸽棚
+    async currShedChange(currShedName) {
+      var { data: changeShedRes } = await this.$API.layout.getChargeName.post(
+        this.currShed.chargeId
+      )
+      this.currOperator = changeShedRes.chargeName
+      for (var i = 0; i < this.dovecotes.length; i++) {
+        for (var key in this.dovecotes[i]) {
+          if (key === currShedName)
+           this.currShed = this.dovecotes[i]
+        }
+      }
+      this.currInfo = {
+        CURR_BASE: this.currBase,
+        CURR_SHED: this.currShed,
+        CHARGE_NAME: this.currOperator,
+      }
+      this.$TOOL.data.set('CURR_INFO', this.currInfo)
+    },
   },
 }
 </script>
 
 <style scoped>
 .adminui-header .panel-item {
-  padding: 0 10px;
   cursor: pointer;
   height: 100%;
   display: flex;
@@ -403,12 +268,21 @@ export default {
   background: rgba(255, 255, 255, 0.1);
 }
 .selectDivs {
-  position: relative;
-  left: -16%;
   display: flex;
   align-items: center;
 }
 .selectText {
   margin-left: 10px;
+}
+.userbarCss {
+  display: flex;
+  justify-content: flex-end;
+}
+.beCenter {
+  justify-content: center;
+}
+.operatorCss {
+  font-size: 16px;
+  font-weight: 700;
 }
 </style>

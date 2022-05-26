@@ -1,0 +1,10 @@
+.el-cascader-menu__wrap.el-scrollbar__wrap {
+  height: auto !important;
+  max-height: 200px;
+}
+.el-table--striped .el-table__body tr.el-table__row--striped td {
+  background: #000;
+}
+:root {
+  --el-fill-color-lighter: #f7f7f7;
+}
