@@ -38,26 +38,12 @@
 					align="center"
 				></el-table-column>
 				<el-table-column
-					label="本次推荐"
+					label="本次操作"
 					prop="recommendation"
 					width="170"
 					align="center"
 				>
-					<!-- <template v-slot="scope">
-						<el-select
-							v-model="scope.row.value"
-							class="m-2"
-							placeholder="抽蛋"
-							style="width: 90px"
-						>
-							<el-option
-								v-for="item in options"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value"
-							/>
-						</el-select>
-					</template> -->
+					
 				</el-table-column>
 				<el-table-column
 					label="生蛋天数"
