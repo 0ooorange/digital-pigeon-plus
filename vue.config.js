@@ -18,6 +18,13 @@ module.exports = {
 				pathRewrite: {
 					'^/api': '/'
 				}
+			},
+			'/digitalPigeon': {
+				target: 'http://172.17.98.87:8000',
+				ws: true,
+				pathRewrite: {
+					'^/digitalPigeon': '/digitalPigeon'
+				}
 			}
 		}
 	},
