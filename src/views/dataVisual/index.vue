@@ -43,9 +43,28 @@
       <div class="pmidd_bott">
         <div class="pumiddboxttop1 fl">
           <h2 class="tith2 pt2">蛋异常统计</h2>
+          <div class="eggAbnormal">
+            <scEcharts :option="eggAbnormalOption" height="16rem" width="20rem"></scEcharts>
+            <ul class="eggAbnormalText">
+              <li>蛋异常数：150枚</li>
+              <li>光蛋1数：30枚</li>
+              <li>光蛋2数：20枚</li>
+              <li>踩蛋1数：20枚</li>
+              <li>踩蛋2数：10枚</li>
+              <li>单蛋数：40枚</li>
+            </ul>
+          </div>
         </div>
         <div class="pumiddboxttop2 fl">
           <h2 class="tith2 pt2">出栏统计</h2>
+          <div class="eggAbnormal">
+            <scEcharts :option="outCageOption" height="16rem" width="20rem"></scEcharts>
+            <ul class="eggAbnormalText">
+              <li>出仔数：3000只</li>
+              <li>出栏数：2000只</li>
+              <li>死仔数：100只</li>
+            </ul>
+          </div>
         </div>
       </div>
       <!--  amidd_bott end-->
@@ -96,12 +115,14 @@ export default {
   },
   setup() {
     const videoUrl = ref('')
+    // 视频
     const videoOptions = [
       {
         value: 'A01仓',
         label: 'A01仓',
       },
     ]
+    // 环境参数
     const environmentOption = {
       tooltip: {
         trigger: 'axis',
@@ -167,6 +188,7 @@ export default {
         },
       ],
     }
+    // 饲料统计
     const fodderOption = {
       tooltip: {
         trigger: 'axis',
@@ -222,6 +244,7 @@ export default {
         },
       ],
     }
+    // 产蛋统计
     const productEggOption = {
       tooltip: {
         trigger: 'axis',
@@ -278,12 +301,80 @@ export default {
         },
       ],
     }
+    // 蛋异常统计
+    const eggAbnormalOption = {
+      tooltip: {
+        trigger: 'item',
+      },
+      legend: {
+        // orient: 'vertical',
+        top: 'top',
+      },
+      series: [
+        {
+          name: '蛋异常统计',
+          type: 'pie',
+          radius: '50%',
+          label: {
+            show: false,
+          },
+          data: [
+            { value: 1048, name: '单蛋' },
+            { value: 735, name: '光蛋1' },
+            { value: 484, name: '光蛋2' },
+            { value: 580, name: '踩蛋1' },
+            { value: 300, name: '踩蛋2' },
+          ],
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+            },
+          },
+        },
+      ],
+    }
+    // 出栏统计
+    const outCageOption = {
+      tooltip: {
+        trigger: 'item',
+      },
+      legend: {
+        // orient: 'vertical',
+        top: 'top',
+      },
+      series: [
+        {
+          name: '出栏统计',
+          type: 'pie',
+          radius: '50%',
+          label: {
+            show: false,
+          },
+          data: [
+            { value: 100, name: '死仔数' },
+            { value: 2000, name: '出栏数' },
+            { value: 3000, name: '出仔数' },
+          ],
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+            },
+          },
+        },
+      ],
+    }
     return {
       videoUrl,
       videoOptions,
       environmentOption,
       fodderOption,
       productEggOption,
+      eggAbnormalOption,
+      outCageOption,
     }
   },
 }
@@ -1744,6 +1835,15 @@ i.redr {
   position: absolute;
   top: 40px;
   right: 50px;
-  font-size: 14px;
+  font-size: 12px;
+}
+
+.eggAbnormal {
+  margin-top: 5px;
+  .eggAbnormalText {
+    margin-left: 20px;
+    font-size: 12px;
+    line-height: 16px;
+  }
 }
 </style>
