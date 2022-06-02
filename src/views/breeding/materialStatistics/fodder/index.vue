@@ -276,10 +276,11 @@ export default defineComponent({
         //获取各品牌饲料剩余量
         const getFeedBrandNumByShedID = async function() {
 
-            console.log('当前鸽棚',currShed)
+            console.log('当前鸽棚',currShed.id)
             let data = {
                 currShed: currShed.id
             }
+            console.log('参数',data)
              const feedBrandNum = await proxy.$API.fodder.feedBrandNumByShedID.get(data)
              console.log('各种饲料剩余量数据',feedBrandNum)
         }
