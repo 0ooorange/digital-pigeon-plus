@@ -8,11 +8,11 @@
             @outTable="outTable"
             class="table_search"
         >
-            <el-date-picker
+            <!-- <el-date-picker
                 style="
                     background-color: #fff;
                     width: 200px;
-                    margin-left: 10px;
+                    margin-left: 10px; 
                     flex: 0 0 auto;
                 "
                 v-model="dateConcreteValue"
@@ -21,7 +21,7 @@
                 end-placeholder="最终时间"
                 :default-time="defaultTime"
                 @change="datePickerChange"
-            />
+            /> -->
         </table-search>
         <!-- <div class="card_list">
             <el-card
@@ -102,10 +102,16 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref ,getCurrentInstance} from "vue";
 export default defineComponent({
     name: "fodderStatistics", // 饲料统计
     setup() {
+
+        const { proxy } = getCurrentInstance();
+
+        //当前鸽棚鸽笼信息
+        const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;
+        
         let searchTypes = reactive([]);
         let cardData = reactive([]);
         let cardWidth = ref("14%");
@@ -123,50 +129,11 @@ export default defineComponent({
         //查询下拉框数组
         searchTypes = [
             {
-                value: "鸽笼编号",
-                label: "鸽笼编号",
+                value: "料槽编号",
+                label: "料槽编号",
             },
         ];
 
-        //各种用量
-        let fodderList = reactive([]);
-        fodderList = [
-            {
-                label: "加料量",
-                value: "100kg",
-                color: "#EE4000",
-            },
-            {
-                label: "食用量",
-                value: "80kg",
-                color: "#EE9A49",
-            },
-            {
-                label: "今天均用量",
-                value: "0.04kg",
-                color: "#EEE685",
-            },
-            {
-                label: "本月已用量",
-                value: "160kg",
-                color: "#43CD80",
-            },
-            {
-                label: "当月均用量",
-                value: "0.08kg",
-                color: "#76EE00",
-            },
-            {
-                label: "上月用量",
-                value: "2000kg",
-                color: "#6495ED",
-            },
-            {
-                label: "上月均用量",
-                value: "1kg",
-                color: "#7D26CD",
-            },
-        ];
         cardData = [
             {
                 cardText: "加料量",
@@ -273,9 +240,53 @@ export default defineComponent({
             console.log("哈哈哈，我被点击了噢");
         };
 
+        //和日期相关的
+
+        //当前日期
+        const nowTime = new Date();
+        console.log(nowTime, "当前时间");
+
+        //格式化时间
+        const formatDate = function (date) {
+            var myyear = date.getFullYear();
+            var mymonth = date.getMonth() + 1;
+            var myweekday = date.getDate();
+
+            if (mymonth < 10) {
+                mymonth = "0" + mymonth;
+            }
+            if (myweekday < 10) {
+                myweekday = "0" + myweekday;
+            }
+            return myyear + "-" + mymonth + "-" + myweekday;
+        };
+
+        //上个月的起止时间
+        const hasLastDate = function (nowYear,nowMonth) {
+            const monthStartDate = new Date(nowYear, nowMonth - 2, 1);
+            const monthEndDate = new Date(nowYear, nowMonth - 1, 1);
+            console.log('上个月',formatDate(monthStartDate))
+            console.log('这个月',formatDate(monthEndDate))
+            console.log('天数',(monthEndDate - monthStartDate)/(1000 * 60 * 60 * 24) )
+        };
+
+        console.log(formatDate(nowTime, "格式化后的"));
+        console.log(hasLastDate(2022,6))
+
+        //获取各品牌饲料剩余量
+        const getFeedBrandNumByShedID = async function() {
+
+            console.log('当前鸽棚',currShed)
+            let data = {
+                currShed: currShed.id
+            }
+             const feedBrandNum = await proxy.$API.fodder.feedBrandNumByShedID.get(data)
+             console.log('各种饲料剩余量数据',feedBrandNum)
+        }
+        getFeedBrandNumByShedID()
+
         return {
             searchTypes,
-            fodderList,
             cardWidth,
             // defaultTime,
             dateConcreteValue,
