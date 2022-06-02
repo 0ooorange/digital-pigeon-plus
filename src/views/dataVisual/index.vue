@@ -36,6 +36,7 @@
       </div>
       <div class="puleftboxtbott">
         <h2 class="tith2 pt7">基地信息</h2>
+        <slideTable></slideTable>
       </div>
     </div>
     <!--  left1 end -->
@@ -107,11 +108,13 @@
 
 <script>
 import scEcharts from '@/components/scEcharts'
+import slideTable from './components/slideTable'
 import { ref } from 'vue'
 export default {
   name: 'dataVisual',
   components: {
     scEcharts,
+    slideTable
   },
   setup() {
     const videoUrl = ref('')
