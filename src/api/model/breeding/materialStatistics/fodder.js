@@ -2,19 +2,28 @@
 import http from "@/utils/request"
 
 export default {
-	feedBrandNumByShedID: {
-		url: `/digitalPigeon/breed/materialstatistic/material-statistic-feed-shed-entity/getFeedNumByIDTime/1518124016571797507/2022-04-01 00:00:00/2022-04-30 23:59:59`,
-		name: "获取饲料剩余量",
-		get: async function(){
-            console.log('url',"/digitalPigeon/breed/materialstatistic/material-statistic-feed-shed-entity/getFeedBrandNumByShedID/1518124016571797507")
-			return await http.get(this.url);
+	feedBrandNum: {
+		url: `/digitalPigeon/breed/materialstatistic/material-statistic-feed-shed-entity/`,
+		name: "获取各种数量不用时间",
+		get: async function(differ,data={}){
+            console.log('url',this.url+ differ +`/${data.currShed}`)
+			return await http.get(this.url+ differ +`/${data.currShed}`);
 		}
 	},
-    getHomeInf: {
-		url: `/digitalPigeon/ucenter/getHomeInformation`,
-		name: "获取首页信息",
-		get: async function(){
-			return await http.get(this.url);
+    FeedNumByIDTime:{
+        url: `/digitalPigeon/breed/materialstatistic/material-statistic-feed-shed-entity/`,
+		name: "获取各种数量需要时间",
+		get: async function(differ,data={}){
+            console.log('url',this.url+ differ +`/${data.currShed}` + `/${data.startTime}` + `/${data.endTime}`)
+			return await http.get(this.url+ differ +`/${data.currShed}` + `/${data.startTime}` + `/${data.endTime}`);
 		}
-	}
+    },
+	FeedStatisticByIDTIme:{
+        url: `/digitalPigeon/breed/materialstatistic/material-statistic-feed-shed-entity/getFeedStatisticByIDTIme`,
+		name: "获取各种数量需要时间",
+		get: async function(data={}){
+            console.log('url',this.url +`/${data.currShed}` + `/${data.startTime}` + `/${data.endTime}`  + `/${data.page}` + `/${data.pageSize}`)
+			return await http.get(this.url +`/${data.currShed}` + `/${data.startTime}` + `/${data.endTime}` + `/${data.page}` + `/${data.pageSize}`);
+		}
+    },
 }

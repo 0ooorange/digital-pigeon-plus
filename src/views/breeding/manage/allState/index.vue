@@ -93,7 +93,7 @@
                             :key="index"
                             @click="changeLever(index)"
                         >
-                            {{ item }}
+                            {{ item.label }}
                         </div>
                     </div>
                 </div>
@@ -126,7 +126,7 @@
                 >
                     <div
                         class="cage_index"
-                        v-for="(item2, index2) in cageArray[0]"
+                        v-for="(item2, index2) in cageArrayIndex"
                         :key="index2"
                     >
                         {{ index2 + 1 }}
@@ -151,9 +151,11 @@
                                 :key="index1"
                                 :style="{
                                     'background-color':
-                                        item1 === 1 ? '#5cacee' : '#e5e5e5',
+                                        item1.state == currentStatus + 1
+                                            ? '#5cacee'
+                                            : '#e5e5e5',
                                 }"
-                                @click="clickCage"
+                                @click="clickCage(item1)"
                             ></div>
                         </div>
                         <!-- <div style="height: 20px; width: 700px" v-if="index % 2 === 0">
@@ -172,24 +174,24 @@
                             </div> -->
                     </div>
                 </div>
-                <div
+                <!-- <div
                     class="cage_row"
                     style="margin-top: 10px; margin-bottom: 0px"
                 >
                     <div
                         class="cage_index"
-                        v-for="(item2, index2) in cageArray[0]"
+                        v-for="(item2, index2) in cageArrayIndex"
                         :key="index2"
                     >
                         {{ index2 + 1 }}
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <!-- 底部盒子 -->
         <div class="footer">
             <div style="margin-bottom: 16px; font-size: 16px">
-                鸽笼A01数据如下:
+                鸽笼{{ currentPigeon }}数据如下:
             </div>
             <div class="left_footer_row">
                 <div class="table_item">
@@ -199,19 +201,20 @@
                     <!-- <div class="item_title"></div> -->
                     <scTable
                         class="table"
-                        ref="table"
+                        ref="logTable"
                         row-key="id"
+                        height="auto"
                         stripe
                         highlightCurrentRow
-                        hidePagination
-                        :data="tableListOption"
-                        @selection-change="selectionChange"
+                        :data="[]"
+                        :apiObj="findLogApi"
+                        :params="findLogParams"
                     >
                         <el-table-column
                             align="center"
                             label="时间"
                             prop="time"
-                            width="150"
+                            width="200"
                             sortable
                         ></el-table-column>
                         <!-- <el-table-column
@@ -224,31 +227,32 @@
                         <el-table-column
                             align="center"
                             label="操作记录"
-                            prop="option"
-                            width="150"
+                            prop="message"
+                            width="200"
                         ></el-table-column>
                     </scTable>
                 </div>
                 <div class="table_item">
                     <el-card class="item_title" style="color: #cd0000">
-                        异常信息
+                        近半年异常信息
                     </el-card>
                     <!-- <div class="item_title"></div> -->
                     <scTable
                         class="table"
                         ref="table"
                         row-key="id"
+                        height="auto"
                         stripe
                         highlightCurrentRow
-                        hidePagination
-                        :data="tableListAbnormal"
-                        @selection-change="selectionChange"
+                        :data="[]"
+                        :apiObj="findAbnormalApi"
+                        :params="findAbnormalParams"
                     >
                         <el-table-column
                             align="center"
                             label="时间"
                             prop="time"
-                            width="150"
+                            width="200"
                             sortable
                         ></el-table-column>
                         <!-- <el-table-column
@@ -261,8 +265,8 @@
                         <el-table-column
                             align="center"
                             label="异常信息"
-                            prop="abnormal"
-                            width="150"
+                            prop="message"
+                            width="200"
                         ></el-table-column>
                     </scTable>
                 </div>
@@ -350,60 +354,6 @@
                         /> -->
                     </div>
                 </div>
-
-                <!-- <div class="right_footer">
-                <div style="font-size: 18px; color: #6b6b6b">
-                    A01鸽笼具体数据:
-                </div>
-                <div class="dataList">
-                    <div class="row">
-                        <el-card class="box-card card_list_item">
-                            <span style="font-size: 14px">成鸽数:</span>
-                            <span
-                                :style="'font-size:17px;padding-left:5px; font-weight: 700;color:#EE4000'"
-                                >1对</span
-                            >
-                        </el-card>
-                        <el-card class="box-card card_list_item">
-                            <span style="font-size: 14px">幼鸽数:</span>
-                            <span
-                                :style="'font-size:17px;padding-left:5px;  font-weight: 700;color:#EE9A49'"
-                                >1只</span
-                            >
-                        </el-card>
-                        <el-card class="box-card card_list_item">
-                            <span style="font-size: 14px">抽蛋数:</span>
-                            <span
-                                :style="'font-size:17px;padding-left:5px;  font-weight: 700;color:#43CD80'"
-                                >1个</span
-                            >
-                        </el-card>
-                    </div>
-                    <div class="row">
-                        <el-card class="box-card card_list_item">
-                            <span style="font-size: 14px">产蛋数:</span>
-                            <span
-                                :style="'font-size:17px;padding-left:5px;  font-weight: 700;color:#76EE00'"
-                                >2个</span
-                            >
-                        </el-card>
-                        <el-card class="box-card card_list_item">
-                            <span style="font-size: 14px">出仔数:</span>
-                            <span
-                                :style="'font-size:17px;padding-left:5px;  font-weight: 700;color:#6495ED'"
-                                >0只</span
-                            >
-                        </el-card>
-                        <el-card class="box-card card_list_item">
-                            <span style="font-size: 14px">出栏数:</span>
-                            <span
-                                :style="'font-size:17px;padding-left:5px;  font-weight: 700;color:#7D26CD'"
-                                >0只</span
-                            >
-                        </el-card>
-                    </div>
-                </div>
-            </div> -->
             </div>
         </div>
     </div>
@@ -412,95 +362,131 @@
 <script>
 export default {
     name: "allStateManage", // 鸽棚总览
+    created() {
+        this.currShed = this.$TOOL.data.get("CURR_INFO").CURR_SHED;
+        this.getAllCage();
+        console.log("当前鸽棚", this.currShed);
+
+        //当前日期
+        const nowTime = new Date();
+        this.today = new Date(
+            nowTime.getFullYear(),
+            nowTime.getMonth(),
+            nowTime.getDate()
+        );
+        this.passDay = new Date(
+            nowTime.getFullYear(),
+            nowTime.getMonth() - 6,
+            nowTime.getDate()
+        );
+        console.log("半个月前", this.formatDate(this.passDay));
+        this.passDay = this.formatDate(this.passDay);
+        this.today = this.formatDate(this.today);
+    },
     data() {
         return {
+            today: "",
+            passDay: "",
+            currShed: "",
             currentBox: 0,
             currentStatus: 0,
             currentLever: 0,
-            methodsArray: ["产蛋", "查蛋", "查仔", "仔异常", "出栏", "回蛋"],
-            lever: ["上", "中", "下"],
+            currentPigeon: "", //当前的鸽笼编号
+            methodsArray: ["产蛋", "查蛋", "查仔", "回蛋"],
+            lever: [
+                {
+                    label: "上",
+                    value: "0",
+                },
+                {
+                    label: "中",
+                    value: "1",
+                },
+                {
+                    label: "下",
+                    value: "2",
+                },
+            ],
             clomeIndex: ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"],
+            cageArrayIndex: [
+                1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1,
+                1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1,
+                0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0,
+                0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0,
+                1, 1, 0, 0, 1, 1, 0, 0,
+            ],
             cageArray: [
-                [
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
-                ],
-                [
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
-                ],
-                [
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
-                ],
-                [
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
-                ],
-                [
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
-                ],
-                [
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
-                ],
-                [
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
-                ],
-                [
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                    1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
-                ],
+                // [
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
+                // ],
+                // [
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
+                // ],
+                // [
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
+                // ],
+                // [
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
+                // ],
+                // [
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
+                // ],
+                // [
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
+                // ],
+                // [
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
+                // ],
+                // [
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
+                //     1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
+                // ],
             ],
-            cageArray3: [
-                [
-                    {
-                        codes: "A002",
-                        state: 0,
-                    },
-                    {
-                        codes: "A002",
-                        state: 1,
-                    },
-                    {
-                        codes: "A002",
-                        state: 0,
-                    },
-                ],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-            ],
+            findLogApi: "",
+            findLogParams: {
+                //操作日志参数
+                pigeonId: "",
+                beginDate: "",
+                endDate: "",
+            },
+            findAbnormalApi: "",
+            findAbnormalParams: {
+                //异常信息参数
+                pigeonId: "",
+                beginDate: "",
+                endDate: "",
+            },
             tableListOption: [
                 {
                     time: "2022-04-21",
@@ -588,9 +574,24 @@ export default {
         };
     },
     methods: {
+        //格式化时间
+        formatDate(date) {
+            var myyear = date.getFullYear();
+            var mymonth = date.getMonth() + 1;
+            var myweekday = date.getDate();
+
+            if (mymonth < 10) {
+                mymonth = "0" + mymonth;
+            }
+            if (myweekday < 10) {
+                myweekday = "0" + myweekday;
+            }
+            return myyear + "-" + mymonth + "-" + myweekday;
+        },
         //改变查看状态
         changeStatus(index) {
             this.currentStatus = index;
+            console.log("当前状态", this.currentStatus);
         },
 
         //改变当前鸽笼数
@@ -605,6 +606,67 @@ export default {
         //改变查看鸽笼层级
         changeLever(index) {
             this.currentLever = index;
+            this.getAllCage();
+        },
+
+        //获取所有鸽笼
+        async getAllCage() {
+            let data = {
+                position: this.lever[this.currentLever].value,
+                shedId: this.currShed.id,
+            };
+            console.log("获取所有鸽笼参数", data);
+            const findCageByState =
+                await this.$API.allState.findCageByState.get(data);
+            if (findCageByState.code == 200) {
+                console.log("全部鸽笼", findCageByState);
+                this.cageArray = findCageByState.data.data;
+                this.findLogParams.pigeonId =
+                    this.cageArray[0][0] && this.cageArray[0][0].pigeonId;
+                console.log(this.cageArray, "鸽笼数据");
+                this.findLogApi = this.$API.allState.findLogByPigeonIdAndDate;
+                this.findLogParams.beginDate = this.passDay;
+                this.findLogParams.endDate = this.today;
+                this.findLogParams.pigeonId =
+                    this.cageArray[0][0] && this.cageArray[0][0].pigeonId;
+                this.currentPigeon = this.cageArray[0][0].codes;
+                console.log(this.findLogParams, "请求参数1111");
+
+                //异常信息
+                this.findAbnormalParams.pigeonId =
+                    this.cageArray[0][0] && this.cageArray[0][0].pigeonId;
+                console.log(this.cageArray, "鸽笼数据");
+                this.findAbnormalApi =
+                    this.$API.allState.findAbnormalByPigeonIdAndDate;
+                this.findAbnormalParams.beginDate = this.passDay;
+                this.findAbnormalParams.endDate = this.today;
+                this.findAbnormalParams.pigeonId =
+                    this.cageArray[0][0] && this.cageArray[0][0].pigeonId;
+                this.currentPigeon = this.cageArray[0][0].codes;
+                console.log(this.findAbnormalParams, "异常信息请求参数1111");
+            }
+        },
+        //获取鸽笼具体信息
+        getCageInfo() {
+            //             let data = {
+            //     position: this.lever[this.currentLever].value,
+            //     shedId: this.currShed.id,
+            // };
+            // console.log("获取所有鸽笼参数", data);
+            // const findCageByState =
+            //     await this.$API.allState.findAbnormalByPigeonIdAndDate.get(data);
+            // if (findCageByState.code == 200) {
+            //     console.log("全部鸽笼", findCageByState);
+            //     this.cageArray = findCageByState.data.data;
+            //     console.log(this.cageArray, "鸽笼数据");
+            // }
+        },
+        clickCage(item) {
+            this.findLogParams.pigeonId = item.pigeonId;
+            this.findAbnormalParams.pigeonId = item.pigeonId;
+            this.currentPigeon = item.codes;
+            console.log("点击鸽笼", this.findLogParams);
+            // this.$refs.logTable.getData()
         },
     },
 };
@@ -634,7 +696,7 @@ export default {
             height: 100%;
             .left_top {
                 display: flex;
-                justify-content: center;
+                justify-content: space-around;
                 align-items: center;
                 height: 70%;
                 .top_button_item {
