@@ -4,7 +4,7 @@ import sysConfig from "@/config";
 import tool from '@/utils/tool';
 import router from '@/router';
 
-axios.defaults.baseURL = 'http://172.17.98.87:8000'
+// axios.defaults.baseURL = 'http://172.17.98.87:8000'
 
 axios.defaults.timeout = sysConfig.TIMEOUT
 

@@ -41,6 +41,7 @@ const login = async function () {
   
   //获取token
   var login = await proxy.$API.login.token.post(data)
+  console.log(login,'登录')
   if (login.code == 200) {
     proxy.$TOOL.cookie.set('TOKEN', login.data.token)
   } else {
