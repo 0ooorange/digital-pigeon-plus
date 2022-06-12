@@ -7,7 +7,7 @@ import * as echarts from 'echarts';
 export default {
       data(){
           return {
-
+             feedShedlist:[]
           }
       },
       methods: {
@@ -46,12 +46,18 @@ export default {
     }
   ]
 }
-              const myChart = echarts.init(document.getElementById("chartmain_bing"));
-               myChart.setOption(option);
-          }
+      const myChart = echarts.init(document.getElementById("chartmain_bing"));
+      myChart.setOption(option);
+          },
+          async  getFeedShedByIDTime(){
+            const{data:res}=await this.$API.breedStatistics.getFeedShedByIDTime.get('1518124016571797507','2022-05-22 00:00:00','2022-05-30 23:59:59');
+            this.feedShedlist=res.data;
+            console.log("获取养殖饲料：",this.feedShedlist);
+        }
       },
       mounted() {
         this.initEcharts();
+        this.getFeedShedByIDTime()
     },
 }
 </script>
