@@ -38,8 +38,10 @@ const login = async function () {
     NameOrPhone: NameOrPhone.value,
     password: password.value,
   }
+  
   //获取token
   var login = await proxy.$API.login.token.post(data)
+  console.log(login,'登录')
   if (login.code == 200) {
     proxy.$TOOL.cookie.set('TOKEN', login.data.token)
     console.log("token:",login.data.token);
@@ -48,6 +50,7 @@ const login = async function () {
     proxy.$message.warning(login.message)
     return false
   }
+
   proxy.$router.replace({
     path: '/navigator',
   })

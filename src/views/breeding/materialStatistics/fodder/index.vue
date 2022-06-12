@@ -7,12 +7,14 @@
             @searchClick="searchClick"
             @outTable="outTable"
             class="table_search"
+            :datePkDefalt="defaultTimeValue"
+            ref="tableSearch"
         >
-            <el-date-picker
+            <!-- <el-date-picker
                 style="
                     background-color: #fff;
                     width: 200px;
-                    margin-left: 10px;
+                    margin-left: 10px; 
                     flex: 0 0 auto;
                 "
                 v-model="dateConcreteValue"
@@ -21,7 +23,7 @@
                 end-placeholder="最终时间"
                 :default-time="defaultTime"
                 @change="datePickerChange"
-            />
+            /> -->
         </table-search>
         <!-- <div class="card_list">
             <el-card
@@ -46,242 +48,591 @@
             row-key="id"
             stripe
             highlightCurrentRow
-            :data="tableList"
-            @selection-change="selectionChange"
+            :data="[]"
+            :apiObj="getFeedStatisticApi"
+            :params="getFeedStatisticParams"
         >
-            <el-table-column
+            <!-- <el-table-column
                 align="center"
                 label="料槽编号"
                 prop="number"
-                width="140"
+                width="200"
                 sortable
-            ></el-table-column>
+            ></el-table-column> -->
             <el-table-column
                 align="center"
                 label="加料时间"
-                prop="chargeTime"
-                width="180"
-                sortable
-            ></el-table-column>
-            <el-table-column
-                align="center"
-                label="加料量"
-                prop="chargeAmount"
-                width="160"
-                sortable
-            ></el-table-column>
-            <el-table-column
-                align="center"
-                label="复称时间"
-                prop="weighAgain"
-                width="180"
-                sortable
-            ></el-table-column>
-            <el-table-column
-                align="center"
-                label="剩余量"
-                prop="surplusWeight"
-                width="160"
-                sortable
-            ></el-table-column>
-            <el-table-column
-                align="center"
-                label="食用量"
-                prop="edibleAmount"
-                width="160"
+                prop="gmtCreate"
+                width="240"
                 sortable
             ></el-table-column>
             <el-table-column
                 align="center"
                 label="饲料品种"
-                prop="variety"
-                width="160"
+                prop="brand"
+                width="220"
+            ></el-table-column>
+            <el-table-column
+                align="center"
+                label="数量"
+                prop="num"
+                width="220"
+                sortable
+            ></el-table-column>
+            <el-table-column
+                align="center"
+                label="规格"
+                prop="size"
+                width="220"
+                sortable
+            ></el-table-column>
+            <el-table-column
+                align="center"
+                label="加料量"
+                prop="weight"
+                width="220"
+                sortable
             ></el-table-column>
         </scTable>
     </div>
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from "vue";
+import {
+    defineComponent,
+    reactive,
+    ref,
+    getCurrentInstance,
+    onMounted,
+    computed,
+} from "vue";
 export default defineComponent({
     name: "fodderStatistics", // 饲料统计
     setup() {
+        const { proxy } = getCurrentInstance();
+
+        //搜索实例
+        const tableSearch = ref(null);
+
+        //当前鸽棚鸽笼信息
+        const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;
+
         let searchTypes = reactive([]);
-        let cardData = reactive([]);
+        let cardData = reactive(new Array(10));
         let cardWidth = ref("14%");
-
-        //时间选择器
-        // const defaultTime = reactive([
-        //     new Date(2022, 4, 22, 0, 0, 0),
-        //     new Date(2022, 4, 23, 0, 0, 0),
-        // ]);
-
-        //日期值
-        let dateConcreteValue = ref("");
-        // dateConcreteValue = []
 
         //查询下拉框数组
         searchTypes = [
             {
-                value: "鸽笼编号",
-                label: "鸽笼编号",
+                value: "料槽编号",
+                label: "料槽编号",
             },
         ];
 
-        //各种用量
-        let fodderList = reactive([]);
-        fodderList = [
-            {
-                label: "加料量",
-                value: "100kg",
-                color: "#EE4000",
-            },
-            {
-                label: "食用量",
-                value: "80kg",
-                color: "#EE9A49",
-            },
-            {
-                label: "今天均用量",
-                value: "0.04kg",
-                color: "#EEE685",
-            },
-            {
-                label: "本月已用量",
-                value: "160kg",
-                color: "#43CD80",
-            },
-            {
-                label: "当月均用量",
-                value: "0.08kg",
-                color: "#76EE00",
-            },
-            {
-                label: "上月用量",
-                value: "2000kg",
-                color: "#6495ED",
-            },
-            {
-                label: "上月均用量",
-                value: "1kg",
-                color: "#7D26CD",
-            },
-        ];
-        cardData = [
-            {
-                cardText: "加料量",
-                cardNumber: "100kg",
-            },
-            {
-                cardText: "复称量",
-                cardNumber: "20kg",
-            },
-            {
-                cardText: "食用量",
-                cardNumber: "80kg",
-            },
-            {
-                cardText: "本月已用量",
-                cardNumber: "160kg",
-            },
-            {
-                cardText: "当月均用量",
-                cardNumber: "0.8kg",
-            },
-            {
-                cardText: "饲料1剩余量",
-                cardNumber: "80kg",
-            },
-            {
-                cardText: "饲料2剩余量",
-                cardNumber: "80kg",
-            },
-            {
-                cardText: "饲料3剩余量",
-                cardNumber: "80kg",
-            },
-            {
-                cardText: "上月用量",
-                cardNumber: "2000kg",
-            },
-            {
-                cardText: "上月均用量",
-                cardNumber: "1kg",
-            },
-        ];
+        // cardData = [
+        //     {
+        //         cardText: "加料量",
+        //         cardNumber: "100kg",
+        //     },
+        //     {
+        //         cardText: "复称量",
+        //         cardNumber: "20kg",
+        //     },
+        //     {
+        //         cardText: "食用量",
+        //         cardNumber: "80kg",
+        //     },
+        //     {
+        //         cardText: "本月已用量",
+        //         cardNumber: "160kg",
+        //     },
+        //     {
+        //         cardText: "当月均用量",
+        //         cardNumber: "0.8kg",
+        //     },
+        //     {
+        //         cardText: "饲料1剩余量",
+        //         cardNumber: "80kg",
+        //     },
+        //     {
+        //         cardText: "饲料2剩余量",
+        //         cardNumber: "80kg",
+        //     },
+        //     {
+        //         cardText: "饲料3剩余量",
+        //         cardNumber: "80kg",
+        //     },
+        //     {
+        //         cardText: "上月用量",
+        //         cardNumber: "2000kg",
+        //     },
+        //     {
+        //         cardText: "上月均用量",
+        //         cardNumber: "1kg",
+        //     },
+        // ];
 
         //表格数据
-        let tableList = reactive([]);
+        // let tableList = reactive([]);
 
-        tableList = [
-            {
-                number: 1,
-                chargeTime: "2022-04-20 09:36:24",
-                chargeAmount: "25kg",
-                weighAgain: "2022-04-20 17:36:24",
-                surplusWeight: "5kg",
-                edibleAmount: "20kg",
-                variety: "混料",
-            },
-            {
-                number: 2,
-                chargeTime: "2022-04-20 09:36:24",
-                chargeAmount: "25kg",
-                weighAgain: "2022-04-20 17:36:24",
-                surplusWeight: "5kg",
-                edibleAmount: "20kg",
-                variety: "混料",
-            },
-            {
-                number: 3,
-                chargeTime: "2022-04-20 09:36:24",
-                chargeAmount: "25kg",
-                weighAgain: "2022-04-20 17:36:24",
-                surplusWeight: "5kg",
-                edibleAmount: "20kg",
-                variety: "混料",
-            },
-            {
-                number: 4,
-                chargeTime: "2022-04-20 09:36:24",
-                chargeAmount: "25kg",
-                weighAgain: "2022-04-20 17:36:24",
-                surplusWeight: "5kg",
-                edibleAmount: "20kg",
-                variety: "混料",
-            },
-            {
-                number: 5,
-                chargeTime: "2022-04-20 09:36:24",
-                chargeAmount: "25kg",
-                weighAgain: "2022-04-20 17:36:24",
-                surplusWeight: "5kg",
-                edibleAmount: "20kg",
-                variety: "混料",
-            },
-        ];
+        // tableList = [
+        //     {
+        //         number: 1,
+        //         chargeTime: "2022-04-20 09:36:24",
+        //         chargeAmount: "25kg",
+        //         weighAgain: "2022-04-20 17:36:24",
+        //         surplusWeight: "5kg",
+        //         edibleAmount: "20kg",
+        //         variety: "混料",
+        //     },
+        //     {
+        //         number: 2,
+        //         chargeTime: "2022-04-20 09:36:24",
+        //         chargeAmount: "25kg",
+        //         weighAgain: "2022-04-20 17:36:24",
+        //         surplusWeight: "5kg",
+        //         edibleAmount: "20kg",
+        //         variety: "混料",
+        //     },
+        //     {
+        //         number: 3,
+        //         chargeTime: "2022-04-20 09:36:24",
+        //         chargeAmount: "25kg",
+        //         weighAgain: "2022-04-20 17:36:24",
+        //         surplusWeight: "5kg",
+        //         edibleAmount: "20kg",
+        //         variety: "混料",
+        //     },
+        //     {
+        //         number: 4,
+        //         chargeTime: "2022-04-20 09:36:24",
+        //         chargeAmount: "25kg",
+        //         weighAgain: "2022-04-20 17:36:24",
+        //         surplusWeight: "5kg",
+        //         edibleAmount: "20kg",
+        //         variety: "混料",
+        //     },
+        //     {
+        //         number: 5,
+        //         chargeTime: "2022-04-20 09:36:24",
+        //         chargeAmount: "25kg",
+        //         weighAgain: "2022-04-20 17:36:24",
+        //         surplusWeight: "5kg",
+        //         edibleAmount: "20kg",
+        //         variety: "混料",
+        //     },
+        // ];
 
         //日期选择器改变
         const datePickerChange = function (e) {
             console.log("日期改变", e);
         };
-        const searchClick = function () {
-            console.log("嘻嘻嘻，我被点击啦");
-        };
+        const searchClick = function (e) {
+            let dataValue = e.dateValue;
+            console.log(dataValue[0], e, "时间数据");
+            console.log(new Date(dataValue[0]));
+            let startTimeTemp = new Date(dataValue[0]);
+            let endTimeTemp = new Date(dataValue[1]);
+            startTime.value = new Date(
+                startTimeTemp.getFullYear(),
+                startTimeTemp.getMonth(),
+                startTimeTemp.getDate()
+            );
+            endTime.value = new Date(
+                endTimeTemp.getFullYear(),
+                endTimeTemp.getMonth(),
+                endTimeTemp.getDate(),
+                23,
+                59,
+                59
+            );
+            console.log(
+                "开始时间",
+                "结束时间",
+                formatDate(startTime.value),
+                formatDate(endTime.value)
+            );
+            getCardData()
+            getFeedStatisticParams.startTime = formatDate(startTime.value);
+            getFeedStatisticParams.endTime = formatDate(endTime.value);
+            
+            proxy.$nextTick(() => {
+                console.log(getFeedStatisticParams.value,1111)
+                // proxy.$refs.table.getData()
+            })
+};
 
         const outTable = function () {
             console.log("哈哈哈，我被点击了噢");
         };
 
-        return {
-            searchTypes,
-            fodderList,
-            cardWidth,
-            // defaultTime,
-            dateConcreteValue,
-            tableList,
-            cardData,
+        //和日期相关的
 
+        //格式化时间
+        const formatDate = function (date) {
+            var myyear = date.getFullYear();
+            var mymonth = date.getMonth() + 1;
+            var myweekday = date.getDate();
+            var myHour = date.getHours();
+            var myMinu = date.getMinutes();
+            var mySec = date.getSeconds();
+
+            if (mymonth < 10) {
+                mymonth = "0" + mymonth;
+            }
+            if (myweekday < 10) {
+                myweekday = "0" + myweekday;
+            }
+            if (myHour < 10) {
+                myHour = "0" + myHour;
+            }
+            if (myMinu < 10) {
+                myMinu = "0" + myMinu;
+            }
+            if (mySec < 10) {
+                mySec = "0" + mySec;
+            }
+            return (
+                myyear +
+                "-" +
+                mymonth +
+                "-" +
+                myweekday +
+                " " +
+                myHour +
+                ":" +
+                myMinu +
+                ":" +
+                mySec
+            );
+        };
+
+        //当前日期
+        const nowTime = new Date();
+
+        //调接口传的时间
+        //这样拿到的时间都是当天的零点，如果不传直接拿，拿到的也会有现在的时分秒,而理解上需要结束时间当天的最后一秒
+        const endTime = ref(
+            new Date(
+                nowTime.getFullYear(),
+                nowTime.getMonth(),
+                nowTime.getDate(),
+                23,
+                59,
+                59
+            )
+        );
+
+        const startTime = ref(
+            new Date(
+                nowTime.getFullYear(),
+                nowTime.getMonth(),
+                nowTime.getDate() - 1
+            )
+        );
+
+        //本月开始时间
+        const thisBegin = ref(
+            new Date(endTime.value.getFullYear(), endTime.value.getMonth(), 1)
+        );
+        console.log("上月开始时间", thisBegin.value);
+
+        //时间组件的默认时间
+        const defaultTimeValue = reactive([
+            formatDate(startTime.value).substring(0, 10),
+            formatDate(endTime.value).substring(0, 10),
+        ]);
+        console.log(
+            formatDate(endTime.value),
+            formatDate(startTime.value),
+            defaultTimeValue,
+            "当前时间"
+        );
+
+        //上个月的起止时间
+
+        const lastMonthStartDate = ref(
+            new Date(
+                endTime.value.getFullYear(),
+                endTime.value.getMonth() - 1,
+                1
+            )
+        );
+        const lastMonthEndDate = ref(
+            new Date(endTime.value.getFullYear(), endTime.value.getMonth(), 0)
+        );
+        // const hasLastDate = function (nowYear, nowMonth) {
+        //     const monthStartDate = new Date(nowYear, nowMonth - 2, 1);
+        //     const monthEndDate = new Date(nowYear, nowMonth - 1, 1);
+        //     console.log("上个月", formatDate(monthStartDate));
+        //     console.log("这个月", formatDate(monthEndDate));
+        //     console.log(
+        //         "天数",
+        //         (monthEndDate - monthStartDate) / (1000 * 60 * 60 * 24)
+        //     );
+        // };
+
+        //调接口
+        //获取各品牌饲料剩余量
+        const getCardData = async function () {
+            // console.log("当前鸽棚", currShed.id);
+            let data = {
+                currShed: currShed.id,
+            };
+            // console.log("参数", data);
+            const feedBrandNum = await proxy.$API.fodder.feedBrandNum.get(
+                "getFeedBrandNumByShedID",
+                data
+            );
+            if (feedBrandNum.code == 200) {
+                // console.log("各种饲料量数据", data);
+                feedBrandNum.data.data.forEach((item, index) => {
+                    let temp = {
+                        cardText: item.brand,
+                        cardNumber: item.num + item.unit,
+                    };
+                    // return temp;
+                    cardData[index] = temp;
+                });
+                // cardData.push(...temp);
+            }
+
+            //根据鸽棚ID和起止时间查询饲料加料量
+            const getFeedNumByIDTimeData = {
+                currShed: currShed.id,
+                startTime: formatDate(startTime.value),
+                endTime: formatDate(endTime.value),
+            };
+            // console.log("参数", getFeedNumByIDTimeData);
+            const FeedNum = await proxy.$API.fodder.FeedNumByIDTime.get(
+                "getFeedNumByIDTime",
+                getFeedNumByIDTimeData
+            );
+            if (FeedNum.code == 200) {
+                let data = FeedNum.data.data;
+                let temp = {
+                    cardText: "加料量",
+                    cardNumber: data,
+                };
+                // console.log("加料量数据", temp);
+                // cardData.push(temp);
+                cardData[3] = temp;
+            }
+
+            //根据鸽棚ID和起止时间查询饲料复称量
+
+            let getTwiceNumByIDTimeData = {
+                currShed: currShed.id,
+                startTime: formatDate(startTime.value),
+                endTime: formatDate(endTime.value),
+            };
+            // console.log("参数", getTwiceNumByIDTimeData);
+            const TwiceNum = await proxy.$API.fodder.FeedNumByIDTime.get(
+                "getTwiceNumByIDTime",
+                getTwiceNumByIDTimeData
+            );
+            if (TwiceNum.code == 200) {
+                let data = TwiceNum.data.data;
+                let temp = {
+                    cardText: "复称量",
+                    cardNumber: data,
+                };
+                // console.log("复称量数据", temp);
+                // cardData.push(temp);
+                cardData[4] = temp;
+            }
+
+            //获取食用量
+            if (FeedNum.code == 200 && TwiceNum.code == 200) {
+                // console
+
+                let firstData = FeedNum.data.data.substring(
+                    0,
+                    FeedNum.data.data.indexOf("k")
+                );
+                let endData = TwiceNum.data.data.substring(
+                    0,
+                    TwiceNum.data.data.indexOf("k")
+                );
+                const hadEat = firstData - endData;
+                // console.log(hadEat, "食用量");
+                let temp = {
+                    cardText: "食用量",
+                    cardNumber: hadEat + "kg",
+                };
+                // cardData.push(temp);
+                cardData[5] = temp;
+            }
+
+            //本月饲料使用量
+            //  console.log(
+            //     formatDate(thisBegin.value).substring(0, 10),
+            //     "本月开始时间"
+            // );
+
+            let getMonthNumByIDTimeData = {
+                currShed: currShed.id,
+                startTime: formatDate(thisBegin.value),
+                endTime: formatDate(endTime.value),
+            };
+            // console.log("参数", getTwiceNumByIDTimeData);
+            const monthNum = await proxy.$API.fodder.FeedNumByIDTime.get(
+                "getMonthNumByIDTime",
+                getMonthNumByIDTimeData
+            );
+            if (monthNum.code == 200) {
+                let data = monthNum.data.data;
+                let temp = {
+                    cardText: "本月已用量",
+                    cardNumber: data,
+                };
+                // console.log("本月已用量", temp);
+                // cardData.push(temp);
+                cardData[6] = temp;
+            }
+
+            //本月均用量
+            let getMonthAvgNumByIDTimeData = {
+                currShed: currShed.id,
+                startTime: formatDate(thisBegin.value),
+                endTime: formatDate(endTime.value),
+            };
+            // console.log("参数", getTwiceNumByIDTimeData);
+            const monthAvgNum = await proxy.$API.fodder.FeedNumByIDTime.get(
+                "getMonthAvgNumByIDTime",
+                getMonthAvgNumByIDTimeData
+            );
+            if (monthAvgNum.code == 200) {
+                let data = monthAvgNum.data.data;
+                let temp = {
+                    cardText: "本月均用量",
+                    cardNumber:
+                        parseFloat(
+                            data.substring(0, data.indexOf("k"))
+                        ).toFixed(3) + "kg",
+                };
+                // console.log("本月均用量", temp);
+                // cardData.push(temp);
+                cardData[7] = temp;
+            }
+
+            //查询上月饲料用量
+            // console.log("上个月第一天", formatDate(lastMonthStartDate.value));
+            // console.log("上个月最后一天", lastMonthEndDate.value);
+            let getLastMonthNumBYIDTimedata = {
+                currShed: currShed.id,
+                startTime: formatDate(lastMonthStartDate.value),
+                endTime: formatDate(lastMonthEndDate.value),
+            };
+            // console.log("参数", getTwiceNumByIDTimeData);
+            const lastMonthNum = await proxy.$API.fodder.FeedNumByIDTime.get(
+                "getLastMonthNumBYIDTime",
+                getLastMonthNumBYIDTimedata
+            );
+            if (lastMonthNum.code == 200) {
+                let data = lastMonthNum.data.data;
+                let temp = {
+                    cardText: "上月用量",
+                    cardNumber: data,
+                };
+                // console.log("上月用量", temp);
+                // cardData.push(temp);
+                cardData[8] = temp;
+            }
+
+            //上月饲料均用量
+            let getLastAvgNUmByIDTimedata = {
+                currShed: currShed.id,
+                startTime: formatDate(lastMonthStartDate.value),
+                endTime: formatDate(lastMonthEndDate.value),
+            };
+            // console.log("参数", getTwiceNumByIDTimeData);
+            const lastAvgNUm = await proxy.$API.fodder.FeedNumByIDTime.get(
+                "getLastAvgNUmByIDTime",
+                getLastAvgNUmByIDTimedata
+            );
+            if (lastAvgNUm.code == 200) {
+                let data = lastAvgNUm.data.data;
+                let temp = {
+                    cardText: "上月均用量",
+                    cardNumber:
+                        parseFloat(
+                            data.substring(0, data.indexOf("k"))
+                        ).toFixed(3) + "kg",
+                };
+                // console.log("上月饲料用量", temp);
+                // cardData.push(temp);
+                cardData[9] = temp;
+            }
+        };
+
+        //列表
+        //接口
+        const getFeedStatisticApi = proxy.$API.fodder.FeedStatisticByIDTIme;
+        //参数
+        const getFeedStatisticParams = reactive(computed(() => {
+            console.log('监听改变')
+            return {
+            currShed: currShed.id,
+            startTime: formatDate(startTime.value),
+            endTime: formatDate(endTime.value),
+            }
+        }))
+        
+        // reactive({
+
+        // });
+
+        //获取列表数据
+        // const getList = function () {
+        //     //上月饲料均用量
+        //     let getLastAvgNUmByIDTimedata = {
+        //         currShed: currShed.id,
+        //         startTime: formatDate(lastMonthStartDate.value),
+        //         endTime: formatDate(lastMonthEndDate.value),
+        //     };
+        //     console.log("参数", getTwiceNumByIDTimeData);
+        //     const lastAvgNUm = await proxy.$API.fodder.FeedNumByIDTime.get(
+        //         "getLastAvgNUmByIDTime",
+        //         getLastAvgNUmByIDTimedata
+        //     );
+        //     if (lastAvgNUm.code == 200) {
+        //         let data = lastAvgNUm.data.data;
+        //         let temp = {
+        //             cardText: "上月均用量",
+        //             cardNumber:
+        //                 parseFloat(
+        //                     data.substring(0, data.indexOf("k"))
+        //                 ).toFixed(3) + "kg",
+        //         };
+        //         console.log("上月饲料用量", temp);
+        //         // cardData.push(temp);
+        //         cardData[9] = temp;
+        //     }
+        // };
+
+        onMounted(() => {
+            console.log(proxy.$refs.tableSearch, "搜索组件");
+        });
+
+        //获取各品牌数量
+        getCardData();
+
+        //根据鸽棚ID和起止时间查询饲料加料量
+        // getFeedNumByIDTime();
+
+        //根据鸽棚ID和起止时间查询饲料复称量
+        // getTwiceNumByIDTime()
+
+        return {
+            tableSearch, //搜索实例
+            searchTypes,
+            cardWidth,
+            defaultTimeValue, //默认时间
+            // tableList,
+            cardData,
+            getFeedStatisticApi, //表格请求接口
+            getFeedStatisticParams, //表格请求参数
             datePickerChange,
             searchClick,
             outTable,
