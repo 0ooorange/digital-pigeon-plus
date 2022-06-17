@@ -4,54 +4,56 @@
 			:cardData="cardData"
 			:showSearch="false"
 			:showDatePk="false"
+			
 			@searchClick="searchClick"
 			@outTable="outTable"
 		/>
 		<el-main class="nopadding">
 			<scTable
 				ref="table"
-				:data="apiObj"
+				:data="tablelist"
 				stripe
 				highlightCurrentRow
 				class="tablestyle"
+
 				:default-sort="{ prop: 'date', order: 'descending' }"
 			>
 				<el-table-column
 					label="鸽笼号"
-					prop="pigeonnumber"
+					prop="codes"
 					sortable
 					width="120"
 					align="center"
 				></el-table-column>
 				<el-table-column
 					label="板子编号"
-					prop="boardnumber"
+					prop="panelCode"
 					width="120"
 					align="center"
 				></el-table-column>
 				<el-table-column
 					label="出仔时间"
-					prop="cubouttime"
+					prop="checkCubTime"
 					sortable
 					width="230"
 					align="center"
 				></el-table-column>
 				<el-table-column
 					label="喂养天数"
-					prop="feedday"
+					prop="days"
 					sortable
 					width="180"
 					align="center"
 				></el-table-column>
 				<el-table-column
 					label="出栏个数"
-					prop="baroutnumber"
+					prop="cubNumber"
 					width="180"
 					align="center"
 				></el-table-column>
 				<el-table-column
 					label="备注"
-					prop="remark"
+					prop="remarks"
 					width="240"
 					align="center"
 				></el-table-column>
@@ -61,110 +63,51 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
-export default defineComponent({
+import scTable from "../../../../components/scTable/index.vue";
+export default {
 	name: "outCageAuxiliary",
-	setup() {
-		let cardData = [];
-		cardData = [
+	components: {
+		scTable,
+	},
+	data() {
+		return {
+      objquery:{
+                pageNum: 1,
+                pageSize:10,
+			},
+			pageSize: 8,
+			total: 100,
+			pageNum: 1,
+			tablelist:[],
+			// 这是卡片数据数组，一个元素一个卡片，元素超过两个自动渲染到查询模块下方
+			cardData: [
 			{
 				cardText: "出栏个数",
 				cardNumber: "999个",
 			},
-		];
-		let apiObj = [];
-		apiObj = [
-			{
-				pigeonnumber: "A12",
-				boardnumber: "3",
-				cubouttime: "2022-04-12 20:21:23",
-				feedday: "10天",
-				baroutnumber: "199只",
-				operator: "李暖暖",
-				remark: "XXXXX",
-			},
-			{
-				pigeonnumber: "A02",
-				boardnumber: "3",
-				cubouttime: "2022-11-12 20:21:23",
-				feedday: "10天",
-				baroutnumber: "199只",
-				operator: "李暖暖",
-				remark: "XXXXX",
-			},
-			{
-				pigeonnumber: "A12",
-				boardnumber: "3",
-				cubouttime: "2022-04-12 20:21:23",
-				feedday: "10天",
-				baroutnumber: "199只",
-				operator: "李暖暖",
-				remark: "XXXXX",
-			},
-			{
-				pigeonnumber: "A10",
-				boardnumber: "3",
-				cubouttime: "2022-06-12 20:21:23",
-				feedday: "8天",
-				baroutnumber: "199只",
-				operator: "李暖暖",
-				remark: "XXXXX",
-			},
-			{
-				pigeonnumber: "A10",
-				boardnumber: "3",
-				cubouttime: "2022-04-30 20:21:23",
-				feedday: "10天",
-				baroutnumber: "199只",
-				operator: "李暖暖",
-				remark: "XXXXX",
-			},
-			{
-				pigeonnumber: "A12",
-				boardnumber: "3",
-				cubouttime: "2022-04-11 20:21:23",
-				feedday: "10天",
-				baroutnumber: "199只",
-				operator: "李暖暖",
-				remark: "XXXXX",
-			},
-
-			{
-				pigeonnumber: "A03",
-				boardnumber: "3",
-				cubouttime: "2022-04-21 20:21:23",
-				feedday: "13天",
-				baroutnumber: "199只",
-				operator: "李暖暖",
-				remark: "XXXXX",
-			},
-
-			{
-				pigeonnumber: "A06",
-				boardnumber: "3",
-				cubouttime: "2022-05-12 20:21:23",
-				feedday: "10天",
-				baroutnumber: "199只",
-				operator: "李暖暖",
-				remark: "XXXXX",
-			},
-		];
-		const searchClick = function () {
-			console.log("嘻嘻嘻，我被点击啦");
-		};
-
-		const outTable = function () {
-			console.log("哈哈哈，我被点击了噢");
-		};
-		return {
-			cardData,
-			apiObj,
-
-			searchClick,
-			outTable,
+		 ],
 		};
 	},
-});
+	methods: {
+		// 表格查询事件
+		searchClick() {
+			console.log("嘻嘻嘻，我被点击啦");
+		},
+		// 表格导出事件
+		outTable() {
+			console.log("哈哈哈，我被点击了噢");
+		},
+    
+		async getMarketingAssistanc(){
+			const {data:res}=await this.$API.outCage.getMarketingAssistance.post(this.objquery);
+            this.tablelist=res.data;
+		    console.log("出栏辅助数据：",this.tablelist );
+		}
+	},
+  created() {
+		this.getMarketingAssistanc();
+	},
+};
 </script>
 
 <style scoped>

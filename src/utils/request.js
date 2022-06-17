@@ -8,6 +8,7 @@ axios.defaults.baseURL = "http://172.17.98.87:8000";
 
 axios.defaults.timeout = sysConfig.TIMEOUT;
 
+
 // HTTP request 拦截器
 axios.interceptors.request.use(
 	(config) => {

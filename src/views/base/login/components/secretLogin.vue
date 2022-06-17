@@ -44,6 +44,7 @@ const login = async function () {
   console.log(login,'登录')
   if (login.code == 200) {
     proxy.$TOOL.cookie.set('TOKEN', login.data.token)
+    console.log("token:",login.data.token);
   } else {
     islogin.value = false
     proxy.$message.warning(login.message)
