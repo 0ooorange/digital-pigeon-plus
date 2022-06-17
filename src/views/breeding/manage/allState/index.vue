@@ -295,7 +295,7 @@
                                 <span style="font-size: 10px">孵蛋数量:</span>
                                 <span
                                     :style="'font-size:12px;padding-left:5px;  font-weight: 700;color:#43CD80'"
-                                    >0次</span
+                                    >0个</span
                                 >
                             </el-card>
                         </div>
