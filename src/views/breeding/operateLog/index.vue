@@ -348,28 +348,28 @@ export default defineComponent({
 
         dataCount = [
             {
-                dataTitle: "下蛋数量",
-                count: "30个",
+                dataTitle: "产蛋数",
+                count: "2个",
             },
             {
-                dataTitle: "出栏数量",
-                count: "30只",
-            },
-            {
-                dataTitle: "出仔数量",
-                count: "30只",
-            },
-            {
-                dataTitle: "抽蛋数量",
-                count: "0个",
+                dataTitle: "抽蛋数",
+                count: "6个",
             },
             {
                 dataTitle: "孵蛋数量",
-                count: "16个",
+                count: "0个",
             },
             {
                 dataTitle: "孵蛋次数",
-                count: "8次",
+                count: "2只",
+            },
+            {
+                dataTitle: "出仔数",
+                count: "16个",
+            },
+            {
+                dataTitle: "死仔数",
+                count: "0只",
             },
         ];
 

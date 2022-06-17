@@ -278,44 +278,44 @@
                     <div class="dataList" style="height: 150px">
                         <div class="row">
                             <el-card class="box-card card_list_item">
-                                <span style="font-size: 10px">成鸽数:</span>
+                                <span style="font-size: 10px">产蛋数:</span>
                                 <span
                                     :style="'font-size:12px;padding-left:5px; font-weight: 700;color:#EE4000'"
-                                    >1对</span
-                                >
-                            </el-card>
-                            <el-card class="box-card card_list_item">
-                                <span style="font-size: 10px">幼鸽数:</span>
-                                <span
-                                    :style="'font-size:12px;padding-left:5px;  font-weight: 700;color:#EE9A49'"
-                                    >1只</span
+                                    >2个</span
                                 >
                             </el-card>
                             <el-card class="box-card card_list_item">
                                 <span style="font-size: 10px">抽蛋数:</span>
                                 <span
+                                    :style="'font-size:12px;padding-left:5px;  font-weight: 700;color:#EE9A49'"
+                                    >6个</span
+                                >
+                            </el-card>
+                            <el-card class="box-card card_list_item">
+                                <span style="font-size: 10px">孵蛋数量:</span>
+                                <span
                                     :style="'font-size:12px;padding-left:5px;  font-weight: 700;color:#43CD80'"
-                                    >1个</span
+                                    >0次</span
                                 >
                             </el-card>
                         </div>
                         <div class="row">
                             <el-card class="box-card card_list_item">
-                                <span style="font-size: 10px">产蛋数:</span>
+                                <span style="font-size: 10px">孵蛋次数:</span>
                                 <span
                                     :style="'font-size:12px;padding-left:5px;  font-weight: 700;color:#76EE00'"
-                                    >2个</span
+                                    >0次</span
                                 >
                             </el-card>
                             <el-card class="box-card card_list_item">
                                 <span style="font-size: 10px">出仔数:</span>
                                 <span
                                     :style="'font-size:12px;padding-left:5px;  font-weight: 700;color:#6495ED'"
-                                    >0只</span
+                                    >2只</span
                                 >
                             </el-card>
                             <el-card class="box-card card_list_item">
-                                <span style="font-size: 10px">出栏数:</span>
+                                <span style="font-size: 10px">死仔数:</span>
                                 <span
                                     :style="'font-size:12px;padding-left:5px;  font-weight: 700;color:#7D26CD'"
                                     >0只</span
@@ -360,6 +360,7 @@
 </template>
 
 <script>
+import { ElMessage } from "element-plus";
 export default {
     name: "allStateManage", // 鸽棚总览
     created() {
@@ -592,6 +593,13 @@ export default {
         changeStatus(index) {
             this.currentStatus = index;
             console.log("当前状态", this.currentStatus);
+            ElMessage({
+                message: `切换状态成功，当前为${
+                    this.methodsArray[this.currentStatus]
+                }`,
+                type: "success",
+                duration: 2000,
+            });
         },
 
         //改变当前鸽笼数
@@ -607,6 +615,13 @@ export default {
         changeLever(index) {
             this.currentLever = index;
             this.getAllCage();
+            ElMessage({
+                message: `切换成功，当前为${
+                    this.lever[this.currentLever].label
+                }层的鸽笼`,
+                type: "success",
+                duration: 2000,
+            });
         },
 
         //获取所有鸽笼
@@ -667,6 +682,11 @@ export default {
             this.currentPigeon = item.codes;
             console.log("点击鸽笼", this.findLogParams);
             // this.$refs.logTable.getData()
+            ElMessage({
+                message: `当前可查看编号为 ${this.currentPigeon} 的鸽笼的详细信息`,
+                type: "success",
+                duration: 2000,
+            });
         },
     },
 };
