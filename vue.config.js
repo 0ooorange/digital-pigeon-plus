@@ -14,7 +14,7 @@ module.exports = {
 		proxy: {
 			// 养殖模块
 			"/digitalPigeon": {
-				target: "http://172.17.98.87:8000",
+				target: "http://106.12.160.172:8000",
 				ws: true,
 				// pathRewrite: {
 				// 	"^/digitalPigeon": "/digitalPigeon",
