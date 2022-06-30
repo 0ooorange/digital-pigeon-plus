@@ -118,7 +118,50 @@ export default defineComponent({
         const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;
 
         let searchTypes = reactive([]);
-        let cardData = reactive(new Array(10));
+        let cardData = reactive(
+            [
+            {
+                cardText: "喜粮",
+                cardNumber: "100kg",
+            },
+            {
+                cardText: "中粮",
+                cardNumber: "20kg",
+            },
+            {
+                cardText: "玉粮",
+                cardNumber: "80kg",
+            },
+            {
+                cardText: "加料量",
+                cardNumber: "160kg",
+            },
+            {
+                cardText: "复称量",
+                cardNumber: "0.8kg",
+            },
+            {
+                cardText: "食用量",
+                cardNumber: "80kg",
+            },
+            {
+                cardText: "本月已用量",
+                cardNumber: "80kg",
+            },
+            {
+                cardText: "本月均用量",
+                cardNumber: "80kg",
+            },
+            {
+                cardText: "上月用量",
+                cardNumber: "2000kg",
+            },
+            {
+                cardText: "上月均用量",
+                cardNumber: "1kg",
+            },
+        ]
+        );
         let cardWidth = ref("14%");
 
         //查询下拉框数组
