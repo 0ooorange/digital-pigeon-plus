@@ -488,6 +488,11 @@ export default {
                 beginDate: "",
                 endDate: "",
             },
+            findCageDataParams: {
+                pigeonId: "",
+                beginDate: "",
+                endDate: "",
+            },
             tableListOption: [
                 {
                     time: "2022-04-21",
@@ -657,8 +662,22 @@ export default {
                 this.findAbnormalParams.endDate = this.today;
                 this.findAbnormalParams.pigeonId =
                     this.cageArray[0][0] && this.cageArray[0][0].pigeonId;
-                this.currentPigeon = this.cageArray[0][0].codes;
                 console.log(this.findAbnormalParams, "异常信息请求参数1111");
+                this.findCageDataParams.beginDate = this.passDay;
+                this.findCageDataParams.endDate = this.today;
+                this.findCageDataParams.pigeonId =
+                    this.cageArray[0][0] && this.cageArray[0][0].pigeonId;
+                console.log(this.findCageDataParams, "各种数据参数1111");
+                const getDataList =
+                    await this.$API.allState.findCageDataByPigeonIdAndDate.get(
+                        this.findCageDataParams
+                    );
+                    console.log('请求各种数据',getDataList)
+                if (getDataList.code == 200) {
+                    console.log("各种数据", getDataList);
+                    let data = getDataList.data.data;
+                    console.log("各种数据", data);
+                }
             }
         },
         //获取鸽笼具体信息

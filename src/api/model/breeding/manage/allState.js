@@ -44,4 +44,12 @@ export default {
 			return await http.get(this.url, params);
 		},
 	},
+	findCageDataByPigeonIdAndDate: {
+		url: `/digitalPigeon/breed/overviewAndStatistics/pigeon-cage-state/findCageDataByPigeonIdAndDate/`,
+		name: "获取各种数据",
+		get: async function (data = {}) {
+			console.log("url", this.url);
+			return await http.get(this.url, data);
+		},
+	},
 };
