@@ -56,6 +56,9 @@
         </span>
         <span class="mid_top_child selectText">操作员：<span class="operatorCss">{{currOperator}}</span></span>
       </div>
+      <div class="datePickerCss">
+        <el-date-picker v-model="dateValue.value" :default-value="defaultValue" type="daterange" format="YYYY-MM-DD" unlink-panels range-separator="-" start-placeholder="起始时间" end-placeholder="结束时间" :shortcuts="shortcuts" style="width: 250px;" />
+      </div>
       <div class="pmidd_bott">
         <div class="pumiddboxttop1 fl">
           <h2 class="tith2 pt2">蛋异常统计</h2>
@@ -86,7 +89,7 @@
       <!--  amidd_bott end-->
       <div class="pmiddboxtbott">
         <h2 class="tith2 pt11">环境参数</h2>
-        <ScEcharts :option="environmentOption" class="echarts" height="20rem" width="40rem"></ScEcharts>
+        <ScEcharts :option="environmentOption" class="echarts" height="16rem" width="38rem"></ScEcharts>
       </div>
       <!-- amidd_bott end -->
     </div>
@@ -124,7 +127,7 @@
 <script>
 import ScEcharts from '@/components/scEcharts'
 import SlideTable from './components/slideTable'
-import { ref, getCurrentInstance } from 'vue'
+import { ref, getCurrentInstance, reactive } from 'vue'
 export default {
   name: 'dataVisual',
   components: {
@@ -187,7 +190,46 @@ export default {
       }
       this.$TOOL.data.set('CURR_INFO', currInfo.value)
     }
-
+    // 时间选择器
+    const dateValue = ref([''])
+    dateValue.value = reactive({
+        text: '近一个月',
+        value: () => {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+          return [start, end]
+        },
+      })
+    const shortcuts = [
+      {
+        text: '近一周',
+        value: () => {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+          return [start, end]
+        },
+      },
+      {
+        text: '近一个月',
+        value: () => {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+          return [start, end]
+        },
+      },
+      {
+        text: '近3个月',
+        value: () => {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+          return [start, end]
+        },
+      },
+    ]
     const videoUrl = ref('')
     // 视频
     const videoOptions = [
@@ -447,6 +489,8 @@ export default {
       currShed,
       bases,
       dovecotes,
+      dateValue,
+      shortcuts,
       videoUrl,
       videoOptions,
       environmentOption,
@@ -1575,7 +1619,7 @@ i.redr {
   background-repeat: no-repeat;
   background-position: top center;
   width: 98.4%;
-  height: 38%;
+  height: 32%;
   margin-top: 2%;
 }
 .purightboxtop {
@@ -1935,5 +1979,11 @@ i.redr {
   .mid_top_child {
     margin-left: 2px;
   }
+}
+.datePickerCss {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
 }
 </style>
