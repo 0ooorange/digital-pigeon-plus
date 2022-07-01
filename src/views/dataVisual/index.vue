@@ -21,12 +21,12 @@
     <div class="puleft fl">
       <div class="pulefttop">
         <h2 class="tith2 pt11"><span>物料统计</span></h2>
-        <scEcharts :option="fodderOption"></scEcharts>
+        <ScEcharts :option="fodderOption"></ScEcharts>
       </div>
       <div class="puleftboxtmidd">
         <h2 class="tith2 pt11">产蛋统计</h2>
         <div class="productEgg">
-          <scEcharts class="productEggEcharts" :option="productEggOption"></scEcharts>
+          <ScEcharts class="productEggEcharts" :option="productEggOption"></ScEcharts>
           <ul class="productEggText">
             <li>单月产蛋数：3600枚</li>
             <li>单月出蛋数：500枚</li>
@@ -36,15 +36,34 @@
       </div>
       <div class="puleftboxtbott">
         <h2 class="tith2 pt7">基地信息</h2>
+        <SlideTable></SlideTable>
       </div>
     </div>
     <!--  left1 end -->
     <div class="fl pt6 puleft2">
+      <div class="mid_top">
+        <span class="mid_top_child">
+          <span class="selectText">基地：</span>
+          <el-select style="width: 150px" v-model="currBase.name" class="m-2" placeholder="Select" @change="currBaseChange">
+            <el-option v-for="item in bases" :key="item.id" :label="item.name" :value="item.name" />
+          </el-select>
+        </span>
+        <span class="mid_top_child">
+          <span class="selectText">鸽棚：</span>
+          <el-select style="width: 150px" v-model="currShed.code" class="m-2" placeholder="Select" @change="currShedChange">
+            <el-option v-for="item in dovecotes" :key="item.id" :label="item.code" :value="item.code" />
+          </el-select>
+        </span>
+        <span class="mid_top_child selectText">操作员：<span class="operatorCss">{{currOperator}}</span></span>
+      </div>
+      <div class="datePickerCss">
+        <el-date-picker v-model="dateValue.value" :default-value="defaultValue" type="daterange" format="YYYY-MM-DD" unlink-panels range-separator="-" start-placeholder="起始时间" end-placeholder="结束时间" :shortcuts="shortcuts" style="width: 250px;" />
+      </div>
       <div class="pmidd_bott">
         <div class="pumiddboxttop1 fl">
           <h2 class="tith2 pt2">蛋异常统计</h2>
           <div class="eggAbnormal">
-            <scEcharts :option="eggAbnormalOption" height="16rem" width="20rem"></scEcharts>
+            <ScEcharts :option="eggAbnormalOption" height="14rem" width="20rem"></ScEcharts>
             <ul class="eggAbnormalText">
               <li>蛋异常数：150枚</li>
               <li>光蛋1数：30枚</li>
@@ -58,7 +77,7 @@
         <div class="pumiddboxttop2 fl">
           <h2 class="tith2 pt2">出栏统计</h2>
           <div class="eggAbnormal">
-            <scEcharts :option="outCageOption" height="16rem" width="20rem"></scEcharts>
+            <ScEcharts :option="outCageOption" height="14rem" width="20rem"></ScEcharts>
             <ul class="eggAbnormalText">
               <li>出仔数：3000只</li>
               <li>出栏数：2000只</li>
@@ -70,7 +89,7 @@
       <!--  amidd_bott end-->
       <div class="pmiddboxtbott">
         <h2 class="tith2 pt11">环境参数</h2>
-        <scEcharts :option="environmentOption" class="echarts" height="20rem" width="40rem"></scEcharts>
+        <ScEcharts :option="environmentOption" class="echarts" height="16rem" width="38rem"></ScEcharts>
       </div>
       <!-- amidd_bott end -->
     </div>
@@ -106,14 +125,111 @@
 </template>
 
 <script>
-import scEcharts from '@/components/scEcharts'
-import { ref } from 'vue'
+import ScEcharts from '@/components/scEcharts'
+import SlideTable from './components/slideTable'
+import { ref, getCurrentInstance, reactive } from 'vue'
 export default {
   name: 'dataVisual',
   components: {
-    scEcharts,
+    ScEcharts,
+    SlideTable,
   },
   setup() {
+    // 右上角
+    const { proxy } = getCurrentInstance()
+    const currOperator = ref('')
+    const bases = ref([])
+    const dovecotes = ref([])
+    const currBase = ref({})
+    const currShed = ref({})
+    const currInfo = ref({})
+    const baseInfo = proxy.$TOOL.data.get('BASE_INFO')
+    bases.value = baseInfo.base
+    dovecotes.value = baseInfo.shed
+    currInfo.value = proxy.$TOOL.data.get('CURR_INFO')
+    if (currInfo.value) {
+      currBase.value = currInfo.value.CURR_BASE
+      currShed.value = currInfo.value.CURR_SHED
+      currOperator.value = currInfo.value.CHARGE_NAME
+    } else {
+      currBase.value = bases.value[0]
+      currShed.value = dovecotes.value[0]
+      currOperator.value = baseInfo.chargeName
+    }
+    // 切换基地
+    const currBaseChange = async function () {
+      const { data: changeBaseRes } = await this.$API.layout.changeBase.post(currBase.value.id)
+      const { data: changeShedRes } = await this.$API.layout.getChargeName.post(
+        currShed.value.chargeId
+      )
+      dovecotes.value = changeBaseRes.shed
+      currOperator.value = changeShedRes.chargeName
+      currInfo.value = ref({
+        CURR_BASE: currBase.value,
+        CURR_SHED: currShed.value,
+        CHARGE_NAME: currOperator.value,
+      })
+      this.$TOOL.data.set('CURR_INFO', currInfo.value)
+      // changeBaseRes.
+    }
+    // 切换鸽棚
+    const currShedChange = async function (currShedName) {
+      var { data: changeShedRes } = await this.$API.layout.getChargeName.post(
+        currShed.value.chargeId
+      )
+      currOperator.value = changeShedRes.chargeName
+      for (var i = 0; i < dovecotes.value.length; i++) {
+        for (var key in dovecotes.value[i]) {
+          if (key === currShedName) currShed.value = dovecotes.value[i]
+        }
+      }
+      currInfo.value = {
+        CURR_BASE: currBase.value,
+        CURR_SHED: currShed.value,
+        CHARGE_NAME: currOperator.value,
+      }
+      this.$TOOL.data.set('CURR_INFO', currInfo.value)
+    }
+    // 时间选择器
+    const dateValue = ref([''])
+    dateValue.value = reactive({
+        text: '近一个月',
+        value: () => {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+          return [start, end]
+        },
+      })
+    const shortcuts = [
+      {
+        text: '近一周',
+        value: () => {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+          return [start, end]
+        },
+      },
+      {
+        text: '近一个月',
+        value: () => {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+          return [start, end]
+        },
+      },
+      {
+        text: '近3个月',
+        value: () => {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+          return [start, end]
+        },
+      },
+    ]
     const videoUrl = ref('')
     // 视频
     const videoOptions = [
@@ -368,6 +484,13 @@ export default {
       ],
     }
     return {
+      currOperator,
+      currBase,
+      currShed,
+      bases,
+      dovecotes,
+      dateValue,
+      shortcuts,
       videoUrl,
       videoOptions,
       environmentOption,
@@ -375,6 +498,8 @@ export default {
       productEggOption,
       eggAbnormalOption,
       outCageOption,
+      currBaseChange,
+      currShedChange,
     }
   },
 }
@@ -503,7 +628,7 @@ html,
 }
 .pmidd_bott {
   width: 100%;
-  height: 47%;
+  height: 42%;
 }
 
 .mrbox_top_right {
@@ -1494,7 +1619,7 @@ i.redr {
   background-repeat: no-repeat;
   background-position: top center;
   width: 98.4%;
-  height: 38%;
+  height: 32%;
   margin-top: 2%;
 }
 .purightboxtop {
@@ -1845,5 +1970,20 @@ i.redr {
     font-size: 12px;
     line-height: 16px;
   }
+}
+.mid_top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  .mid_top_child {
+    margin-left: 2px;
+  }
+}
+.datePickerCss {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
 }
 </style>

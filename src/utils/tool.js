@@ -12,7 +12,6 @@ const tool = {};
 /* cookie */
 tool.cookie = {
 	set(name, value, expires, domain, path, secure) {
-		console.log('触发到这里',name)
 		var cookieText = "";
 		cookieText += encodeURIComponent(name) + "=" + encodeURIComponent(value);
 		if (expires instanceof Date) {

@@ -14,11 +14,11 @@
         <el-col :span="secondSpan" style="display:flex; ">
           <div class="selectDivs">
             <span class="selectText">基地：</span>
-            <el-select style="width: 150px" v-model="currBase.name" class="m-2" placeholder="Select" @change="currBaseChange">
+            <el-select style="width: 150px" v-model="currBaseName" class="m-2" placeholder="Select" @change="currBaseChange($event)">
               <el-option v-for="item in bases" :key="item.id" :label="item.name" :value="item.name" />
             </el-select>
             <span class="selectText">鸽棚：</span>
-            <el-select style="width: 150px" v-model="currShed.code" class="m-2" placeholder="Select" @change="currShedChange">
+            <el-select style="width: 150px" v-model="currShedCode" class="m-2" placeholder="Select" @change="currShedChange">
               <el-option v-for="item in dovecotes" :key="item.id" :label="item.code" :value="item.code" />
             </el-select>
             <span class="selectText">操作员：<span class="operatorCss">{{currOperator}}</span></span>
@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import tool from "../utils/tool";
+import tool from '../utils/tool'
 import SideM from './components/sideM.vue'
 import Topbar from './components/topbar.vue'
 import NavMenu from './components/NavMenu.vue'
@@ -94,6 +94,8 @@ export default {
       currBase: {},
       currShed: {},
       currOperator: '',
+      currBaseName: '',
+      currShedCode: '',
       bases: [],
       dovecotes: [],
       menu: [],
@@ -127,7 +129,7 @@ export default {
     this.baseInfo = this.$TOOL.data.get('BASE_INFO')
     this.bases = this.baseInfo.base
     this.dovecotes = this.baseInfo.shed
-    var currInfo = this.$TOOL.data.get('CURR_INFO')
+    let currInfo = this.$TOOL.data.get('CURR_INFO')
     if (currInfo) {
       this.currBase = currInfo.CURR_BASE
       this.currShed = currInfo.CURR_SHED
@@ -137,7 +139,8 @@ export default {
       this.currShed = this.dovecotes[0]
       this.currOperator = this.baseInfo.chargeName
     }
-
+    this.currBaseName = this.currBase.name
+    this.currShedCode = this.currShed.code
     this.currInfo = {
       CURR_BASE: this.currBase,
       CURR_SHED: this.currShed,
@@ -148,7 +151,7 @@ export default {
     this.onLayoutResize()
     window.addEventListener('resize', this.onLayoutResize)
     // var menu = this.$router.sc_getMenu()
-    var menu = tool.data.get("CURR_MENU")
+    var menu = tool.data.get('CURR_MENU')
     this.menu = this.filterUrl(menu)
     this.showThis()
   },
@@ -219,20 +222,46 @@ export default {
       })
     },
     // 切换基地
-    async currBaseChange() {
-      var { data: changeBaseRes } = await this.$API.layout.changeBase.post(this.currBase.id)
-      var { data: changeShedRes } = await this.$API.layout.getChargeName.post(
-        this.currShed.chargeId
-      )
+    async currBaseChange(e) {
+      for (let i = 0; i < this.bases.length; i++) {
+        if (this.bases[i].name === e) {
+          this.currBase = JSON.parse(JSON.stringify(this.bases[i]))
+          break
+        }
+      }
+      let { data: changeBaseRes } = await this.$API.layout.changeBase.post(this.currBase.id)
       this.dovecotes = changeBaseRes.shed
-      this.currOperator = changeShedRes.chargeName
+      this.currShed = this.dovecotes[0]
+      if (changeBaseRes.shed.length === 0) {
+        this.dovecotes = [
+          {
+            id: null,
+            gmtCreate: null,
+            gmtModified: null,
+            isDeleted: 0,
+            version: 0,
+            code: '没有棚',
+            chargeId: null,
+            baseId: 0,
+          },
+        ]
+        this.currOperator = '无信息'
+        this.currShed = this.dovecotes[0]
+      } else {
+        let { data: changeShedRes } = await this.$API.layout.getChargeName.post(
+          this.currShed.chargeId
+        )
+        this.currOperator = changeShedRes.chargeName
+      }
+      this.currBaseName = this.currBase.name
+      this.currShedCode = this.currShed.code
+
       this.currInfo = {
         CURR_BASE: this.currBase,
         CURR_SHED: this.currShed,
         CHARGE_NAME: this.currOperator,
       }
       this.$TOOL.data.set('CURR_INFO', this.currInfo)
-      // changeBaseRes.
     },
     // 切换鸽棚
     async currShedChange(currShedName) {
@@ -242,8 +271,7 @@ export default {
       this.currOperator = changeShedRes.chargeName
       for (var i = 0; i < this.dovecotes.length; i++) {
         for (var key in this.dovecotes[i]) {
-          if (key === currShedName)
-           this.currShed = this.dovecotes[i]
+          if (key === currShedName) this.currShed = this.dovecotes[i]
         }
       }
       this.currInfo = {
