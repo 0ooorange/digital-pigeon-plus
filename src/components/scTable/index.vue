@@ -93,6 +93,7 @@ export default {
         columnSetting,
     },
     props: {
+        requestMethods: { type: String, default: "get" },
         tableName: { type: String, default: "" },
         apiObj: { type: Object, default: () => {} },
         params: { type: Object, default: () => ({}) },
@@ -222,7 +223,7 @@ export default {
             console.log("请求参数", reqData);
 
             try {
-                var res = await this.apiObj.get(reqData);
+                var res = await this.apiObj[this.requestMethods](reqData);
                 console.log("请求结果", res);
             } catch (error) {
                 this.loading = false;
