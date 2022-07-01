@@ -1,15 +1,1989 @@
 <template>
-  <div>
-    大数据可视化
+  <div class="body">
+    <div class="bnt">
+      <div class="topbnt_left fl">
+        <ul>
+          <li><a href="javascript:;">养殖</a></li>
+          <li><a href="javascript:;">屠宰</a></li>
+          <li><a href="javascript:;">加工</a></li>
+        </ul>
+      </div>
+      <h1 class="tith1 fl">数字鸽业云服务平台</h1>
+      <div class=" fr topbnt_right">
+        <ul>
+          <li>
+            <router-link to="/navigator">返回</router-link>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- bnt end -->
+    <div class="puleft fl">
+      <div class="pulefttop">
+        <h2 class="tith2 pt11"><span>物料统计</span></h2>
+        <ScEcharts :option="fodderOption"></ScEcharts>
+      </div>
+      <div class="puleftboxtmidd">
+        <h2 class="tith2 pt11">产蛋统计</h2>
+        <div class="productEgg">
+          <ScEcharts class="productEggEcharts" :option="productEggOption"></ScEcharts>
+          <ul class="productEggText">
+            <li>单月产蛋数：3600枚</li>
+            <li>单月出蛋数：500枚</li>
+            <li></li>
+          </ul>
+        </div>
+      </div>
+      <div class="puleftboxtbott">
+        <h2 class="tith2 pt7">基地信息</h2>
+        <SlideTable></SlideTable>
+      </div>
+    </div>
+    <!--  left1 end -->
+    <div class="fl pt6 puleft2">
+      <div class="mid_top">
+        <span class="mid_top_child">
+          <span class="selectText">基地：</span>
+          <el-select style="width: 150px" v-model="currBase.name" class="m-2" placeholder="Select" @change="currBaseChange">
+            <el-option v-for="item in bases" :key="item.id" :label="item.name" :value="item.name" />
+          </el-select>
+        </span>
+        <span class="mid_top_child">
+          <span class="selectText">鸽棚：</span>
+          <el-select style="width: 150px" v-model="currShed.code" class="m-2" placeholder="Select" @change="currShedChange">
+            <el-option v-for="item in dovecotes" :key="item.id" :label="item.code" :value="item.code" />
+          </el-select>
+        </span>
+        <span class="mid_top_child selectText">操作员：<span class="operatorCss">{{currOperator}}</span></span>
+      </div>
+      <div class="datePickerCss">
+        <el-date-picker v-model="dateValue.value" :default-value="defaultValue" type="daterange" format="YYYY-MM-DD" unlink-panels range-separator="-" start-placeholder="起始时间" end-placeholder="结束时间" :shortcuts="shortcuts" style="width: 250px;" />
+      </div>
+      <div class="pmidd_bott">
+        <div class="pumiddboxttop1 fl">
+          <h2 class="tith2 pt2">蛋异常统计</h2>
+          <div class="eggAbnormal">
+            <ScEcharts :option="eggAbnormalOption" height="14rem" width="20rem"></ScEcharts>
+            <ul class="eggAbnormalText">
+              <li>蛋异常数：150枚</li>
+              <li>光蛋1数：30枚</li>
+              <li>光蛋2数：20枚</li>
+              <li>踩蛋1数：20枚</li>
+              <li>踩蛋2数：10枚</li>
+              <li>单蛋数：40枚</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pumiddboxttop2 fl">
+          <h2 class="tith2 pt2">出栏统计</h2>
+          <div class="eggAbnormal">
+            <ScEcharts :option="outCageOption" height="14rem" width="20rem"></ScEcharts>
+            <ul class="eggAbnormalText">
+              <li>出仔数：3000只</li>
+              <li>出栏数：2000只</li>
+              <li>死仔数：100只</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!--  amidd_bott end-->
+      <div class="pmiddboxtbott">
+        <h2 class="tith2 pt11">环境参数</h2>
+        <ScEcharts :option="environmentOption" class="echarts" height="16rem" width="38rem"></ScEcharts>
+      </div>
+      <!-- amidd_bott end -->
+    </div>
+    <!-- mrbox_top end -->
+    <div class="mr_right fl">
+      <div class="arightboxbott">
+        <h2 class="tith2">视频监控</h2>
+        <div class="lefttoday_tit">
+          <span></span>
+          <el-select style="width: 100px; background: #051655;" v-model="value" placeholder="监控1">
+            <el-option v-for="item in videoOptions" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+        </div>
+        <div class="videoDiv">
+          <video class="video vjs-big-play-button" data-setup="{}" controls>
+            <source :src="videoUrl" type="application/x-mpegURL" />
+          </video>
+        </div>
+      </div>
+      <div class="arightboxbott">
+        <h2 class="tith2">养殖品种介绍</h2>
+        <div class="dataList">
+          <el-carousel trigger="click" height="100%" style="height: 100%; width: 100%; padding: 10px">
+            <el-carousel-item v-for="item in 3" :key="item" style="height: 100%; width: 100%">
+              <img src="../../assets/images/pigeon2.jpg" style="height: 100%; width: 100%" />
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-  export default {
-    name: "dataVisual"
-  }
+import ScEcharts from '@/components/scEcharts'
+import SlideTable from './components/slideTable'
+import { ref, getCurrentInstance, reactive } from 'vue'
+export default {
+  name: 'dataVisual',
+  components: {
+    ScEcharts,
+    SlideTable,
+  },
+  setup() {
+    // 右上角
+    const { proxy } = getCurrentInstance()
+    const currOperator = ref('')
+    const bases = ref([])
+    const dovecotes = ref([])
+    const currBase = ref({})
+    const currShed = ref({})
+    const currInfo = ref({})
+    const baseInfo = proxy.$TOOL.data.get('BASE_INFO')
+    bases.value = baseInfo.base
+    dovecotes.value = baseInfo.shed
+    currInfo.value = proxy.$TOOL.data.get('CURR_INFO')
+    if (currInfo.value) {
+      currBase.value = currInfo.value.CURR_BASE
+      currShed.value = currInfo.value.CURR_SHED
+      currOperator.value = currInfo.value.CHARGE_NAME
+    } else {
+      currBase.value = bases.value[0]
+      currShed.value = dovecotes.value[0]
+      currOperator.value = baseInfo.chargeName
+    }
+    // 切换基地
+    const currBaseChange = async function () {
+      const { data: changeBaseRes } = await this.$API.layout.changeBase.post(currBase.value.id)
+      const { data: changeShedRes } = await this.$API.layout.getChargeName.post(
+        currShed.value.chargeId
+      )
+      dovecotes.value = changeBaseRes.shed
+      currOperator.value = changeShedRes.chargeName
+      currInfo.value = ref({
+        CURR_BASE: currBase.value,
+        CURR_SHED: currShed.value,
+        CHARGE_NAME: currOperator.value,
+      })
+      this.$TOOL.data.set('CURR_INFO', currInfo.value)
+      // changeBaseRes.
+    }
+    // 切换鸽棚
+    const currShedChange = async function (currShedName) {
+      var { data: changeShedRes } = await this.$API.layout.getChargeName.post(
+        currShed.value.chargeId
+      )
+      currOperator.value = changeShedRes.chargeName
+      for (var i = 0; i < dovecotes.value.length; i++) {
+        for (var key in dovecotes.value[i]) {
+          if (key === currShedName) currShed.value = dovecotes.value[i]
+        }
+      }
+      currInfo.value = {
+        CURR_BASE: currBase.value,
+        CURR_SHED: currShed.value,
+        CHARGE_NAME: currOperator.value,
+      }
+      this.$TOOL.data.set('CURR_INFO', currInfo.value)
+    }
+    // 时间选择器
+    const dateValue = ref([''])
+    dateValue.value = reactive({
+        text: '近一个月',
+        value: () => {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+          return [start, end]
+        },
+      })
+    const shortcuts = [
+      {
+        text: '近一周',
+        value: () => {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+          return [start, end]
+        },
+      },
+      {
+        text: '近一个月',
+        value: () => {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+          return [start, end]
+        },
+      },
+      {
+        text: '近3个月',
+        value: () => {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+          return [start, end]
+        },
+      },
+    ]
+    const videoUrl = ref('')
+    // 视频
+    const videoOptions = [
+      {
+        value: 'A01仓',
+        label: 'A01仓',
+      },
+    ]
+    // 环境参数
+    const environmentOption = {
+      tooltip: {
+        trigger: 'axis',
+      },
+      legend: {
+        data: ['温度', '湿度', '二氧化碳', '光照强度', 'PM2.5', '氮气'],
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true,
+      },
+      toolbox: {
+        feature: {
+          saveAsImage: {},
+        },
+      },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: ['00:00', '4:00', '8:00', '12:00', '16:00', '20:00', '24:00'],
+      },
+      yAxis: {
+        type: 'value',
+      },
+      series: [
+        {
+          name: '温度',
+          type: 'line',
+          stack: 'Total',
+          data: ['100', '70', '40', '60', '50', '90', '80'],
+        },
+        {
+          name: '湿度',
+          type: 'line',
+          stack: 'Total',
+          data: ['20', '62', '31', '64', '90', '73', '100'],
+        },
+        {
+          name: '二氧化碳',
+          type: 'line',
+          stack: 'Total',
+          data: ['30', '232', '201', '154', '190', '330', '410'],
+        },
+        {
+          name: '光照强度',
+          type: 'line',
+          stack: 'Total',
+          data: [320, 332, 301, 334, 390, 330, 320],
+        },
+        {
+          name: 'PM2.5',
+          type: 'line',
+          stack: 'Total',
+          data: [100, 93, 351, 74, 160, 300, 400],
+        },
+        {
+          name: '氮气',
+          type: 'line',
+          stack: 'Total',
+          data: [120, 250, 100, 98, 500, 420, 200],
+        },
+      ],
+    }
+    // 饲料统计
+    const fodderOption = {
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow',
+        },
+      },
+      legend: {
+        data: ['饲料A', '饲料B'],
+      },
+      toolbox: {
+        show: true,
+        orient: 'vertical',
+        left: 'right',
+        top: 'center',
+        feature: {
+          mark: { show: true },
+          dataView: { show: true, readOnly: false },
+          magicType: { show: true, type: ['line', 'bar', 'stack'] },
+          restore: { show: true },
+          saveAsImage: { show: true },
+        },
+      },
+      xAxis: [
+        {
+          type: 'category',
+          axisTick: { show: false },
+          data: ['1', '5', '10', '15', '20', '25', '30'],
+        },
+      ],
+      yAxis: [
+        {
+          type: 'value',
+        },
+      ],
+      series: [
+        {
+          name: '饲料A',
+          type: 'bar',
+          barGap: 0,
+          emphasis: {
+            focus: 'series',
+          },
+          data: [320, 332, 301, 334, 390, 260, 330],
+        },
+        {
+          name: '饲料B',
+          type: 'bar',
+          emphasis: {
+            focus: 'series',
+          },
+          data: [220, 182, 191, 234, 290, 180, 270],
+        },
+      ],
+    }
+    // 产蛋统计
+    const productEggOption = {
+      tooltip: {
+        trigger: 'axis',
+      },
+      xAxis: {
+        boundaryGap: false,
+        type: 'category',
+        data: (function () {
+          // var now = new Date()
+          var nowres = 30
+          var res = []
+          res.unshift(nowres)
+          // var len = 30
+          while (nowres >= 0) {
+            // res.unshift(now.toLocaleTimeString().replace(/^\D*/, ''))
+            nowres -= 5
+            if (nowres <= 0) break
+            res.unshift(nowres)
+          }
+          res.unshift(1)
+          return res
+        })(),
+      },
+      yAxis: [
+        {
+          type: 'value',
+          name: '产蛋数',
+          splitLine: {
+            show: false,
+          },
+        },
+      ],
+      series: [
+        {
+          name: '产蛋数',
+          type: 'line',
+          symbol: 'none',
+          lineStyle: {
+            width: 1,
+            color: '#409EFF',
+          },
+          areaStyle: {
+            opacity: 0.1,
+            color: '#79bbff',
+          },
+          data: (function () {
+            var res = []
+            var len = 30
+            while (len--) {
+              res.push(Math.round(Math.random() * 250))
+            }
+            return res
+          })(),
+        },
+      ],
+    }
+    // 蛋异常统计
+    const eggAbnormalOption = {
+      tooltip: {
+        trigger: 'item',
+      },
+      legend: {
+        // orient: 'vertical',
+        top: 'top',
+      },
+      series: [
+        {
+          name: '蛋异常统计',
+          type: 'pie',
+          radius: '50%',
+          label: {
+            show: false,
+          },
+          data: [
+            { value: 1048, name: '单蛋' },
+            { value: 735, name: '光蛋1' },
+            { value: 484, name: '光蛋2' },
+            { value: 580, name: '踩蛋1' },
+            { value: 300, name: '踩蛋2' },
+          ],
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+            },
+          },
+        },
+      ],
+    }
+    // 出栏统计
+    const outCageOption = {
+      tooltip: {
+        trigger: 'item',
+      },
+      legend: {
+        // orient: 'vertical',
+        top: 'top',
+      },
+      series: [
+        {
+          name: '出栏统计',
+          type: 'pie',
+          radius: '50%',
+          label: {
+            show: false,
+          },
+          data: [
+            { value: 100, name: '死仔数' },
+            { value: 2000, name: '出栏数' },
+            { value: 3000, name: '出仔数' },
+          ],
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+            },
+          },
+        },
+      ],
+    }
+    return {
+      currOperator,
+      currBase,
+      currShed,
+      bases,
+      dovecotes,
+      dateValue,
+      shortcuts,
+      videoUrl,
+      videoOptions,
+      environmentOption,
+      fodderOption,
+      productEggOption,
+      eggAbnormalOption,
+      outCageOption,
+      currBaseChange,
+      currShedChange,
+    }
+  },
+}
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+/****** PLACE YOUR CUSTOM STYLES HERE ******/
+.body {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  background: #051655;
+  // font-family: 微软雅黑, MicrosoftYahei, sans-serif;
+  color: #fff;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+pre,
+table,
+blockquote,
+input,
+button,
+select,
+em,
+textarea {
+  margin: 0;
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-style: normal;
+}
+html,
+.body {
+  // font-family: 微软雅黑, MicrosoftYahei, sans-serif;
+  color: #fff;
+  background: #00065b url(./img/bg.jpg);
+  background-size: 100% 100%;
+  background-position: 0 0;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+}
+.wpbox {
+  width: 100%;
+  height: calc(100% - 10px);
+}
+.bnt {
+  height: 9%;
+  width: 100%;
+  display: inline-block;
+}
+.left1 {
+  width: 18%;
+  height: calc(100% - 10%);
+  float: left;
+  padding-left: 2.2%;
+  text-align: center;
+}
+.pleft1 {
+  width: 18.6%;
+  float: left;
+  padding-left: 2.2%;
+  text-align: center;
+}
+.puleft {
+  padding-left: 2.2%;
+  width: 35.2%;
+  text-align: center;
+  height: 100%;
+}
+.puleft2 {
+  width: 35%;
+  height: 100%;
+  padding-left: 0.4%;
+}
+.mr_right {
+  width: 25%;
+  height: 100%;
+}
+.left2 {
+  width: 18%;
+  float: left;
+  height: 100%;
+}
+.mrbox {
+  float: left;
+  width: 79%;
+  height: 100%;
+}
+.mrbox.prbox {
+  float: left;
+  width: 60%;
+  height: 100%;
+}
+.mrbox_bottom {
+  float: left;
+  width: 100%;
+  height: 28%;
+}
+.mrbox_top_midd {
+  width: 68%;
+  float: left;
+  height: 100%;
+}
+.mrbox_topmidd {
+  float: left;
+  width: 76%;
+  padding-left: 0.2%;
+  height: 100%;
+}
+.amidd_bott,
+.box {
+  overflow: hidden;
+}
+.pmidd_bott {
+  width: 100%;
+  height: 42%;
+}
 
+.mrbox_top_right {
+  float: right;
+  width: 29.4%;
+  padding-right: 1.4%;
+  height: 100%;
+}
+.mrbox_top {
+  width: 100%;
+  height: 62.4%;
+}
+.hdmrbox_top {
+  width: 100%;
+  height: 100%;
+}
+
+.lefttime {
+  background: url(./img/time.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 84%;
+  height: 9.3%;
+  margin-left: 6%;
+}
+.lefttime_text {
+  padding: 2% 5% 0 5%;
+}
+.lefttime_text li {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  width: 20%;
+  float: left;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  border-radius: 4px;
+}
+.lefttime_text li.bg {
+  background: rgba(0, 183, 238, 0.1);
+}
+.lefttime_text li.active {
+  background: rgba(0, 183, 238, 0.6);
+  color: #fff;
+}
+.lefttoday {
+  background: url(./img/left1box.png);
+  background-repeat: no-repeat;
+  background-position: -3px 2px;
+  width: 350px;
+  height: 584px;
+  margin: 0 auto;
+}
+
+.lefttoday_tit {
+  overflow: hidden;
+  padding: 1.9% 5% 0.2%;
+  height: 15%;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.lefttoday_tit.height {
+  height: 12%;
+}
+.lefttoday_number {
+  overflow: hidden;
+  height: 74%;
+  width: 91%;
+  margin: 1% 4%;
+  background: rgba(1, 202, 217, 0.2);
+}
+.lefttoday_tit p.fl {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 1);
+  position: absolute;
+  left: 5%;
+  top: 22%;
+}
+.lefttoday_tit p.fr {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  position: absolute;
+  right: 5%;
+  top: 25%;
+}
+.lefttoday_tit p.fm {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 1);
+  position: absolute;
+  left: 40%;
+  top: 25%;
+}
+
+.lefttoday_tit.height.ht {
+  height: 16%;
+}
+.lefttoday_tit.height p.fl {
+  position: absolute;
+  left: 5%;
+  top: 15%;
+}
+.lefttoday_tit.height p.fr {
+  position: absolute;
+  left: 5%;
+  top: 65%;
+  right: auto;
+}
+
+.lefttoday_bar ul {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.lefttoday_bar li {
+  color: #333;
+  position: absolute;
+  border-radius: 50%;
+  font-size: 12px;
+  overflow: hidden;
+  font-weight: normal;
+  text-align: center;
+  line-height: 140%;
+}
+.lefttoday_bar li span {
+  padding-top: 30%;
+  display: inline-block;
+}
+.c1 {
+  background: #ac3ff2;
+}
+.c2 {
+  background: #ffff00;
+}
+.c3 {
+  background: #0078ff;
+}
+.c4 {
+  background: #9cff00;
+}
+.c5 {
+  background: #ff6c00;
+}
+.c6 {
+  background: #77b5fb;
+}
+.big0 {
+  width: 10px;
+  height: 10px;
+}
+.big1 {
+  width: 20px;
+  height: 20px;
+}
+.big2 {
+  width: 30px;
+  height: 30px;
+}
+.big3 {
+  width: 40px;
+  height: 40px;
+}
+.big4 {
+  width: 50px;
+  height: 50px;
+}
+.big5 {
+  width: 60px;
+  height: 60px;
+}
+.big6 {
+  width: 70px;
+  height: 70px;
+}
+
+.leftclass {
+  background: url(./img/leftb1.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 350px;
+  height: 291px;
+}
+.leftbox2_table {
+  background: url(./img/leftbox2.png);
+  background-repeat: no-repeat;
+  background-position: -2px -2px;
+  width: 354px;
+  height: 680px;
+}
+.left2_table {
+  width: 91%;
+  margin-left: 5%;
+  font-size: 12px;
+  height: 83.6%;
+  overflow: hidden;
+}
+.hdleft2_table {
+  width: 91%;
+  margin-left: 5%;
+  font-size: 12px;
+  height: 91.6%;
+  overflow: hidden;
+}
+.left2_table li {
+  background: rgba(1, 202, 217, 0.2) url(./img/icosjx.png) no-repeat top left;
+  position: relative;
+  overflow: hidden;
+  padding: 2% 6%;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 150%;
+}
+.left2_table li b {
+  color: rgba(255, 255, 255, 1);
+  font-weight: normal;
+}
+.left2_table li p.fl {
+  width: 80%;
+  overflow: hidden;
+}
+.left2_table li p.fr {
+  position: absolute;
+  right: 5%;
+  top: -20%;
+}
+.yellow {
+  color: #fff45c;
+}
+.green {
+  color: #00c2fd;
+}
+.left2_table li.bg {
+  background: rgba(0, 255, 255, 0.4) url(./img/icosjx.png) no-repeat top left;
+}
+.mrbox_tr_box {
+  background: url(./img/rbox1.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 354px;
+  height: 291px;
+}
+
+.mrboxtm-mbox {
+  background: url(./img/midtop.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 100%;
+  height: 63.6%;
+}
+.mrboxtm-b1 {
+  background: url(./img/mbox1.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 460px;
+  height: 233px;
+  float: left;
+}
+.mrboxtm-b2 {
+  background: url(./img/mbox2.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 330px;
+  height: 233px;
+  float: right;
+}
+/* .mrbox_tr_box{background:url(./img/rbox1.png);background-size: 100% 100%; background-repeat: no-repeat;background-position: top center; width:350px; height:680px;} */
+
+.hdmrboxtm-mbox {
+  background: url(./img/hdbj.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 100%;
+  height: 61.6%;
+}
+
+.rbottom_box1 {
+  background: url(./img/b-rbox2.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 33.5%;
+  height: 89.4%;
+  float: left;
+}
+.rbottom_box2 {
+  background: url(./img/bbox2.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 33.5%;
+  height: 89.4%;
+  float: left;
+  margin-left: 0.8%;
+}
+.rbottom_box3 {
+  background: url(./img/b-rbox2.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 30%;
+  height: 89.4%;
+  float: left;
+  margin-left: 1%;
+}
+.prbottom_box1cont {
+  margin-left: 5.2%;
+  width: 90.6%;
+  height: 82%;
+  margin-top: 1.8%;
+}
+.prbottom_box2cont {
+  margin-left: 5.2%;
+  width: 90.6%;
+  height: 82%;
+  margin-top: 1.8%;
+}
+.prbottom_box3cont {
+  margin-left: 5.2%;
+  width: 90.6%;
+  height: 82%;
+  margin-top: 1.8%;
+}
+
+.tith2 {
+  text-align: center;
+  width: 100%;
+  font-size: 12px;
+  padding-top: 1.9%;
+  font-weight: normal;
+  letter-spacing: 2px;
+  font-weight: normal;
+  overflow: hidden;
+}
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.topbnt_left {
+  width: 33%;
+}
+.topbnt_left ul {
+  padding-top: 38px;
+  padding-left: 10%;
+  width: 100%;
+}
+.topbnt_left li {
+  background: url(./img/bnt.png) center;
+  font-size: 14px;
+  line-height: 33px;
+  background-repeat: no-repeat;
+  width: 18%;
+  height: 35px;
+  float: left;
+  text-align: center;
+  margin-left: 1%;
+}
+.topbnt_left li.active,
+.topbnt_right li.active {
+  background: url(./img/bntactive.png) no-repeat center;
+}
+.topbnt_left li a {
+  text-decoration: none;
+  color: #fff;
+}
+.tith1 {
+  width: 33%;
+  text-align: center;
+  padding-top: 5px;
+  font-weight: bold;
+  letter-spacing: 8px;
+  font-size: 34px;
+}
+.topbnt_right {
+  padding-top: 2%;
+  padding-right: 2.5%;
+  width: 27%;
+}
+.topbnt_right li {
+  background: url(./img/bnt.png) center;
+  font-size: 14px;
+  line-height: 33px;
+  background-repeat: no-repeat;
+  width: 22%;
+  height: 35px;
+  float: right;
+  text-align: center;
+  margin-right: 1%;
+}
+.topbnt_right li a {
+  text-decoration: none;
+  color: #fff;
+}
+.pt7 {
+  padding-top: 0.6%;
+}
+.pt11 {
+  padding-top: 1.1%;
+}
+.pt1 {
+  padding-top: 1.3%;
+}
+.pt2 {
+  padding-top: 2.2%;
+}
+.pt3 {
+  padding-top: 3.3%;
+}
+.pt6 {
+  padding-top: 6px;
+}
+.pt17 {
+  padding-top: 17px;
+}
+.pt14 {
+  padding-top: 14px;
+}
+.pt12 {
+  padding-top: 12px;
+}
+.pt20 {
+  padding-top: 22px;
+}
+/* .box_pad{ margin: 3px 20px; } */
+
+.mrboxtm-map {
+  background: url(./img/mapbg.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 90%;
+  margin-left: 4%;
+  margin-top: 1%;
+  height: 90%;
+  position: relative;
+}
+.hdmrboxtm-map {
+  background: url(./img/hdmap.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 90%;
+  margin-left: 4%;
+  margin-top: 1%;
+  height: 66%;
+  position: relative;
+}
+.mrboxtm-map li {
+  width: 23px;
+  height: 22px;
+  line-height: 22px;
+  color: #fff;
+  text-align: center;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-size: 12px;
+  position: absolute;
+}
+.mrboxtm-map li.bluer {
+  background-image: url(./img/blue_rico.png);
+}
+.mrboxtm-map li.redr {
+  background-image: url(./img/red_rico.png);
+}
+.ricontop {
+  width: 29px;
+  height: 30px;
+  line-height: 30px;
+  color: #fff;
+  text-align: center;
+  bbackground-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  font-size: 12px;
+  margin-right: 5px;
+  font-style: normal;
+  display: inline-block;
+}
+i.bluer {
+  background-image: url(./img/ricon2.png);
+}
+i.redr {
+  background-image: url(./img/ricon1.png);
+}
+.font14 p.fl,
+.font14 p.fr {
+  color: #fff;
+  font-size: 14px;
+}
+.mrtop1 {
+  background: rgba(1, 202, 217, 0.2);
+  overflow: hidden;
+  margin: 4px 15px;
+}
+.widget-inline-box {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.9);
+  width: 50%;
+  padding: 10% 0;
+  text-align: center;
+  font-size: 12px;
+  float: left;
+  overflow: hidden;
+}
+.widget-inline-box h3 {
+  font-size: 22px;
+  font-weight: 100;
+  font-weight: normal;
+}
+.ceeb1fd {
+  color: #eeb1fd;
+}
+.c24c9ff {
+  color: #24c9ff;
+}
+.cffff00 {
+  color: #ffff00;
+}
+.c11e2dd {
+  color: #11e2dd;
+}
+.text-muted {
+  font-size: 12px;
+  color: #789ce0;
+}
+.text-muted img {
+  vertical-align: middle;
+  margin: 0 3px;
+}
+.mrtop2 {
+  margin: 4px 15px;
+  padding: 20px 0;
+  background: rgba(1, 202, 217, 0.2);
+  width: 305px;
+}
+.tith4 {
+  font-size: 12px;
+  text-align: center;
+}
+.mrtop3 {
+  margin: 4px 15px;
+  padding: 20px 0;
+  background: rgba(1, 202, 217, 0.2);
+  width: 305px;
+}
+
+.mrboxtm-b1wp {
+  margin: 4px 25px;
+  padding: 20px 0;
+  background: rgba(1, 202, 217, 0.2);
+  width: 415px;
+  overflow: hidden;
+}
+.mrboxtm_text {
+  overflow: hidden;
+  padding-left: 12px;
+  padding-bottom: 10px;
+}
+.mrbtext_info {
+  background: rgba(1, 202, 217, 0.2);
+  font-weight: normal;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  float: left;
+  margin: 2px 0 10px 8px;
+  width: 140px;
+}
+.mrbtext_info b {
+  font-weight: normal;
+  font-size: 18px;
+}
+.lefttoday_number .widget-inline-box {
+  width: 25%;
+}
+
+/*  警情警力分析 完*/
+.aleftboxttop {
+  background: url(./img/leftb1.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 99%;
+  height: 27.5%;
+  margin-bottom: 1%;
+}
+.aleftboxttop .lefttoday_number {
+  background: none;
+}
+.aleftboxttop .widget-inline-box {
+  width: 24.2%;
+  margin: 0 0.4%;
+  background: rgba(1, 202, 217, 0.2);
+  padding: 16% 0;
+  height: 100%;
+  font-size: 10px;
+}
+
+.aleftboxtmidd {
+  background: url(./img/aleftboxtmidd.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 98.5%;
+  height: 29.4%;
+  margin-bottom: 1%;
+}
+.aleftboxtmiddcont {
+  width: 91%;
+  height: 66%;
+  margin-left: 4.4%;
+  margin-top: 1%;
+}
+.aleftboxtbott {
+  background: url(./img/aleftboxtbott.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 100%;
+  height: 40%;
+}
+.aleftboxtbott_cont {
+  width: 91%;
+  height: 72.6%;
+  margin-top: 1.8%;
+  margin-left: 4.4%;
+}
+.aleftboxtbott_cont2 {
+  width: 89.9%;
+  height: 86.6%;
+  margin-top: 2.8%;
+  margin-left: 5%;
+}
+.aleftboxtbott_contr {
+  width: 89.9%;
+  height: 90.6%;
+  margin-top: 1.8%;
+  margin-left: 5%;
+}
+.amiddboxttop {
+  overflow: hidden;
+  background: url(./img/amiddboxttop.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 99%;
+  height: 52.1%;
+}
+.amiddboxttop_map {
+  background: url(./img/img.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  position: relative;
+  width: 90%;
+  height: 86%;
+  margin: 1.4% 5% 0;
+}
+.hot_map {
+  width: 90%;
+  height: 86%;
+  margin: 1.4% 5% 0;
+}
+
+.amidd_bott {
+  width: 100%;
+  height: 38%;
+  padding-top: 0.8%;
+}
+.amiddboxttop_map span {
+  background: url(./img/camera.png);
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  width: 24px;
+  height: 19px;
+  display: inline-block;
+  position: absolute;
+}
+.amiddboxttop_map span.camera_l {
+  background: url(./img/camera_l.png);
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  width: 24px;
+  height: 19px;
+  display: inline-block;
+  position: absolute;
+}
+
+.amiddboxtbott1 {
+  background: url(./img/amiddboxtbott1.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 48%;
+  height: 91.6%;
+  margin-left: 0.5%;
+  margin-right: 1%;
+}
+.amiddboxtbott1content {
+  width: 91%;
+  height: 86.5%;
+  margin-left: 4.8%;
+  margin-top: 1.6%;
+}
+.amiddboxtbott1content2 {
+  width: 91%;
+  height: 80%;
+  margin-left: 4.8%;
+  margin-top: 0.6%;
+}
+.amiddboxtbott2 {
+  background: url(./img/amiddboxtbott2.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  float: right;
+  width: 49%;
+  height: 91.8%;
+  margin-right: 0.9%;
+}
+.amiddboxtbott2content {
+  width: 91.8%;
+  height: 86%;
+  margin-left: 4.4%;
+  margin-top: 1.6%;
+}
+.arightboxtop {
+  background: url(./img/arightboxtop.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 100%;
+  height: 51.9%;
+}
+.arightboxbott {
+  background: url(./img/arightboxbott.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 100%;
+  height: 41.6%;
+  margin-top: 3%;
+}
+.arightboxbottcont {
+  width: 91%;
+  margin-top: 1%;
+  margin-left: 5%;
+  height: 79%;
+}
+.arightboxbottcont2 {
+  width: 90%;
+  margin-top: 1.6%;
+  margin-left: 5.3%;
+  height: 85.5%;
+}
+.plefttoday {
+  background: url(./img/pleft1middt.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 96%;
+  height: 30%;
+  margin-top: 0.4%;
+}
+.plefttoday .widget-inline-box {
+  width: 48%;
+  padding: 4% 0;
+}
+.lpeftmidbot {
+  background: url(./img/pleft1middb.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 95.8%;
+  height: 27.6%;
+  margin-top: 3.4%;
+}
+.lpeftmidbotcont {
+  width: 90.1%;
+  margin-top: 2%;
+  margin-left: 5.2%;
+  height: 82%;
+}
+.lpeftbot {
+  background: url(./img/pleft1middb.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 95.8%;
+  height: 27.6%;
+  margin-top: 3.4%;
+}
+.lpeftbotcont {
+  width: 90.1%;
+  margin-top: 2%;
+  margin-left: 5.2%;
+  height: 82%;
+}
+.pleftbox2top {
+  background: url(./img/pleftbox2top.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 96.8%;
+  height: 35.2%;
+  margin-top: 1%;
+}
+.pleftbox2topcont {
+  width: 90.1%;
+  margin-top: 2%;
+  margin-left: 5%;
+  height: 88%;
+}
+.pleftbox2midd {
+  background: url(./img/pleftbox2mid.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 96.8%;
+  height: 24.6%;
+  margin-top: 3.8%;
+}
+.pleftbox2middcont {
+  width: 90.1%;
+  margin-top: 2%;
+  margin-left: 5.2%;
+  height: 82%;
+  overflow: hidden;
+}
+.lpeft2bot {
+  background: url(./img/pleft1middb.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 97.8%;
+  height: 24.6%;
+  margin-top: 4.2%;
+}
+.lpeftb2otcont1 {
+  width: 100%;
+  height: 100%;
+}
+.hdrightboxtop {
+  background: url(./img/hdbjr.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 100%;
+  height: 87%;
+}
+
+.lpeftb2otcont {
+  width: 90.1%;
+  margin-top: 2%;
+  margin-left: 5.2%;
+  height: 82%;
+}
+.pmrboxbottom {
+  background: url(./img/pmiddboxmidd.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  position: relative;
+  width: 100%;
+  height: 32.9%;
+  margin-top: 1.8%;
+}
+.pmrboxbottomcont {
+  width: 94.1%;
+  margin-top: 1.1%;
+  margin-left: 3.1%;
+  height: 76%;
+}
+.mrbox_bottom_bott {
+  width: 100%;
+  height: 27%;
+  margin-top: 1.8%;
+}
+.pmrtop {
+  background: url(./img/prighttop.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 100%;
+  height: 56.6%;
+}
+.pmrtop_contheight {
+  height: 30%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.pmrtop1 {
+  background: url(./img/prighttop.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 100%;
+  height: 40.4%;
+}
+.pmrtop_cont1 {
+  height: 87%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.pmrmiddcont {
+  width: 98.1%;
+  margin-top: 1.1%;
+  margin-left: 3.1%;
+  height: 64%;
+}
+.pmrtop_contheight .widget-inline-box {
+  padding: 5% 0;
+}
+.lefttoday_bar {
+  height: 56%;
+  width: 100%;
+}
+.pmrtop_cont {
+  background: rgba(1, 202, 217, 0.2);
+  width: 90.6%;
+  height: 86%;
+  margin: 2.2% 0 0 5.1%;
+}
+.pmrtop_wid .widget-inline-box {
+  width: 33%;
+}
+
+.pulefttop {
+  background: url(./img/pulefttop.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 100%;
+  height: 29%;
+}
+.puleftboxtmidd {
+  position: relative;
+  background: url(./img/puleftmidd.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 100%;
+  height: 28.6%;
+  margin-top: 1%;
+}
+.puleftboxtbott {
+  background: url(./img/puleftbott.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 100%;
+  height: 28%;
+  margin-top: 1%;
+}
+
+.pumiddboxttop1 {
+  background: url(./img/pumiddtop1.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 47.7%;
+  height: 100%;
+  padding-left: 1.4%;
+}
+.pumiddboxttop2 {
+  background: url(./img/pumiddtop2.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 47.7%;
+  height: 100%;
+  margin-left: 1.4%;
+}
+.pmiddboxtbott {
+  background: url(./img/pumiddbott.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 98.4%;
+  height: 32%;
+  margin-top: 2%;
+}
+.purightboxtop {
+  background: url(./img/purighttop.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 100%;
+  height: 29%;
+}
+.purightboxmidd {
+  background: url(./img/purightmidd.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 100%;
+  height: 28%;
+  margin-top: 1.8%;
+}
+.purightboxbott {
+  background: url(./img/purightbott.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  width: 100%;
+  height: 28%;
+  margin-top: 2.2%;
+}
+.purightboxtopcont {
+  width: 90.2%;
+  height: 77%;
+  margin-left: 5%;
+}
+.purightboxmiddcont {
+  width: 90.2%;
+  height: 77%;
+  margin-left: 5%;
+}
+.purightboxbottcont {
+  width: 90.2%;
+  height: 77%;
+  margin-left: 5%;
+}
+.pumiddboxtbott1cont {
+  width: 62%;
+  height: 100%;
+  margin-left: 3%;
+}
+
+.tith2 span {
+  display: inline-block;
+  float: left;
+  width: 40%;
+}
+.pbox {
+  width: 100%;
+  height: 76%;
+}
+.pulefttoday_bar {
+  width: 46.7%;
+  height: 100%;
+  margin-left: 2.5%;
+}
+.pulefttoday_bar2 {
+  width: 46.7%;
+  height: 100%;
+  margin-right: 2.5%;
+}
+.puleftboxtmidd1 {
+  width: 46.7%;
+  height: 100%;
+  margin-left: 2.5%;
+}
+.puleftboxtbott1 {
+  width: 62.7%;
+  height: 100%;
+  margin-left: 2.5%;
+}
+.puleftboxtbott2 {
+  width: 30.7%;
+  height: 100%;
+  margin-right: 2.5%;
+}
+.puleft2height {
+  width: 96%;
+  height: 88%;
+  margin-left: 3%;
+}
+.puleftbox2bott_cont {
+  width: 100%;
+  height: 100%;
+}
+.pulefttoday_bar,
+.puleftboxtbott2,
+.pumiddboxtbott2 {
+  background: rgba(1, 202, 217, 0.2);
+}
+.puleftboxtbott2 .widget-inline-box {
+  width: 100%;
+  margin: 0;
+  padding: 2% 0;
+}
+
+.pumiddboxttop1 .widget-inline-box {
+  width: 45%;
+  background: rgba(1, 202, 217, 0.2);
+  margin-left: 2%;
+  margin-bottom: 1.5%;
+  height: 38%;
+}
+.pumiddboxttop1 .widget-inline-box p {
+  padding-top: 30%;
+}
+.f30 {
+  font-size: 40px !important;
+  margin: 10% 0;
+}
+.pumiddboxtbott2 {
+  width: 30.9%;
+  height: 100%;
+  margin-right: 2.5%;
+}
+.pumiddboxtbott2 .widget-inline-box {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+}
+.pumiddboxtbott2 .widget-inline-box p {
+  padding-top: 19%;
+}
+
+.pumiddboxttop2_cont {
+  width: 90%;
+  margin-left: 4.5%;
+  margin-top: 0;
+  height: 85.4%;
+  overflow: hidden;
+  text-align: left;
+}
+.pumiddboxttop2_cont ul {
+  height: 100%;
+}
+.pumiddboxttop2_cont li {
+  background: rgba(1, 202, 217, 0.2) url(./img/hot.png) no-repeat 12px 12px;
+  height: 13.8%;
+}
+.pumiddboxttop2_cont li p.text_l {
+  line-height: 160%;
+  width: 95%;
+  overflow: hidden;
+  padding-left: 10%;
+}
+.pumiddboxttop2_cont li p.text_r {
+  text-align: right;
+  width: 99%;
+  height: 40%;
+}
+.pumiddboxttop2_cont li.bg {
+  background: rgba(0, 255, 255, 0.4) url(./img/hot.png) no-repeat 12px 12px;
+}
+.pvr {
+  position: relative;
+}
+.pvr ul {
+  position: absolute;
+  left: 11%;
+  top: 13%;
+}
+.pvr ul li {
+  width: 16px;
+  height: 16px;
+  text-align: center;
+  line-height: 16px;
+  margin-top: 82%;
+  border-radius: 2px;
+  font-size: 12px;
+  display: block;
+  color: #fff;
+  z-index: 1111;
+}
+.hot1 {
+  background-color: #ff0000;
+}
+.hot2 {
+  background-color: #ff7200;
+}
+.hot3 {
+  background-color: #ffbd5e;
+}
+.hot4 {
+  background-color: #b3b3b3;
+}
+.hot5 {
+  background-color: #597a9f;
+}
+.liwp ul li {
+  margin-top: 79%;
+}
+.hdtop ul li {
+  margin-top: 95%;
+}
+.pulefttoday_bar2 ul {
+  position: absolute;
+  left: 4.7%;
+  top: 8%;
+}
+.pulefttoday_bar2 ul li {
+  margin-top: 110%;
+}
+.tlbox {
+  overflow: hidden;
+  height: 74%;
+  width: 91%;
+  margin: 1% 4%;
+  background: rgba(1, 202, 217, 0.2);
+  font-size: 12px;
+}
+.tlbox p.text {
+  padding-left: 3%;
+}
+.tlbox p.text span {
+  width: 27.8%;
+  color: rgba(255, 255, 255, 0.6);
+  display: inline-block;
+  text-align: left;
+}
+.tlbox ul {
+  height: 100%;
+}
+.tlbox li {
+  height: 20%;
+  padding-top: 5.6%;
+}
+.tlbox p.rwith {
+  width: 90%;
+  height: 10px;
+  background: #4ab4ff;
+  margin: 2% 5%;
+}
+.tlbox span.rwith_img {
+  height: 10px;
+  background: #f8e19a;
+  float: left;
+  display: inline-block;
+}
+.tlbox p.text span.w12 {
+  width: 28%;
+  text-align: left;
+}
+.tlbox p.bgc3 {
+  background: #f19ec2;
+}
+.tlbox span.qgc2 {
+  background: #7ecef4;
+}
+.tlbox p.bgc2 {
+  background: #99b0f7;
+}
+.tlbox span.qgc3 {
+  background: #cce198;
+}
+.tlbox p.text span.tr {
+  text-align: right;
+  width: 10%;
+  padding-right: 3%;
+}
+
+.tlbox li span i {
+  width: 14px;
+  height: 6px;
+  display: inline-block;
+  margin-right: 3px;
+}
+.ricon1 {
+  background: #f8e19a;
+}
+.ricon2 {
+  background: #7ecef4;
+}
+.ricon3 {
+  background: #f19ec2;
+}
+.tricon1 {
+  background: #4ab4ff;
+}
+.tricon2 {
+  background: #99b0f7;
+}
+.tricon3 {
+  background: #cce198;
+}
+.hdwid {
+  width: 49.6%;
+}
+// 新增样式
+.videoDiv {
+  display: flex;
+  justify-content: center;
+}
+.video {
+  margin-top: 20px;
+  width: 90%;
+}
+.video:hover .vjs-big-play-button {
+  background: none;
+}
+.video .vjs-big-play-button:hover {
+  background: none;
+}
+.video .vjs-big-play-button {
+  border: none;
+  background: none;
+}
+.echarts {
+  margin: 0 auto;
+  margin-top: 5px;
+}
+
+.dataList {
+  height: 260px;
+  width: 100%;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.productEgg {
+  height: 90%;
+  width: 60%;
+}
+.productEggEcharts {
+  display: flex;
+}
+.productEggText {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  position: absolute;
+  top: 40px;
+  right: 50px;
+  font-size: 12px;
+}
+
+.eggAbnormal {
+  margin-top: 5px;
+  .eggAbnormalText {
+    margin-left: 20px;
+    font-size: 12px;
+    line-height: 16px;
+  }
+}
+.mid_top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  .mid_top_child {
+    margin-left: 2px;
+  }
+}
+.datePickerCss {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
 </style>

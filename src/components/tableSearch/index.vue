@@ -125,8 +125,16 @@ export default defineComponent({
     )
 
     const selectType = ref([''])
+    const inputValue = ref('') //搜索框的值
     const searchClick = () => {
-      emit('searchClick')
+      let params = {
+        dateValue: dateValue.value,
+        selectType: selectType.value,//查询类型
+        inputValue: inputValue.value
+
+      }
+      console.log(params,'测试')
+      emit('searchClick',params)
     } // 搜索
     const reset = () => {
       emit('reset')
@@ -156,7 +164,7 @@ export default defineComponent({
                   <span class="selectTypeText">{props.searchTypes[0].value}:</span>
                 )}
 
-                <el-input ref="searchInput" placeholder="查询内容" style={{ width: '150px' }} />
+                <el-input ref="searchInput" placeholder="查询内容" style={{ width: '150px' }} v-model={inputValue.value}/>
                 <el-button type="success" class="searchBtn" onClick={searchClick}>
                   查询
                 </el-button>

@@ -29,15 +29,16 @@
 			<div class="jiankong">
 				<h3>监控视频区</h3>
 				<el-select
-					style="width: 100px"
+					style="width:100px"
 					v-model="value"
 					placeholder="监控1"
+					@change="applicantTypes"
 				>
 					<el-option
-						v-for="item in options"
-						:key="item.value"
-						:label="item.label"
-						:value="item.value"
+						v-for="item in monitor_idlist"
+						:key="item.id"
+						:label="item.devicename"
+						:value="item.id"
 					>
 					</el-option>
 				</el-select>
@@ -78,37 +79,32 @@
 						<div class="ul_list">
 							<div class="ul_listIn">
 								<ul class="ul_con">
-									<li>2022-4-13</li>
+									<li>2022-4-23</li>
+									<li>A3仓</li>
+									<li>温度过高</li>
+								</ul>
+								<ul class="ul_con">
+									<li>2022-5-13</li>
+									<li>A1仓</li>
+									<li>温度过高</li>
+								</ul>
+								<ul class="ul_con">
+									<li>2022-5-13</li>
+									<li>A3仓</li>
+									<li>温度过高</li>
+								</ul>
+								<ul class="ul_con">
+									<li>2022-2-17</li>
 									<li>A1仓</li>
 									<li>温度过高</li>
 								</ul>
 								<ul class="ul_con">
 									<li>2022-4-13</li>
-									<li>A1仓</li>
+									<li>A2仓</li>
 									<li>温度过高</li>
 								</ul>
 								<ul class="ul_con">
-									<li>2022-4-13</li>
-									<li>A1仓</li>
-									<li>温度过高</li>
-								</ul>
-								<ul class="ul_con">
-									<li>2022-4-13</li>
-									<li>A1仓</li>
-									<li>温度过高</li>
-								</ul>
-								<ul class="ul_con">
-									<li>2022-4-13</li>
-									<li>A1仓</li>
-									<li>温度过高</li>
-								</ul>
-								<ul class="ul_con">
-									<li>2022-4-13</li>
-									<li>A1仓</li>
-									<li>温度过高</li>
-								</ul>
-								<ul class="ul_con">
-									<li>2022-4-13</li>
+									<li>2022-3-3</li>
 									<li>A1仓</li>
 									<li>温度过高</li>
 								</ul>
@@ -126,7 +122,6 @@ import DovecoteInfo from "./components/DovecoteInfo.vue";
 import TableCustom from "./components/table-custom.vue";
 import EchartStatistics from "./components/echartStatistics.vue";
 import EchartsEnvironment from "./components/echartsEnvironment.vue";
-
 export default {
 	name: "bsBreedingStatistics",
 	components: {
@@ -138,6 +133,11 @@ export default {
 
 	data() {
 		return {
+			baseid:'',
+			monitor_idlist:[],
+			currentmonitorid:'',
+			monitorcontent:'',
+			NumberOfParents:'',
 			timeDefaultShow: "",
 			dateVals: "",
 			shortcuts: [
@@ -172,33 +172,25 @@ export default {
 			value2: "",
 			//指定图表的配置项和数据
 			chartDom: document.getElementById("main"),
-			options: [
-				{
-					value: "选项1",
-					label: "监控1",
-				},
-				{
-					value: "选项2",
-					label: "监控2",
-				},
-				{
-					value: "选项3",
-					label: "监控3",
-				},
-				{
-					value: "选项4",
-					label: "监控4",
-				},
-				{
-					value: "选项5",
-					label: "监控5",
-				},
-			],
 			value: "",
 		};
 	},
 
 	methods: {
+		// 获取监控视频id
+		 async getMonitorByShedID(){
+            const{data:res}=await this.$API.breedStatistics.getMonitorByShedID.get('1518124016571797507');
+			this.monitor_idlist=res.data;    
+        },
+		async applicantTypes(value){
+			this.currentmonitorid=value;
+			 console.log("由选择id获取详情视频内容",this.currentmonitorid);
+			  const{data:res}=await this.$API.breedStatistics.getMonitorByID.get(this.currentmonitorid);
+			 console.log("获取数据",res);
+			 this.monitorcontent=res.data 
+			 console.log( console.log("获取详情视频内容",this.monitorcontent));  
+            
+		},
 		getstyles() {
 			document.documentElement.style.fontSize =
 				(document.documentElement.clientWidth / 768) * 100 + "px";
@@ -223,12 +215,17 @@ export default {
 			let end = year + "-" + month + "-" + da; //当天'2019-04-12'
 			let beg = year + "-" + month + "-01"; //当月第一天'2019-04-01'
 			this.dateVals = [beg, end]; //将值设置给插件绑定的数据
+			console.log("获取选择日期区间：",this.dateVals);
 		},
+		
 	},
 
 	mounted() {
+		this.baseid=this.$TOOL.data.get('BASE_INFO')
+		console.log(this.baseid.shed.id);
 		this.getstyles();
 		this.defaultDate();
+		this.getMonitorByShedID();
 	},
 };
 </script>

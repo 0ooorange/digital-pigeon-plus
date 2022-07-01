@@ -16,7 +16,7 @@
 		<el-main class="nopadding">
 			<scTable
 				ref="table"
-				:data="apiObj"
+				:data="tablelist"
 				stripe
 				highlightCurrentRow
 				class="tablestyle"
@@ -24,39 +24,39 @@
 			>
 				<el-table-column
 					label="鸽笼号"
-					prop="pigeonnumber"
+					prop="codes"
 					sortable
 					width="120"
 					align="center"
 				></el-table-column>
 				<el-table-column
 					label="板子编号"
-					prop="boardnumber"
+					prop="panelCode"
 					width="120"
 					align="center"
 				></el-table-column>
 				<el-table-column
 					label="上上次"
-					prop="firstime"
+					prop="lastTwoOperate"
 					width="120"
 					align="center"
 				></el-table-column>
 				<el-table-column
 					label="时间间隔"
-					prop="timeinterval_st"
+					prop="lastTwoDiffer"
 					sortable
 					width="150"
 					align="center"
 				></el-table-column>
 				<el-table-column
 					label="上次"
-					prop="secondtime"
+					prop="lastOperate"
 					width="120"
 					align="center"
 				></el-table-column>
 				<el-table-column
 					label="时间间隔"
-					prop="timeinterval_nd"
+					prop="lastDiffer"
 					sortable
 					width="150"
 					align="center"
@@ -85,7 +85,7 @@
 				</el-table-column>
 				<el-table-column
 					label="备注"
-					prop="remark"
+					prop="remarks"
 					align="center"
 				></el-table-column>
 			</scTable>
@@ -102,6 +102,11 @@ export default {
 	},
 	data() {
 		return {
+			objquery:{
+                pageNum: 1,
+                pageSize:10,
+			},
+			tablelist:[],
 			pageSize: 8,
 			total: 100,
 			pageNum: 1,
@@ -143,97 +148,18 @@ export default {
 					label: "孵化",
 				},
 			],
-			apiObj: [
-				{
-					pigeonnumber: "A01",
-					boardnumber: "3",
-					firstime: "孵化",
-					timeinterval_st: "2天",
-					secondtime: "抽蛋",
-					timeinterval_nd: "10天",
-					recommendation: "抽蛋",
-					operator: "李暖暖",
-					remark: "XXXXX",
-				},
-				{
-					pigeonnumber: "A08",
-					boardnumber: "3",
-					firstime: "孵化",
-					timeinterval_st: "21天",
-					secondtime: "抽蛋",
-					timeinterval_nd: "10天",
-					recommendation: "抽蛋",
-					operator: "李暖暖",
-					remark: "XXXXX",
-				},
-				{
-					pigeonnumber: "A03",
-					boardnumber: "3",
-					firstime: "孵化",
-					timeinterval_st: "20天",
-					secondtime: "抽蛋",
-					timeinterval_nd: "10天",
-					recommendation: "抽蛋",
-					operator: "李暖暖",
-					remark: "XXXXX",
-				},
-				{
-					pigeonnumber: "A11",
-					boardnumber: "3",
-					firstime: "孵化",
-					timeinterval_st: "18天",
-					secondtime: "抽蛋",
-					timeinterval_nd: "10天",
-					recommendation: "抽蛋",
-					operator: "李暖暖",
-					remark: "XXXXX",
-				},
-				{
-					pigeonnumber: "A10",
-					boardnumber: "3",
-					firstime: "孵化",
-					timeinterval_st: "20天",
-					secondtime: "抽蛋",
-					timeinterval_nd: "10天",
-					recommendation: "抽蛋",
-					operator: "李暖暖",
-					remark: "XXXXX",
-				},
-				{
-					pigeonnumber: "A07",
-					boardnumber: "3",
-					firstime: "孵化",
-					timeinterval_st: "10天",
-					secondtime: "抽蛋",
-					timeinterval_nd: "10天",
-					recommendation: "抽蛋",
-					operator: "李暖暖",
-					remark: "XXXXX",
-				},
-				{
-					pigeonnumber: "A10",
-					boardnumber: "3",
-					firstime: "孵化",
-					timeinterval_st: "21天",
-					secondtime: "抽蛋",
-					timeinterval_nd: "10天",
-					recommendation: "抽蛋",
-					operator: "李暖暖",
-					remark: "XXXXX",
-				},
-				{
-					pigeonnumber: "A10",
-					boardnumber: "3",
-					firstime: "孵化",
-					timeinterval_st: "2天",
-					secondtime: "抽蛋",
-					timeinterval_nd: "18天",
-					recommendation: "抽蛋",
-					operator: "李暖暖",
-					remark: "XXXXX",
-				},
-			],
 		};
+	},
+	methods:{
+		 async getTakeOrHatchAssistance(){
+            const {data:res}=await this.$API.incubate.getTakeOrHatchAssistance.post(this.objquery);
+			this.tablelist=res.data;
+			console.log("抽孵辅助数据：",this.tablelist);
+            
+        }
+	},
+	created() {
+		this.getTakeOrHatchAssistance();
 	},
 };
 </script>
