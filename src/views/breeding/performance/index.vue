@@ -1,9 +1,9 @@
 <template>
   <div>
     <table-search :searchTypes="searchTypes" :cardData="[]" @searchClick="searchClick" @outTable="outTable" class="table_search">
-      <el-select style="width: 150px;flex: 0 0 auto;margin-bottom:9px;margin-right:10px" v-model="dateValue" class="m-2" placeholder="统计时间" @change="dateChange">
+      <!-- <el-select style="width: 150px;flex: 0 0 auto;margin-bottom:9px;margin-right:10px" v-model="dateValue" class="m-2" placeholder="统计时间" @change="dateChange">
         <el-option v-for="item in dateOptions" :key="item.value" :label="item.label" :value="item.value" />
-      </el-select>
+      </el-select> -->
       <el-date-picker v-if="showDatePicker" style="background-color: #fff; width: 220px; margin-left: 10px" v-model="dateConcreteValue" type="daterange" start-placeholder="起始时间" end-placeholder="最终时间" :default-time="defaultTime" @change="datePickerChange" />
     </table-search>
 
@@ -22,7 +22,7 @@
       <el-table-column align="center" label="淘汰建议" prop="suggest" width="110"></el-table-column>
       <el-table-column align="center" label="备注" prop="remark" width="140" show-overflow-tooltip></el-table-column>
     </scTable>
-  </div>
+  </div> 
 </template>
 
 <script>
@@ -51,7 +51,7 @@ export default defineComponent({
         value: '2',
         label: '近半年',
       },
-      {
+      { 
         value: '3',
         label: '近一年',
       },
