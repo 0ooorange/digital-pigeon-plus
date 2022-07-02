@@ -10,14 +10,25 @@
         >
         </table-search>
 
+        <!-- <scTable
+            class="table"
+            ref="table"
+            row-key="id"
+            :data="tableList"
+            requestMethods= "post"
+            @selection-change="selectionChange"
+            stripe
+            highlightCurrentRow
+        > -->
+
         <scTable
             class="table"
             ref="table"
             row-key="id"
             :data="[]"
-            requestMethods= "post"
             :apiObj="dataApi"
             :params="params"
+            requestMethods="post"
             @selection-change="selectionChange"
             stripe
             highlightCurrentRow

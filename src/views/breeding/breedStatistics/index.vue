@@ -50,11 +50,12 @@
 							class="video-js vjs-big-play-button"
 							data-setup="{}"
 							controls
+							:src="monitor_idlist[0]"
 						>
-							<source
+							<!-- <source
 								src="http://hls01open.ys7.com/openlive/cf40f99cc9cb4a23bd52e0b2119b534c.m3u8"
 								type="application/x-mpegURL"
-							/>
+							/> -->
 						</video>
 					</div>
 				</div>
@@ -179,16 +180,17 @@ export default {
 	methods: {
 		// 获取监控视频id
 		 async getMonitorByShedID(){
-            const{data:res}=await this.$API.breedStatistics.getMonitorByShedID.get('1518124016571797507');
-			this.monitor_idlist=res.data;    
+            const res =await this.$API.breedStatistics.getMonitorByShedID.post('1518124016571797507');
+			this.monitor_idlist=res.data.urlList;  
+			console.log('监控视频111',this.monitor_idlist)  
         },
 		async applicantTypes(value){
-			this.currentmonitorid=value;
-			 console.log("由选择id获取详情视频内容",this.currentmonitorid);
-			  const{data:res}=await this.$API.breedStatistics.getMonitorByID.get(this.currentmonitorid);
-			 console.log("获取数据",res);
-			 this.monitorcontent=res.data 
-			 console.log( console.log("获取详情视频内容",this.monitorcontent));  
+			// this.currentmonitorid=value;
+			//  console.log("由选择id获取详情视频内容",this.currentmonitorid);
+			//   const{data:res}=await this.$API.breedStatistics.getMonitorByID.get(this.currentmonitorid);
+			//  console.log("获取数据",res);
+			//  this.monitorcontent=res.data 
+			//  console.log( console.log("获取详情视频内容",this.monitorcontent));  
             
 		},
 		getstyles() {
