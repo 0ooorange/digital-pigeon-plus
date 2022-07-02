@@ -10,7 +10,7 @@
         >
         </table-search>
 
-        <!-- <scTable
+        <scTable
             class="table"
             ref="table"
             row-key="id"
@@ -19,9 +19,9 @@
             @selection-change="selectionChange"
             stripe
             highlightCurrentRow
-        > -->
+        >
 
-        <scTable
+        <!-- <scTable
             class="table"
             ref="table"
             row-key="id"
@@ -32,7 +32,7 @@
             @selection-change="selectionChange"
             stripe
             highlightCurrentRow
-        >
+        > -->
             <!-- <el-table-column type="selection" width="40"></el-table-column> -->
             <el-table-column
                 align="center"
