@@ -1,5 +1,5 @@
 export default {
-	//   currunt: '',
+	// 养殖管理
 	breeding: [
 		{
 			name: "breedStatistics",
@@ -176,7 +176,38 @@ export default {
 			],
 		},
 	],
+	// 环境监控
 	equipVideo: [
+		{
+			name: "envForecast",
+			path: "/equipVideo/envForecast",
+			meta: {
+				title: "环境监测",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			component: "equipVideo/envForecast/index",
+		},
+		{
+			name: "globalVideo",
+			path: "/equipVideo/globalVideo",
+			meta: {
+				title: "视频监控",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			component: "equipVideo/globalVideo/index",
+		},
+		{
+			name: "warnCenter",
+			path: "/equipVideo/warnCenter",
+			meta: {
+				title: "预警中心",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			component: "equipVideo/warnCenter/index",
+		},
 		{
 			name: "eauipManage",
 			path: "/equipVideo/equipManage",
@@ -210,33 +241,104 @@ export default {
 				},
 			],
 		},
+	],
+	// 产品溯源
+	toSource: [
 		{
-			name: "videoManage",
-			path: "/equipVideo/videoManage",
+			name: "source",
+			path: "/toSource/traceSource",
 			meta: {
-				title: "视频管理",
+				title: "溯源管理",
 				icon: "el-icon-histogram",
 				type: "menu",
 			},
-			children: [
-				{
-					name: "globalVideo",
-					path: "/equipVideo/videoManage/globalVideo",
-					meta: {
-						title: "全局监控",
-						icon: "el-icon-histogram",
-						type: "menu",
-					},
-					component: "equipVideo/videoManage/globalVideo/index",
-				},
-			],
+			component: "toSource/traceSource/index",
+		},
+		{
+			name: "blockchain",
+			path: "/toSource/blockchain",
+			meta: {
+				title: "区块链管理",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			component: "toSource/blockchain/index",
 		},
 	],
-	//   dataVisual: [
-	//     {
-	//       name: 'dataVisual',
-	//       path: '/dataVisual',
-	//       component: 'dataVisual/index'
-	//     }
-	//   ]
+	// AI+精准管控
+	AIControl: [
+		{
+			name: "actRcognition",
+			path: "/AIControl/actRcognition",
+			meta: {
+				title: "行为识别",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			component: "AIControl/actRcognition/index",
+		},
+		{
+			name: "forecastCenter",
+			path: "/AIControl/forecastCenter",
+			meta: {
+				title: "预测中心",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			component: "AIControl/forecastCenter/index",
+		},
+	],
+	// 基础信息管理
+	baseInformation: [
+		{
+			name: "personInf",
+			path: "/baseInformation/personInf",
+			meta: {
+				title: "个人信息管理",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			component: "baseInformation/personInf/index",
+		},
+		{
+			name: "employee",
+			path: "/baseInformation/employee",
+			meta: {
+				title: "员工管理",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			component: "baseInformation/employee/index",
+		},
+		{
+			name: "dovecote",
+			path: "/baseInformation/dovecote",
+			meta: {
+				title: "鸽棚管理",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			component: "baseInformation/dovecote/index",
+		},
+		{
+			name: "base",
+			path: "/baseInformation/base",
+			meta: {
+				title: "基地信息管理",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			component: "baseInformation/base/index",
+		},
+		{
+			name: "authority",
+			path: "/baseInformation/authority",
+			meta: {
+				title: "权限管理",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			component: "baseInformation/authority/index",
+		},
+	],
 };
