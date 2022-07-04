@@ -147,7 +147,7 @@ export default {
 					path: "/breeding/registration/regOutCage",
 					name: "outCageRegistration",
 					meta: {
-						title: "出栏登记",
+						title: "出栏管理",
 						icon: "el-icon-office-building",
 						type: "menu",
 					},
@@ -167,11 +167,31 @@ export default {
 					path: "/breeding/registration/regFodder",
 					name: "fodderRegistration",
 					meta: {
-						title: "饲料登记",
+						title: "饲料管理",
 						icon: "el-icon-office-building",
 						type: "menu",
 					},
 					component: "breeding/registration/regFodder/index",
+				},
+				{
+					path: "/breeding/registration/fodderAllot",
+					name: "fodderAllot",
+					meta: {
+						title: "饲料调拨",
+						icon: "el-icon-office-building",
+						type: "menu",
+					},
+					component: "breeding/registration/fodderAllot/index",
+				},
+				{
+					path: "/breeding/registration/reWeighAllot",
+					name: "reWeighAllot",
+					meta: {
+						title: "复称调拨",
+						icon: "el-icon-office-building",
+						type: "menu",
+					},
+					component: "breeding/registration/reWeighAllot/index",
 				},
 			],
 		},
