@@ -277,6 +277,26 @@ router.sc_getMenu = () => {
 							},
 							component: "breeding/registration/regFodder/index",
 						},
+            {
+							path: "/breeding/registration/fodderAllot",
+							name: "fodderAllot",
+							meta: {
+								title: "饲料调拨",
+								icon: "el-icon-office-building",
+								type: "menu",
+							},
+							component: "breeding/registration/fodderAllot/index",
+						},
+            {
+							path: "/breeding/registration/reWeighAllot",
+							name: "reWeighAllot",
+							meta: {
+								title: "复称饲料",
+								icon: "el-icon-office-building",
+								type: "menu",
+							},
+							component: "breeding/registration/reWeighAllot/index",
+						},
 					],
 				},
 			],

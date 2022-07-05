@@ -6,7 +6,7 @@
       >
     </div>
     <el-main class="main">
-      <scTable :data="tableData" stripe >
+      <scTable :data="tableData" stripe>
         <el-table-column
           prop="date"
           label="时间"
@@ -162,7 +162,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, getCurrentInstance } from "vue";
+import { defineComponent, ref, getCurrentInstance, toRaw } from "vue";
 import scTable from "@/components/scTable/index.vue";
 export default defineComponent({
   name: "outCageRegistration", // 出栏登记
@@ -255,23 +255,18 @@ export default defineComponent({
       OutcageInfo.value = item;
     };
     const addOutcage = () => {
-     /*  tableData.value.push(addInfo.value); */
-      addOutcagedialog.value=false;
+      tableData.value.push(toRaw(addInfo.value));
     };
     const addDialogClosed = () => {
       proxy.$refs.addRef.resetFields();
     };
-    const api=()=>{
-
-    }
     return {
       tableData,
       addInfo,
+      addOutcage,
       addOutcagedialog,
       Outcagedialog,
       OutcageInfo,
-      api,
-      addOutcage,
       addDialogClosed,
       showOutcagedialog,
     };

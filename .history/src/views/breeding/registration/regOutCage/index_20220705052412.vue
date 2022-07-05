@@ -255,7 +255,7 @@ export default defineComponent({
       OutcageInfo.value = item;
     };
     const addOutcage = () => {
-     /*  tableData.value.push(addInfo.value); */
+      tableData.value.push(addInfo.value);
       addOutcagedialog.value=false;
     };
     const addDialogClosed = () => {
