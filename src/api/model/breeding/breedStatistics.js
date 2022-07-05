@@ -52,9 +52,13 @@ import http from "@/utils/request"
     },
     // 获取监控视频id
     getMonitorByShedID: {
-      url: `/digitalPigeon/breed/breed/breedstatistic/breedstatistic-pigeon-cage-state-entity/getMonitorByShedID`,
-      get: async function(breedId){
-        return await http.get(this.url+`/${breedId}`);
+      url: `/digitalPigeon/aliyun/video/getListVideoUrlList`,
+      post: async function(breedId){
+        let data = {
+          sheId: breedId
+        }
+        console.log('视频请求参数',data)
+        return await http.post(this.url + `?sheId=` + breedId);
       }
     },
     // 根据监控视频id获取对应的监控视频资料

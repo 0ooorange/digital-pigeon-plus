@@ -87,7 +87,7 @@
 <script>
 import { ref } from '@vue/reactivity'
 export default {
-  name: 'globalVideo',
+  name: 'warnCenter',
   setup () {
     const videoList = [
       { id: 1, url: 'http' },

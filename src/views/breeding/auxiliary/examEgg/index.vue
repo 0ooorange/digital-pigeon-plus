@@ -86,14 +86,14 @@ export default {
 				cardText: "查蛋个数",
 				cardNumber: "888只",
 			},
-			{
-				cardText: "正常蛋个数",
-				cardNumber: "88只",
-			},
-			{
-				cardText: "异常蛋个数",
-				cardNumber: "8只",
-			},
+			// {
+			// 	cardText: "正常蛋个数",
+			// 	cardNumber: "88只",
+			// },
+			// {
+			// 	cardText: "异常蛋个数",
+			// 	cardNumber: "8只",
+			// },
 		],
 		options :[
 			{

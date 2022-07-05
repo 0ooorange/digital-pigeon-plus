@@ -208,7 +208,7 @@
                         highlightCurrentRow
                         :data="[]"
                         :apiObj="findLogApi"
-                        :params="findLogParams"
+                        :params="dataParams"
                     >
                         <el-table-column
                             align="center"
@@ -246,7 +246,7 @@
                         highlightCurrentRow
                         :data="[]"
                         :apiObj="findAbnormalApi"
-                        :params="findAbnormalParams"
+                        :params="dataParams"
                     >
                         <el-table-column
                             align="center"
@@ -493,6 +493,11 @@ export default {
                 beginDate: "",
                 endDate: "",
             },
+            dataParams: {
+                pigeonId: "",
+                beginDate: "",
+                endDate: "",
+            },
             tableListOption: [
                 {
                     time: "2022-04-21",
@@ -653,24 +658,29 @@ export default {
                 console.log(this.findLogParams, "请求参数1111");
 
                 //异常信息
-                this.findAbnormalParams.pigeonId =
+                this.dataParams.pigeonId =
                     this.cageArray[0][0] && this.cageArray[0][0].pigeonId;
                 console.log(this.cageArray, "鸽笼数据");
                 this.findAbnormalApi =
                     this.$API.allState.findAbnormalByPigeonIdAndDate;
-                this.findAbnormalParams.beginDate = this.passDay;
-                this.findAbnormalParams.endDate = this.today;
-                this.findAbnormalParams.pigeonId =
+                this.dataParams.beginDate = this.passDay;
+                this.dataParams.endDate = this.today;
+                this.dataParams.pigeonId =
                     this.cageArray[0][0] && this.cageArray[0][0].pigeonId;
-                console.log(this.findAbnormalParams, "异常信息请求参数1111");
-                this.findCageDataParams.beginDate = this.passDay;
-                this.findCageDataParams.endDate = this.today;
-                this.findCageDataParams.pigeonId =
-                    this.cageArray[0][0] && this.cageArray[0][0].pigeonId;
-                console.log(this.findCageDataParams, "各种数据参数1111");
+                console.log(this.dataParams, "异常信息请求参数1111");
+                // this.findCageDataParams.beginDate = this.passDay;
+                // this.findCageDataParams.endDate = this.today;
+                // this.findCageDataParams.pigeonId =
+                //     this.cageArray[0][0] && this.cageArray[0][0].pigeonId;
+                this.getCageDataInfo()
+            }
+        },
+        //获取鸽笼具体信息
+       async getCageDataInfo() {
+                console.log(this.dataParams, "各种数据参数1111");
                 const getDataList =
                     await this.$API.allState.findCageDataByPigeonIdAndDate.get(
-                        this.findCageDataParams
+                        this.dataParams
                     );
                     console.log('请求各种数据',getDataList)
                 if (getDataList.code == 200) {
@@ -678,26 +688,10 @@ export default {
                     let data = getDataList.data.data;
                     console.log("各种数据", data);
                 }
-            }
-        },
-        //获取鸽笼具体信息
-        getCageInfo() {
-            //             let data = {
-            //     position: this.lever[this.currentLever].value,
-            //     shedId: this.currShed.id,
-            // };
-            // console.log("获取所有鸽笼参数", data);
-            // const findCageByState =
-            //     await this.$API.allState.findAbnormalByPigeonIdAndDate.get(data);
-            // if (findCageByState.code == 200) {
-            //     console.log("全部鸽笼", findCageByState);
-            //     this.cageArray = findCageByState.data.data;
-            //     console.log(this.cageArray, "鸽笼数据");
-            // }
         },
         clickCage(item) {
-            this.findLogParams.pigeonId = item.pigeonId;
-            this.findAbnormalParams.pigeonId = item.pigeonId;
+            this.dataParams.pigeonId = item.pigeonId;
+            this.dataParams.pigeonId = item.pigeonId;
             this.currentPigeon = item.codes;
             console.log("点击鸽笼", this.findLogParams);
             // this.$refs.logTable.getData()
@@ -706,6 +700,7 @@ export default {
                 type: "success",
                 duration: 2000,
             });
+            this.getCageDataInfo()
         },
     },
 };
