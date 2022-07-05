@@ -6,7 +6,7 @@
       >
     </div>
     <el-main class="main">
-      <scTable :data="tableData" stripe >
+      <scTable :data="tableData" stripe :apiObj="api">
         <el-table-column
           prop="date"
           label="时间"
@@ -255,7 +255,7 @@ export default defineComponent({
       OutcageInfo.value = item;
     };
     const addOutcage = () => {
-     /*  tableData.value.push(addInfo.value); */
+      tableData.value.push(addInfo.value);
       addOutcagedialog.value=false;
     };
     const addDialogClosed = () => {
@@ -267,11 +267,11 @@ export default defineComponent({
     return {
       tableData,
       addInfo,
+      addOutcage,
       addOutcagedialog,
       Outcagedialog,
       OutcageInfo,
       api,
-      addOutcage,
       addDialogClosed,
       showOutcagedialog,
     };
