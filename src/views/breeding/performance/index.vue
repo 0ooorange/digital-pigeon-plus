@@ -10,7 +10,7 @@
         >
         </table-search>
 
-        <scTable
+        <!-- <scTable
             class="table"
             ref="table"
             row-key="id"
@@ -19,9 +19,9 @@
             @selection-change="selectionChange"
             stripe
             highlightCurrentRow
-        >
+        > -->
 
-        <!-- <scTable
+        <scTable
             class="table"
             ref="table"
             row-key="id"
@@ -32,88 +32,88 @@
             @selection-change="selectionChange"
             stripe
             highlightCurrentRow
-        > -->
+        >
             <!-- <el-table-column type="selection" width="40"></el-table-column> -->
             <el-table-column
                 align="center"
                 label="鸽笼号"
-                prop="cageNumber"
+                prop="codes"
+                width="110"
+                sortable
+            ></el-table-column>
+            <el-table-column
+                align="center"
+                label="鸽板编号"
+                prop="panelCode"
+                width="110"
+                sortable
+            ></el-table-column>
+            <el-table-column
+                align="center"
+                label="生蛋"
+                prop="countLayEgg"
                 width="100"
                 sortable
             ></el-table-column>
             <el-table-column
                 align="center"
-                label="板子编号"
-                prop="boardNumber"
-                width="110"
-                sortable
-            ></el-table-column>
-            <el-table-column
-                align="center"
-                label="一个月未下蛋"
-                prop="oneMonNoLayEgg"
-                width="140"
-                sortable
-            ></el-table-column>
-            <el-table-column
-                align="center"
-                label="生蛋次数"
-                prop="layEggInterval"
-                width="110"
-                sortable
-            ></el-table-column>
-            <el-table-column
-                align="center"
-                label="回蛋次数"
-                prop="backEggAmount"
-                width="110"
+                label="回蛋"
+                prop="countReEgg"
+                width="100"
                 sortable
             ></el-table-column>
             <el-table-column
                 align="center"
                 label="光蛋"
-                prop="lightEgg"
-                width="80"
-                sortable
-            ></el-table-column>
-            <el-table-column
-                align="center"
-                label="冷蛋"
-                prop="coolEgg"
-                width="80"
+                prop="countEggState23"
+                width="100"
                 sortable
             ></el-table-column>
             <el-table-column
                 align="center"
                 label="单蛋"
-                prop="aloneEgg"
-                width="80"
+                prop="countEggState1"
+                width="100"
                 sortable
             ></el-table-column>
             <el-table-column
                 align="center"
                 label="踩蛋"
-                prop="stampEgg"
-                width="80"
+                prop="countEggState45"
+                width="100"
+                sortable
+            ></el-table-column>
+            <el-table-column
+                align="center"
+                label="冷蛋"
+                prop="countCubState12"
+                width="100"
+                sortable
+            ></el-table-column>
+            <el-table-column
+                align="center"
+                label="死精"
+                prop="countCubState34"
+                width="100"
                 sortable
             ></el-table-column>
             <el-table-column
                 align="center"
                 label="死仔"
-                prop="deathChild"
-                width="80"
+                prop="countDeadCub"
+                width="100"
                 sortable
             ></el-table-column>
-            <el-table-column
+            <!-- <el-table-column
                 align="center"
                 label="淘汰建议"
                 prop="suggest"
                 width="110"
-            ></el-table-column>
+            ></el-table-column> -->
             <el-table-column
                 align="center"
                 label="备注"
-                prop="remark"
+                prop="remarks"
                 width="140"
                 show-overflow-tooltip
             ></el-table-column>
@@ -214,7 +214,7 @@ export default defineComponent({
 
         //请求参数
         let params = reactive({
-            fieldCommon: "A", //鸽棚编号，后面要问问师兄确定一下
+            fieldCommon: "", //鸽棚编号，后面要问问师兄确定一下
             startTime: formatDate(startTime.value).substring(0, 10),
             endTime: formatDate(endTime.value).substring(0, 10),
             shedId: currShed.id, //后面要用computed
@@ -349,8 +349,10 @@ export default defineComponent({
             },
         ];
 
-        const searchClick = function () {
-            console.log("嘻嘻嘻，我被点击啦");
+        const searchClick = function (e) {
+            console.log("嘻嘻嘻，我被点击啦",e);
+            params.fieldCommon = e.inputValue
+            console.log('请求的参数',params)
         };
 
         const outTable = function () {

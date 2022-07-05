@@ -184,15 +184,15 @@ export default {
 			this.monitor_idlist=res.data.urlList;  
 			console.log('监控视频111',this.monitor_idlist)  
         },
-		async applicantTypes(value){
-			// this.currentmonitorid=value;
-			//  console.log("由选择id获取详情视频内容",this.currentmonitorid);
-			//   const{data:res}=await this.$API.breedStatistics.getMonitorByID.get(this.currentmonitorid);
-			//  console.log("获取数据",res);
-			//  this.monitorcontent=res.data 
-			//  console.log( console.log("获取详情视频内容",this.monitorcontent));  
+		// async applicantTypes(value){
+		// 	// this.currentmonitorid=value;
+		// 	//  console.log("由选择id获取详情视频内容",this.currentmonitorid);
+		// 	//   const{data:res}=await this.$API.breedStatistics.getMonitorByID.get(this.currentmonitorid);
+		// 	//  console.log("获取数据",res);
+		// 	//  this.monitorcontent=res.data 
+		// 	//  console.log( console.log("获取详情视频内容",this.monitorcontent));  
             
-		},
+		// },
 		getstyles() {
 			document.documentElement.style.fontSize =
 				(document.documentElement.clientWidth / 768) * 100 + "px";

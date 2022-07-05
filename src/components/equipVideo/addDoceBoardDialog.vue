@@ -2,7 +2,7 @@
     <div>
         <el-dialog
             v-model="dialogFormVisible"
-            title="添加鸽板"
+            title="添加出栏"
             width="40%"
             @close="closeDialog"
         >
