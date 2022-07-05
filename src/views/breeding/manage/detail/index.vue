@@ -1,144 +1,11 @@
 <script>
 import { defineComponent, reactive, ref } from 'vue'
 import { Setting, Search } from '@element-plus/icons-vue'
+import { getBreedingDetail } from '../../../../api/model/breeding/manage/detail'
+import tool from '../../../../utils/tool'
 export default defineComponent({
   name: 'breedingDetail', // 养殖明细
-  setup() {
-    /* table */
-    const eggsList = [
-      {
-        pigeonnumber: 'A1',
-        boardnumber: '1',
-        layEggDate: '2022年4月14日 12:30:19',
-        layEggdays: '10天',
-        hatchEggdays: '19天',
-        actionType: '抽蛋',
-        remark: '无'
-      },
-      {
-        pigeonnumber: 'A8',
-        boardnumber: '2',
-        layEggDate: '2022年4月14日 12:30:19',
-        layEggdays: '10天',
-        hatchEggdays: '19天',
-        actionType: '孵化',
-        remark: '无'
-      },
-      {
-        pigeonnumber: 'B10',
-        boardnumber: '3',
-        layEggDate: '2022年4月14日 12:30:19',
-        layEggdays: '10天',
-        hatchEggdays: '19天',
-        actionType: '抽蛋',
-        remark: '无'
-      },
-      {
-        pigeonnumber: 'A15',
-        boardnumber: '4',
-        layEggDate: '2022年4月14日 12:30:19',
-        layEggdays: '10天',
-        hatchEggdays: '19天',
-        actionType: '孵化',
-        remark: '无'
-      },
-      {
-        pigeonnumber: 'B1',
-        boardnumber: '5',
-        layEggDate: '2022年4月14日 12:30:19',
-        layEggdays: '10天',
-        hatchEggdays: '19天',
-        actionType: '孵化',
-        remark: '无'
-      },
-      {
-        pigeonnumber: 'B10',
-        boardnumber: '6',
-        layEggDate: '2022年4月14日 12:30:19',
-        layEggdays: '10天',
-        hatchEggdays: '19天',
-        actionType: '抽蛋',
-        remark: '无'
-      },
-      {
-        pigeonnumber: 'C4',
-        boardnumber: '7',
-        layEggDate: '2022年4月14日 12:30:19',
-        layEggdays: '10天',
-        hatchEggdays: '19天',
-        actionType: '抽蛋',
-        remark: '无'
-      }
-    ]
-
-    const column = ref([
-      {
-        label: '鸽笼号',
-        prop: 'pigeonnumber',
-        width: '180',
-        sortable: true,
-        hide: false,
-        checked: true,
-        disabled: false
-      },
-      {
-        label: '板子号',
-        prop: 'boardnumber',
-        width: '180',
-        sortable: true,
-        hide: false,
-        checked: true,
-        disabled: false
-      },
-      {
-        label: '生蛋时间',
-        prop: 'layEggDate',
-        width: '200',
-        sortable: true,
-        hide: false,
-        checked: true,
-        disabled: false
-      },
-      {
-        label: '生蛋天数',
-        prop: 'layEggdays',
-        width: '180',
-        hide: false,
-        checked: true,
-        disabled: false
-      },
-      {
-        label: '孵化天数',
-        prop: 'hatchEggdays',
-        width: '180',
-        hide: false,
-        checked: true,
-        disabled: false
-      },
-      {
-        label: '备注',
-        prop: 'remark',
-        hide: false,
-        checked: true,
-        disabled: false
-      }
-    ])
-
-    /* 工具栏 */
-    //下拉框 时间类型选择
-    const dateType = ref('')
-    const dateTypes = [
-      {
-        label: '生蛋日期',
-        value: 'layDate'
-      },
-      {
-        label: '回蛋日期',
-        value: 'backDate'
-      }
-    ]
-    // 时间选择器
-    const dateValue = ref([''])
+  setup () {
     const shortcuts = [
       {
         text: '近一周',
@@ -166,8 +33,138 @@ export default defineComponent({
           start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
           return [start, end]
         }
+      },
+      {
+        text: '近半年',
+        value: () => {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 360)
+          return [start, end]
+        }
       }
     ]
+    const [startTime, endTime] = shortcuts[3].value()
+    const query = reactive({
+      startTime: tool.dateFormat(startTime),
+      endTime: tool.dateFormat(endTime),
+      shedId: 1518124016571797507,
+      codes: '',
+      fieldTime: '',
+      incubationDay: '',
+      layEggDay: '',
+      pageNum: 1,
+      pageSize: 5,
+      panelCode: '',
+    })
+    /* table */
+    const eggsList = ref([])
+    const column = ref([
+      {
+        label: '鸽笼编号',
+        prop: 'codes',
+        width: '180',
+        sortable: true,
+        hide: false,
+        checked: true,
+        disabled: false
+      },
+      {
+        label: '鸽板编号',
+        prop: 'panelCode',
+        width: '180',
+        sortable: true,
+        hide: false,
+        checked: true,
+        disabled: false
+      },
+      {
+        label: '下蛋时间',
+        prop: 'layEggTime',
+        width: '200',
+        sortable: true,
+        hide: false,
+        checked: true,
+        disabled: false
+      },
+      {
+        label: '抽蛋/孵蛋',
+        prop: 'takeOrHatch',
+        width: '180',
+        hide: false,
+        checked: true,
+        disabled: false
+      },
+      {
+        label: '查蛋时间',
+        prop: 'eggGmtCreate',
+        width: '180',
+        hide: false,
+        checked: true,
+        disabled: false
+      },
+      {
+        label: '蛋状态',
+        prop: 'eggState',
+        hide: false,
+        checked: true,
+        disabled: false
+      },
+      {
+        label: '查仔时间',
+        prop: 'cubGmtCreate',
+        hide: false,
+        checked: true,
+        disabled: false
+      },
+      {
+        label: '仔状态',
+        prop: 'cubState',
+        hide: false,
+        checked: true,
+        disabled: false
+      },
+      {
+        label: '死仔时间',
+        prop: 'deathTime',
+        hide: false,
+        checked: true,
+        disabled: false
+      },
+      {
+        label: '死仔个数',
+        prop: 'deathNumber',
+        hide: false,
+        checked: true,
+        disabled: false
+      },
+      {
+        label: '回蛋时间',
+        prop: 'reLayEggTime',
+        hide: false,
+        checked: true,
+        disabled: false
+      }
+    ])
+    getBreedingDetail(query).then(res => {
+      console.log(res.data);
+    })
+    /* 工具栏 */
+    //下拉框 时间类型选择
+    const dateType = ref('')
+    const dateTypes = [
+      {
+        label: '生蛋日期',
+        value: 'layDate'
+      },
+      {
+        label: '回蛋日期',
+        value: 'backDate'
+      }
+    ]
+    // 时间选择器
+    const dateValue = ref([''])
+
     const checkboxChange = (value, item) => {
       console.log(value, item, 'checkboxChange')
       //   至少选中一个检查
