@@ -305,15 +305,8 @@ export default defineComponent({
                 count: "0只",
             },
         ]);
-        const total = ref(12);
-        const pageSizes = ref(10);
-        const currentPage = ref(1);
-        const pageSize = ref(10);
 
-        const totalAnother = ref(10);
-        const pageSizesAnother = ref(10);
-        const currentPageAnother = ref(1);
-        const pageSizeAnother = ref(10);
+        const isSearch = ref(false);
 
         // tableListOption = [
         //     {
@@ -462,7 +455,8 @@ export default defineComponent({
         const datePickerChange = function (e) {
             console.log("日期改变", e);
         };
-        const searchClick = function () {
+        const searchClick = function (e) {
+            isSearch.value = true;
             // let dataValue = e.dateValue;
             // console.log(dataValue[0], e, "时间数据");
             // console.log(new Date(dataValue[0]));
@@ -488,7 +482,14 @@ export default defineComponent({
             //     formatDate(endTime.value).substring(0, 10)
             // );
 
+            console.log("拿到的参数", e);
+            findAbnormalApi.value =
+                proxy.$API.operateLog.findAbnormalByPigeonCodesAndDate;
+            findAbnormalParams.pigeonId = e.inputValue;
 
+            findLogParams.value =
+                proxy.$API.operateLog.findLogByPigeonCodesAndDate;
+            findLogParams.pigeonId = e.inputValue;
         };
 
         const outTable = function () {
@@ -503,10 +504,16 @@ export default defineComponent({
 
         //获取各种数据
         const getDataList = async function () {
-            const getDataList =
-                await proxy.$API.allState.findCageDataByPigeonIdAndDate.get(
-                    findCageDataParams
-                );
+            let getDataList 
+            if (isSearch.value) {
+                getDataList =
+                    await proxy.$API.operateLog.findCageDataByPigeonAndDate.get(
+                        findCageDataParams
+                    );
+            } else {
+                 getDataList = await proxy.$API.allState.findCageDataByPigeonIdAndDate.get(
+                    findCageDataParams)
+            }
             if (getDataList.code == 200) {
                 console.log("各种数据", getDataList);
                 let data = getDataList.data.data;
@@ -537,14 +544,6 @@ export default defineComponent({
             tableListOption,
             cardData,
             dataCount,
-            total,
-            pageSizes,
-            currentPage,
-            pageSize,
-            totalAnother,
-            pageSizesAnother,
-            currentPageAnother,
-            pageSizeAnother,
             datePickerChange,
             searchClick,
             outTable,
