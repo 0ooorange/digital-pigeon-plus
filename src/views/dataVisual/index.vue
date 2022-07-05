@@ -17,9 +17,27 @@
         </ul>
       </div>
     </div>
-    <div class="map">
+
+    <div class="content">
+      <div class="left">
+        <div class="pl25 amiddboxttop baseInfoCss">
+          <!-- <div>养殖基础信息</div> -->
+        </div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
       <div ref="mapEcharts" class="map-echart"></div>
+      <div class="right">
+        <div class="">
+          <div></div>
+        </div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -204,7 +222,7 @@ export default {
             realtime: false,
             calculable: true,
             inRange: {
-              color: ['#07a3d7', 'yellow', 'orangered']
+              color: ['#07a3d7', 'yellow', 'orangered'],
             },
           },
           // 要显示的散点数据
@@ -339,7 +357,7 @@ html,
     text-align: center;
     font-weight: bold;
     letter-spacing: 8px;
-    font-size: 2.1rem;
+    font-size: 26px;
   }
   .top_right {
     width: 33%;
@@ -362,7 +380,7 @@ html,
     }
   }
 }
-.map {
+.content {
   display: flex;
   justify-content: center;
 }
@@ -372,5 +390,22 @@ html,
   width: 600px;
   background-color: rgba(128, 137, 165, 0.8);
   align-items: center;
+}
+.left {
+  width: 28%;
+  .amiddboxttop {
+    // background: url('./img/amiddboxttop.png') no-repeat;
+    // background-size: 50% 24%;
+  }
+  .baseInfoCss {
+    width: 28%;
+    height: 24%;
+  }
+}
+.right {
+  width: 28%;
+}
+.pl25 {
+  padding-left: 25px;
 }
 </style>
