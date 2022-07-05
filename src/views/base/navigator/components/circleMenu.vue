@@ -61,7 +61,7 @@ export default {
       }
     },
     routerClick(item) {
-      console.log('item的值是', item)
+      // console.log('item的值是', item)
       const menu = tool.data.get('MENU')
       tool.data.set('CURR_MENU', menu[item.system])
     }

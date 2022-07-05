@@ -120,10 +120,10 @@ export default {
     var homeInfRes = await this.$API.login.getHomeInf.get()
     if (homeInfRes.code == 200) {
       this.$TOOL.data.set('BASE_INFO', homeInfRes.data)
-      console.log('200: ', homeInfRes)
+      // console.log('200: ', homeInfRes)
     } else {
       this.$message.warning(homeInfRes.message)
-      console.log('err: ', homeInfRes)
+      // console.log('err: ', homeInfRes)
       return false
     }
   },

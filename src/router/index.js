@@ -68,7 +68,7 @@ router.beforeEach(async (to, from) => {
 		Object.keys(menu).forEach((system) => {
 			if (system === "currunt") return;
 			const menuRoutes = menuMapRoutes(menu[system]);
-			console.log(system, "=>", menuRoutes, "menuMapRoutes(menu[system]");
+			// console.log(system, "=>", menuRoutes, "menuMapRoutes(menu[system]");
 			menuRoutes.forEach((r) => router.addRoute(system, r));
 			// menuRoutes.forEach((r) => router.addRoute("layout", r));
 			// router.addRoute('layout', menuRoutes[0])
