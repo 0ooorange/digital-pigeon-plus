@@ -58,6 +58,7 @@
 <script>
 import { ref, getCurrentInstance } from 'vue'
 import { dateFormat } from '@/hooks/dateFormat.js'
+// import { useState } from '@/hooks/useState.js'
 import TableCustom from './components/table-custom.vue'
 import EchartStatistics from './components/echartStatistics.vue'
 import EchartsEnvironment from './components/echartsEnvironment.vue'
@@ -148,7 +149,9 @@ export default {
     endTime = ref(endTime)
     dateVals.value = [startTime.value, endTime.value]
 
+    // const shedId = useState("baseInfo", ["SHED_ID"])
     const shedId = proxy.$store.state.baseInfo.CURR_INFO.CURR_SHED.id
+    // console.log("shedId: ", shedId)
     const getCardData = async (shedId, startTime, endTime) => {
       const { data: res } = await proxy.$API.breedStatistics.getNumberOfParents.get(shedId)
       cardList.value[0].number = res.data
