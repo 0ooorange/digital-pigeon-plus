@@ -32,6 +32,11 @@ module.exports = {
     config.resolve.alias.set('@', resolve('src'))
     config.resolve.alias.set('@components', resolve('src/components'))
     config.resolve.alias.set('@api', resolve('src/api/model'))
+    config.resolve.alias.set('@utils', resolve('src/utils'))
+    config.resolve.alias.set('@images', resolve('src/assets/images'))
+    config.resolve.alias.set('@icons', resolve('src/assets/icons'))
+    config.resolve.alias.set('@style', resolve('src/style'))
+    config.resolve.alias.set('@store', resolve('src/store/modules'))
   },
 
   configureWebpack: (config) => {
