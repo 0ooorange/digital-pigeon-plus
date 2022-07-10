@@ -1,0 +1,319 @@
+<template>
+  <div class="container">
+    <div class="tag">
+      <el-button type="primary" plain @click="addPersondialog = true"
+        >新增个人信息</el-button
+      >
+      <table-search
+        :searchTypes="searchTypes"
+        @searchClick="searchClick"
+        @reset="reset"
+        @outTable="outTable"
+        @printTable="printTable"
+      />
+    </div>
+    <el-main class="main">
+      <scTable :data="tableData" stripe highlightCurrentRow>
+        <el-table-column
+          prop="date"
+          label="时间"
+          width="220"
+          sortable
+          align="center"
+        />
+        <el-table-column
+          prop="dovecoteNumber"
+          label="鸽棚"
+          width="220"
+          sortable
+          align="center"
+        />
+        <el-table-column
+          prop="doveNum"
+          label="鸽笼号"
+          width="220"
+          sortable
+          align="center"
+        />
+        <el-table-column label="操作" width="220" align="center" fixed="right">
+          <template #default="scope">
+            <el-button
+              size="mini"
+              type="primary"
+              text
+              icon="el-icon-edit"
+              @click="showDovedialog(scope.row)"
+              >编辑</el-button
+            >
+            <el-button
+              size="mini"
+              type="danger"
+              text
+              icon="el-icon-delete"
+              @click="removeDove(scope.row.id)"
+              >删除</el-button
+            >
+          </template>
+        </el-table-column>
+      </scTable>
+    </el-main>
+    <el-dialog
+      title="添加鸽子"
+      v-model="addPersondialog"
+      width="25%"
+      @close="addDialogClosed"
+    >
+      <el-form
+        :model="addInfo"
+        ref="addRef"
+        label-width="auto"
+        style="width: 250px"
+        :rules="formRules"
+      >
+        <el-form-item label="时间:" prop="date">
+          <el-input v-model="addInfo.date" placeholder="请输入时间"></el-input>
+        </el-form-item>
+        <el-form-item label="鸽棚:" prop="dovecoteNumber">
+          <el-select v-model="addInfo.dovecoteNumber" placeholder="请选择">
+            <el-option
+              v-for="(item, index) in doptions"
+              :key="index"
+              :label="item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="鸽笼号:" prop="doveNum">
+          <el-input
+            v-model="addInfo.doveNum"
+            placeholder="请输入鸽笼号"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <span class="dialog-footer">
+        <el-button @click="addPersondialog = false">取 消</el-button>
+        <el-button type="primary" plain @click="addPerson()">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="编辑鸽子"
+      v-model="dovedialog"
+      width="25%"
+      @close="editDoveClosed"
+    >
+      <el-form
+        :model="editInfo"
+        ref="editRef"
+        label-width="auto"
+        style="width: 250px"
+        :rules="formRules"
+      >
+        <el-form-item label="时间:" prop="date">
+          <el-input v-model="editInfo.date" placeholder="请输入时间"></el-input>
+        </el-form-item>
+        <el-form-item label="鸽棚:" prop="dovecoteNumber">
+          <el-select v-model="editInfo.dovecoteNumber" placeholder="请选择">
+            <el-option
+              v-for="(item, index) in doptions"
+              :key="index"
+              :label="item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="鸽笼号:" prop="doveNum">
+          <el-input
+            v-model="editInfo.doveNum"
+            placeholder="请输入鸽笼号"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <span class="dialog-footer">
+        <el-button @click="dovedialog = false">取 消</el-button>
+        <el-button type="primary" plain @click="updateDove()">确 定</el-button>
+      </span>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import { defineComponent, ref, getCurrentInstance, reactive } from "vue";
+import scTable from "@/components/scTable/index.vue";
+export default defineComponent({
+  name: "doveRegistration", // 鸽子登记
+  components: {
+    scTable,
+  },
+  setup() {
+    const { proxy } = getCurrentInstance();
+    const searchTypes = reactive([
+      {
+        value: "鸽笼号",
+        label: "鸽笼号",
+      },
+    ]);
+    // 时间选择器
+    const shortcuts = [
+      {
+        text: "近一周",
+        value: () => {
+          const end = new Date();
+          const start = new Date();
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+          return [start, end];
+        },
+      },
+      {
+        text: "近一个月",
+        value: () => {
+          const end = new Date();
+          const start = new Date();
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+          return [start, end];
+        },
+      },
+      {
+        text: "近3个月",
+        value: () => {
+          const end = new Date();
+          const start = new Date();
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+          return [start, end];
+        },
+      },
+    ];
+    let addPersondialog = ref(false);
+    let dovedialog = ref(false);
+    let doptions = reactive(["A1", "A2", "A3"]);
+    const tableData = reactive([
+      {
+        date: "2022-07-05",
+        dovecoteNumber: "A1",
+        doveNum: "A001",
+      },
+      {
+        date: "2022-07-05",
+        dovecoteNumber: "A1",
+        doveNum: "A001",
+      },
+      {
+        date: "2022-07-05",
+        dovecoteNumber: "A1",
+        doveNum: "A001",
+      },
+      {
+        date: "2022-07-05",
+        dovecoteNumber: "A1",
+        doveNum: "A001",
+      },
+    ]);
+    const editInfo = ref({
+      date: "",
+      dovecoteNumber: "",
+      doveNum: "",
+    });
+    const addInfo = reactive({
+      date: "",
+      dovecoteNumber: "",
+      doveNum: "",
+    });
+    const formRules = ref({
+      date: [{ message: "请输入时间", trigger: "blur", required: true }],
+      dovecoteNumber: [
+        { message: "请输入鸽棚", trigger: "blur", required: true },
+      ],
+      doveNum: [{ message: "请输入鸽笼号", trigger: "blur", required: true }],
+    });
+    // 设置默认时间段，组件内默认半年
+    let end = new Date();
+    let start = new Date();
+    start.setTime(start.getTime() - 3600 * 1000 * 24 * 183); // 半年
+    let dateDefault = [start, end];
+
+    const searchClick = () => {
+      console.log("点击查询");
+    };
+    const printTable = () => {
+      console.log("点击打印");
+    };
+    const reset = () => {
+      console.log("点击重置");
+    };
+    const outTable = () => {
+      console.log("点击导出");
+    };
+    //把这一行的信息传入对话框
+    const showDovedialog = (item) => {
+      dovedialog.value = true;
+      editInfo.value = item;
+    };
+    const updateDove = () => {
+      console.log("更改");
+      dovedialog.value = false;
+    };
+    const addPerson = () => {
+      /*  tableData.value.push(addInfo.value); */
+      addPersondialog.value = false;
+    };
+    const removeDove = () => {
+      console.log("删除");
+    };
+    const addDialogClosed = () => {
+      proxy.$refs.addRef.resetFields();
+    };
+    const editDialogClosed = () => {
+      proxy.$refs.editRef.resetFields();
+    };
+
+    const api = () => {};
+    return {
+      tableData,
+      addInfo,
+      addPersondialog,
+      dovedialog,
+      editInfo,
+      doptions,
+      shortcuts,
+      searchTypes,
+      searchClick,
+      reset,
+      outTable,
+      printTable,
+      dateDefault,
+      formRules,
+      api,
+      updateDove,
+      addPerson,
+      removeDove,
+      addDialogClosed,
+      editDialogClosed,
+      showDovedialog,
+    };
+  },
+});
+</script>
+
+<style scoped>
+.container {
+  margin: 0 20px;
+}
+.top {
+  display: flex;
+}
+.tag {
+  display: flex;
+  padding: 0 15px;
+}
+.form {
+  width: 80%;
+}
+.submit {
+  margin-left: 20px;
+}
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+</style>
