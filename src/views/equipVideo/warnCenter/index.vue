@@ -5,11 +5,10 @@
 </template>
 
 <script>
-  export default {
-    name: "warnCenter", // 预警中心
-  }
+export default {
+  name: "warnCenter", // 预警中心
+}
 </script>
 
 <style scoped>
-
 </style>

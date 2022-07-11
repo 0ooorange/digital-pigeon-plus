@@ -281,21 +281,21 @@
                                 <span style="font-size: 10px">产蛋数:</span>
                                 <span
                                     :style="'font-size:12px;padding-left:5px; font-weight: 700;color:#EE4000'"
-                                    >2个</span
+                                    >{{allKindsOfData.layEggNum}}</span
                                 >
                             </el-card>
                             <el-card class="box-card card_list_item">
                                 <span style="font-size: 10px">抽蛋数:</span>
                                 <span
                                     :style="'font-size:12px;padding-left:5px;  font-weight: 700;color:#EE9A49'"
-                                    >6个</span
+                                    >{{allKindsOfData.takeEggNum}}</span
                                 >
                             </el-card>
                             <el-card class="box-card card_list_item">
                                 <span style="font-size: 10px">孵蛋数量:</span>
                                 <span
                                     :style="'font-size:12px;padding-left:5px;  font-weight: 700;color:#43CD80'"
-                                    >0个</span
+                                    >{{allKindsOfData.hatchEggNum}}</span
                                 >
                             </el-card>
                         </div>
@@ -304,21 +304,21 @@
                                 <span style="font-size: 10px">孵蛋次数:</span>
                                 <span
                                     :style="'font-size:12px;padding-left:5px;  font-weight: 700;color:#76EE00'"
-                                    >0次</span
+                                    >{{allKindsOfData.hatchEgg}}</span
                                 >
                             </el-card>
                             <el-card class="box-card card_list_item">
                                 <span style="font-size: 10px">出仔数:</span>
                                 <span
                                     :style="'font-size:12px;padding-left:5px;  font-weight: 700;color:#6495ED'"
-                                    >2只</span
+                                    >{{allKindsOfData.newCubNum}}</span
                                 >
                             </el-card>
                             <el-card class="box-card card_list_item">
                                 <span style="font-size: 10px">死仔数:</span>
                                 <span
                                     :style="'font-size:12px;padding-left:5px;  font-weight: 700;color:#7D26CD'"
-                                    >0只</span
+                                    >{{allKindsOfData.deadCubNum}}</span
                                 >
                             </el-card>
                         </div>
@@ -498,6 +498,14 @@ export default {
                 beginDate: "",
                 endDate: "",
             },
+            allKindsOfData: {
+                layEggNum: "0个",
+                takeEggNum: "6个",
+                hatchEggNum: "0个",
+                hatchEgg: "0次",
+                newCubNum: "2只",
+                deadCubNum: "0只",
+            },
             tableListOption: [
                 {
                     time: "2022-04-21",
@@ -672,22 +680,28 @@ export default {
                 // this.findCageDataParams.endDate = this.today;
                 // this.findCageDataParams.pigeonId =
                 //     this.cageArray[0][0] && this.cageArray[0][0].pigeonId;
-                this.getCageDataInfo()
+                this.getCageDataInfo();
             }
         },
         //获取鸽笼具体信息
-       async getCageDataInfo() {
-                console.log(this.dataParams, "各种数据参数1111");
-                const getDataList =
-                    await this.$API.allState.findCageDataByPigeonIdAndDate.get(
-                        this.dataParams
-                    );
-                    console.log('请求各种数据',getDataList)
-                if (getDataList.code == 200) {
-                    console.log("各种数据", getDataList);
-                    let data = getDataList.data.data;
-                    console.log("各种数据", data);
-                }
+        async getCageDataInfo() {
+            console.log(this.dataParams, "各种数据参数1111");
+            const getDataList =
+                await this.$API.allState.findCageDataByPigeonIdAndDate.get(
+                    this.dataParams
+                );
+            console.log("请求各种数据", getDataList);
+            if (getDataList.code == 200) {
+                console.log("各种数据", getDataList);
+                let data = getDataList.data.data;
+                console.log("各种数据", data);
+                this.allKindsOfData.layEggNum = data.layEggNum + "个";
+                this.allKindsOfData.takeEggNum = data.takeEggNum + "个";
+                this.allKindsOfData.hatchEggNum = data.hatchEggNum + "个";
+                this.allKindsOfData.hatchEgg = data.hatchEgg + "次";
+                this.allKindsOfData.newCubNum = data.newCubNum + "只";
+                this.allKindsOfData.deadCubNum = data.deadCubNum + "只";
+            }
         },
         clickCage(item) {
             this.dataParams.pigeonId = item.pigeonId;
@@ -700,7 +714,7 @@ export default {
                 type: "success",
                 duration: 2000,
             });
-            this.getCageDataInfo()
+            this.getCageDataInfo();
         },
     },
 };

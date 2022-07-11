@@ -262,6 +262,7 @@ export default {
         CHARGE_NAME: this.currOperator,
       }
       this.$TOOL.data.set('CURR_INFO', this.currInfo)
+      this.$store.commit('setCurrInfo', this.$TOOL.data.get('CURR_INFO'))
     },
     // 切换鸽棚
     async currShedChange(currShedName) {
@@ -270,8 +271,8 @@ export default {
       )
       this.currOperator = changeShedRes.chargeName
       for (var i = 0; i < this.dovecotes.length; i++) {
-        for (var key in this.dovecotes[i]) {
-          if (key === currShedName) this.currShed = this.dovecotes[i]
+        if (this.dovecotes[i].code === currShedName) {
+          this.currShed = this.dovecotes[i]
         }
       }
       this.currInfo = {
@@ -280,6 +281,8 @@ export default {
         CHARGE_NAME: this.currOperator,
       }
       this.$TOOL.data.set('CURR_INFO', this.currInfo)
+      this.$store.commit('setCurrInfo', this.$TOOL.data.get('CURR_INFO'))
+      this.$store.commit('setShedId', this.$TOOL.data.get('CURR_INFO').CURR_SHED.id)
     },
   },
 }
