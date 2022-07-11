@@ -126,27 +126,27 @@ export default {
     },
   },
   created() {
-    this.baseInfo = this.$TOOL.data.get('BASE_INFO')
-    this.bases = this.baseInfo.base
-    this.dovecotes = this.baseInfo.shed
-    let currInfo = this.$TOOL.data.get('CURR_INFO')
-    if (currInfo) {
-      this.currBase = currInfo.CURR_BASE
-      this.currShed = currInfo.CURR_SHED
-      this.currOperator = currInfo.CHARGE_NAME
-    } else {
-      this.currBase = this.bases[0]
-      this.currShed = this.dovecotes[0]
-      this.currOperator = this.baseInfo.chargeName
-    }
-    this.currBaseName = this.currBase.name
-    this.currShedCode = this.currShed.code
-    this.currInfo = {
-      CURR_BASE: this.currBase,
-      CURR_SHED: this.currShed,
-      CHARGE_NAME: this.currOperator,
-    }
-    this.$TOOL.data.set('CURR_INFO', this.currInfo)
+    // this.baseInfo = this.$TOOL.data.get('BASE_INFO')
+    // this.bases = this.baseInfo.base
+    // this.dovecotes = this.baseInfo.shed
+    // let currInfo = this.$TOOL.data.get('CURR_INFO')
+    // if (currInfo) {
+    //   this.currBase = currInfo.CURR_BASE
+    //   this.currShed = currInfo.CURR_SHED
+    //   this.currOperator = currInfo.CHARGE_NAME
+    // } else {
+    //   this.currBase = this.bases[0]
+    //   this.currShed = this.dovecotes[0]
+    //   this.currOperator = this.baseInfo.chargeName
+    // }
+    // this.currBaseName = this.currBase.name
+    // this.currShedCode = this.currShed.code
+    // this.currInfo = {
+    //   CURR_BASE: this.currBase,
+    //   CURR_SHED: this.currShed,
+    //   CHARGE_NAME: this.currOperator,
+    // }
+    // this.$TOOL.data.set('CURR_INFO', this.currInfo)
 
     this.onLayoutResize()
     window.addEventListener('resize', this.onLayoutResize)

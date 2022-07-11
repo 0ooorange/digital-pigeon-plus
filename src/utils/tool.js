@@ -13,7 +13,8 @@ const tool = {};
 tool.cookie = {
 	set(name, value, expires, domain, path, secure) {
 		var cookieText = "";
-		cookieText += encodeURIComponent(name) + "=" + encodeURIComponent(value);
+		cookieText +=
+			encodeURIComponent(name) + "=" + encodeURIComponent(value);
 		if (expires instanceof Date) {
 			cookieText += "; expires=" + expires.toGMTString();
 		}
@@ -222,6 +223,47 @@ tool.crypto = {
 			);
 			return CryptoJS.enc.Utf8.stringify(result);
 		},
+	},
+};
+
+//时间处理
+tool.date = {
+	formateDate(date) {
+		var myyear = date.getFullYear();
+		var mymonth = date.getMonth() + 1;
+		var myweekday = date.getDate();
+		var myHour = date.getHours();
+		var myMinu = date.getMinutes();
+		var mySec = date.getSeconds();
+
+		if (mymonth < 10) {
+			mymonth = "0" + mymonth;
+		}
+		if (myweekday < 10) {
+			myweekday = "0" + myweekday;
+		}
+		if (myHour < 10) {
+			myHour = "0" + myHour;
+		}
+		if (myMinu < 10) {
+			myMinu = "0" + myMinu;
+		}
+		if (mySec < 10) {
+			mySec = "0" + mySec;
+		}
+		return (
+			myyear +
+			"-" +
+			mymonth +
+			"-" +
+			myweekday +
+			" " +
+			myHour +
+			":" +
+			myMinu +
+			":" +
+			mySec
+		);
 	},
 };
 

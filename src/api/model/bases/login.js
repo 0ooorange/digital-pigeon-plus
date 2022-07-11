@@ -3,7 +3,7 @@ import http from "@/utils/request"
 
 export default {
 	token: {
-		url: `/digitalPigeon/ucenter/login`,
+		url: `/digitalPigeon/ucenter/ucenter/new-user/login`,
 		name: "登录获取TOKEN",
 		post: async function(data={}){
 			return await http.post(this.url+`?NameOrPhone=${data.NameOrPhone}&password=${data.password}`);
