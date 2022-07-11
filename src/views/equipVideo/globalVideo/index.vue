@@ -36,7 +36,7 @@
       </el-row> -->
       <div class="v-box-container">
         <div :class="['v-box', { 'v-box-active': index === curIndex }]" v-for="(item, index) in videoList" :key="index">
-          <el-card @click="videoChange(index)">
+          <el-card @click="videoChange(item, index)">
             <template #header>
               <span>{{ '摄像头' + (index + 1) }}</span>
             </template>
@@ -69,14 +69,23 @@
           <template #label>
             <div class="cell-item">名称</div>
           </template>
-          摄像头{{ curIndex + 1 }}
+          兴宁鸽舍1列监控(G24611101)
+          <!-- {{ monitorInfo.name || `摄像头${curIndex + 1}` }} -->
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
             <div class="cell-item">型号</div>
           </template>
-          <el-tag size="small">TCL800</el-tag>
+          <el-tag size="small">G24611101</el-tag>
+          <!-- <el-tag size="small">{{ monitorInfo.serial || '-' }}</el-tag> -->
         </el-descriptions-item>
+        <el-descriptions-item>
+          <template #label>
+            <div class="cell-item">状态</div>
+          </template>
+          在线
+        </el-descriptions-item>
+
         <el-descriptions-item>
           <template #label>
             <div class="cell-item">位置</div>
@@ -136,7 +145,7 @@
 <script>
 import { reactive, ref } from '@vue/reactivity'
 // import SCMap from '@/components/scMap'
-import { getMonitorList } from '@api/equipVideo/globalVideo'
+import { getMonitorList, getMonitorInfo } from '@api/equipVideo/globalVideo'
 import { CirclePlus } from '@element-plus/icons-vue'
 export default {
   name: 'globalVideo',
@@ -147,8 +156,18 @@ export default {
     const shedID = '1518124016571797507'
     getMonitorList(shedID).then((res) => {
       const urlList = res.data?.urlList || []
-      videoList.value = urlList.map((url, id) => ({ url, id }))
+      videoList.value = urlList.map((url) => ({ url, id: '1545974946201624577' }))
     })
+    /* 查摄像头信息 */
+    // eslint-disable-next-line no-unused-vars
+    let monitorInfo = {}
+    const getMonitorData = async (id = '1545974946201624577') => {
+      await getMonitorInfo(id).then((res) => {
+        // console.log(res.data.data, 'getMonitorInfo')
+        monitorInfo = res.data?.data || {}
+      })
+    }
+    getMonitorData()
 
     /* 视频表格 */
     const areaList = [
@@ -161,8 +180,9 @@ export default {
     /* 右侧 监控信息 */
     const curInfo = reactive({})
     const curIndex = ref(1)
-    const videoChange = (i) => {
+    const videoChange = ({ id }, i) => {
       curIndex.value = i
+      getMonitorData(id)
       // 更新监控信息
     }
     // 添加对话框
