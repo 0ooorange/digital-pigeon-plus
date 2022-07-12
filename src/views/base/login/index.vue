@@ -50,6 +50,8 @@ export default {
     tool.cookie.remove('TOKEN')
     tool.data.remove('BASE_INFO')
     tool.data.remove('CURR_INFO')
+    tool.data.remove('BASE_INFO')
+    tool.data.remove('MENU')
     store.commit('clearViewTags')
     store.commit('clearKeepLive')
     store.commit('clearIframeList')

@@ -140,7 +140,7 @@ export default defineComponent({
         //获取当前鸽棚信息
 
         //当前鸽棚鸽笼信息
-        const currShed = proxy.$TOOL.data.get("CURR_INFO").SHED_ID;
+        const currShed = proxy.$TOOL.data.get("CURR_INFO");
 
         //时间选择器
         const shortcuts = [
