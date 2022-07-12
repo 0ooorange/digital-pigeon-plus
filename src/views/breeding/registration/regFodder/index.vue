@@ -20,7 +20,7 @@
         :apiObj="api"
         :params="params"
         requestMethods="post"
-        v-loading="loading"
+        @dataChange="dataChange"
       >
         <el-table-column
           prop="gmtCreate"
@@ -241,7 +241,6 @@ export default defineComponent({
   setup() {
     const { proxy } = getCurrentInstance();
     const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;
-    const loading = ref(false);
     // 时间选择器
     const shortcuts = [
       {
@@ -299,6 +298,7 @@ export default defineComponent({
       size: ["", ""],
       num: ["", ""],
       weight: ["", ""],
+      shedId:currShed.id
     });
     const addInput = () => {
       addInfo.brand.push("");
@@ -396,24 +396,12 @@ export default defineComponent({
       endTime: formatDate(datePk[1]),
       shedId: currShed.id,
     };
-    let refreshParams = {
-      page: 1,
-      pageSize: 10,
-    };
-    const getData = () => {
-      loading.value = true;
-      Object.assign(refreshParams, params);
-      api.post(refreshParams).then((res) => {
-        loading.value = false;
-        tableData.value = res.data;
-      });
-    };
     const addFodder = () => {
       proxy.$refs.addRef.validate(async (valid) => {
         if (!valid) {
           return;
         }
-        await proxy.$API.regFodder.addfeed.post(addInfo.value).then((res) => {
+        await proxy.$API.regFodder.addfeed.post(addInfo).then((res) => {
           if (res.success) {
             proxy.$message({
               message: "添加成功",
@@ -428,7 +416,7 @@ export default defineComponent({
         });
         proxy.$refs.addRef.resetFields();
         addFodderdialog.value = false;
-        getData();
+        proxy.$refs.table.getData();
       });
     };
     const updateFodder = () => {
@@ -452,7 +440,7 @@ export default defineComponent({
             }
           });
         fodderdialog.value = false;
-        getData();
+        proxy.$refs.table.getData();
       });
     };
     const removeFodder = async (id) => {
@@ -479,16 +467,18 @@ export default defineComponent({
           });
         }
       });
-      getData();
+        proxy.$refs.table.getData();
     };
     const addDialogClosed = () => {
       proxy.$refs.addRef.resetFields();
     };
     const editDialogClosed = () => {
-      proxy.$refs.editRef.resetFields();
     };
+    const dataChange=(res)=>{
+      if(parseInt(res.data.total)>0)
+      proxy.$refs.table.total=parseInt(res.data.total)
+    }
     return {
-      loading,
       tableData,
       addInfo,
       addFodderdialog,
@@ -499,13 +489,12 @@ export default defineComponent({
       fodderbrand,
       outTable,
       printTable,
+      dataChange,
       dateDefault,
       datePk,
       formRules,
       api,
       params,
-      refreshParams,
-      getData,
       updateFodder,
       addFodder,
       addInput,

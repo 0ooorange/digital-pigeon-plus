@@ -13,29 +13,38 @@
       />
     </div>
     <el-main class="main">
-      <scTable :data="tableData" stripe highlightCurrentRow>
+      <scTable
+        ref="table"
+        :data="tableData"
+        stripe
+        highlightCurrentRow
+        :apiObj="api"
+        :params="params"
+        requestMethods="post"
+        @dataChange="dataChange"
+      >
         <el-table-column
-          prop="date"
+          prop="gmtCreate"
           label="时间"
           width="120"
           sortable
           align="center"
         />
         <el-table-column
-          prop="cate"
+          prop="brand"
           label="饲料种类"
           width="120"
           align="center"
         />
         <el-table-column
-          prop="specs"
+          prop="size"
           label="规格"
           width="120"
           sortable
           align="center"
         />
         <el-table-column
-          prop="number"
+          prop="num"
           label="数量"
           width="120"
           sortable
@@ -48,7 +57,7 @@
           sortable
           align="center"
         />
-        <el-table-column prop="from" label="来源" width="120" align="center" />
+        <el-table-column prop="origin" label="来源" width="120" align="center" />
         <el-table-column label="操作" width="220" align="center" fixed="right">
           <template #default="scope">
             <el-button
@@ -85,19 +94,19 @@
         style="width: 380px"
         :rules="formRules"
       >
-        <el-form-item label="时间:" prop="date">
-          <el-input v-model="addInfo.date" placeholder="请输入时间"></el-input>
+        <el-form-item label="时间:" prop="gmtCreate">
+          <el-input v-model="addInfo.gmtCreate" placeholder="请输入时间"></el-input>
         </el-form-item>
-        <el-form-item label="饲料种类:" prop="cate">
+        <el-form-item label="饲料种类:" prop="brand">
           <el-row :gutter="10">
             <el-col
               :span="8"
-              v-for="(item, index) in addInfo.cate"
+              v-for="(item, index) in addInfo.brand"
               :key="index"
             >
-              <el-select v-model="addInfo.cate[index]" placeholder="请选择" :change="specsChange(index)">
+              <el-select v-model="addInfo.brand[index]" placeholder="请选择" :change="sizeChange(index)">
                 <el-option
-                  v-for="item in fodderCate"
+                  v-for="item in fodderbrand"
                   :key="item"
                   :label="item"
                   :value="item"
@@ -113,28 +122,28 @@
             </el-col>
           </el-row>
         </el-form-item>
-        <el-form-item label="规格:" prop="specs">
+        <el-form-item label="规格:" prop="size">
           <el-row :gutter="10">
             <el-col
               :span="8"
-              v-for="(item, index) in addInfo.specs"
+              v-for="(item, index) in addInfo.size"
               :key="index"
             >
               <el-input
-                v-model="addInfo.specs[index]"
+                v-model="addInfo.size[index]"
                 placeholder="请输入规格"
               ></el-input> </el-col
           ></el-row>
         </el-form-item>
-        <el-form-item label="数量:" prop="number">
+        <el-form-item label="数量:" prop="num">
           <el-row :gutter="10">
             <el-col
               :span="8"
-              v-for="(item, index) in addInfo.number"
+              v-for="(item, index) in addInfo.num"
               :key="index"
             >
               <el-input
-                v-model="addInfo.number[index]"
+                v-model="addInfo.num[index]"
                 placeholder="请输入数量"
                 :change="numChange(index)"
               ></el-input> </el-col
@@ -153,8 +162,8 @@
               ></el-input> </el-col
           ></el-row>
         </el-form-item>
-        <el-form-item label="来源:" prop="from">
-          <el-input v-model="addInfo.from" placeholder="请输入来源"></el-input>
+        <el-form-item label="来源:" prop="origin">
+          <el-input v-model="addInfo.origin" placeholder="请输入来源"></el-input>
         </el-form-item>
       </el-form>
       <span class="dialog-footer">
@@ -175,13 +184,13 @@
         style="width: 250px"
         :rules="formRules"
       >
-        <el-form-item label="时间:" prop="date">
-          <el-input v-model="editInfo.date" placeholder="请输入时间"></el-input>
+        <el-form-item label="时间:" prop="gmtCreate">
+          <el-input v-model="editInfo.gmtCreate" placeholder="请输入时间"></el-input>
         </el-form-item>
-        <el-form-item label="饲料种类:" prop="cate">
-          <el-select v-model="editInfo.cate" placeholder="请选择" :change="editSpecsChange()">
+        <el-form-item label="饲料种类:" prop="brand">
+          <el-select v-model="editInfo.brand" placeholder="请选择" :change="editsizeChange()">
             <el-option
-              v-for="item in fodderCate"
+              v-for="item in fodderbrand"
               :key="item"
               :label="item"
               :value="item"
@@ -189,15 +198,15 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="规格:" prop="specs">
+        <el-form-item label="规格:" prop="size">
           <el-input
-            v-model="editInfo.specs"
+            v-model="editInfo.size"
             placeholder="请输入规格"
           ></el-input>
         </el-form-item>
-        <el-form-item label="数量:" prop="number">
+        <el-form-item label="数量:" prop="num">
           <el-input
-            v-model="editInfo.number"
+            v-model="editInfo.num"
             placeholder="请输入数量"
             :change="editNumChange()"
           ></el-input>
@@ -208,8 +217,8 @@
             placeholder="请输入重量"
           ></el-input>
         </el-form-item>
-        <el-form-item label="来源:" prop="from">
-          <el-input v-model="editInfo.from" placeholder="请输入来源"></el-input>
+        <el-form-item label="来源:" prop="origin">
+          <el-input v-model="editInfo.origin" placeholder="请输入来源"></el-input>
         </el-form-item>
       </el-form>
       <span class="dialog-footer">
@@ -231,7 +240,6 @@ export default defineComponent({
   setup() {
     const { proxy } = getCurrentInstance();
     const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;
-    const loading = ref(false);
     // 时间选择器
     const shortcuts = [
       {
@@ -265,79 +273,80 @@ export default defineComponent({
     let addFodderdialog = ref(false);
     let fodderdialog = ref(false);
     let doptions = reactive(["A1", "A2", "A3"]);
-    let fodderCate = reactive(["鸽料138", "中粮"]);
+    let fodderbrand = reactive(["鸽料138", "中粮"]);
     const tableData = ref([
       {
-        date: "2022-07-04",
-        cate: "喜粮",
-        specs: "40kg/包",
-        number: "4包",
-        weight: "160kg",
-        from: "全绿货仓",
+        gmtCreate: "",
+        brand: "",
+        size: "",
+        num: "",
+        weight: "",
+        origin:"",
+        id:""
       },
     ]);
     const addInfo = reactive({
-      date: "",
-      cate: ["", ""],
-      specs: ["", ""],
-      number: ["", ""],
+      gmtCreate: "",
+      brand: ["", ""],
+      size: ["", ""],
+      num: ["", ""],
       weight: ["", ""],
-      from: "",
+      origin: "",
     });
     const addInput = () => {
-      addInfo.cate.push("");
-      addInfo.specs.push("");
-      addInfo.number.push("");
+      addInfo.brand.push("");
+      addInfo.size.push("");
+      addInfo.num.push("");
       addInfo.weight.push("");
     };
     const removeInput = () => {
-      if (addInfo.cate.length <= 1) return;
-      addInfo.cate.pop();
-      addInfo.specs.pop();
-      addInfo.number.pop();
+      if (addInfo.brand.length <= 1) return;
+      addInfo.brand.pop();
+      addInfo.size.pop();
+      addInfo.num.pop();
       addInfo.weight.pop();
     };
     const editInfo = ref({
-      date: "",
-      cate: "",
-      specs: "",
-      number: "",
+      gmtCreate: "",
+      brand: "",
+      size: "",
+      num: "",
       weight: "",
-      from: "",
+      origin: "",
     });
-    const specsChange = (index) => {
-      if (addInfo.cate[index] === "鸽料138") {
-        addInfo.specs[index] = "80kg/包";
-      } else if (addInfo.cate[index] === "中粮") {
-        addInfo.specs[index] = "40kg/包";
+    const sizeChange = (index) => {
+      if (addInfo.brand[index] === "鸽料138") {
+        addInfo.size[index] = "80kg/包";
+      } else if (addInfo.brand[index] === "中粮") {
+        addInfo.size[index] = "40kg/包";
       }
     };
     const numChange = (index) => {
-      if (addInfo.number[index]) {
+      if (addInfo.num[index]) {
         addInfo.weight[index] =
-          parseInt(addInfo.number[index]) * parseInt(addInfo.specs[index]);
+          parseInt(addInfo.num[index]) * parseInt(addInfo.size[index]);
       }
     };
-    const editSpecsChange = () => {
-      if (editInfo.value.cate === "鸽料138") {
-        editInfo.value.specs = "80kg/包";
-      } else if (editInfo.value.cate === "中粮") {
-        editInfo.value.specs = "40kg/包";
+    const editsizeChange = () => {
+      if (editInfo.value.brand === "鸽料138") {
+        editInfo.value.size = "80kg/包";
+      } else if (editInfo.value.brand === "中粮") {
+        editInfo.value.size = "40kg/包";
       }
     };
     const editNumChange = () => {
-      if (editInfo.value.number) {
+      if (editInfo.value.num) {
         editInfo.value.weight =
-          parseInt(editInfo.value.number) * parseInt(editInfo.value.specs);
+          parseInt(editInfo.value.num) * parseInt(editInfo.value.size);
       }
     };
     const formRules = ref({
-      date: [{ message: "请输入时间", trigger: "blur", required: true }],
-      cate: [{ message: "请输入饲料种类", trigger: "blur", required: true }],
-      specs: [{ message: "请输入规格", trigger: "blur", required: true }],
-      number: [{ message: "请输入数量", trigger: "blur", required: true }],
+      gmtCreate: [{ message: "请输入时间", trigger: "blur", required: true }],
+      brand: [{ message: "请输入饲料种类", trigger: "blur", required: true }],
+      size: [{ message: "请输入规格", trigger: "blur", required: true }],
+      num: [{ message: "请输入数量", trigger: "blur", required: true }],
       weight: [{ message: "请输入重量", trigger: "blur", required: true }],
-      from: [{ message: "请输入来源", trigger: "blur", required: true }],
+      origin: [{ message: "请输入来源", trigger: "blur", required: true }],
     });
     // 设置默认时间段，组件内默认半年
     let end = new Date();
@@ -376,30 +385,18 @@ export default defineComponent({
         year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
       return newDate;
     };
-    const api = proxy.$API.fodderAllot.getallocatefeed;
+    const api = proxy.$API.fodderAllot.getallobrandfeed;
     const params = {
       startTime: formatDate(datePk[0]),
       endTime: formatDate(datePk[1]),
       shedId: currShed.id,
-    };
-    let refreshParams = {
-      page: 1,
-      pageSize: 10,
-    };
-    const getData = () => {
-      loading.value = true;
-      Object.assign(refreshParams, params);
-      api.post(refreshParams).then((res) => {
-        loading.value = false;
-        tableData.value = res.data;
-      });
     };
     const addFodder = () => {
       proxy.$refs.addRef.validate(async (valid) => {
         if (!valid) {
           return;
         }
-        await proxy.$API.fodderAllot.addallocatefeed.post(addInfo.value).then((res) => {
+        await proxy.$API.fodderAllot.addallobrandfeed.post(addInfo.value).then((res) => {
           if (res.success) {
             proxy.$message({
               message: "添加成功",
@@ -414,7 +411,7 @@ export default defineComponent({
         });
         proxy.$refs.addRef.resetFields();
         addFodderdialog.value = false;
-        getData();
+        proxy.$refs.table.getData();
       });
     };
     const updateFodder = () => {
@@ -422,7 +419,7 @@ export default defineComponent({
         if (!valid) {
           return;
         }
-        await proxy.$API.fodderAllot.modifyallocatefeed
+        await proxy.$API.fodderAllot.modifyallobrandfeed
           .post(editInfo.value)
           .then((res) => {
             if (res.success) {
@@ -438,7 +435,7 @@ export default defineComponent({
             }
           });
         fodderdialog.value = false;
-        getData();
+        proxy.$refs.table.getData();
       });
     };
     const removeFodder = async (id) => {
@@ -452,7 +449,7 @@ export default defineComponent({
       if (confirmResult !== "confirm") {
         return proxy.$message.info("已取消删除操作");
       }
-      await proxy.$API.fodderAllot.deleteallocatefeed.post(id).then((res) => {
+      await proxy.$API.fodderAllot.deleteallobrandfeed.post(id).then((res) => {
         if (res.success) {
           proxy.$message({
             message: "删除成功",
@@ -465,16 +462,18 @@ export default defineComponent({
           });
         }
       });
-      getData();
+      proxy.$refs.table.getData();
     };
     const addDialogClosed = () => {
       proxy.$refs.addRef.resetFields();
     };
     const editDialogClosed = () => {
-      proxy.$refs.editRef.resetFields();
+    };
+    const dataChange = (res) => {
+      if(parseInt(res.data.total)>0)
+      proxy.$refs.table.total = parseInt(res.data.total);
     };
     return {
-      loading,
       tableData,
       addInfo,
       addFodderdialog,
@@ -482,24 +481,23 @@ export default defineComponent({
       editInfo,
       doptions,
       shortcuts,
-      fodderCate,
+      fodderbrand,
       outTable,
       printTable,
+      dataChange,
       dateDefault,
       datePk,
       formRules,
       api,
       params,
-      refreshParams,
-      getData,
       formatDate,
       updateFodder,
       addFodder,
       addInput,
       removeInput,
-      specsChange,
+      sizeChange,
       numChange,
-      editSpecsChange,
+      editsizeChange,
       editNumChange,
       removeFodder,
       addDialogClosed,

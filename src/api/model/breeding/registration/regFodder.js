@@ -23,7 +23,26 @@ export default {
     name:'添加饲料记录',
     post: async function (data) {
 			console.log("url", this.url);
-			return await http.post(this.url, data);
+      console.log(data.brand);
+      let n=data.brand.length;
+      let index=0;
+      while(n){
+        if(data.brand[index]==="") return;
+        let params={
+          brand:data.brand[index],
+          num:data.num[index],
+          shedId:data.shedId,
+          size:data.brand[index],
+          weight:data.brand[index],
+          type:0,
+          unit:"kg"
+        }
+        await http.post(this.url, params)
+        console.log(index)
+        index++;
+        n--;
+      }
+			return;
 		},
   },
   modifyfeed:{

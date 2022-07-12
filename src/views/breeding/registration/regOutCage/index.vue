@@ -15,14 +15,14 @@
     </div>
     <el-main class="main">
       <scTable
-        ref="scTable"
+        ref="table"
         :data="tableData"
         stripe
         highlightCurrentRow
         :apiObj="api"
         :params="params"
         requestMethods="post"
-        v-loading="loading"
+        @dataChange="dataChange"
       >
         <el-table-column
           prop="deliverTime"
@@ -202,12 +202,11 @@
 import { defineComponent, ref, getCurrentInstance } from "vue";
 export default defineComponent({
   name: "outCageRegistration", // 出栏登记
-  components: {
-  },
+  components: {},
   setup() {
     const { proxy } = getCurrentInstance();
     const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;
-    const loading = ref(false);
+    
     // 时间选择器
     const shortcuts = [
       {
@@ -325,19 +324,7 @@ export default defineComponent({
     const params = {
       startTime: formatDate(datePk[0]),
       endTime: formatDate(datePk[1]),
-      shedId: currShed.id,
-    };
-    let refreshParams = {
-      page: 1,
-      pageSize: 10,
-    };
-    const getData = () => {
-      loading.value = true;
-      Object.assign(refreshParams, params);
-      api.post(refreshParams).then((res) => {
-        loading.value = false;
-        tableData.value = res.data;
-      });
+      shedId:currShed.id,
     };
     const addOutcage = () => {
       proxy.$refs.addRef.validate(async (valid) => {
@@ -361,7 +348,7 @@ export default defineComponent({
           });
         proxy.$refs.addRef.resetFields();
         addOutcagedialog.value = false;
-        getData();
+        proxy.$refs.table.getData();
       });
     };
     const updateOutcage = () => {
@@ -385,7 +372,7 @@ export default defineComponent({
             }
           });
         Outcagedialog.value = false;
-        getDate();
+        proxy.$refs.table.getData();
       });
     };
     const removeOutcage = async (id) => {
@@ -412,14 +399,17 @@ export default defineComponent({
           });
         }
       });
-      getData();
+      proxy.$refs.table.getData();
     };
     const addDialogClosed = () => {
       proxy.$refs.addRef.resetFields();
     };
+    const dataChange = (res) => {
+      if(parseInt(res.data.total)>0)
+      proxy.$refs.table.total = parseInt(res.data.total);
+    };
     const editDialogClosed = () => {};
     return {
-      loading,
       tableData,
       addInfo,
       addOutcagedialog,
@@ -434,8 +424,7 @@ export default defineComponent({
       formRules,
       api,
       params,
-      refreshParams,
-      getData,
+      dataChange,
       formatDate,
       updateOutcage,
       addOutcage,

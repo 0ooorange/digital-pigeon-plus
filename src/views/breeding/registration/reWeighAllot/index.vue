@@ -13,9 +13,18 @@
       />
     </div>
     <el-main class="main">
-      <scTable :data="tableData" stripe highlightCurrentRow>
+      <scTable
+        ref="table"
+        :data="tableData"
+        stripe
+        highlightCurrentRow
+        :apiObj="api"
+        :params="params"
+        requestMethods="post"
+        @dataChange="dataChange"
+      >
         <el-table-column
-          prop="date"
+          prop="gmtCreate"
           label="时间"
           width="120"
           sortable
@@ -70,8 +79,8 @@
         style="width: 250px"
         :rules="formRules"
       >
-        <el-form-item label="时间:" prop="date">
-          <el-input v-model="addInfo.date" placeholder="请输入时间"></el-input>
+        <el-form-item label="时间:" prop="gmtCreate">
+          <el-input v-model="addInfo.gmtCreate" placeholder="请输入时间"></el-input>
         </el-form-item>
         <el-form-item label="鸽棚:" prop="dovecoteNumber">
           <el-select v-model="addInfo.dovecoteNumber" placeholder="请选择">
@@ -109,8 +118,8 @@
         style="width: 250px"
         :rules="formRules"
       >
-        <el-form-item label="时间:" prop="date">
-          <el-input v-model="editInfo.date" placeholder="请输入时间"></el-input>
+        <el-form-item label="时间:" prop="gmtCreate">
+          <el-input v-model="editInfo.gmtCreate" placeholder="请输入时间"></el-input>
         </el-form-item>
         <el-form-item label="鸽棚:" prop="dovecoteNumber">
           <el-select v-model="editInfo.dovecoteNumber" placeholder="请选择">
@@ -149,7 +158,6 @@ export default defineComponent({
   setup() {
     const { proxy } = getCurrentInstance();
     const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;
-    const loading = ref(false);
     // 时间选择器
     const shortcuts = [
       {
@@ -185,23 +193,23 @@ export default defineComponent({
     let doptions = ref(["A1", "A2", "A3"]);
     const tableData = ref([
       {
-        date: "2022-07-07",
+        gmtCreate: "2022-07-07",
         dovecoteNumber: "A1",
         weight: "10kg",
       },
     ]);
     const addInfo = ref({
-      date: "",
+      gmtCreate: "",
       dovecoteNumber: "",
       weight: "",
     });
     const editInfo = ref({
-      date: "",
+      gmtCreate: "",
       dovecoteNumber: "",
       weight: "",
     });
     const formRules = ref({
-      date: [{ message: "请输入时间", trigger: "blur", required: true }],
+      gmtCreate: [{ message: "请输入时间", trigger: "blur", required: true }],
       dovecoteNumber: [
         { message: "请输入鸽棚", trigger: "blur", required: true },
       ],
@@ -244,30 +252,18 @@ export default defineComponent({
         year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
       return newDate;
     };
-    const api = proxy.$API.regReWeight.getreweighfeed;
+    const api = proxy.$API.reWeighAllot.getreweighfeed;
     const params = {
       startTime: formatDate(datePk[0]),
       endTime: formatDate(datePk[1]),
       shedId: currShed.id,
-    };
-    let refreshParams = {
-      page: 1,
-      pageSize: 10,
-    };
-    const getData = () => {
-      loading.value = true;
-      Object.assign(refreshParams, params);
-      api.post(refreshParams).then((res) => {
-        loading.value = false;
-        tableData.value = res.data;
-      });
     };
     const addReWeight = () => {
       proxy.$refs.addRef.validate(async (valid) => {
         if (!valid) {
           return;
         }
-        await proxy.$API.regReWeight.addreweighfeed.post(addInfo.value).then((res) => {
+        await proxy.$API.reWeighAllot.addreweighfeed.post(addInfo.value).then((res) => {
           if (res.success) {
             proxy.$message({
               message: "添加成功",
@@ -282,7 +278,7 @@ export default defineComponent({
         });
         proxy.$refs.addRef.resetFields();
         addReWeightdialog.value = false;
-        getData();
+        proxy.$refs.table.getData();
       });
     };
     const updateReWeight = () => {
@@ -290,7 +286,7 @@ export default defineComponent({
         if (!valid) {
           return;
         }
-        await proxy.$API.regReWeight.modifyreweighfeed
+        await proxy.$API.reWeighAllot.modifyreweighfeed
           .post(editInfo.value)
           .then((res) => {
             if (res.success) {
@@ -306,7 +302,7 @@ export default defineComponent({
             }
           });
         ReWeightdialog.value = false;
-        getData();
+        proxy.$refs.table.getData();
       });
     };
     const removeReWeight = async (id) => {
@@ -320,7 +316,7 @@ export default defineComponent({
       if (confirmResult !== "confirm") {
         return proxy.$message.info("已取消删除操作");
       }
-      await proxy.$API.regReWeight.deletereweighfeed.post(id).then((res) => {
+      await proxy.$API.reWeighAllot.deletereweighfeed.post(id).then((res) => {
         if (res.success) {
           proxy.$message({
             message: "删除成功",
@@ -333,7 +329,7 @@ export default defineComponent({
           });
         }
       });
-      getData();
+     proxy.$refs.table.getData();
     };
     const addDialogClosed = () => {
       proxy.$refs.addRef.resetFields();
@@ -341,9 +337,11 @@ export default defineComponent({
     const editDialogClosed = () => {
       proxy.$refs.editRef.resetFields();
     };
-
+    const dataChange = (res) => {
+      if(parseInt(res.data.total)>0)
+      proxy.$refs.table.total = parseInt(res.data.total);
+    };
     return {
-      loading,
       tableData,
       addInfo,
       addReWeightdialog,
@@ -353,13 +351,12 @@ export default defineComponent({
       shortcuts,
       outTable,
       printTable,
+      dataChange,
       dateDefault,
       datePk,
       formRules,
       api,
       params,
-      refreshParams,
-      getData,
       formatDate,
       updateReWeight,
       addReWeight,
