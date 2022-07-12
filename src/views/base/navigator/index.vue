@@ -117,13 +117,13 @@ export default {
     tool.data.set('CURR_MENU_INDEX', 0)
 
     // 获取基本信息
-    var homeInfRes = await this.$API.login.getHomeInf.get()
-    if (homeInfRes.code == 200) {
-      this.$TOOL.data.set('BASE_INFO', homeInfRes.data)
-      // console.log('200: ', homeInfRes)
+    let res = await this.$API.login.getUserInfo.get()
+    if (res.code == 200) {
+      this.$TOOL.data.set('BASE_INFO', res.data.userInfo)
+      // console.log('200: ', res.data)
     } else {
-      this.$message.warning(homeInfRes.message)
-      // console.log('err: ', homeInfRes)
+      this.$message.warning(res.message)
+      // console.log('err: ', res.data)
       return false
     }
   },

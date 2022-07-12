@@ -40,14 +40,15 @@ export default {
     return {
       userName: '',
       userNameF: '',
-      userAvatar: ''
+      userAvatar: '',
     }
   },
   created() {
-    var userInfo = this.$TOOL.data.get('BASE_INFO').user
+    let userInfo = this.$TOOL.data.get('BASE_INFO')
     this.userName = userInfo.name
     this.userNameF = this.userName.substring(0, 1)
     this.userAvatar = userInfo.avatar
+    // console.log('sssss', userInfo)
   },
   methods: {
     //个人信息
@@ -144,7 +145,7 @@ export default {
   line-height: 58px;
   font-size: 12px;
 }
-@media (max-width: 992px){ 
+@media (max-width: 992px) {
   .timeCss {
     display: none;
   }

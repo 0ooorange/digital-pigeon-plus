@@ -15,7 +15,7 @@
           <div class="selectDivs">
             <span class="selectText">基地：</span>
             <el-select style="width: 150px" v-model="currBaseName" class="m-2" placeholder="Select" @change="currBaseChange($event)">
-              <el-option v-for="item in bases" :key="item.id" :label="item.name" :value="item.name" />
+              <el-option v-for="item in bases" :key="item.id" :label="item.code" :value="item.code" />
             </el-select>
             <span class="selectText">鸽棚：</span>
             <el-select style="width: 150px" v-model="currShedCode" class="m-2" placeholder="Select" @change="currShedChange">
@@ -93,7 +93,7 @@ export default {
       settingDialog: false,
       currBase: {},
       currShed: {},
-      currOperator: '',
+      currOperator: {},
       currBaseName: '',
       currShedCode: '',
       bases: [],
@@ -125,21 +125,23 @@ export default {
       return this.$store.state.global.menuIsCollapse ? 15 : 12
     },
   },
-  created() {
+  async created() {
     this.baseInfo = this.$TOOL.data.get('BASE_INFO')
-    this.bases = this.baseInfo.base
-    this.dovecotes = this.baseInfo.shed
+    let {data: baseAndShed} = await this.$API.layout.getBaseAndShed.get(this.baseInfo.id)
+    // console.log('baseAndShed: ', baseAndShed)
+    this.bases = baseAndShed.baseList
+    this.dovecotes = baseAndShed.shedList
     let currInfo = this.$TOOL.data.get('CURR_INFO')
     if (currInfo) {
       this.currBase = currInfo.CURR_BASE
       this.currShed = currInfo.CURR_SHED
       this.currOperator = currInfo.CHARGE_NAME
     } else {
-      this.currBase = this.bases[0]
-      this.currShed = this.dovecotes[0]
-      this.currOperator = this.baseInfo.chargeName
+      this.currBase = baseAndShed.baseList[0]
+      this.currShed = baseAndShed.shedList[0]
+      this.currOperator = baseAndShed.userList[0].name
     }
-    this.currBaseName = this.currBase.name
+    this.currBaseName = this.currBase.code
     this.currShedCode = this.currShed.code
     this.currInfo = {
       CURR_BASE: this.currBase,
