@@ -20,10 +20,12 @@
 
     <div class="content">
       <div class="left">
-        <div class="pl25 amiddboxttop baseInfoCss">
-          <!-- <div>养殖基础信息</div> -->
+        <!-- <div class="pl25 amiddboxttop baseInfoCss">
+          <div>养殖基础信息</div>
+        </div> -->
+        <div class="productEggEcharts">
+          <ScEcharts class="productEggEcharts" :option="productEggOption"></ScEcharts>
         </div>
-        <div></div>
         <div></div>
         <div></div>
       </div>
@@ -45,7 +47,7 @@
 import ScEcharts from '@/components/scEcharts'
 import SlideTable from './components/slideTable'
 import { ref, getCurrentInstance, reactive } from 'vue'
-import chinaData from './china.json'
+import GuangDongData from './GuangDong.json'
 
 import * as echarts from 'echarts'
 
@@ -153,14 +155,13 @@ export default {
     ]
     const videoUrl = ref('')
 
+    // 地图
     let timer = null
     const seriesData = reactive([
-      { name: '广东省', value: 40057.34 },
-      { name: '北京市', value: 15477.48 },
-      { name: '上海市', value: 31686.1 },
-      { name: '河北省', value: 6992.6 },
-      { name: '山东省', value: 24045.49 },
-      { name: '山西省', value: 4045.49 },
+      { name: '广州市', value: 10057.34 },
+      { name: '梅州市', value: 45477.48 },
+      { name: '潮州市', value: 31686.1 },
+      { name: '揭阳市', value: 6992.6 },
     ])
     let map = null
     const setTimer = () => {
@@ -201,7 +202,7 @@ export default {
       // 获取地图数据
       // 将下载后的json文件放置/public目录下
       // 使用数据注册地图
-      echarts.registerMap('china', chinaData)
+      echarts.registerMap('GuangDong', GuangDongData)
       proxy.$nextTick(() => {
         // 初始化地图
         map = echarts.init(proxy.$refs['mapEcharts'])
@@ -229,13 +230,13 @@ export default {
           series: [
             {
               type: 'map',
-              map: 'china',
+              map: 'GuangDong',
               // 这是要显示的数据
               data: seriesData,
               // 自定义命名映射，不设置的话，label默认是使用 geoJson中的name名
               nameMap: {
-                北京市: '北京市',
-                天津市: '天津市',
+                广州市: '广州市',
+                梅州市: '梅州市',
               },
             },
           ],
@@ -256,6 +257,63 @@ export default {
     }
     initMapEcharts()
 
+    const productEggOption = {
+      tooltip: {
+        trigger: 'axis',
+      },
+      xAxis: {
+        boundaryGap: false,
+        type: 'category',
+        data: (function () {
+          // var now = new Date()
+          var nowres = 30
+          var res = []
+          res.unshift(nowres)
+          // var len = 30
+          while (nowres >= 0) {
+            // res.unshift(now.toLocaleTimeString().replace(/^\D*/, ''))
+            nowres -= 5
+            if (nowres <= 0) break
+            res.unshift(nowres)
+          }
+          res.unshift(1)
+          return res
+        })(),
+      },
+      yAxis: [
+        {
+          type: 'value',
+          name: '产蛋数',
+          splitLine: {
+            show: false,
+          },
+        },
+      ],
+      series: [
+        {
+          name: '产蛋数',
+          type: 'line',
+          symbol: 'none',
+          lineStyle: {
+            width: 1,
+            color: '#409EFF',
+          },
+          areaStyle: {
+            opacity: 0.1,
+            color: '#79bbff',
+          },
+          data: (function () {
+            var res = []
+            var len = 30
+            while (len--) {
+              res.push(Math.round(Math.random() * 250))
+            }
+            return res
+          })(),
+        },
+      ],
+    }
+
     return {
       currOperator,
       currBase,
@@ -267,6 +325,7 @@ export default {
       videoUrl,
       currBaseChange,
       currShedChange,
+      productEggOption,
     }
   },
 }
@@ -386,9 +445,9 @@ html,
 }
 .map-echart {
   margin-top: 10px;
-  height: 600px;
-  width: 600px;
-  background-color: rgba(128, 137, 165, 0.8);
+  height: 400px;
+  width: 400px;
+  // background-color: rgba(128, 137, 165, 0.8);
   align-items: center;
 }
 .left {
@@ -400,6 +459,10 @@ html,
   .baseInfoCss {
     width: 28%;
     height: 24%;
+  }
+  .productEggEcharts {
+    z-index: 100;
+    height: 26%;
   }
 }
 .right {
