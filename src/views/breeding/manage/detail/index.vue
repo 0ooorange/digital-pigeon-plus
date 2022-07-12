@@ -332,12 +332,12 @@ export default defineComponent({
     }
     const searchForm = reactive({})
     const isShowMore = ref(false)
-    const search = () => {
-      if (isShowMore.value) {
-        queryData()
-        return
-      }
-    }
+    // const search = () => {
+    //   if (isShowMore.value) {
+    //     queryData()
+    //     return
+    //   }
+    // }
     const renderMore = () => (
       <>
         <el-form label-width="70px" inline>
