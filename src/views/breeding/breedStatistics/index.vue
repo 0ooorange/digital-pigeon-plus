@@ -196,7 +196,8 @@ export default {
     // 获取监控视频id
     const monitor_idlist = ref([])
     const getMonitorByShedID = async () => {
-      const shedId = proxy.$store.state.baseInfo.CURR_INFO.CURR_SHED.id
+      const CURR_INFO = proxy.$store.state.baseInfo.CURR_INFO
+      let shedId = CURR_INFO.CURR_SHED.id
       const res = await proxy.$API.breedStatistics.getMonitorByShedID.post(shedId)
       monitor_idlist.value = res.data.urlList
     }
