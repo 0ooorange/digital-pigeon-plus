@@ -487,9 +487,11 @@ export default defineComponent({
                 proxy.$API.operateLog.findAbnormalByPigeonCodesAndDate;
             findAbnormalParams.pigeonId = e.inputValue;
 
-            findLogParams.value =
+            findLogApi.value =
                 proxy.$API.operateLog.findLogByPigeonCodesAndDate;
             findLogParams.pigeonId = e.inputValue;
+            findCageDataParams.pigeonId = e.inputValue;
+            getDataList()
         };
 
         const outTable = function () {
@@ -510,6 +512,7 @@ export default defineComponent({
                     await proxy.$API.operateLog.findCageDataByPigeonAndDate.get(
                         findCageDataParams
                     );
+                isSearch.value = false
             } else {
                  getDataList = await proxy.$API.allState.findCageDataByPigeonIdAndDate.get(
                     findCageDataParams)

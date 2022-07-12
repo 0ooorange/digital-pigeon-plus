@@ -270,6 +270,10 @@ export default defineComponent({
         value: "1518124016571797507",
         label: "A1",
       },
+      {
+        value: "1518124016571797511",
+        label: "A4",
+      },
     ]);
     const formRules = ref({
       deliverTime: [{ message: "请输入时间", trigger: "blur", required: true }],
@@ -381,7 +385,7 @@ export default defineComponent({
             }
           });
         Outcagedialog.value = false;
-        proxy.$refs.scTable.getDate();
+        getDate();
       });
     };
     const removeOutcage = async (id) => {

@@ -274,7 +274,15 @@ export default defineComponent({
     ];
     let addFodderdialog = ref(false);
     let fodderdialog = ref(false);
-    let doptions = reactive(["A1", "A2", "A3"]);
+    let doptions = reactive([
+      {
+        value: "1518124016571797507",
+        label: "A1",
+      },{
+        value: "1518124016571797511",
+        label: "A4",
+      }
+      ]);
     let fodderbrand = reactive(["鸽料138", "中粮"]);
     const tableData = ref([
       {

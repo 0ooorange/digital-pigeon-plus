@@ -40,7 +40,7 @@ export default {
 		url: `/digitalPigeon/breed/overviewAndStatistics/pigeon-cage-state/findCageDataByPigeonAndDate/`,
 		name: "获取各种数据",
 		get: async function (data = {}) {
-			console.log("url", this.url);
+			console.log("请求到我111", this.url);
             let params = {
 				codes: data.pigeonId,
 				beginDate: data.beginDate,
