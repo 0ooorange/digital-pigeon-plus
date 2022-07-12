@@ -317,6 +317,8 @@ export default defineComponent({
         //     ],
         // };
 
+        //相关单位
+        // const unit = ["ppm","℃","%","Lx","PM2.5","PM10","ppm","ppm","TSP","dB"]
         //相同维度
         let commonDimensions = [
             "id",
@@ -341,13 +343,15 @@ export default defineComponent({
         let commonY = {
             type: "value",
             nameGap: 20, //坐标轴名称与坐标轴之间的距离
+           
             splitLine: {
                 show: false,
             },
             nameTextStyle: {
                 color: "#696969",
                 fontWeight: "bold",
-                fontSize: 15,
+                //  width: 80,
+                fontSize: 12,
             },
         };
 
@@ -427,7 +431,7 @@ export default defineComponent({
         };
 
         //二氧化碳的图表值
-        let carbonDioxideYAxis = [{ ...commonY, name: "二氧化碳" }];
+        let carbonDioxideYAxis = [{ ...commonY, name: "二氧化碳/ppm" }];
         let carbonDioxideDataset = { dimensions: commonDimensions, source: [] };
         let carbonDioxideSeriesObject = {
             ...seriesObject,
@@ -471,7 +475,7 @@ export default defineComponent({
         const carbonDioxideOption = reactive(carbonDioxideOptionStatic);
 
         //温度的图表值
-        let temperatureYAxis = [{ ...commonY, name: "空气温度" }];
+        let temperatureYAxis = [{ ...commonY, name: "空气温度/℃" }];
         let temperatureDataset = { dimensions: commonDimensions, source: [] };
         let temperatureSeriesObject = {
             ...seriesObject,
@@ -516,7 +520,7 @@ export default defineComponent({
         const temperatureOption = reactive(temperatureOptionStatic);
 
         //湿度的图表值
-        let humidityYAxis = [{ ...commonY, name: "空气湿度" }];
+        let humidityYAxis = [{ ...commonY, name: "空气湿度/%" }];
         let humidityDataset = { dimensions: commonDimensions, source: [] };
         let humiditySeriesObject = {
             ...seriesObject,
@@ -561,7 +565,7 @@ export default defineComponent({
         const humidityOption = reactive(humidityOptionStatic);
 
         //光照强度的图表值
-        let illuminationIntensityYAxis = [{ ...commonY, name: "光照强度" }];
+        let illuminationIntensityYAxis = [{ ...commonY, name: "光照强度/Lx" }];
         let illuminationIntensityDataset = {
             dimensions: commonDimensions,
             source: [],
@@ -611,7 +615,7 @@ export default defineComponent({
         );
 
         //PM2.5的图表值
-        let PMYAxis = [{ ...commonY, name: "PM2.5" }];
+        let PMYAxis = [{ ...commonY, name: "PM2.5/um" }];
         let PMDataset = {
             dimensions: commonDimensions,
             source: [],
@@ -659,7 +663,7 @@ export default defineComponent({
         const PMOption = reactive(PMOptionStatic);
 
         //PM10的图表值
-        let PM10YAxis = [{ ...commonY, name: "PM10" }];
+        let PM10YAxis = [{ ...commonY, name: "PM10/μg/m3" }];
         let PM10Dataset = {
             dimensions: commonDimensions,
             source: [],
@@ -707,7 +711,7 @@ export default defineComponent({
         const PM10Option = reactive(PM10OptionStatic);
 
         //氨气的图表值
-        let ammoniaGasYAxis = [{ ...commonY, name: "氨气" }];
+        let ammoniaGasYAxis = [{ ...commonY, name: "氨气/ppm" }];
         let ammoniaGasDataset = {
             dimensions: commonDimensions,
             source: [],
@@ -755,7 +759,7 @@ export default defineComponent({
         const ammoniaGasOption = reactive(ammoniaGasOptionStatic);
 
         //硫化氢的图表值
-        let sulfurettedHydrogenYAxis = [{ ...commonY, name: "硫化氢" }];
+        let sulfurettedHydrogenYAxis = [{ ...commonY, name: "硫化氢/ppm" }];
         let sulfurettedHydrogenDataset = {
             dimensions: commonDimensions,
             source: [],
@@ -853,7 +857,7 @@ export default defineComponent({
         const TSPOption = reactive(TSPOptionStatic);
 
         //噪声的图表值
-        let noiseYAxis = [{ ...commonY, name: "噪声" }];
+        let noiseYAxis = [{ ...commonY, name: "噪声/dB" }];
         let noiseDataset = {
             dimensions: commonDimensions,
             source: [],
@@ -918,6 +922,7 @@ export default defineComponent({
                     commonParams,
                     "二氧化碳"
                 );
+                 console.log("二氧化碳请求结果", CarbonDioxRes);
 
             if (CarbonDioxRes.code === 200) {
                 carbonDioxide = CarbonDioxRes.data.data;
@@ -929,12 +934,13 @@ export default defineComponent({
                     commonParams,
                     "空气温度"
                 );
+                 console.log("空气温度请求结果", temperatureRes);
             if (temperatureRes.code === 200) {
                 temperature = temperatureRes.data.data;
                 //数据赋值
                 temperatureOption.dataset.source = temperature;
             }
-            console.log("环境数据请求结果", temperatureRes);
+            // console.log("环境数据请求结果", temperatureRes);
 
             let humidityRes =
                 await proxy.$API.envForecast.getCarbonDioxideData.post(
@@ -960,7 +966,7 @@ export default defineComponent({
                 //数据赋值
                 illuminationIntensityOption.dataset.source =
                     illuminationIntensity;
-                console.log("空气湿度请求结果", illuminationIntensityRes);
+                console.log("光照强度请求结果", illuminationIntensityRes);
             }
 
             //PM2.5
