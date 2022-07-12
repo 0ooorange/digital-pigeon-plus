@@ -237,6 +237,7 @@ import { defineComponent, ref, getCurrentInstance, reactive } from "vue";
 export default defineComponent({
   name: "fodderRegistration", // 饲料登记
   components: {
+    scTable,
   },
   setup() {
     const { proxy } = getCurrentInstance();

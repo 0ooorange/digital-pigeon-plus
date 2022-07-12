@@ -202,8 +202,6 @@
 import { defineComponent, ref, getCurrentInstance } from "vue";
 export default defineComponent({
   name: "outCageRegistration", // 出栏登记
-  components: {
-  },
   setup() {
     const { proxy } = getCurrentInstance();
     const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;

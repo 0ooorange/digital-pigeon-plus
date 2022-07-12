@@ -200,9 +200,11 @@
 
 <script>
 import { defineComponent, ref, getCurrentInstance } from "vue";
+import scTable from "@/components/scTable/index.vue";
 export default defineComponent({
   name: "outCageRegistration", // 出栏登记
   components: {
+    scTable,
   },
   setup() {
     const { proxy } = getCurrentInstance();
