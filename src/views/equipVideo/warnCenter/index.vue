@@ -100,7 +100,7 @@ export default defineComponent({
         const { proxy } = getCurrentInstance();
 
         //当前鸽棚鸽笼信息
-        // const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;
+        const currShed = proxy.$TOOL.data.get("CURR_INFO").SHED_ID;
         //当前日期
         const nowTime = new Date();
         //调接口传的时间
@@ -126,8 +126,8 @@ export default defineComponent({
 
         //时间选择器绑定的值
         const dateValue = ref([
-            proxy.$TOOL.date.formateDate(startTime.value).substring(0, 10),
-            proxy.$TOOL.date.formateDate(endTime.value).substring(0, 10),
+            proxy.$TOOL.dateFormat(startTime.value).substring(0, 10),
+            proxy.$TOOL.dateFormat(endTime.value).substring(0, 10),
         ]);
 
         //时间选择器
@@ -169,24 +169,24 @@ export default defineComponent({
 
         //请求参数
         let params = {
-            start_time: proxy.$TOOL.date.formateDate(startTime.value),
-            end_time: proxy.$TOOL.date.formateDate(endTime.value),
+            start_time: proxy.$TOOL.dateFormat(startTime.value),
+            end_time: proxy.$TOOL.dateFormat(endTime.value),
             current: currentPage.value,
             size: pageSize.value,
-            // shed_id: currShed.id,
+            shed_id: currShed,
         };
 
         //日期选择器
         const visibleChange = function (e) {
             console.log("选择日期", e);
             console.log(
-                proxy.$TOOL.date.formateDate(e[0]),
-                proxy.$TOOL.date.formateDate(e[1]).substring(0, 10) +
+                proxy.$TOOL.dateFormat(e[0]),
+                proxy.$TOOL.dateFormat(e[1]).substring(0, 10) +
                     " 23:59:59"
             );
-            params.start_time = proxy.$TOOL.date.formateDate(e[0]);
+            params.start_time = proxy.$TOOL.dateFormat(e[0]);
             params.end_time =
-                proxy.$TOOL.date.formateDate(e[1]).substring(0, 10) +
+                proxy.$TOOL.dateFormat(e[1]).substring(0, 10) +
                 " 23:59:59";
             console.log("参数", params);
             getData();
