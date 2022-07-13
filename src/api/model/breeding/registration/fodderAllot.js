@@ -23,9 +23,28 @@ export default {
     name:'添加饲料记录',
     post: async function (data) {
 			console.log("url", this.url);
-			return await http.post(this.url, data);
-		},
-  },
+      console.log(data.brand);
+      let n=data.brand.length;
+      let index=0;
+      while(n){
+        if(data.brand[index]==="") return;
+        let params={
+          brand:data.brand[index],
+          num:data.num[index],
+          shedId:data.shedId,
+          size:data.size[index],
+          weight:data.weight[index],
+          type:2,
+          unit:"斤",
+          origin:"金绿货仓"
+        }
+        await http.post(this.url, params)
+        console.log(index)
+        index++;
+        n--;
+		}
+    return;
+  }},
   modifyallocatefeed:{
     url:`digitalPigeon/breed/informationinput/modifyallocatefeed`,
     name:'修改饲料记录',

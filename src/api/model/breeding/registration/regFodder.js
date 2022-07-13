@@ -32,10 +32,11 @@ export default {
           brand:data.brand[index],
           num:data.num[index],
           shedId:data.shedId,
-          size:data.brand[index],
-          weight:data.brand[index],
-          type:0,
-          unit:"kg"
+          size:data.size[index],
+          weight:data.weight[index],
+          type:1,
+          unit:"斤",
+          origin:"金绿货仓"
         }
         await http.post(this.url, params)
         console.log(index)

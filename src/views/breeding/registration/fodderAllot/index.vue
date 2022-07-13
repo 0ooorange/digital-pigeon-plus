@@ -274,6 +274,57 @@ export default defineComponent({
     let fodderdialog = ref(false);
     let doptions = reactive(["A1", "A2", "A3"]);
     let fodderbrand = reactive(["鸽料138", "中粮"]);
+    const formRules = ref({
+      gmtCreate: [{ message: "请输入时间", trigger: "blur", required: true }],
+      brand: [{ message: "请输入饲料种类", trigger: "blur", required: true }],
+      size: [{ message: "请输入规格", trigger: "blur", required: true }],
+      num: [{ message: "请输入数量", trigger: "blur", required: true }],
+      weight: [{ message: "请输入重量", trigger: "blur", required: true }],
+      origin: [{ message: "请输入来源", trigger: "blur", required: true }],
+    });
+    // 设置默认时间段，组件内默认半年
+    let end = new Date();
+    let start = new Date();
+    start.setTime(start.getTime() - 3600 * 1000 * 24 * 183); // 半年
+    let dateDefault = [start, end];
+    const outTable = () => {
+      console.log("点击导出");
+    };
+
+    const printTable = () => {
+      console.log("点击打印");
+    };
+    //把这一行的信息传入对话框
+    const showFodderdialog = (item) => {
+      fodderdialog.value = true;
+      editInfo.value = item;
+    };
+    let datePk = [start, end];
+    //格式化时间
+    const formatDate = (dat) => {
+      //获取年月日，时间
+      var year = dat.getFullYear();
+      var mon =
+        dat.getMonth() + 1 < 10
+          ? "0" + (dat.getMonth() + 1)
+          : dat.getMonth() + 1;
+      var data = dat.getDate() < 10 ? "0" + dat.getDate() : dat.getDate();
+      var hour = dat.getHours() < 10 ? "0" + dat.getHours() : dat.getHours();
+      var min =
+        dat.getMinutes() < 10 ? "0" + dat.getMinutes() : dat.getMinutes();
+      var seon =
+        dat.getSeconds() < 10 ? "0" + dat.getSeconds() : dat.getSeconds();
+
+      var newDate =
+        year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
+      return newDate;
+    };
+    const api = proxy.$API.fodderAllot.getallocatefeed;
+    const params = {
+      startTime: formatDate(datePk[0]),
+      endTime: formatDate(datePk[1]),
+      shedId: currShed.id,
+    };
     const tableData = ref([
       {
         gmtCreate: "",
@@ -286,12 +337,13 @@ export default defineComponent({
       },
     ]);
     const addInfo = reactive({
-      gmtCreate: "",
+      gmtCreate: formatDate(end),
       brand: ["", ""],
       size: ["", ""],
       num: ["", ""],
       weight: ["", ""],
       origin: "",
+      shedId:currShed.id
     });
     const addInput = () => {
       addInfo.brand.push("");
@@ -340,63 +392,12 @@ export default defineComponent({
           parseInt(editInfo.value.num) * parseInt(editInfo.value.size);
       }
     };
-    const formRules = ref({
-      gmtCreate: [{ message: "请输入时间", trigger: "blur", required: true }],
-      brand: [{ message: "请输入饲料种类", trigger: "blur", required: true }],
-      size: [{ message: "请输入规格", trigger: "blur", required: true }],
-      num: [{ message: "请输入数量", trigger: "blur", required: true }],
-      weight: [{ message: "请输入重量", trigger: "blur", required: true }],
-      origin: [{ message: "请输入来源", trigger: "blur", required: true }],
-    });
-    // 设置默认时间段，组件内默认半年
-    let end = new Date();
-    let start = new Date();
-    start.setTime(start.getTime() - 3600 * 1000 * 24 * 183); // 半年
-    let dateDefault = [start, end];
-    const outTable = () => {
-      console.log("点击导出");
-    };
-
-    const printTable = () => {
-      console.log("点击打印");
-    };
-    //把这一行的信息传入对话框
-    const showFodderdialog = (item) => {
-      fodderdialog.value = true;
-      editInfo.value = item;
-    };
-    let datePk = [start, end];
-    //格式化时间
-    const formatDate = (dat) => {
-      //获取年月日，时间
-      var year = dat.getFullYear();
-      var mon =
-        dat.getMonth() + 1 < 10
-          ? "0" + (dat.getMonth() + 1)
-          : dat.getMonth() + 1;
-      var data = dat.getDate() < 10 ? "0" + dat.getDate() : dat.getDate();
-      var hour = dat.getHours() < 10 ? "0" + dat.getHours() : dat.getHours();
-      var min =
-        dat.getMinutes() < 10 ? "0" + dat.getMinutes() : dat.getMinutes();
-      var seon =
-        dat.getSeconds() < 10 ? "0" + dat.getSeconds() : dat.getSeconds();
-
-      var newDate =
-        year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
-      return newDate;
-    };
-    const api = proxy.$API.fodderAllot.getallobrandfeed;
-    const params = {
-      startTime: formatDate(datePk[0]),
-      endTime: formatDate(datePk[1]),
-      shedId: currShed.id,
-    };
     const addFodder = () => {
       proxy.$refs.addRef.validate(async (valid) => {
         if (!valid) {
           return;
         }
-        await proxy.$API.fodderAllot.addallobrandfeed.post(addInfo.value).then((res) => {
+        await proxy.$API.fodderAllot.addallocatefeed.post(addInfo).then((res) => {
           if (res.success) {
             proxy.$message({
               message: "添加成功",
@@ -419,7 +420,7 @@ export default defineComponent({
         if (!valid) {
           return;
         }
-        await proxy.$API.fodderAllot.modifyallobrandfeed
+        await proxy.$API.fodderAllot.modifyallocatefeed
           .post(editInfo.value)
           .then((res) => {
             if (res.success) {
@@ -449,7 +450,7 @@ export default defineComponent({
       if (confirmResult !== "confirm") {
         return proxy.$message.info("已取消删除操作");
       }
-      await proxy.$API.fodderAllot.deleteallobrandfeed.post(id).then((res) => {
+      await proxy.$API.fodderAllot.deleteallocatefeed.post(id).then((res) => {
         if (res.success) {
           proxy.$message({
             message: "删除成功",

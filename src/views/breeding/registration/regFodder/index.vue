@@ -14,6 +14,7 @@
     </div>
     <el-main class="main">
       <scTable
+        ref="table"
         :data="tableData"
         stripe
         highlightCurrentRow
@@ -282,7 +283,7 @@ export default defineComponent({
         label: "A4",
       }
       ]);
-    let fodderbrand = reactive(["鸽料138", "中粮"]);
+    let fodderbrand = reactive(["鸽料138", "混料"]);
     const tableData = ref([
       {
         gmtCreate: "",
@@ -322,9 +323,9 @@ export default defineComponent({
     });
     const sizeChange = (index) => {
       if (addInfo.brand[index] === "鸽料138") {
-        addInfo.size[index] = "80kg/包";
-      } else if (addInfo.brand[index] === "中粮") {
-        addInfo.size[index] = "40kg/包";
+        addInfo.size[index] = "80斤/包";
+      } else if (addInfo.brand[index] === "混料") {
+        addInfo.size[index] = "40斤/包";
       }
     };
     const numChange = (index) => {
@@ -336,7 +337,7 @@ export default defineComponent({
     const editsizeChange = () => {
       if (editInfo.value.brand === "鸽料138") {
         editInfo.value.size = "80kg/包";
-      } else if (editInfo.value.brand === "中粮") {
+      } else if (editInfo.value.brand === "混料") {
         editInfo.value.size = "40kg/包";
       }
     };
