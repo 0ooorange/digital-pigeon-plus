@@ -127,7 +127,7 @@
     </div>
 </template>
 <script >
-import { defineComponent, ref, reactive, getCurrentInstance } from "vue";
+import { defineComponent, ref, reactive, getCurrentInstance,computed } from "vue";
 import ScEcharts from "@/components/scEcharts";
 export default defineComponent({
     name: "envForecast", // 环境监测
@@ -139,8 +139,10 @@ export default defineComponent({
 
         //获取当前鸽棚信息
 
-        //当前鸽棚鸽笼信息
-        const currShed = proxy.$TOOL.data.get("CURR_INFO");
+               //当前鸽棚鸽笼信息
+         const currShed = computed(() => {
+            return proxy.$store.state.baseInfo.SHED_ID
+         })
 
         //时间选择器
         const shortcuts = [
@@ -205,7 +207,7 @@ export default defineComponent({
         let commonParams = {
             start_time: proxy.$TOOL.dateFormat(startTime.value),
             end_time: proxy.$TOOL.dateFormat(endTime.value),
-            shed_id: currShed,
+            shed_id: currShed.value,
         };
 
         //日期选择器
