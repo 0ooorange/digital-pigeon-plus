@@ -364,7 +364,7 @@ import { ElMessage } from "element-plus";
 export default {
     name: "allStateManage", // 鸽棚总览
     created() {
-        this.currShed = this.$TOOL.data.get("CURR_INFO").CURR_SHED;
+        this.currShed = "1518124016571797507";
         this.getAllCage();
         console.log("当前鸽棚", this.currShed);
 
@@ -646,7 +646,7 @@ export default {
         async getAllCage() {
             let data = {
                 position: this.lever[this.currentLever].value,
-                shedId: this.currShed.id,
+                shedId: this.currShed,
             };
             console.log("获取所有鸽笼参数", data);
             const findCageByState =
