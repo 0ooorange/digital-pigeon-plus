@@ -122,7 +122,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref, getCurrentInstance } from "vue";
+import { defineComponent, reactive, ref, getCurrentInstance,computed } from "vue";
 export default defineComponent({
     name: "dovePerformance", // 种鸽性能测试
     setup() {
@@ -138,8 +138,11 @@ export default defineComponent({
         ];
 
         //获取鸽棚id
-        let currShed = reactive(proxy.$TOOL.data.get("CURR_INFO").CURR_SHED);
-        console.log("当前鸽棚", currShed);
+                      //当前鸽棚鸽笼信息
+         const currShed = computed(() => {
+            return proxy.$store.state.baseInfo.SHED_ID
+         })
+        console.log("当前鸽棚", currShed.value);
 
         //格式化时间
         const formatDate = function (date) {
@@ -217,7 +220,7 @@ export default defineComponent({
             fieldCommon: "", //鸽棚编号，后面要问问师兄确定一下
             startTime: formatDate(startTime.value).substring(0, 10),
             endTime: formatDate(endTime.value).substring(0, 10),
-            shedId: currShed.id, //后面要用computed
+            shedId: currShed.value, //后面要用computed
         });
 
         //获取数据

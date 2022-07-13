@@ -93,14 +93,16 @@
 </template>
 <script>
 import { ElMessage } from "element-plus";
-import { defineComponent, ref, getCurrentInstance, reactive } from "vue";
+import { defineComponent, ref, getCurrentInstance, reactive ,computed} from "vue";
 export default defineComponent({
     name: "warnCenter", // 预警中心
     setup() {
         const { proxy } = getCurrentInstance();
 
-        //当前鸽棚鸽笼信息
-        const currShed = proxy.$TOOL.data.get("CURR_INFO").SHED_ID;
+               //当前鸽棚鸽笼信息
+         const currShed = computed(() => {
+            return proxy.$store.state.baseInfo.SHED_ID
+         })
         //当前日期
         const nowTime = new Date();
         //调接口传的时间
@@ -173,7 +175,7 @@ export default defineComponent({
             end_time: proxy.$TOOL.dateFormat(endTime.value),
             current: currentPage.value,
             size: pageSize.value,
-            shed_id: currShed,
+            shed_id: currShed.value,
         };
 
         //日期选择器
