@@ -46,8 +46,11 @@
 <script>
 import ScEcharts from '@/components/scEcharts'
 import SlideTable from './components/slideTable'
-import { ref, getCurrentInstance, reactive } from 'vue'
+import { ref, nextTick, reactive } from 'vue'
 import GuangDongData from './GuangDong.json'
+import tool from '@/utils/tool'
+
+import { getBaseAndShed } from '@api/bases/layout'
 
 import * as echarts from 'echarts'
 
@@ -58,102 +61,30 @@ export default {
     SlideTable,
   },
   setup() {
-    // 右上角
-    const { proxy } = getCurrentInstance()
-    const currOperator = ref('')
-    const bases = ref([])
-    const dovecotes = ref([])
-    const currBase = ref({})
-    const currShed = ref({})
-    const currInfo = ref({})
-    const baseInfo = proxy.$TOOL.data.get('BASE_INFO')
-    bases.value = baseInfo.base
-    dovecotes.value = baseInfo.shed
-    currInfo.value = proxy.$TOOL.data.get('CURR_INFO')
-    if (currInfo.value) {
-      currBase.value = currInfo.value.CURR_BASE
-      currShed.value = currInfo.value.CURR_SHED
-      currOperator.value = currInfo.value.CHARGE_NAME
-    } else {
-      currBase.value = bases.value[0]
-      currShed.value = dovecotes.value[0]
-      currOperator.value = baseInfo.chargeName
-    }
-    // 切换基地
-    const currBaseChange = async function () {
-      const { data: changeBaseRes } = await this.$API.layout.changeBase.post(currBase.value.id)
-      const { data: changeShedRes } = await this.$API.layout.getChargeName.post(
-        currShed.value.chargeId
-      )
-      dovecotes.value = changeBaseRes.shed
-      currOperator.value = changeShedRes.chargeName
-      currInfo.value = ref({
-        CURR_BASE: currBase.value,
-        CURR_SHED: currShed.value,
-        CHARGE_NAME: currOperator.value,
-      })
-      this.$TOOL.data.set('CURR_INFO', currInfo.value)
-      // changeBaseRes.
-    }
-    // 切换鸽棚
-    const currShedChange = async function (currShedName) {
-      var { data: changeShedRes } = await this.$API.layout.getChargeName.post(
-        currShed.value.chargeId
-      )
-      currOperator.value = changeShedRes.chargeName
-      for (var i = 0; i < dovecotes.value.length; i++) {
-        for (var key in dovecotes.value[i]) {
-          if (key === currShedName) currShed.value = dovecotes.value[i]
-        }
+    // 基地和棚
+    let baseInfo = tool.data.get('BASE_INFO')
+    getBaseAndShed(baseInfo.id).then((res) => {
+      console.log('res', res)
+      let currInfo = ref(tool.data.get('CURR_INFO'))
+      let currBase = ref({})
+      let currShed = ref({})
+      let currOperator = ref('')
+      if (currInfo.value) {
+        currBase.value = currInfo.value.CURR_BASE
+        currShed.value = currInfo.value.CURR_SHED
+        currOperator.value = currInfo.value.CHARGE_NAME
+      } else {
+        currBase.value = res.data.baseList[0]
+        currShed.value = res.data.shedList[0]
+        currOperator.value = res.data.userList[0].name
       }
       currInfo.value = {
         CURR_BASE: currBase.value,
         CURR_SHED: currShed.value,
         CHARGE_NAME: currOperator.value,
       }
-      this.$TOOL.data.set('CURR_INFO', currInfo.value)
-    }
-    // 时间选择器
-    const dateValue = ref([''])
-    dateValue.value = reactive({
-      text: '近一个月',
-      value: () => {
-        const end = new Date()
-        const start = new Date()
-        start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-        return [start, end]
-      },
+      tool.data.set('CURR_INFO', currInfo.value)
     })
-    const shortcuts = [
-      {
-        text: '近一周',
-        value: () => {
-          const end = new Date()
-          const start = new Date()
-          start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-          return [start, end]
-        },
-      },
-      {
-        text: '近一个月',
-        value: () => {
-          const end = new Date()
-          const start = new Date()
-          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-          return [start, end]
-        },
-      },
-      {
-        text: '近3个月',
-        value: () => {
-          const end = new Date()
-          const start = new Date()
-          start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-          return [start, end]
-        },
-      },
-    ]
-    const videoUrl = ref('')
 
     // 地图
     let timer = null
@@ -198,14 +129,15 @@ export default {
     //  const beforeDestroy = () => {
     //  clearTimer()
     //  }
+    const mapEcharts = ref(null)
     const initMapEcharts = () => {
       // 获取地图数据
       // 将下载后的json文件放置/public目录下
       // 使用数据注册地图
       echarts.registerMap('GuangDong', GuangDongData)
-      proxy.$nextTick(() => {
+      nextTick(() => {
         // 初始化地图
-        map = echarts.init(proxy.$refs['mapEcharts'])
+        map = echarts.init(mapEcharts.value)
         // 设置基础配置项
         const option = {
           // 悬浮窗
@@ -315,17 +247,8 @@ export default {
     }
 
     return {
-      currOperator,
-      currBase,
-      currShed,
-      bases,
-      dovecotes,
-      dateValue,
-      shortcuts,
-      videoUrl,
-      currBaseChange,
-      currShedChange,
       productEggOption,
+      mapEcharts
     }
   },
 }
