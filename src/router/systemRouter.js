@@ -65,6 +65,17 @@ const routes = [
 			title: "可视化",
 		},
 	},
+	{
+		name: "dataVisualShed",
+		path: "/dataVisualShed",
+		component: () =>
+			import(
+				/* webpackChunkName: "dataVisual-chunk" */ "@/views/dataVisualShed"
+			),
+		meta: {
+			title: "基地可视化",
+		},
+	},
 ];
 
 export default routes;
