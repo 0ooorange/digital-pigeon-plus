@@ -93,21 +93,21 @@
 </template>
 
 <script>
-import ScEcharts from '@/components/scEcharts'
-import SlideTable from './components/slideTable'
-import { ref, nextTick, reactive } from 'vue'
 import GuangDongData from './GuangDong.json'
-import tool from '@/utils/tool'
-
-import { getBaseAndShed } from '@api/bases/layout'
 
 import * as echarts from 'echarts'
+import ScEcharts from '@/components/scEcharts'
+
+import { ref, nextTick, reactive } from 'vue'
+
+import tool from '@/utils/tool'
+import { getBaseAndShed } from '@api/bases/layout'
+
 
 export default {
   name: 'dataVisual',
   components: {
     ScEcharts,
-    SlideTable,
   },
   setup() {
     // 基地和棚
