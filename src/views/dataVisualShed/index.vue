@@ -73,12 +73,9 @@
 </template>
 
 <script>
-import GuangDongData from './GuangDong.json'
-
-import * as echarts from 'echarts'
 import ScEcharts from '@/components/scEcharts'
 
-import { ref, nextTick, reactive } from 'vue'
+import { ref } from 'vue'
 
 import tool from '@/utils/tool'
 import { getBaseAndShed } from '@api/bases/layout'
@@ -113,115 +110,6 @@ export default {
       }
       tool.data.set('CURR_INFO', currInfo.value)
     })
-
-    // 地图
-    let timer = null
-    const seriesData = reactive([
-      { name: '广州市', value: 10057.34 },
-      { name: '梅州市', value: 45477.48 },
-      { name: '潮州市', value: 31686.1 },
-      { name: '揭阳市', value: 6992.6 },
-    ])
-    let map = null
-    const setTimer = () => {
-      // 当前选中区域的下标
-      let curIndex = -1
-      timer && clearInterval(timer)
-      timer = setInterval(() => {
-        const len = seriesData.length
-        // dispatchAction是主动去触发echarts事件，取消高亮当前的数据图形
-        map.dispatchAction({
-          type: 'downplay',
-          seriesIndex: 0,
-          dataIndex: curIndex,
-        })
-        // 下一个选中区域的下标
-        curIndex = (curIndex + 1) % len
-        // 高亮下一个数据图形
-        map.dispatchAction({
-          type: 'highlight',
-          seriesIndex: 0,
-          dataIndex: curIndex,
-        })
-        // 显示tooltip
-        map.dispatchAction({
-          type: 'showTip',
-          seriesIndex: 0,
-          dataIndex: curIndex,
-        })
-      }, 2000)
-    }
-    const clearTimer = () => {
-      timer && clearInterval(timer)
-    }
-    //  const beforeDestroy = () => {
-    //  clearTimer()
-    //  }
-    const mapEcharts = ref(null)
-    const initMapEcharts = () => {
-      // 获取地图数据
-      // 将下载后的json文件放置/public目录下
-      // 使用数据注册地图
-      echarts.registerMap('GuangDong', GuangDongData)
-      nextTick(() => {
-        // 初始化地图
-        map = echarts.init(mapEcharts.value)
-        // 设置基础配置项
-        const option = {
-          // 悬浮窗
-          tooltip: {
-            trigger: 'item',
-            formatter: function (params) {
-              return `${params.name}: ${params.value || 0}`
-            },
-          },
-          // 图例
-          visualMap: {
-            min: 800,
-            max: 50000,
-            text: ['High', 'Low'],
-            realtime: false,
-            calculable: true,
-            inRange: {
-              color: ['#07a3d7', 'yellow', 'orangered'],
-            },
-          },
-          // 要显示的散点数据
-          series: [
-            {
-              type: 'map',
-              map: 'GuangDong',
-              // 这是要显示的数据
-              data: seriesData,
-              // 自定义命名映射，不设置的话，label默认是使用 geoJson中的name名
-              nameMap: {
-                广州市: '广州市',
-                梅州市: '梅州市',
-              },
-            },
-          ],
-        }
-        // 将配置应用到地图上
-        map.setOption(option)
-        // 设置定时器，自动循环触发tooltip悬浮窗事件
-        setTimer()
-        // 当鼠标在地图上时，停止自动tooltip事件
-        map.on('mouseover', { series: 0 }, function () {
-          clearTimer()
-        })
-        // 当鼠标移出地图后，再自动tooltip
-        map.on('mouseout', { series: 0 }, function () {
-          setTimer()
-        })
-        map.on('click', function (e) {
-          if (e.name === '梅州市') {
-            // 在此处跳转至基地可视化页面
-            console.log('梅州市')
-          }
-        })
-      })
-    }
-    initMapEcharts()
 
     // 视频
     const videoValue = ref('')
@@ -488,7 +376,6 @@ export default {
 
     return {
       fodderOption,
-      mapEcharts,
 
       videoValue,
       videoOptions,
