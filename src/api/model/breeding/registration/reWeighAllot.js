@@ -23,7 +23,13 @@ export default {
     name:'添加饲料记录',
     post: async function (data) {
 			console.log("url", this.url);
-			return await http.post(this.url, data);
+      let params={
+        shedId:data.shedId,
+        weight:data.weight,
+        type:3,
+        unit:"斤",
+      }
+			return await http.post(this.url, params);
 		},
   },
   modifyreweighfeed:{

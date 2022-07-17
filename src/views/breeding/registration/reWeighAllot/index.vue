@@ -6,7 +6,6 @@
       >
       <table-search
         :dateDefault="dateDefault"
-        @reset="reset"
         @outTable="outTable"
         @printTable="printTable"
         :showSearch="false"
@@ -26,21 +25,14 @@
         <el-table-column
           prop="gmtCreate"
           label="时间"
-          width="120"
-          sortable
-          align="center"
-        />
-        <el-table-column
-          prop="dovecoteNumber"
-          label="鸽棚"
-          width="120"
+          width="200"
           sortable
           align="center"
         />
         <el-table-column
           prop="weight"
-          label="重量"
-          width="120"
+          label="重量(斤)"
+          width="200"
           sortable
           align="center"
         />
@@ -79,21 +71,7 @@
         style="width: 250px"
         :rules="formRules"
       >
-        <el-form-item label="时间:" prop="gmtCreate">
-          <el-input v-model="addInfo.gmtCreate" placeholder="请输入时间"></el-input>
-        </el-form-item>
-        <el-form-item label="鸽棚:" prop="dovecoteNumber">
-          <el-select v-model="addInfo.dovecoteNumber" placeholder="请选择">
-            <el-option
-              v-for="(item, index) in doptions"
-              :key="index"
-              :label="item"
-              :value="item"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="重量:" prop="weight">
+        <el-form-item label="重量(斤):" prop="weight">
           <el-input
             v-model="addInfo.weight"
             placeholder="请输入重量"
@@ -121,18 +99,7 @@
         <el-form-item label="时间:" prop="gmtCreate">
           <el-input v-model="editInfo.gmtCreate" placeholder="请输入时间"></el-input>
         </el-form-item>
-        <el-form-item label="鸽棚:" prop="dovecoteNumber">
-          <el-select v-model="editInfo.dovecoteNumber" placeholder="请选择">
-            <el-option
-              v-for="(item, index) in doptions"
-              :key="index"
-              :label="item"
-              :value="item"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="重量:" prop="weight">
+        <el-form-item label="重量(斤):" prop="weight">
           <el-input
             v-model="editInfo.weight"
             placeholder="请输入重量"
@@ -190,48 +157,11 @@ export default defineComponent({
     ];
     let addReWeightdialog = ref(false);
     let ReWeightdialog = ref(false);
-    let doptions = ref(["A1", "A2", "A3"]);
-    const tableData = ref([
-      {
-        gmtCreate: "2022-07-07",
-        dovecoteNumber: "A1",
-        weight: "10kg",
-      },
-    ]);
-    const addInfo = ref({
-      gmtCreate: "",
-      dovecoteNumber: "",
-      weight: "",
-    });
-    const editInfo = ref({
-      gmtCreate: "",
-      dovecoteNumber: "",
-      weight: "",
-    });
-    const formRules = ref({
-      gmtCreate: [{ message: "请输入时间", trigger: "blur", required: true }],
-      dovecoteNumber: [
-        { message: "请输入鸽棚", trigger: "blur", required: true },
-      ],
-      weight: [{ message: "请输入重量", trigger: "blur", required: true }],
-    });
     // 设置默认时间段，组件内默认半年
     let end = new Date();
     let start = new Date();
     start.setTime(start.getTime() - 3600 * 1000 * 24 * 183); // 半年
     let dateDefault = [start, end];
-    const outTable = () => {
-      console.log("点击导出");
-    };
-
-    const printTable = () => {
-      console.log("点击打印");
-    };
-    //把这一行的信息传入对话框
-    const showReWeightdialog = (item) => {
-      ReWeightdialog.value = true;
-      editInfo.value = item;
-    };
     let datePk = [start, end];
     //格式化时间
     const formatDate = (dat) => {
@@ -249,8 +179,38 @@ export default defineComponent({
         dat.getSeconds() < 10 ? "0" + dat.getSeconds() : dat.getSeconds();
 
       var newDate =
-        year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
+        year + "-" + mon + "-" + data + " " + (hour+1) + ":" + min + ":" + seon;
       return newDate;
+    };
+    const tableData = ref([
+      {
+        gmtCreate: "",
+        weight: "",
+      },
+    ]);
+    const addInfo = ref({
+      shedId: currShed.id,
+      weight: "",
+    });
+    const editInfo = ref({
+      gmtCreate: "",
+      weight: "",
+    });
+    const formRules = ref({
+      weight: [{ message: "请输入重量", trigger: "blur", required: true }],
+    });
+    
+    const outTable = () => {
+      console.log("点击导出");
+    };
+
+    const printTable = () => {
+      console.log("点击打印");
+    };
+    //把这一行的信息传入对话框
+    const showReWeightdialog = (item) => {
+      ReWeightdialog.value = true;
+      editInfo.value = Object.assign(item,{shedId:currShed.id})
     };
     const api = proxy.$API.reWeighAllot.getreweighfeed;
     const params = {
@@ -307,7 +267,7 @@ export default defineComponent({
     };
     const removeReWeight = async (id) => {
       const confirmResult = await proxy
-        .$confirm("此操作将永久删除该用户, 是否继续?", "提示", {
+        .$confirm("此操作将永久删除该记录, 是否继续?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
@@ -335,7 +295,6 @@ export default defineComponent({
       proxy.$refs.addRef.resetFields();
     };
     const editDialogClosed = () => {
-      proxy.$refs.editRef.resetFields();
     };
     const dataChange = (res) => {
       if(parseInt(res.data.total)>0)
@@ -347,7 +306,6 @@ export default defineComponent({
       addReWeightdialog,
       ReWeightdialog,
       editInfo,
-      doptions,
       shortcuts,
       outTable,
       printTable,

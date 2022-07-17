@@ -27,7 +27,6 @@ export default {
       let n=data.brand.length;
       let index=0;
       while(n){
-        if(data.brand[index]==="") return;
         let params={
           brand:data.brand[index],
           num:data.num[index],
@@ -36,14 +35,13 @@ export default {
           weight:data.weight[index],
           type:1,
           unit:"斤",
-          origin:"金绿货仓"
         }
-        await http.post(this.url, params)
-        console.log(index)
-        index++;
         n--;
+        if(n===0)
+        return await http.post(this.url, params);
+        await http.post(this.url, params);
+        index++;
       }
-			return;
 		},
   },
   modifyfeed:{

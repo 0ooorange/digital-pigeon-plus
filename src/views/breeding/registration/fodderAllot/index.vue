@@ -6,7 +6,6 @@
       >
       <table-search
         :dateDefault="dateDefault"
-        @reset="reset"
         @outTable="outTable"
         @printTable="printTable"
         :showSearch="false"
@@ -26,7 +25,7 @@
         <el-table-column
           prop="gmtCreate"
           label="时间"
-          width="120"
+          width="200"
           sortable
           align="center"
         />
@@ -52,7 +51,7 @@
         />
         <el-table-column
           prop="weight"
-          label="重量"
+          label="重量(斤)"
           width="120"
           sortable
           align="center"
@@ -92,11 +91,8 @@
         ref="addRef"
         label-width="auto"
         style="width: 380px"
-        :rules="formRules"
+        :rules="addformRules"
       >
-        <el-form-item label="时间:" prop="gmtCreate">
-          <el-input v-model="addInfo.gmtCreate" placeholder="请输入时间"></el-input>
-        </el-form-item>
         <el-form-item label="饲料种类:" prop="brand">
           <el-row :gutter="10">
             <el-col
@@ -149,7 +145,7 @@
               ></el-input> </el-col
           ></el-row>
         </el-form-item>
-        <el-form-item label="重量:" prop="weight">
+        <el-form-item label="重量(斤):" prop="weight">
           <el-row :gutter="10">
             <el-col
               :span="8"
@@ -182,7 +178,7 @@
         ref="editRef"
         label-width="auto"
         style="width: 250px"
-        :rules="formRules"
+        :rules="editformRules"
       >
         <el-form-item label="时间:" prop="gmtCreate">
           <el-input v-model="editInfo.gmtCreate" placeholder="请输入时间"></el-input>
@@ -211,7 +207,7 @@
             :change="editNumChange()"
           ></el-input>
         </el-form-item>
-        <el-form-item label="重量:" prop="weight">
+        <el-form-item label="重量(斤):" prop="weight">
           <el-input
             v-model="editInfo.weight"
             placeholder="请输入重量"
@@ -274,7 +270,20 @@ export default defineComponent({
     let fodderdialog = ref(false);
     let doptions = reactive(["A1", "A2", "A3"]);
     let fodderbrand = reactive(["鸽料138", "中粮"]);
-    const formRules = ref({
+    const checkForm = (rule, value, callback) => {
+      for (let index in value) {
+        if (!value[index]) callback(new Error("请输入"));
+      }
+      callback();
+    };
+    const addformRules = ref({
+      brand: [{ validator: checkForm, trigger: "blur", required: true }],
+      size: [{ validator: checkForm, trigger: "blur", required: true }],
+      num: [{ validator: checkForm, trigger: "blur", required: true }],
+      weight: [{ validator: checkForm, trigger: "blur", required: true }],
+      origin: [{ message: "请输入来源", trigger: "blur", required: true }],
+    });
+    const editformRules = ref({
       gmtCreate: [{ message: "请输入时间", trigger: "blur", required: true }],
       brand: [{ message: "请输入饲料种类", trigger: "blur", required: true }],
       size: [{ message: "请输入规格", trigger: "blur", required: true }],
@@ -297,7 +306,7 @@ export default defineComponent({
     //把这一行的信息传入对话框
     const showFodderdialog = (item) => {
       fodderdialog.value = true;
-      editInfo.value = item;
+      editInfo.value = Object.assign(item,{shedId:currShed.id})
     };
     let datePk = [start, end];
     //格式化时间
@@ -316,7 +325,7 @@ export default defineComponent({
         dat.getSeconds() < 10 ? "0" + dat.getSeconds() : dat.getSeconds();
 
       var newDate =
-        year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
+        year + "-" + mon + "-" + data + " " + (hour+1) + ":" + min + ":" + seon;
       return newDate;
     };
     const api = proxy.$API.fodderAllot.getallocatefeed;
@@ -337,7 +346,6 @@ export default defineComponent({
       },
     ]);
     const addInfo = reactive({
-      gmtCreate: formatDate(end),
       brand: ["", ""],
       size: ["", ""],
       num: ["", ""],
@@ -368,9 +376,9 @@ export default defineComponent({
     });
     const sizeChange = (index) => {
       if (addInfo.brand[index] === "鸽料138") {
-        addInfo.size[index] = "80kg/包";
+        addInfo.size[index] = "80斤/包";
       } else if (addInfo.brand[index] === "中粮") {
-        addInfo.size[index] = "40kg/包";
+        addInfo.size[index] = "40斤/包";
       }
     };
     const numChange = (index) => {
@@ -381,9 +389,9 @@ export default defineComponent({
     };
     const editsizeChange = () => {
       if (editInfo.value.brand === "鸽料138") {
-        editInfo.value.size = "80kg/包";
+        editInfo.value.size = "80斤/包";
       } else if (editInfo.value.brand === "中粮") {
-        editInfo.value.size = "40kg/包";
+        editInfo.value.size = "40斤/包";
       }
     };
     const editNumChange = () => {
@@ -441,7 +449,7 @@ export default defineComponent({
     };
     const removeFodder = async (id) => {
       const confirmResult = await proxy
-        .$confirm("此操作将永久删除该用户, 是否继续?", "提示", {
+        .$confirm("此操作将永久删除该记录, 是否继续?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
@@ -488,9 +496,11 @@ export default defineComponent({
       dataChange,
       dateDefault,
       datePk,
-      formRules,
+      addformRules,
+      editformRules,
       api,
       params,
+      checkForm,
       formatDate,
       updateFodder,
       addFodder,

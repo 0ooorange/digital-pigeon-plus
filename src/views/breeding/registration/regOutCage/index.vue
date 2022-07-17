@@ -7,7 +7,6 @@
       <table-search
         :dateDefault="dateDefault"
         :datePkDefalt="datePk"
-        @reset="reset"
         @outTable="outTable"
         @printTable="printTable"
         :showSearch="false"
@@ -98,17 +97,6 @@
             placeholder="请输入时间"
           ></el-input>
         </el-form-item>
-        <el-form-item label="鸽棚:" prop="shedId">
-          <el-select v-model="addInfo.shedId" placeholder="请选择">
-            <el-option
-              v-for="item in doptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="种类:" prop="category">
           <el-input
             v-model="addInfo.category"
@@ -154,17 +142,6 @@
             v-model="editInfo.deliverTime"
             placeholder="请输入时间"
           ></el-input>
-        </el-form-item>
-        <el-form-item label="鸽棚:" prop="shedId">
-          <el-select v-model="editInfo.shedId" placeholder="请选择">
-            <el-option
-              v-for="(item, index) in doptions"
-              :key="index"
-              :label="item"
-              :value="item"
-            >
-            </el-option>
-          </el-select>
         </el-form-item>
         <el-form-item label="种类:" prop="category">
           <el-input
@@ -264,16 +241,6 @@ export default defineComponent({
     start.setTime(start.getTime() - 3600 * 1000 * 24 * 183); // 半年
     let dateDefault = [start, end];
     let datePk = [start, end];
-    let doptions = ref([
-      {
-        value: "1518124016571797507",
-        label: "A1",
-      },
-      {
-        value: "1518124016571797511",
-        label: "A4",
-      },
-    ]);
     const formRules = ref({
       deliverTime: [{ message: "请输入时间", trigger: "blur", required: true }],
       shedId: [{ message: "请输入鸽棚", trigger: "blur", required: true }],
@@ -294,7 +261,7 @@ export default defineComponent({
     ]);
     const addInfo = ref({
       deliverTime: formatDate(end),
-      shedId: "",
+      shedId: currShed.id,
       category: "",
       num: "",
       destination: "",
@@ -302,7 +269,6 @@ export default defineComponent({
     });
     const editInfo = ref({
       deliverTime: formatDate(end),
-      shedId: "",
       category: "",
       num: "",
       destination: "",
@@ -318,7 +284,7 @@ export default defineComponent({
     //把这一行的信息传入对话框
     const showOutcagedialog = (item) => {
       Outcagedialog.value = true;
-      editInfo.value = item;
+      editInfo.value = Object.assign(item,{shedId:currShed.id});
     };
     const api = proxy.$API.regOutCage.delivermanagement;
     const params = {
@@ -377,7 +343,7 @@ export default defineComponent({
     };
     const removeOutcage = async (id) => {
       const confirmResult = await proxy
-        .$confirm("此操作将永久删除该用户, 是否继续?", "提示", {
+        .$confirm("此操作将永久删除该记录, 是否继续?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
@@ -415,7 +381,6 @@ export default defineComponent({
       addOutcagedialog,
       Outcagedialog,
       editInfo,
-      doptions,
       shortcuts,
       outTable,
       printTable,

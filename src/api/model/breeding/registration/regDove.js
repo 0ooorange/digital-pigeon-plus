@@ -3,7 +3,7 @@ import http from "@/utils/request"
 import qs from 'qs'
 export default {
   getpigeon:{
-    url:``,
+    url:`digitalPigeon/breed/informationinput/getaddpigeon`,
     name:'获取鸽子记录',
     post: async function (data) {
 			console.log("url", this.url);
@@ -12,9 +12,9 @@ export default {
         pageSize:data.pageSize,
         shedId:data.shedId,
         startTime:data.startTime,
-        endTime:data.endTime
+        endTime:data.endTime,
+        codes:data.codes
       })
-      console.log("参数",params);
 			return await http.post(this.url, params);
 		},
   },
@@ -27,19 +27,9 @@ export default {
 		},
   },
   modifypigeon:{
-    url:``,
-    name:'修改鸽子记录',
-    post: async function (data) {
-			console.log("url", this.url);
-			return await http.post(this.url, data);
-		},
+    
   },
   deletepigeon:{
-    url:``,
-    name:'删除鸽子记录',
-    post: async function (id) {
-			console.log("url", this.url);
-			return await http.post(this.url,id,{headers:{'Content-Type':'application/json'}});
-		},
+    
   },
 }
