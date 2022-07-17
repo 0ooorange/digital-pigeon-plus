@@ -212,11 +212,18 @@ export default {
     showThis()
 
     return {
-      firstSpan, secondSpan, thirdSpan,
-      bases, dovecotes, currBaseName, currShedCode, currOperator,
+      firstSpan,
+      secondSpan,
+      thirdSpan,
+      bases,
+      dovecotes,
+      currBaseName,
+      currShedCode,
+      currOperator,
       smallLogo,
       currMenu,
-      currBaseChange, currShedChange,
+      currBaseChange,
+      currShedChange,
       exitMaximize,
       toNavigator,
       ismobile,
@@ -224,7 +231,7 @@ export default {
       menuIsCollapse,
       active,
     }
-  }
+  },
 }
 </script>
 
