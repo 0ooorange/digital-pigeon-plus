@@ -19,48 +19,62 @@
   </div>
 </template>
 
-<script>
-import { reactive } from 'vue'
-export default {
-  setup() {
-    let list = reactive([
-      {
-        time: 2022 - 5 - 13,
-        shed: 'A1仓',
-        info: '温度过低',
-      },
-      {
-        time: 2022 - 5 - 13,
-        shed: 'A1仓',
-        info: '温度过低',
-      },
-      {
-        time: 2022 - 5 - 13,
-        shed: 'A1仓',
-        info: '温度过低',
-      },
-      {
-        time: 2022 - 5 - 13,
-        shed: 'A1仓',
-        info: '温度过低',
-      },
-      {
-        time: 2022 - 5 - 13,
-        shed: 'A1仓',
-        info: '温度过低',
-      },
-      {
-        time: 2022 - 5 - 13,
-        shed: 'A1仓',
-        info: '温度过低',
-      },
-    ])
+<script setup>
+import { ref, defineProps } from 'vue'
+import { getWarningByID } from '@api/breeding/breedStatistics'
+import { dateFormat } from '@/hooks/dateFormat.js'
 
-    return {
-      list
-    }
+const props = defineProps({
+  shed_id: {
+    type: String,
+    require: true,
   },
-}
+  start_time: {
+    type: String,
+    require: true,
+  },
+  end_time: {
+    type: String,
+    require: true,
+  },
+})
+let list = ref([
+  {
+    time: 2022 - 5 - 13,
+    shed: 'A1仓',
+    info: '温度过低',
+  },
+  {
+    time: 2022 - 5 - 13,
+    shed: 'A1仓',
+    info: '温度过低',
+  },
+  {
+    time: 2022 - 5 - 13,
+    shed: 'A1仓',
+    info: '温度过低',
+  },
+  {
+    time: 2022 - 5 - 13,
+    shed: 'A1仓',
+    info: '温度过低',
+  },
+  {
+    time: 2022 - 5 - 13,
+    shed: 'A1仓',
+    info: '温度过低',
+  },
+  {
+    time: 2022 - 5 - 13,
+    shed: 'A1仓',
+    info: '温度过低',
+  },
+])
+getWarningByID(props.shed_id, dateFormat(props.start_time), dateFormat(props.end_time)).then(
+  (res) => {
+    console.log('环境预警信息', res)
+  }
+)
 </script>
 
 <style scoped>

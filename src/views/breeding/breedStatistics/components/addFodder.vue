@@ -3,7 +3,7 @@
 </template>
 <script setup>
 import ScEcharts from '@/components/scEcharts'
-import { ref, defineProps, defineExpose } from 'vue'
+import { ref, defineProps } from 'vue'
 import { getFeedShedByIDTime } from '@api/breeding/breedStatistics'
 import { dateFormat } from '@/hooks/dateFormat.js'
 
@@ -38,17 +38,13 @@ const option = ref({
       label: {
         show: false,
       },
-      data: [
-        { value: 735, name: 'C牌饲料' },
-        { value: 510, name: 'D牌饲料' },
-      ],
+      data: [],
     },
   ],
 })
 
-const getData = (shed_id, start_time, end_time) => {
-  console.log(15632468465)
-  getFeedShedByIDTime(shed_id, start_time, end_time).then((res) => {
+getFeedShedByIDTime(props.shed_id, dateFormat(props.start_time), dateFormat(props.end_time)).then(
+  (res) => {
     option.value.legend.data = []
     option.value.series[0].data = []
     res.data.data.forEach((item) => {
@@ -58,15 +54,6 @@ const getData = (shed_id, start_time, end_time) => {
       })
       option.value.legend.data.push(item.brand)
     })
-  })
-}
-getData(props.shed_id, dateFormat(props.start_time), dateFormat(props.end_time))
-
-// const test = function() {
-//   console.log('test test test')
-// }
-
-defineExpose({
-  getData,
-})
+  }
+)
 </script>
