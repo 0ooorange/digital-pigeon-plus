@@ -12,7 +12,15 @@
       <div class="top_right">
         <ul>
           <li>
-            <router-link to="/navigator">返回</router-link>
+            <span @click="toNavigator">返回</span>
+          </li>
+          <li>
+            <span @click="toBase">前往基地</span>
+          </li>
+          <li class="baseSelect">
+            <el-select v-model="currBaseName" placeholder="选择基地" @change="currBaseChange($event)" style="width: 150px">
+              <el-option v-for="item in bases" :key="item.id" :label="item.code" :value="item.code" />
+            </el-select>
           </li>
         </ul>
       </div>
@@ -97,11 +105,13 @@ import GuangDongData from './GuangDong.json'
 
 import * as echarts from 'echarts'
 import ScEcharts from '@/components/scEcharts'
+import { ElMessage } from 'element-plus'
 
-import { ref, nextTick, reactive } from 'vue'
+import { ref, nextTick, reactive, h } from 'vue'
 
 import tool from '@/utils/tool'
 import router from '@/router'
+import store from '@/store'
 import { getBaseAndShed } from '@api/bases/layout'
 
 export default {
@@ -112,8 +122,9 @@ export default {
   setup() {
     // 基地和棚
     let baseInfo = tool.data.get('BASE_INFO')
+    const bases = ref([])
     getBaseAndShed(baseInfo.id).then((res) => {
-      console.log('res', res)
+      bases.value = res.data.baseList
       let currInfo = ref(tool.data.get('CURR_INFO'))
       let currBase = ref({})
       let currShed = ref({})
@@ -134,6 +145,37 @@ export default {
       }
       tool.data.set('CURR_INFO', currInfo.value)
     })
+    // 基地选择
+    const currBaseName = ref('')
+    const nextBase = ref([])
+    const currBaseChange = (e) => {
+      bases.value.forEach((val) => {
+        if (val.code === e) {
+          nextBase.value = val
+        }
+      })
+    }
+    // 前往菜单
+    const toNavigator = () => {
+      router.push('/navigator')
+    }
+    // 前往基地
+    const openError = () => {
+      ElMessage({
+        message: h('p', null, [
+          h('span', null, '请选择'),
+          h('i', { style: 'color: teal' }, '基地'),
+        ]),
+      })
+    }
+    const toBase = () => {
+      if (currBaseName.value) {
+        store.commit('setCurrBase', nextBase.value)
+        router.push({ path: '/dataVisualBase' })
+      } else {
+        openError()
+      }
+    }
 
     // 地图
     let timer = null
@@ -233,15 +275,6 @@ export default {
         // 当鼠标移出地图后，再自动tooltip
         map.on('mouseout', { series: 0 }, function () {
           setTimer()
-        })
-        map.on('click', function (e) {
-          if (e.name === '梅州市') {
-            // 在此处跳转至基地可视化页面
-            console.log('梅州市')
-            router.push({
-              path: '/dataVisualShed',
-            })
-          }
         })
       })
     }
@@ -388,6 +421,11 @@ export default {
     }
 
     return {
+      currBaseName,
+      currBaseChange,
+      bases,
+      toNavigator,
+      toBase,
       breededOption,
       mapEcharts,
 
@@ -490,6 +528,7 @@ html,
     font-size: 26px;
   }
   .top_right {
+    position: relative;
     width: 33%;
     padding-top: 2%;
     padding-right: 2.5%;
@@ -503,10 +542,14 @@ html,
       float: right;
       text-align: center;
       margin-right: 1%;
+      cursor: pointer;
       a {
         text-decoration: none;
         color: #fff;
       }
+    }
+    .baseSelect {
+      width: 150px;
     }
   }
 }

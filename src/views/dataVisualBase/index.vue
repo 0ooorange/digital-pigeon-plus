@@ -8,20 +8,20 @@
           <li><a href="javascript:;">加工</a></li>
         </ul>
       </div>
-      <h1 class="top_center">{{curr_shed}}</h1>
+      <h1 class="top_center">{{curr_base}}</h1>
       <div class="top_right">
         <ul>
           <li>
             <span @click="toLast">返回</span>
           </li>
-          <!-- <li>
-            <span @click="changeShed">切换鸽棚</span>
+          <li>
+            <span @click="toShed">前往鸽棚</span>
           </li>
           <li class="shedSelect">
             <el-select v-model="currShedName" placeholder="选择鸽棚" @change="currShedChange($event)" style="width: 150px">
               <el-option v-for="item in shed" :key="item.id" :label="item.code" :value="item.code" />
             </el-select>
-          </li> -->
+          </li>
         </ul>
       </div>
     </div>
@@ -31,7 +31,7 @@
         <div class="echarts1 box-background">
           <div class="title">视频监控</div>
           <div class="videoSelect">
-            <el-select style="width: 100px;" v-model="videoValue" placeholder="监控1">
+            <el-select style="width: 100px;" placeholder="监控1">
               <el-option v-for="item in videoOptions" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
@@ -82,8 +82,9 @@
 
 <script>
 import ScEcharts from '@/components/scEcharts'
+import { ElMessage } from 'element-plus'
 
-import { ref } from 'vue'
+import { ref, h } from 'vue'
 
 import tool from '@/utils/tool'
 import router from '@/router'
@@ -91,12 +92,14 @@ import store from '@/store'
 import { getBaseAndShed } from '@api/bases/layout'
 
 export default {
-  name: 'dataVisual',
+  name: 'dataVisualBase',
   components: {
     ScEcharts,
   },
   setup() {
-    const curr_shed = store.state.dataVisual.CURR_SHED.code
+    // 接收路由传参的值
+    const curr_base = store.state.dataVisual.CURR_BASE.code
+
     // 基地和棚
     let baseInfo = tool.data.get('BASE_INFO')
     const shed = ref([])
@@ -124,27 +127,35 @@ export default {
     })
     // 鸽棚选择
     const currShedName = ref('')
-    const currShedChange = () => {}
+    const nextShed = ref([])
+    const currShedChange = (e) => {
+      shed.value.forEach((val) => {
+        if (val.code === e) {
+          nextShed.value = val
+        }
+      })
+    }
     // 前往上一页
     const toLast = () => {
       router.go(-1)
     }
-    // 切换鸽棚
-    // const openError = () => {
-    //   ElMessage({
-    //     message: h('p', null, [
-    //       h('span', null, '请选择'),
-    //       h('i', { style: 'color: teal' }, '鸽棚'),
-    //     ]),
-    //   })
-    // }
-    // const changeShed = () => {
-    //   if (currShedName.value) {
-    //     router.push('/dataVisualShed')
-    //   } else {
-    //     openError()
-    //   }
-    // }
+    // 前往鸽棚
+    const openError = () => {
+      ElMessage({
+        message: h('p', null, [
+          h('span', null, '请选择'),
+          h('i', { style: 'color: teal' }, '鸽棚'),
+        ]),
+      })
+    }
+    const toShed = () => {
+      store.commit('setCurrShed', nextShed.value)
+      if (currShedName.value) {
+        router.push('/dataVisualShed')
+      } else {
+        openError()
+      }
+    }
 
     // 视频
     const videoValue = ref('')
@@ -410,11 +421,13 @@ export default {
     }
 
     return {
-      curr_shed,
+      curr_base,
       shed,
       currShedName,
       currShedChange,
       toLast,
+      toShed,
+
       fodderOption,
 
       videoValue,
@@ -502,6 +515,7 @@ html,
       float: left;
       text-align: center;
       margin-left: 1%;
+      cursor: pointer;
       a {
         text-decoration: none;
         color: #fff;
