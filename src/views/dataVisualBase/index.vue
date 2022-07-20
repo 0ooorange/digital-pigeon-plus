@@ -29,6 +29,81 @@
     <div class="content">
       <div class="left">
         <div class="echarts1 box-background">
+          <div class="title">基地基础信息</div>
+          <div class="cContent">
+            <span class="c1">
+              <div>乳鸽出栏数（万）</div>
+              <div class="t1">1420821</div>
+            </span>
+            <span class="c2">
+              <div>鸽棚数量</div>
+              <div class="t2">13</div>
+            </span>
+            <span class="c3">
+              <div>种鸽出栏数（万）</div>
+              <div class="t3">70593</div>
+            </span>
+          </div>
+          <ScEcharts class="e1" :option="allStatistics" height="80%" width="40%"></ScEcharts>
+        </div>
+        <div class="echarts2 box-background">
+          <div class="title">基地种鸽、乳鸽养殖规模（万）</div>
+          <ScEcharts :option="breededOption" height="90%" width="100%"></ScEcharts>
+        </div>
+        <div class="echarts3 box-background">
+          <div class="title">位置信息</div>
+          <img src="./img/tempMap.jpg" alt="error">
+        </div>
+      </div>
+      <div class="center">
+        <div class="map-echart">
+          <img class="image" src="./img/base.jpg" alt="error">
+        </div>
+        <div class="box-background centerEcharts">
+          <div class="title">基地人员分布</div>
+          <ScEcharts class="e1" :option="memberOption " height="95%" width="80%"></ScEcharts>
+        </div>
+      </div>
+      <div class="right">
+        <div class="echarts4 box-background">
+          <div class="title">基地数据统计</div>
+          <div class="center4">
+            <div class="left4">
+              <span class="c1">
+                <div>总销售额（千万）</div>
+                <div class="t1">1034</div>
+              </span>
+              <span class="c2">
+                <div>养殖企业</div>
+                <div class="t2">123</div>
+              </span>
+              <span class="c3">
+                <div>带动农户（户）</div>
+                <div class="t3">302</div>
+              </span>
+            </div>
+            <div class="right4">
+              <span class="c4">
+                <div>科技投入（千万）</div>
+                <div class="t1">3</div>
+              </span>
+              <span class="c5">
+                <div>科研平台数</div>
+                <div class="t2">734</div>
+              </span>
+              <span class="c6">
+                <div>无害化处理（吨）</div>
+                <div class="t3">103</div>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="echarts5 box-background">
+          <div class="title">基地经济产值走势（千万元）</div>
+          <ScEcharts :option="economicOption" height="100%" width="100%"></ScEcharts>
+        </div>
+
+        <div class="echarts6 box-background">
           <div class="title">视频监控</div>
           <div class="videoSelect">
             <el-select style="width: 100px;" placeholder="监控1">
@@ -41,39 +116,6 @@
               <source :src="videoUrl" type="application/x-mpegURL" />
             </video>
           </div>
-        </div>
-        <div class="echarts2 box-background">
-          <div class="title">蛋异常统计</div>
-          <ScEcharts :option="eggAbnormalOption" height="90%" width="100%"></ScEcharts>
-        </div>
-        <div class="echarts3 box-background">
-          <div class="title">产蛋统计</div>
-          <ScEcharts :option="productEggOption" height="90%" width="100%"></ScEcharts>
-        </div>
-      </div>
-      <div class="center">
-        <div class="map-echart">
-          <img class="image" src="./img/shed.png" alt="error">
-        </div>
-        <div class="box-background centerEcharts">
-          <div class="title">环境参数</div>
-          <ScEcharts class="e1" :option="environmentOption " height="85%" width="90%"></ScEcharts>
-        </div>
-      </div>
-      <div class="right">
-        <div class="echarts4 box-background">
-          <div class="title">养殖品种介绍</div>
-          <div class="echarts4-img">
-            <img class="image" src="./img/variety1.jpg" alt="error">
-          </div>
-        </div>
-        <div class="echarts5 box-background">
-          <div class="title">出栏统计</div>
-          <ScEcharts class="" :option="outCageOption" height="90%" width="100%"></ScEcharts>
-        </div>
-        <div class="echarts6 box-background">
-          <div class="title">饲料统计</div>
-          <ScEcharts class="" :option="fodderOption " height="90%" width="100%"></ScEcharts>
         </div>
       </div>
     </div>
@@ -150,11 +192,48 @@ export default {
     }
     const toShed = () => {
       store.commit('setCurrShed', nextShed.value)
+      tool.session.set('CURR_SHED', nextShed.value)
       if (currShedName.value) {
         router.push('/dataVisualShed')
       } else {
         openError()
       }
+    }
+
+    // echarts1
+    const allStatistics = {
+      title: {
+        text: '基地乳鸽去向',
+        left: 'center',
+        textStyle: {
+          color: 'white',
+          fontWeight: 400,
+          fontSize: 14,
+        },
+      },
+      tooltip: {
+        trigger: 'item',
+      },
+      series: [
+        {
+          name: '基地乳鸽去向',
+          type: 'pie',
+          radius: '80%',
+          labelLine: {
+            show: false,
+          },
+          label: {
+            position: 'inner',
+            fontSize: 14,
+            fontWeight: 600,
+          },
+          data: [
+            { value: 340, name: '深加工' },
+            { value: 590, name: '屠宰' },
+            { value: 70, name: '活禽' },
+          ],
+        },
+      ],
     }
 
     // 视频
@@ -171,103 +250,48 @@ export default {
     ]
 
     // centerEcharts
-    const environmentOption = {
+    const memberOption = {
+      xAxis: {
+        type: 'category',
+        data: ['养殖', '屠宰', '加工', '销售', '科研', '管理'],
+      },
+      yAxis: {
+        type: 'value',
+        max: 150,
+      },
+      series: [
+        {
+          data: [120, 50, 40, 20, 10, 15],
+          type: 'bar',
+        },
+      ],
+    }
+
+    // echarts2
+    const breededOption = {
       tooltip: {
         trigger: 'axis',
       },
       legend: {
-        data: ['温度', '湿度', '二氧化碳', '光照强度', 'PM2.5', '氮气'],
-      },
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true,
-      },
-      toolbox: {
-        feature: {
-          saveAsImage: {},
-        },
+        data: ['种鸽', '乳鸽'],
       },
       xAxis: {
         type: 'category',
-        boundaryGap: false,
-        data: ['00:00', '4:00', '8:00', '12:00', '16:00', '20:00', '24:00'],
+        data: ['2019年', '2020年', '2021年', '2022年'],
       },
       yAxis: {
         type: 'value',
       },
       series: [
         {
-          name: '温度',
+          name: '种鸽',
           type: 'line',
-          stack: 'Total',
-          data: ['100', '70', '40', '60', '50', '90', '80'],
+          data: [0, 0, 0, 0],
         },
         {
-          name: '湿度',
+          name: '乳鸽',
           type: 'line',
-          stack: 'Total',
-          data: ['20', '62', '31', '64', '90', '73', '100'],
-        },
-        {
-          name: '二氧化碳',
-          type: 'line',
-          stack: 'Total',
-          data: ['30', '232', '201', '154', '190', '330', '410'],
-        },
-        {
-          name: '光照强度',
-          type: 'line',
-          stack: 'Total',
-          data: [320, 332, 301, 334, 390, 330, 320],
-        },
-        {
-          name: 'PM2.5',
-          type: 'line',
-          stack: 'Total',
-          data: [100, 93, 351, 74, 160, 300, 400],
-        },
-        {
-          name: '氮气',
-          type: 'line',
-          stack: 'Total',
-          data: [120, 250, 100, 98, 500, 420, 200],
-        },
-      ],
-    }
-
-    // echarts2
-    const eggAbnormalOption = {
-      tooltip: {
-        trigger: 'item',
-      },
-      legend: {
-        // orient: 'vertical',
-        top: 'top',
-      },
-      series: [
-        {
-          name: '蛋异常统计',
-          type: 'pie',
-          radius: '70%',
-          label: {
-            show: false,
-          },
-          data: [
-            { value: 1048, name: '单蛋' },
-            { value: 735, name: '光蛋1' },
-            { value: 484, name: '光蛋2' },
-            { value: 580, name: '踩蛋1' },
-            { value: 300, name: '踩蛋2' },
-          ],
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)',
-            },
-          },
+          data: [121, 134, 156, 150],
         },
       ],
     }
@@ -331,91 +355,18 @@ export default {
     }
 
     // echarts5
-    const outCageOption = {
-      tooltip: {
-        trigger: 'item',
+    const economicOption = {
+      xAxis: {
+        type: 'category',
+        data: ['2019年', '2020年', '2021年', '2022年'],
       },
-      legend: {
-        // orient: 'vertical',
-        top: 'top',
+      yAxis: {
+        type: 'value',
       },
       series: [
         {
-          name: '出栏统计',
-          type: 'pie',
-          radius: '70%',
-          label: {
-            show: false,
-          },
-          data: [
-            { value: 100, name: '死仔数' },
-            { value: 2000, name: '出栏数' },
-            { value: 3000, name: '出仔数' },
-          ],
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)',
-            },
-          },
-        },
-      ],
-    }
-
-    // echarts6
-    const fodderOption = {
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'shadow',
-        },
-      },
-      legend: {
-        data: ['饲料A', '饲料B'],
-      },
-      toolbox: {
-        show: true,
-        orient: 'vertical',
-        left: 'right',
-        top: 'center',
-        feature: {
-          mark: { show: true },
-          dataView: { show: true, readOnly: false },
-          magicType: { show: true, type: ['line', 'bar', 'stack'] },
-          restore: { show: true },
-          saveAsImage: { show: true },
-        },
-      },
-      xAxis: [
-        {
-          type: 'category',
-          axisTick: { show: false },
-          data: ['1', '5', '10', '15', '20', '25', '30'],
-        },
-      ],
-      yAxis: [
-        {
-          type: 'value',
-        },
-      ],
-      series: [
-        {
-          name: '饲料A',
-          type: 'bar',
-          barGap: 0,
-          emphasis: {
-            focus: 'series',
-          },
-          data: [320, 332, 301, 334, 390, 260, 330],
-        },
-        {
-          name: '饲料B',
-          type: 'bar',
-          emphasis: {
-            focus: 'series',
-          },
-          data: [220, 182, 191, 234, 290, 180, 270],
+          data: [4290, 4830, 5900, 6400],
+          type: 'line',
         },
       ],
     }
@@ -428,15 +379,14 @@ export default {
       toLast,
       toShed,
 
-      fodderOption,
-
+      allStatistics,
       videoValue,
       videoOptions,
 
-      environmentOption,
-      eggAbnormalOption,
+      memberOption,
+      breededOption,
       productEggOption,
-      outCageOption,
+      economicOption,
     }
   },
 }
@@ -522,7 +472,7 @@ html,
       }
     }
     li.active {
-      background: url(./img/bntactive.png) no-repeat center;
+      background: url(./img/base.jpg) no-repeat center;
     }
   }
   .top_center {
@@ -609,6 +559,128 @@ html,
 }
 // 图表1
 .echarts1 {
+  margin: 4px 0;
+  padding: 0 15px;
+  .cContent {
+    padding-top: 15px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-start;
+    font-weight: 700;
+    .c1 {
+      padding-left: 15%;
+      background: url('./img/dove1.png') no-repeat;
+      background-size: 35%;
+      background-position: 0 -7px;
+    }
+    .c2 {
+      padding-left: 15%;
+      background: url('./img/shedNums.png') no-repeat;
+      background-size: 25%;
+      background-position: 12px 6px;
+    }
+    .c3 {
+      padding-left: 15%;
+      background: url('./img/dove2.png') no-repeat;
+      background-size: 20%;
+      background-position: 8px 5px;
+    }
+    .t1 {
+      color: #ee4000;
+      font-size: 18px;
+    }
+    .t2 {
+      color: #ee9a49;
+      font-size: 18px;
+    }
+    .t3 {
+      color: #eee685;
+      font-size: 18px;
+    }
+  }
+  .e1 {
+    position: absolute;
+    right: 30px;
+    bottom: 5px;
+  }
+}
+// 图表4
+.echarts4 {
+  font-weight: 700;
+  .center4 {
+    display: flex;
+    height: 100%;
+    .left4,
+    .right4 {
+      padding: 3% 0 0 6%;
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: flex-start;
+      font-weight: 700;
+    }
+    .c1 {
+      padding-left: 25%;
+      background: url('./img/xiaoshou.png') no-repeat;
+      background-size: 25%;
+      background-position: 0 0;
+    }
+    .c2 {
+      padding-left: 25%;
+      background: url('./img/qiye.png') no-repeat;
+      background-size: 31%;
+      background-position: 4px 5px;
+    }
+    .c3 {
+      padding-left: 25%;
+      background: url('./img/nonghu.png') no-repeat;
+      background-size: 20%;
+      background-position: 6px 7px;
+    }
+    .c4 {
+      padding-left: 25%;
+      background: url('./img/keji.png') no-repeat;
+      background-size: 22%;
+      background-position: 0 2px;
+    }
+    .c5 {
+      padding-left: 25%;
+      background: url('./img/pingtai.png') no-repeat;
+      background-size: 25%;
+      background-position: 3px 8px;
+    }
+    .c6 {
+      padding-left: 25%;
+      background: url('./img/laji.png') no-repeat;
+      background-size: 20%;
+      background-position: 1px 4px;
+    }
+    .t1 {
+      color: #ee4000;
+      font-size: 18px;
+    }
+    .t2 {
+      color: #ee9a49;
+      font-size: 18px;
+    }
+    .t3 {
+      color: #eee685;
+      font-size: 18px;
+    }
+  }
+}
+.echarts2,
+.echarts5,
+.echarts6,
+.centerEcharts {
+  display: flex;
+  align-items: flex-end;
+}
+
+.echarts6 {
   display: flex;
   flex-direction: column;
   .videoSelect {
@@ -622,27 +694,14 @@ html,
     }
   }
 }
-// 图表4
-.echarts4 {
+
+.echarts3 {
   display: flex;
   justify-content: center;
   align-items: center;
-  .echarts4-img {
-    margin-top: 10px;
-    height: 80%;
-    .image {
-      height: 100%;
-    }
+  img {
+    width: 80%;
   }
-}
-// 图表3、图表5
-.echarts2,
-.echarts3,
-.echarts5,
-.echarts6,
-.centerEcharts {
-  display: flex;
-  align-items: flex-end;
 }
 
 .map-echart {
@@ -650,11 +709,9 @@ html,
   height: 56%;
   width: 100%;
   align-items: center;
-  background: url('./img/light.jpg') no-repeat;
   background-size: 100%;
   background-position: 0 -130px;
   .image {
-    margin-top: 40px;
     width: 100%;
   }
 }
@@ -663,56 +720,5 @@ html,
   padding: 0 0 10px 0;
   height: 28%;
   width: 100%;
-  .centerContent {
-    width: 90%;
-    height: 90%;
-    .cContent {
-      height: 50%;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      font-weight: 700;
-      .c1 {
-        padding-left: 15%;
-        background: url('./img/dove1.png') no-repeat;
-        background-size: 35%;
-        background-position: 0 -10px;
-      }
-      .c2 {
-        padding-left: 15%;
-        background: url('./img/dove2.png') no-repeat;
-        background-size: 20%;
-        background-position: 10px 4px;
-      }
-      .c3 {
-        padding-left: 15%;
-        background: url('./img/dove1.png') no-repeat;
-        background-size: 35%;
-        background-position: 0 -10px;
-      }
-      .c4 {
-        padding-left: 15%;
-        background: url('./img/dove3.png') no-repeat;
-        background-size: 25%;
-        background-position: 5px -2px;
-      }
-      .t1 {
-        color: #ee4000;
-        font-size: 18px;
-      }
-      .t2 {
-        color: #ee9a49;
-        font-size: 18px;
-      }
-      .t3 {
-        color: #eee685;
-        font-size: 18px;
-      }
-      .t4 {
-        color: #43cd80;
-        font-size: 18px;
-      }
-    }
-  }
 }
 </style>

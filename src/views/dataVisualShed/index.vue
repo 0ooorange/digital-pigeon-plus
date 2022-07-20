@@ -652,53 +652,6 @@ html,
   .centerContent {
     width: 90%;
     height: 90%;
-    .cContent {
-      height: 50%;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      font-weight: 700;
-      .c1 {
-        padding-left: 15%;
-        background: url('./img/dove1.png') no-repeat;
-        background-size: 35%;
-        background-position: 0 -10px;
-      }
-      .c2 {
-        padding-left: 15%;
-        background: url('./img/dove2.png') no-repeat;
-        background-size: 20%;
-        background-position: 10px 4px;
-      }
-      .c3 {
-        padding-left: 15%;
-        background: url('./img/dove1.png') no-repeat;
-        background-size: 35%;
-        background-position: 0 -10px;
-      }
-      .c4 {
-        padding-left: 15%;
-        background: url('./img/dove3.png') no-repeat;
-        background-size: 25%;
-        background-position: 5px -2px;
-      }
-      .t1 {
-        color: #ee4000;
-        font-size: 18px;
-      }
-      .t2 {
-        color: #ee9a49;
-        font-size: 18px;
-      }
-      .t3 {
-        color: #eee685;
-        font-size: 18px;
-      }
-      .t4 {
-        color: #43cd80;
-        font-size: 18px;
-      }
-    }
   }
 }
 </style>

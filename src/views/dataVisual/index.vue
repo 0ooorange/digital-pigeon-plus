@@ -171,6 +171,7 @@ export default {
     const toBase = () => {
       if (currBaseName.value) {
         store.commit('setCurrBase', nextBase.value)
+        tool.session.set("CURR_BASE", nextBase.value)
         router.push({ path: '/dataVisualBase' })
       } else {
         openError()
@@ -320,7 +321,7 @@ export default {
     const saleRoomOption = {
       xAxis: {
         type: 'category',
-        data: ['2019', '2020', '2021', '2022'],
+        data: ['2019年', '2020年', '2021年', '2022年'],
       },
       yAxis: {
         type: 'value',
@@ -375,15 +376,15 @@ export default {
       dataset: {
         source: [
           ['year', '乳鸽出栏', '种鸽出栏', '乳鸽存栏', '种鸽存栏'],
-          ['2019', 47, 38, 1, 2],
-          ['2020', 51, 42, 1, 2],
-          ['2021', 47, 38, 1, 2],
-          ['2022', 49, 43, 1, 2],
+          ['2019年', 47, 38, 1, 2],
+          ['2020年', 51, 42, 1, 2],
+          ['2021年', 47, 38, 1, 2],
+          ['2022年', 49, 43, 1, 2],
         ],
       },
       xAxis: {
         type: 'category',
-        data: ['2019', '2020', '2021', '2022'],
+        data: ['2019年', '2020年', '2021年', '2022年'],
       },
       yAxis: {
         type: 'value',
@@ -401,7 +402,7 @@ export default {
       },
       xAxis: {
         type: 'category',
-        data: ['2019', '2020', '2021', '2022'],
+        data: ['2019年', '2020年', '2021年', '2022年'],
       },
       yAxis: {
         type: 'value',
