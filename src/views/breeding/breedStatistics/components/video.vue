@@ -1,16 +1,14 @@
 <template>
   <div class="video">
     <h3>监控视频区</h3>
-    <el-select style="width:100px" v-model="value" placeholder="监控1">
-      <el-option v-for="item in monitor_idlist" :key="item.id" :label="item.devicename" :value="item.id">
-      </el-option>
+    <el-select style="width:100px" v-model="videoSelect" placeholder="监控1" @change='change($event)'>
+      <el-option v-for="(item, index) in monitor_namelist" :key="index" :label="item" :value="item"></el-option>
     </el-select>
   </div>
   <div class="video2">
     <div class="contList">
       <div class="boxVideo">
-        <video class="video-js video-btn" data-setup="{}" controls :src="monitor_idlist[0]">
-        </video>
+        <video class="video-js video-btn" data-setup="{}" controls :src="monitor_id"></video>
       </div>
     </div>
   </div>
@@ -19,53 +17,33 @@
 <script setup>
 import { ref, defineProps } from 'vue'
 import { getMonitorByShedID } from '@api/breeding/breedStatistics'
-const props = defineProps({
-  shed_id: {
-    type: String,
-    require: true,
-  },
-})
+const props = defineProps({ shed_id: { type: String, require: true} })
+// 下拉框选项值
+const videoSelect = ref('')
 // 获取监控视频id
 const monitor_idlist = ref([])
-getMonitorByShedID(props.shed_id).then((res) => {
-  monitor_idlist.value = res.data.urlList
-})
+const monitor_id = ref('')
+const monitor_namelist = ref([])
+getMonitorByShedID(props.shed_id)
+  .then((res) => { monitor_idlist.value = res.data.urlList }) // 获取监控列表
+  .then(() => { monitor_id.value = monitor_idlist.value[0] }) // 获取当前监控
+  .then(() => { for (let i = 1; i <= monitor_idlist.value.length; i++) { monitor_namelist.value.push('监控' + i) } }) // 获取监控下拉框选项名
+// 选项变化
+const change = (e) => { monitor_id.value = monitor_idlist.value[parseInt(e.split('')[2])] }
 </script>
 
 <style lang="scss" scoped>
 /* 监控样式 */
 .bottomLeft {
   width: 25%;
-  .video {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  .video2 {
-    width: 100%;
-    height: 28vh;
-    .contList {
-      position: relative;
-      width: 100%;
-      height: 11vw;
-      margin: 1vw auto 0;
-      .boxVideo {
-        width: 100%;
-        height: 100%;
-        .video-js {
-          width: 100%;
-          height: 100%;
-        }
-        .video-js:hover .video-btn {
-          background: none;
-        }
-        .video-btn:hover {
-          background: none;
-        }
-        .video-btn {
-          border: none;
-          background: none;
-        }
+  .video {display: flex; flex-direction: row;justify-content: space-between;}
+  .video2 {width: 100%; height: 28vh;
+    .contList {position: relative; width: 100%; height: 11vw; margin: 1vw auto 0;
+      .boxVideo {width: 100%; height: 100%;
+        .video-js {width: 100%; height: 100%;}
+        .video-js:hover .video-btn {background: none;}
+        .video-btn:hover {background: none;}
+        .video-btn {border: none; background: none;}
       }
     }
   }

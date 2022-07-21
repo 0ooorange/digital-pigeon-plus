@@ -100,7 +100,8 @@ export default defineComponent({
     endTime = ref(endTime)
     dateVals.value = [startTime.value, endTime.value]
 
-    const shedId = store.state.baseInfo.SHED_ID
+    // const shedId = store.state.baseInfo.SHED_ID
+    const shedId = '1518124016571797507'
 
     // 改变时间
     const isComponents = ref(true)

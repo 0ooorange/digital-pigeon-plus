@@ -10,25 +10,12 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
-// import { ref, defineProps } from 'vue'
-// import { getUnCheckPigeonCage, getUnCheceEgg, getUnTakeEgg } from '@api/breeding/breedStatistics'
-// import { dateFormat } from '@/hooks/dateFormat.js'
+import { ref, defineProps } from 'vue'
+import { getUnCheckPigeonCage, getUnCheceEgg, getUnTakeEgg } from '@api/breeding/breedStatistics'
+import { dateFormat } from '@/hooks/dateFormat.js'
 
-// const props = defineProps({
-//   shed_id: {
-//     type: String,
-//     require: true,
-//   },
-//   start_time: {
-//     type: String,
-//     require: true,
-//   },
-//   end_time: {
-//     type: String,
-//     require: true,
-//   },
-// })
+const props = defineProps({shed_id: {type: String, require: true}, start_time: {type: Object, require: true}, end_time: {type: Object, require: true}})
+
 const tableData = ref([
   {
     id: 1,
@@ -87,24 +74,24 @@ const tableData = ref([
     nochildchecked: '✔️',
   },
 ])
-// // 未查仔鸽笼
-// getUnCheckPigeonCage(props.shed_id, dateFormat(props.start_time), dateFormat(props.end_time)).then(
-//   (res) => {
-//     console.log('未查仔鸽笼', res)
-//   }
-// )
-// // 未查蛋鸽笼
-// getUnCheceEgg(props.shed_id, dateFormat(props.start_time), dateFormat(props.end_time)).then(
-//   (res) => {
-//     console.log('未查蛋鸽笼', res)
-//   }
-// )
-// // 未抽蛋鸽笼
-// getUnTakeEgg(props.shed_id, dateFormat(props.start_time), dateFormat(props.end_time)).then(
-//   (res) => {
-//     console.log('未抽蛋鸽笼', res)
-//   }
-// )
+// 未查仔鸽笼
+getUnCheckPigeonCage(props.shed_id, dateFormat(props.start_time), dateFormat(props.end_time)).then(
+  (res) => {
+    console.log('未查仔鸽笼', res)
+  }
+)
+// 未查蛋鸽笼
+getUnCheceEgg(props.shed_id, dateFormat(props.start_time), dateFormat(props.end_time)).then(
+  (res) => {
+    console.log('未查蛋鸽笼', res)
+  }
+)
+// 未抽蛋鸽笼
+getUnTakeEgg(props.shed_id, dateFormat(props.start_time), dateFormat(props.end_time)).then(
+  (res) => {
+    console.log('未抽蛋鸽笼', res)
+  }
+)
 </script>
 <style scoped>
 .pagination {
