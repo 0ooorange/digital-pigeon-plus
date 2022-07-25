@@ -11,90 +11,28 @@
 </template>
 <script setup>
 import { ref, defineProps } from 'vue'
-import { getUnCheckPigeonCage, getUnCheceEgg, getUnTakeEgg } from '@api/breeding/breedStatistics'
+import { getUnCheckPigeonCage, getUnCheckEgg, getUnTakeEgg } from '@api/breeding/breedStatistics'
 import { dateFormat } from '@/hooks/dateFormat.js'
 
 const props = defineProps({shed_id: {type: String, require: true}, start_time: {type: Object, require: true}, end_time: {type: Object, require: true}})
 
-const tableData = ref([
-  {
-    id: 1,
-    pigeonnumber: 'A02',
-    boardnumber: '5',
-    noeggspumped: '✔️',
-    noeggschecked: '✔️',
-    nochildchecked: '',
-  },
-  {
-    id: 1,
-    pigeonnumber: 'A02',
-    boardnumber: '5',
-    noeggspumped: '',
-    noeggschecked: '✔️',
-    nochildchecked: '✔️',
-  },
-  {
-    id: 1,
-    pigeonnumber: 'A02',
-    boardnumber: '5',
-    noeggspumped: '',
-    noeggschecked: '✔️',
-    nochildchecked: '✔️',
-  },
-  {
-    id: 1,
-    pigeonnumber: 'A02',
-    boardnumber: '5',
-    noeggspumped: '✔️',
-    noeggschecked: '',
-    nochildchecked: '✔️',
-  },
-  {
-    id: 1,
-    pigeonnumber: 'A02',
-    boardnumber: '5',
-    noeggspumped: '',
-    noeggschecked: '',
-    nochildchecked: '✔️',
-  },
-  {
-    id: 1,
-    pigeonnumber: 'A02',
-    boardnumber: '5',
-    noeggspumped: '',
-    noeggschecked: '',
-    nochildchecked: '✔️',
-  },
-  {
-    id: 1,
-    pigeonnumber: 'A02',
-    boardnumber: '5',
-    noeggspumped: '',
-    noeggschecked: '',
-    nochildchecked: '✔️',
-  },
-])
+const tableData = ref([])
 // 未查仔鸽笼
-getUnCheckPigeonCage(props.shed_id, dateFormat(props.start_time), dateFormat(props.end_time)).then(
-  (res) => {
-    console.log('未查仔鸽笼', res)
-  }
-)
+getUnCheckPigeonCage(props.shed_id, dateFormat(props.start_time), dateFormat(props.end_time)).then(res => {
+  res.data.data.forEach(item => {
+    tableData.value.push({id: item.id, pigeonnumber: item.codes, boardnumber: item.panelCode, noeggspumped: '', noeggschecked: '', nochildchecked: '✔️'})
+  })
+})
 // 未查蛋鸽笼
-getUnCheceEgg(props.shed_id, dateFormat(props.start_time), dateFormat(props.end_time)).then(
-  (res) => {
-    console.log('未查蛋鸽笼', res)
-  }
-)
+getUnCheckEgg(props.shed_id, dateFormat(props.start_time), dateFormat(props.end_time)).then(res => {
+  res.data.data.forEach(item => {
+    tableData.value.push({id: item.id, pigeonnumber: item.codes, boardnumber: item.panelCode, noeggspumped: '', noeggschecked: '✔️', nochildchecked: ''})
+  })
+})
 // 未抽蛋鸽笼
-getUnTakeEgg(props.shed_id, dateFormat(props.start_time), dateFormat(props.end_time)).then(
-  (res) => {
-    console.log('未抽蛋鸽笼', res)
-  }
-)
+getUnTakeEgg(props.shed_id, dateFormat(props.start_time), dateFormat(props.end_time)).then(res => {
+  res.data.data.forEach(item => {
+    tableData.value.push({id: item.id, pigeonnumber: item.codes, boardnumber: item.panelCode, noeggspumped: '✔️', noeggschecked: '', nochildchecked: ''})
+  })
+})
 </script>
-<style scoped>
-.pagination {
-  margin-left: 60px;
-}
-</style>

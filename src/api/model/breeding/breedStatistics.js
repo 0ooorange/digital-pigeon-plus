@@ -34,14 +34,13 @@ export const getMonitorByShedID = (data) => http.post(`/digitalPigeon/aliyun/vid
 export const getUnCheckPigeonCage = (shed_id, start_time, end_time) => http.get(`${baseUrl}/getUnCheckPigeonCage/${shed_id}/${start_time}/${end_time}`)
 
 // 当日预警信息———根据鸽棚ID和起止时间查询未查蛋鸽笼
-export const getUnCheceEgg = (shed_id, start_time, end_time) => http.get(`${baseUrl}/getUnCheceEgg/${shed_id}/${start_time}/${end_time}`)
+export const getUnCheckEgg = (shed_id, start_time, end_time) => http.get(`${baseUrl}/getUnCheckEgg/${shed_id}/${start_time}/${end_time}`)
 
 // 当日预警信息———根据鸽棚ID和起止时间查询未抽蛋鸽笼
 export const getUnTakeEgg = (shed_id, start_time, end_time) => http.get(`${baseUrl}/getUnTakeEgg/${shed_id}/${start_time}/${end_time}`)
 
 // 环境监测———根据鸽棚ID、传感数据类型和起止时间查询传感数据
 export const getSensorByIDTypeTime = (shed_id, type, start_time, end_time) => http.post(`/digitalPigeon/environment/enviroment/sensordevice/getSensorByIDTypeTime?shed_id=${shed_id}&type=${type}&start_time=${start_time}&end_time=${end_time}`)
-
 
 // 根据鸽棚ID和起止时间查询环境预警信息
 export const getWarningByID = (shed_id, start_time, end_time) => http.post(`/digitalPigeon/environment/enviroment/warning/getWarningByID?shed_id=${shed_id}&start_time=${start_time}&end_time=${end_time}`)
