@@ -5,7 +5,6 @@ import tool from '@/utils/tool';
 import router from '@/router';
 
 axios.defaults.baseURL = 'http://106.12.160.172:8000'
-
 axios.defaults.timeout = sysConfig.TIMEOUT
 
 // HTTP request 拦截器
