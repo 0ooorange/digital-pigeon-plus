@@ -1,9 +1,9 @@
-// 饲料管理
+// 饲料复称
 import http from "@/utils/request"
 import qs from 'qs'
 export default {
-  getfeed:{
-    url:`digitalPigeon/breed/informationinput/getaddfeed`,
+  getreweighfeed:{
+    url:`digitalPigeon/breed/informationinput/getreweighfeed`,
     name:'获取饲料记录',
     post: async function (data) {
 			console.log("url", this.url);
@@ -18,42 +18,30 @@ export default {
 			return await http.post(this.url, params);
 		},
   },
-  addfeed:{
-    url:`digitalPigeon/breed/informationinput/addfeed`,
+  addreweighfeed:{
+    url:`digitalPigeon/breed/informationinput/addreweighfeed`,
     name:'添加饲料记录',
     post: async function (data) {
 			console.log("url", this.url);
-      console.log(data.brand);
-      let n=data.brand.length;
-      let index=0;
-      while(n){
-        let params={
-          brand:data.brand[index],
-          num:data.num[index],
-          shedId:data.shedId,
-          size:data.size[index],
-          weight:data.weight[index],
-          type:1,
-          unit:"斤",
-        }
-        n--;
-        if(n===0)
-        return await http.post(this.url, params);
-        await http.post(this.url, params);
-        index++;
+      let params={
+        shedId:data.shedId,
+        weight:data.weight,
+        type:3,
+        unit:"斤",
       }
+			return await http.post(this.url, params);
 		},
   },
-  modifyfeed:{
-    url:`digitalPigeon/breed/informationinput/modifyfeed`,
+  modifyreweighfeed:{
+    url:`digitalPigeon/breed/informationinput/modifyreweighfeed`,
     name:'修改饲料记录',
     post: async function (data) {
 			console.log("url", this.url);
 			return await http.post(this.url, data);
 		},
   },
-  deletefeed:{
-    url:`digitalPigeon/breed/informationinput/deletefeed`,
+  deletereweighfeed:{
+    url:`digitalPigeon/breed/informationinput/deletereweighfeed`,
     name:'删除饲料记录',
     post: async function (id) {
 			console.log("url", this.url);

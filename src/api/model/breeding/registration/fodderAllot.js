@@ -34,16 +34,16 @@ export default {
           shedId:data.shedId,
           size:data.size[index],
           weight:data.weight[index],
-          type:2,
+          origin:data.origin,
+          type:0,
           unit:"斤",
-          origin:"金绿货仓"
         }
-        await http.post(this.url, params)
-        console.log(index)
-        index++;
         n--;
+        if(n===0)
+        return await http.post(this.url, params);
+        await http.post(this.url, params);
+        index++;
 		}
-    return;
   }},
   modifyallocatefeed:{
     url:`digitalPigeon/breed/informationinput/modifyallocatefeed`,
