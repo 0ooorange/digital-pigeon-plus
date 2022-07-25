@@ -1,70 +1,72 @@
 <template>
-    <div class="biaoge" style="width:380px; height:320px" id="chartmain_bing"></div>
+  <ScEcharts :option="option" height="100%" width="100%"></ScEcharts>
 </template>
-<script>
-import * as echarts from 'echarts';
+<script setup>
+import ScEcharts from '@/components/scEcharts'
+import { ref, defineProps, defineExpose } from 'vue'
+import { getFeedShedByIDTime } from '@api/breeding/breedStatistics'
+import { dateFormat } from '@/hooks/dateFormat.js'
 
-export default {
-      data(){
-          return {
-             feedShedlist:[]
-          }
+const props = defineProps({
+  shed_id: {
+    type: String,
+    require: true,
+  },
+  start_time: {
+    type: String,
+    require: true,
+  },
+  end_time: {
+    type: String,
+    require: true,
+  },
+})
+const option = ref({
+  tooltip: {
+    trigger: 'item',
+  },
+  legend: {
+    bottom: 10,
+    left: 'center',
+    data: [],
+  },
+  series: [
+    {
+      name: '单位：斤',
+      type: 'pie',
+      radius: '60%',
+      label: {
+        show: false,
       },
-      methods: {
-          initEcharts(){
-                     const option={
-               tooltip: {
-                    trigger: 'item',
-                    formatter: '{a} <br/>{b} : {c} ({d}%)'
-                },
-               legend: {
-                    bottom: 10,
-                    left: 'center',
-                    data: ['A牌饲料', 'B牌饲料', 'D牌饲料', 'C牌饲料']
-                },
-                series: [
-                    {
-                        name: '单位：kg',
-                        type: 'pie',
-                        radius: '65%',
-                        center: ['50%', '50%'],
-                        selectedMode: 'single',
-                        data: [
-                       
+      data: [
         { value: 735, name: 'C牌饲料' },
         { value: 510, name: 'D牌饲料' },
-        { value: 434, name: 'B牌饲料' },
-        { value: 235, name: 'A牌饲料' }
       ],
-      emphasis: {
-        itemStyle: {
-          shadowBlur: 10,
-          shadowOffsetX: 0,
-          shadowColor: 'rgba(0, 0, 0, 0.5)'
-        }
-      }
-    }
-  ]
-}
-      const myChart = echarts.init(document.getElementById("chartmain_bing"));
-      myChart.setOption(option);
-          },
-          async  getFeedShedByIDTime(){
-            const{data:res}=await this.$API.breedStatistics.getFeedShedByIDTime.get('1518124016571797507','2022-05-22 00:00:00','2022-05-30 23:59:59');
-            this.feedShedlist=res.data;
-            console.log("获取养殖饲料：",this.feedShedlist);
-        }
-      },
-      mounted() {
-        this.initEcharts();
-        this.getFeedShedByIDTime()
     },
+  ],
+})
+
+const getData = (shed_id, start_time, end_time) => {
+  console.log(15632468465)
+  getFeedShedByIDTime(shed_id, start_time, end_time).then((res) => {
+    option.value.legend.data = []
+    option.value.series[0].data = []
+    res.data.data.forEach((item) => {
+      option.value.series[0].data.push({
+        name: item.brand,
+        value: item.weight,
+      })
+      option.value.legend.data.push(item.brand)
+    })
+  })
 }
+getData(props.shed_id, dateFormat(props.start_time), dateFormat(props.end_time))
+
+// const test = function() {
+//   console.log('test test test')
+// }
+
+defineExpose({
+  getData,
+})
 </script>
-<style scoped>
-.biaoge{
-	position:absolute;
-  top:-10px;
-  left: 2px;
-    }
-</style>
