@@ -364,9 +364,9 @@ import { ElMessage } from "element-plus";
 export default {
     name: "allStateManage", // 鸽棚总览
     created() {
-        this.currShed = "1518124016571797507";
-        this.getAllCage();
-        console.log("当前鸽棚", this.currShed);
+        // this.currShed = this.$store.state.baseInfo.SHED_ID;
+        
+        // console.log("当前鸽棚", this.currShed);
 
         //当前日期
         const nowTime = new Date();
@@ -383,12 +383,13 @@ export default {
         console.log("半个月前", this.formatDate(this.passDay));
         this.passDay = this.formatDate(this.passDay);
         this.today = this.formatDate(this.today);
+        this.getAllCage();
     },
     data() {
         return {
             today: "",
             passDay: "",
-            currShed: "",
+            // currShed: "",
             currentBox: 0,
             currentStatus: 0,
             currentLever: 0,
@@ -592,6 +593,12 @@ export default {
             ],
         };
     },
+    computed: {
+       currShed() {
+        console.log(this.$store.state.baseInfo.SHED_ID,'触发这里')
+        return this.$store.state.baseInfo.SHED_ID
+       } 
+    },
     methods: {
         //格式化时间
         formatDate(date) {
@@ -646,7 +653,8 @@ export default {
         async getAllCage() {
             let data = {
                 position: this.lever[this.currentLever].value,
-                shedId: this.currShed,
+                // shedId: this.currShed,
+                shedId: "1518124016571797507"
             };
             console.log("获取所有鸽笼参数", data);
             const findCageByState =
