@@ -607,7 +607,7 @@ export default defineComponent({
                 feedBrandNum.data.data.forEach((item) => {
                     let temp = {
                         cardText: item.brand,
-                        cardNumber: item.num + item.unit,
+                        cardNumber: item.weight + item.unit,
                     };
                     // return temp;
                     cardData[current + 1] = temp;
