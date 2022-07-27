@@ -9,6 +9,7 @@
         :datePkDefalt="datePk"
         @outTable="outTable"
         @printTable="printTable"
+        @panelChange="panelChange"
         :showSearch="false"
       />
     </div>
@@ -92,10 +93,14 @@
         :rules="formRules"
       >
         <el-form-item label="时间:" prop="deliverTime">
-          <el-input
+          <el-date-picker
             v-model="addInfo.deliverTime"
+            :default-value="addInfo.deliverTime"
+            type="datetime"
+            format="YYYY-MM-DD HH:mm:ss"
+            unlink-panels
             placeholder="请输入时间"
-          ></el-input>
+          />
         </el-form-item>
         <el-form-item label="种类:" prop="category">
           <el-input
@@ -176,14 +181,15 @@
 </template>
 
 <script>
-import { defineComponent, ref, getCurrentInstance } from "vue";
+import { defineComponent, ref, getCurrentInstance} from "vue";
+import { useStore } from "vuex";
 export default defineComponent({
   name: "outCageRegistration", // 出栏登记
   components: {},
   setup() {
     const { proxy } = getCurrentInstance();
-    const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;
-    
+    const store = useStore();
+    const currShed = store.state.baseInfo.SHED_ID;
     // 时间选择器
     const shortcuts = [
       {
@@ -240,7 +246,7 @@ export default defineComponent({
     let start = new Date();
     start.setTime(start.getTime() - 3600 * 1000 * 24 * 183); // 半年
     let dateDefault = [start, end];
-    let datePk = [start, end];
+    let datePk = ref([start, end]);
     const formRules = ref({
       deliverTime: [{ message: "请输入时间", trigger: "blur", required: true }],
       shedId: [{ message: "请输入鸽棚", trigger: "blur", required: true }],
@@ -261,7 +267,7 @@ export default defineComponent({
     ]);
     const addInfo = ref({
       deliverTime: formatDate(end),
-      shedId: currShed.id,
+      shedId: currShed,
       category: "",
       num: "",
       destination: "",
@@ -281,18 +287,27 @@ export default defineComponent({
     const printTable = () => {
       console.log("点击打印");
     };
+    const panelChange = (date) => {
+      datePk.value = date;
+      params.value = {
+        startTime: formatDate(datePk.value[0]),
+        endTime: formatDate(datePk.value[1]),
+        shedId: currShed,
+      };
+    };
     //把这一行的信息传入对话框
     const showOutcagedialog = (item) => {
       Outcagedialog.value = true;
-      editInfo.value = Object.assign(item,{shedId:currShed.id});
+      editInfo.value = Object.assign(item, { shedId: currShed });
     };
     const api = proxy.$API.regOutCage.delivermanagement;
-    const params = {
-      startTime: formatDate(datePk[0]),
-      endTime: formatDate(datePk[1]),
-      shedId:currShed.id,
-    };
+    let params = ref({
+      startTime: formatDate(datePk.value[0]),
+      endTime: formatDate(datePk.value[1]),
+      shedId: currShed,
+    });
     const addOutcage = () => {
+      addInfo.value.deliverTime = formatDate(addInfo.value.deliverTime);
       proxy.$refs.addRef.validate(async (valid) => {
         if (!valid) {
           return;
@@ -347,6 +362,7 @@ export default defineComponent({
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
+          customClass: "del-model",
         })
         .catch((err) => err);
       if (confirmResult !== "confirm") {
@@ -371,17 +387,19 @@ export default defineComponent({
       proxy.$refs.addRef.resetFields();
     };
     const dataChange = (res) => {
-      if(parseInt(res.data.total)>0)
-      proxy.$refs.table.total = parseInt(res.data.total);
+      if (parseInt(res.data.total) > 0)
+        proxy.$refs.table.total = parseInt(res.data.total);
     };
     const editDialogClosed = () => {};
     return {
+      store,
       tableData,
       addInfo,
       addOutcagedialog,
       Outcagedialog,
       editInfo,
       shortcuts,
+      panelChange,
       outTable,
       printTable,
       dateDefault,
@@ -402,26 +420,25 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss">
 .container {
   margin: 0 20px;
-}
-.top {
-  display: flex;
 }
 .tag {
   display: flex;
   padding: 0 15px;
 }
-.form {
-  width: 80%;
-}
-.submit {
-  align-self: flex-end;
-  margin-bottom: 10px;
-}
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
+}
+.del-model {
+  .el-message-box__btns {
+    .el-button:nth-child(2) {
+      margin-right: 10px;
+      background-color: #2d8cf0;
+      border-color: #2d8cf0;
+    }
+  }
 }
 </style>

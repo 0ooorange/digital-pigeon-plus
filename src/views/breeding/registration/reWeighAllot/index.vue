@@ -6,8 +6,10 @@
       >
       <table-search
         :dateDefault="dateDefault"
+        :datePkDefalt="datePk"
         @outTable="outTable"
         @printTable="printTable"
+        @panelChange="panelChange"
         :showSearch="false"
       />
     </div>
@@ -118,13 +120,15 @@
 
 <script>
 import { defineComponent, ref, getCurrentInstance } from "vue";
+import { useStore } from "vuex";
 export default defineComponent({
   name: "reWeighAllot", // 复称调拨
   components: {
   },
   setup() {
     const { proxy } = getCurrentInstance();
-    const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;
+    const store = useStore();
+    const currShed = store.state.baseInfo.SHED_ID;
     // 时间选择器
     const shortcuts = [
       {
@@ -189,7 +193,7 @@ export default defineComponent({
       },
     ]);
     const addInfo = ref({
-      shedId: currShed.id,
+      shedId: currShed,
       weight: "",
     });
     const editInfo = ref({
@@ -207,17 +211,25 @@ export default defineComponent({
     const printTable = () => {
       console.log("点击打印");
     };
+    const panelChange = (date) => {
+      datePk.value = date;
+      params.value = {
+        startTime: formatDate(datePk.value[0]),
+        endTime: formatDate(datePk.value[1]),
+        shedId: currShed,
+      };
+    };
     //把这一行的信息传入对话框
     const showReWeightdialog = (item) => {
       ReWeightdialog.value = true;
-      editInfo.value = Object.assign(item,{shedId:currShed.id})
+      editInfo.value = Object.assign(item,{shedId:currShed})
     };
     const api = proxy.$API.reWeighAllot.getreweighfeed;
-    const params = {
+    let params = ref({
       startTime: formatDate(datePk[0]),
       endTime: formatDate(datePk[1]),
-      shedId: currShed.id,
-    };
+      shedId: currShed,
+    });
     const addReWeight = () => {
       proxy.$refs.addRef.validate(async (valid) => {
         if (!valid) {
@@ -271,6 +283,7 @@ export default defineComponent({
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
+          customClass: "del-model",
         })
         .catch((err) => err);
       if (confirmResult !== "confirm") {
@@ -301,12 +314,14 @@ export default defineComponent({
       proxy.$refs.table.total = parseInt(res.data.total);
     };
     return {
+      store,
       tableData,
       addInfo,
       addReWeightdialog,
       ReWeightdialog,
       editInfo,
       shortcuts,
+      panelChange,
       outTable,
       printTable,
       dataChange,
@@ -327,26 +342,25 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss">
 .container {
   margin: 0 20px;
-}
-.top {
-  display: flex;
 }
 .tag {
   display: flex;
   padding: 0 15px;
 }
-.form {
-  width: 80%;
-}
-.submit {
-  align-self: flex-end;
-  margin-bottom: 10px;
-}
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
+}
+.del-model {
+  .el-message-box__btns {
+    .el-button:nth-child(2) {
+      margin-right: 10px;
+      background-color: #2d8cf0;
+      border-color: #2d8cf0;
+    }
+  }
 }
 </style>

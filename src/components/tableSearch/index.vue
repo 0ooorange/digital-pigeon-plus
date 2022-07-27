@@ -78,6 +78,10 @@ export default defineComponent({
     // 时间选择器
     const dateValue = ref([''])
     dateValue.value = reactive(props.datePkDefalt)
+    const panelChange = () =>{
+      let date = dateValue.value
+      emit('panelChange',date)
+    }
     const shortcuts = [
       {
         text: '近一周',
@@ -120,6 +124,7 @@ export default defineComponent({
           end-placeholder="结束时间"
           shortcuts={shortcuts}
           style={{ width: '250px' }}
+          panel-change={panelChange()}
         />
       </div>
     )
