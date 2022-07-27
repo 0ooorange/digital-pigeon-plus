@@ -124,13 +124,14 @@ export default defineComponent({
       </div>
     )
 
-    let selectType = ref([''])
-    let inputValue = ref('') //搜索框的值
+    const selectType = ref([''])
+    const inputValue = ref('') //搜索框的值
     const searchClick = () => {
       let params = {
         dateValue: dateValue.value,
         selectType: selectType.value,//查询类型
-        inputValue: inputValue.value,
+        inputValue: inputValue.value
+
       }
       console.log(params,'测试')
       emit('searchClick',params)
@@ -154,7 +155,7 @@ export default defineComponent({
               <span>
                 {isShowSearchType.value ? (
                   <el-cascader
-                    v-model={selectType.value}
+                    v-model={selectType}
                     options={props.searchTypes}
                     placeholder="查询类型"
                     style={{ width: '150px' }}

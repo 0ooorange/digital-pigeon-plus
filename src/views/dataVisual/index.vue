@@ -8,7 +8,7 @@
           <li><a href="javascript:;">加工</a></li>
         </ul>
       </div>
-      <h1 class="top_center">数字鸽业云服务平台</h1>
+      <h1 class="top_center">广东省数字鸽业云服务平台</h1>
       <div class="top_right">
         <ul>
           <li>
@@ -20,140 +20,120 @@
 
     <div class="content">
       <div class="left">
-        <!-- <div class="pl25 amiddboxttop baseInfoCss">
-          <div>养殖基础信息</div>
-        </div> -->
-        <div class="productEggEcharts">
-          <ScEcharts class="productEggEcharts" :option="productEggOption"></ScEcharts>
+        <div class="echarts1 box-background">
+          <div class="title">广东总经济产值、养殖人员、从业人员</div>
+          <ul class="echart1_content">
+            <li class="text1">
+              <span>总经济产值(亿)：</span><span class="li1">2340</span>
+            </li>
+            <li class="text1">
+              <span>养殖企业：</span><span class="li2">105</span>
+            </li>
+            <li class="text1">
+              <span>从业人员：</span><span class="li3">3043</span>
+            </li>
+          </ul>
+          <ScEcharts class="e1" :option="allStatistics" height="80%" width="70%"></ScEcharts>
         </div>
-        <div></div>
-        <div></div>
+        <div class="echarts2 box-background">
+          <div class="title">广东销售额走势（千万元）</div>
+          <ScEcharts :option="saleRoomOption" height="100%" width="100%"></ScEcharts>
+        </div>
+        <div class="echarts3 box-background">
+          <div class="title">广东价格走势（元/只）</div>
+          <ScEcharts :option="priceOption" height="90%" width="100%"></ScEcharts>
+        </div>
       </div>
-      <div ref="mapEcharts" class="map-echart"></div>
-      <div class="right">
-        <div class="">
-          <div></div>
+      <div class="center">
+        <div ref="mapEcharts" class="map-echart"></div>
+        <div class="box-background centerEcharts">
+          <div class="title">广东养殖基础信息</div>
+          <div class="centerContent">
+            <div class="cContent">
+              <span class="c1">
+                <div>乳鸽出栏数（千万）</div>
+                <div class="t1">68420</div>
+              </span>
+              <span class="c2">
+                <div>种鸽出栏数（千万）</div>
+                <div class="t2">4082</div>
+              </span>
+            </div>
+            <div class="cContent">
+              <span class="c3">
+                <div>活鸽出口数（吨）</div>
+                <div class="t3">4082</div>
+              </span>
+              <span class="c4">
+                <div>冰鲜鸽出口数（吨）</div>
+                <div class="t4">4208</div>
+              </span>
+            </div>
+          </div>
         </div>
-        <div></div>
-        <div></div>
-        <div></div>
+      </div>
+      <div class="right">
+        <div class="echarts4 box-background">
+          <div class="title">广东知名品牌</div>
+          <div class="echarts4-img">
+            <img class="image" src="./img/variety1.jpg" alt="error">
+          </div>
+        </div>
+        <div class="echarts5 box-background">
+          <div class="title">广东种鸽、乳鸽存(出)栏量（万）</div>
+          <ScEcharts class="" :option="outCageOption" height="90%" width="100%"></ScEcharts>
+        </div>
+        <div class="echarts6 box-background">
+          <div class="title">广东历年养殖规模（万）</div>
+          <ScEcharts class="" :option="breededOption" height="90%" width="100%"></ScEcharts>
+        </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import ScEcharts from '@/components/scEcharts'
-import SlideTable from './components/slideTable'
-import { ref, getCurrentInstance, reactive } from 'vue'
 import GuangDongData from './GuangDong.json'
 
 import * as echarts from 'echarts'
+import ScEcharts from '@/components/scEcharts'
+
+import { ref, nextTick, reactive } from 'vue'
+
+import tool from '@/utils/tool'
+import router from '@/router'
+import { getBaseAndShed } from '@api/bases/layout'
 
 export default {
   name: 'dataVisual',
   components: {
     ScEcharts,
-    SlideTable,
   },
   setup() {
-    // 右上角
-    const { proxy } = getCurrentInstance()
-    const currOperator = ref('')
-    const bases = ref([])
-    const dovecotes = ref([])
-    const currBase = ref({})
-    const currShed = ref({})
-    const currInfo = ref({})
-    const baseInfo = proxy.$TOOL.data.get('BASE_INFO')
-    bases.value = baseInfo.base
-    dovecotes.value = baseInfo.shed
-    currInfo.value = proxy.$TOOL.data.get('CURR_INFO')
-    if (currInfo.value) {
-      currBase.value = currInfo.value.CURR_BASE
-      currShed.value = currInfo.value.CURR_SHED
-      currOperator.value = currInfo.value.CHARGE_NAME
-    } else {
-      currBase.value = bases.value[0]
-      currShed.value = dovecotes.value[0]
-      currOperator.value = baseInfo.chargeName
-    }
-    // 切换基地
-    const currBaseChange = async function () {
-      const { data: changeBaseRes } = await this.$API.layout.changeBase.post(currBase.value.id)
-      const { data: changeShedRes } = await this.$API.layout.getChargeName.post(
-        currShed.value.chargeId
-      )
-      dovecotes.value = changeBaseRes.shed
-      currOperator.value = changeShedRes.chargeName
-      currInfo.value = ref({
-        CURR_BASE: currBase.value,
-        CURR_SHED: currShed.value,
-        CHARGE_NAME: currOperator.value,
-      })
-      this.$TOOL.data.set('CURR_INFO', currInfo.value)
-      // changeBaseRes.
-    }
-    // 切换鸽棚
-    const currShedChange = async function (currShedName) {
-      var { data: changeShedRes } = await this.$API.layout.getChargeName.post(
-        currShed.value.chargeId
-      )
-      currOperator.value = changeShedRes.chargeName
-      for (var i = 0; i < dovecotes.value.length; i++) {
-        for (var key in dovecotes.value[i]) {
-          if (key === currShedName) currShed.value = dovecotes.value[i]
-        }
+    // 基地和棚
+    let baseInfo = tool.data.get('BASE_INFO')
+    getBaseAndShed(baseInfo.id).then((res) => {
+      console.log('res', res)
+      let currInfo = ref(tool.data.get('CURR_INFO'))
+      let currBase = ref({})
+      let currShed = ref({})
+      let currOperator = ref('')
+      if (currInfo.value) {
+        currBase.value = currInfo.value.CURR_BASE
+        currShed.value = currInfo.value.CURR_SHED
+        currOperator.value = currInfo.value.CHARGE_NAME
+      } else {
+        currBase.value = res.data.baseList[0]
+        currShed.value = res.data.shedList[0]
+        currOperator.value = res.data.userList[0].name
       }
       currInfo.value = {
         CURR_BASE: currBase.value,
         CURR_SHED: currShed.value,
         CHARGE_NAME: currOperator.value,
       }
-      this.$TOOL.data.set('CURR_INFO', currInfo.value)
-    }
-    // 时间选择器
-    const dateValue = ref([''])
-    dateValue.value = reactive({
-      text: '近一个月',
-      value: () => {
-        const end = new Date()
-        const start = new Date()
-        start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-        return [start, end]
-      },
+      tool.data.set('CURR_INFO', currInfo.value)
     })
-    const shortcuts = [
-      {
-        text: '近一周',
-        value: () => {
-          const end = new Date()
-          const start = new Date()
-          start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-          return [start, end]
-        },
-      },
-      {
-        text: '近一个月',
-        value: () => {
-          const end = new Date()
-          const start = new Date()
-          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-          return [start, end]
-        },
-      },
-      {
-        text: '近3个月',
-        value: () => {
-          const end = new Date()
-          const start = new Date()
-          start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-          return [start, end]
-        },
-      },
-    ]
-    const videoUrl = ref('')
 
     // 地图
     let timer = null
@@ -198,14 +178,15 @@ export default {
     //  const beforeDestroy = () => {
     //  clearTimer()
     //  }
+    const mapEcharts = ref(null)
     const initMapEcharts = () => {
       // 获取地图数据
       // 将下载后的json文件放置/public目录下
       // 使用数据注册地图
       echarts.registerMap('GuangDong', GuangDongData)
-      proxy.$nextTick(() => {
+      nextTick(() => {
         // 初始化地图
-        map = echarts.init(proxy.$refs['mapEcharts'])
+        map = echarts.init(mapEcharts.value)
         // 设置基础配置项
         const option = {
           // 悬浮窗
@@ -253,79 +234,167 @@ export default {
         map.on('mouseout', { series: 0 }, function () {
           setTimer()
         })
+        map.on('click', function (e) {
+          if (e.name === '梅州市') {
+            // 在此处跳转至基地可视化页面
+            console.log('梅州市')
+            router.push({
+              path: '/dataVisualShed',
+            })
+          }
+        })
       })
     }
     initMapEcharts()
 
-    const productEggOption = {
+    // echarts1
+    const allStatistics = {
+      title: {
+        text: '销售额',
+        left: 'center',
+        textStyle: {
+          color: 'white',
+          fontWeight: 400,
+          fontSize: 14,
+        },
+      },
+      tooltip: {
+        trigger: 'item',
+      },
+      legend: {
+        orient: 'vertical',
+        left: 'right',
+      },
+      series: [
+        {
+          name: '销售额',
+          type: 'pie',
+          radius: '70%',
+          label: {
+            show: false,
+          },
+          data: [
+            { value: 580, name: '乳鸽' },
+            { value: 300, name: '种鸽' },
+            { value: 80, name: '鸽蛋' },
+            { value: 40, name: '其他' },
+          ],
+        },
+      ],
+    }
+
+    // echarts2
+    const saleRoomOption = {
+      xAxis: {
+        type: 'category',
+        data: ['2019', '2020', '2021', '2022'],
+      },
+      yAxis: {
+        type: 'value',
+      },
+      series: [
+        {
+          data: [880, 900, 1280, 1360],
+          type: 'line',
+        },
+      ],
+    }
+
+    // echarts3
+    const priceOption = {
       tooltip: {
         trigger: 'axis',
       },
-      xAxis: {
-        boundaryGap: false,
-        type: 'category',
-        data: (function () {
-          // var now = new Date()
-          var nowres = 30
-          var res = []
-          res.unshift(nowres)
-          // var len = 30
-          while (nowres >= 0) {
-            // res.unshift(now.toLocaleTimeString().replace(/^\D*/, ''))
-            nowres -= 5
-            if (nowres <= 0) break
-            res.unshift(nowres)
-          }
-          res.unshift(1)
-          return res
-        })(),
+      legend: {
+        data: ['乳鸽', '老鸽', '鸽蛋'],
       },
-      yAxis: [
-        {
-          type: 'value',
-          name: '产蛋数',
-          splitLine: {
-            show: false,
-          },
-        },
-      ],
+      xAxis: {
+        type: 'category',
+        data: ['7月', '8月', '9月', '10月', '11月'],
+      },
+      yAxis: {
+        type: 'value',
+      },
       series: [
         {
-          name: '产蛋数',
+          name: '乳鸽',
           type: 'line',
-          symbol: 'none',
-          lineStyle: {
-            width: 1,
-            color: '#409EFF',
-          },
-          areaStyle: {
-            opacity: 0.1,
-            color: '#79bbff',
-          },
-          data: (function () {
-            var res = []
-            var len = 30
-            while (len--) {
-              res.push(Math.round(Math.random() * 250))
-            }
-            return res
-          })(),
+          data: [15, 14, 15, 13, 15],
+        },
+        {
+          name: '老鸽',
+          type: 'line',
+          data: [12, 12, 13, 14, 14],
+        },
+        {
+          name: '鸽蛋',
+          type: 'line',
+          data: [3, 3, 3, 3, 3],
+        },
+      ],
+    }
+
+    // echarts5
+    const outCageOption = {
+      legend: {
+        data: ['乳鸽出栏', '种鸽出栏', '乳鸽存栏', '种鸽存栏'],
+      },
+      dataset: {
+        source: [
+          ['year', '乳鸽出栏', '种鸽出栏', '乳鸽存栏', '种鸽存栏'],
+          ['2019', 47, 38, 1, 2],
+          ['2020', 51, 42, 1, 2],
+          ['2021', 47, 38, 1, 2],
+          ['2022', 49, 43, 1, 2],
+        ],
+      },
+      xAxis: {
+        type: 'category',
+        data: ['2019', '2020', '2021', '2022'],
+      },
+      yAxis: {
+        type: 'value',
+      },
+      series: [{ type: 'bar' }, { type: 'bar' }, { type: 'bar' }, { type: 'bar' }],
+    }
+
+    // echarts6
+    const breededOption = {
+      tooltip: {
+        trigger: 'axis',
+      },
+      legend: {
+        data: ['种鸽', '乳鸽'],
+      },
+      xAxis: {
+        type: 'category',
+        data: ['2019', '2020', '2021', '2022'],
+      },
+      yAxis: {
+        type: 'value',
+      },
+      series: [
+        {
+          name: '种鸽',
+          type: 'line',
+          data: [2430, 2920, 3000, 2340],
+        },
+        {
+          name: '乳鸽',
+          type: 'line',
+          data: [0, 0, 0, 0],
         },
       ],
     }
 
     return {
-      currOperator,
-      currBase,
-      currShed,
-      bases,
-      dovecotes,
-      dateValue,
-      shortcuts,
-      videoUrl,
-      currBaseChange,
-      currShedChange,
-      productEggOption,
+      breededOption,
+      mapEcharts,
+
+      allStatistics,
+      saleRoomOption,
+      priceOption,
+      outCageOption,
     }
   },
 }
@@ -380,6 +449,8 @@ html,
   height: 100%;
   background-repeat: no-repeat;
 }
+
+// 顶部
 .top {
   display: flex;
   height: 8%;
@@ -388,7 +459,7 @@ html,
   .top_left {
     width: 33%;
     ul {
-      padding-top: 38px;
+      padding-top: 6%;
       padding-left: 10%;
       width: 100%;
     }
@@ -439,36 +510,174 @@ html,
     }
   }
 }
+
+// 内容部分
 .content {
   display: flex;
+  margin-top: 10px;
   justify-content: center;
+  height: 100%;
+  .left {
+    width: 34%;
+    justify-content: flex-start;
+    flex-direction: column;
+  }
+  .right {
+    display: flex;
+    width: 34%;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: flex-end;
+  }
 }
+
+// 图表标题
+.echarts1,
+.echarts2,
+.echarts3,
+.echarts4,
+.echarts5,
+.echarts6 {
+  position: relative;
+}
+.title {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  text-align: center;
+  align-self: flex-start;
+  font-weight: 700;
+  font-size: 14px;
+}
+// 图表背景
+.box-background {
+  margin-bottom: 7px;
+  height: 28%;
+  width: 85%;
+  background: url('./img/amiddboxttop.png') no-repeat;
+  background-size: 100% 100%;
+}
+// 图表1
+.echarts1 {
+  margin: 4px 0;
+  padding: 0 30px 20px 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  .echart1_content {
+    position: absolute;
+    left: 40px;
+    bottom: 5px;
+    height: 80%;
+    .text1 {
+      padding-left: 2px;
+      display: flex;
+      align-items: center;
+      height: 30%;
+      font-weight: 700;
+    }
+    .li1 {
+      color: #ee4000;
+      font-size: 18px;
+    }
+    .li2 {
+      color: #ee9a49;
+      font-size: 18px;
+    }
+    .li3 {
+      color: #eee685;
+      font-size: 18px;
+    }
+  }
+  .e1 {
+    position: absolute;
+    right: 30px;
+    bottom: 5px;
+  }
+}
+// 图表4
+.echarts4 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .echarts4-img {
+    margin-top: 10px;
+    height: 80%;
+    .image {
+      height: 100%;
+    }
+  }
+}
+// 图表3、图表5
+.echarts3,
+.echarts5,
+.echarts6,
+.centerEcharts {
+  display: flex;
+  align-items: flex-end;
+}
+
 .map-echart {
   margin-top: 10px;
   height: 400px;
   width: 400px;
-  // background-color: rgba(128, 137, 165, 0.8);
   align-items: center;
 }
-.left {
-  width: 28%;
-  .amiddboxttop {
-    // background: url('./img/amiddboxttop.png') no-repeat;
-    // background-size: 50% 24%;
+.centerEcharts {
+  justify-content: center;
+  padding: 0 0 10px 0;
+  height: 28%;
+  width: 100%;
+  .centerContent {
+    width: 90%;
+    height: 90%;
+    .cContent {
+      height: 50%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      font-weight: 700;
+      .c1 {
+        padding-left: 15%;
+        background: url('./img/dove1.png') no-repeat;
+        background-size: 35%;
+        background-position: 0 -10px;
+      }
+      .c2 {
+        padding-left: 15%;
+        background: url('./img/dove2.png') no-repeat;
+        background-size: 20%;
+        background-position: 10px 4px;
+      }
+      .c3 {
+        padding-left: 15%;
+        background: url('./img/dove1.png') no-repeat;
+        background-size: 35%;
+        background-position: 0 -10px;
+      }
+      .c4 {
+        padding-left: 15%;
+        background: url('./img/dove3.png') no-repeat;
+        background-size: 25%;
+        background-position: 5px -2px;
+      }
+      .t1 {
+        color: #ee4000;
+        font-size: 18px;
+      }
+      .t2 {
+        color: #ee9a49;
+        font-size: 18px;
+      }
+      .t3 {
+        color: #eee685;
+        font-size: 18px;
+      }
+      .t4 {
+        color: #43cd80;
+        font-size: 18px;
+      }
+    }
   }
-  .baseInfoCss {
-    width: 28%;
-    height: 24%;
-  }
-  .productEggEcharts {
-    z-index: 100;
-    height: 26%;
-  }
-}
-.right {
-  width: 28%;
-}
-.pl25 {
-  padding-left: 25px;
 }
 </style>

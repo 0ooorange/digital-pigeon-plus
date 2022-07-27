@@ -1,71 +1,31 @@
 // 养殖统计
 import http from "@/utils/request"
 
-  export default {
-    getNumberOfParents: {
-      url: `/digitalPigeon/breed/breed/breedstatistic/breedstatistic-pigeon-cage-state-entity/getNumberOfParents`,
-      get: async function(breedId){
-        return await http.get(this.url+`/${breedId}`);
-      }
-    },
-    getNumberOfChildren: {
-      url: `/digitalPigeon/breed/breed/breedstatistic/breedstatistic-pigeon-cage-state-entity/getNumberOfChildren`,
-      get: async function(shed_id){
-        return await http.get(this.url+`/${shed_id}`);
-      }
-    },
-    getNumOfTakeEgg: {
-      url: `/digitalPigeon/breed/breed/breedstatistic/breedstatistic-pigeon-cage-state-entity/getNumOfTakeEgg`,
-      get: async function(shed_id,start_time,end_time){
-        return await http.get(this.url+`/${shed_id}/${start_time}/${end_time}`);
-      }
-    },
-    getNumOfLayEggs: {
-      url: `/digitalPigeon/breed/breed/breedstatistic/breedstatistic-pigeon-cage-state-entity/getNumOfLayEggs`,
-      get: async function(shed_id,start_time,end_time){
-        return await http.get(this.url+`/${shed_id}/${start_time}/${end_time}`);
-      }
-    },
-    getNumOfCubs: {
-      url: `/digitalPigeon/breed/breed/breedstatistic/breedstatistic-pigeon-cage-state-entity/getNumOfCubs`,
-      get: async function(shed_id,start_time,end_time){
-        return await http.get(this.url+`/${shed_id}/${start_time}/${end_time}`);
-      }
-    },
-    getNumOfOut: {
-      url: `/digitalPigeon/breed/breed/breedstatistic/breedstatistic-pigeon-cage-state-entity/getNumOfOut`,
-      get: async function(shed_id,start_time,end_time){
-        return await http.get(this.url+`/${shed_id}/${start_time}/${end_time}`);
-      }
-    },
-    getNumOfDeath: {
-      url: `/digitalPigeon/breed/breed/breedstatistic/breedstatistic-pigeon-cage-state-entity/getNumOfDeath`,
-      get: async function(shed_id,start_time,end_time){
-        return await http.get(this.url+`/${shed_id}/${start_time}/${end_time}`);
-      }
-    },
-    getFeedShedByIDTime: {
-      url: `/digitalPigeon/breed/breed/breedstatistic/breedstatistic-pigeon-cage-state-entity/getFeedShedByIDTime`,
-      get: async function(shed_id,start_time,end_time){
-        return await http.get(this.url+`/${shed_id}/${start_time}/${end_time}`);
-      }
-    },
-    // 获取监控视频id
-    getMonitorByShedID: {
-      url: `/digitalPigeon/aliyun/video/getListVideoUrlList`,
-      post: async function(breedId){
-        let data = {
-          sheId: breedId
-        }
-        console.log('视频请求参数',data)
-        return await http.post(this.url + `?sheId=` + breedId);
-      }
-    },
-    // 根据监控视频id获取对应的监控视频资料
-     getMonitorByID: {
-      url: `/digitalPigeon/breed/breed/breedstatistic/breedstatistic-pigeon-cage-state-entity/getMonitorByID`,
-      get: async function(breedId){
-        return await http.get(this.url+`/${breedId}`);
-      }
-    },
-  }
+const baseUrl = '/digitalPigeon/breed/breed/breedstatistic/breedstatistic-pigeon-cage-state-entity'
+
+// 根据鸽棚ID查询成鸽对数
+export const getNumberOfParents = (shed_id) => http.get(`${baseUrl}/getNumberOfParents/${shed_id}`)
+
+// 根据鸽棚ID查询幼鸽数
+export const getNumberOfChildren = (shed_id) => http.get(`${baseUrl}/getNumberOfChildren/${shed_id}`)
+
+// 根据鸽棚ID和起止日期统计抽蛋数量
+export const getNumOfTakeEgg = (shed_id, start_time, end_time) => http.get(`${baseUrl}/getNumOfTakeEgg/${shed_id}/${start_time}/${end_time}`)
+
+// 根据鸽棚ID和起止时间查询产蛋数
+export const getNumOfLayEggs = (shed_id, start_time, end_time) => http.get(`${baseUrl}/getNumOfLayEggs/${shed_id}/${start_time}/${end_time}`)
+
+// 根据鸽棚ID和起止时间查询出仔数
+export const getNumOfCubs = (shed_id, start_time, end_time) => http.get(`${baseUrl}/getNumOfCubs/${shed_id}/${start_time}/${end_time}`)
+
+// 根据鸽棚ID和起止时间查询出栏数
+export const getNumOfOut = (shed_id, start_time, end_time) => http.get(`${baseUrl}/getNumOfOut/${shed_id}/${start_time}/${end_time}`)
+
+// 通过鸽棚ID和起止时间统计死仔数
+export const getNumOfDeath = (shed_id, start_time, end_time) => http.get(`${baseUrl}/getNumOfDeath/${shed_id}/${start_time}/${end_time}`)
+
+// 根据鸽棚ID和起止时间查询鸽棚饲料用料情况
+export const getFeedShedByIDTime = (shed_id, start_time, end_time) => http.get(`${baseUrl}/getFeedShedByIDTime/${shed_id}/${start_time}/${end_time}`)
+
+// 获取监控视频id
+export const getMonitorByShedID = (data) => http.post(`/digitalPigeon/aliyun/video/getListVideoUrlList?sheId=${data}`)

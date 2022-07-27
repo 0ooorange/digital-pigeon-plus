@@ -229,6 +229,16 @@ export default {
 			component: "equipVideo/warnCenter/index",
 		},
 		{
+			name: "setValue",
+			path: "/equipVideo/setValue",
+			meta: {
+				title: "阈值设置",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			component: "equipVideo/setValue/index",
+		},
+		{
 			name: "eauipManage",
 			path: "/equipVideo/equipManage",
 			meta: {
@@ -256,6 +266,17 @@ export default {
 							},
 							component:
 								"equipVideo/equipManage/breeding/doveBoard/index",
+						},
+						{
+							name: "tagManage",
+							path: "/equipVideo/equipManage/breeding/tagManage",
+							meta: {
+								title: "标签管理",
+								icon: "el-icon-histogram",
+								type: "menu",
+							},
+							component:
+								"equipVideo/equipManage/breeding/tagManage/index",
 						},
 					],
 				},
