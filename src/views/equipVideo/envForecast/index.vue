@@ -127,7 +127,7 @@
     </div>
 </template>
 <script >
-import { defineComponent, ref, reactive, getCurrentInstance } from "vue";
+import { defineComponent, ref, reactive, getCurrentInstance,computed } from "vue";
 import ScEcharts from "@/components/scEcharts";
 export default defineComponent({
     name: "envForecast", // 环境监测
@@ -139,8 +139,10 @@ export default defineComponent({
 
         //获取当前鸽棚信息
 
-        //当前鸽棚鸽笼信息
-        // const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;
+               //当前鸽棚鸽笼信息
+         const currShed = computed(() => {
+            return proxy.$store.state.baseInfo.SHED_ID
+         })
 
         //时间选择器
         const shortcuts = [
@@ -198,26 +200,26 @@ export default defineComponent({
 
         //时间选择器绑定的值
         const dateValue = ref([
-            proxy.$TOOL.date.formateDate(startTime.value).substring(0, 10),
-            proxy.$TOOL.date.formateDate(endTime.value).substring(0, 10),
+            proxy.$TOOL.dateFormat(startTime.value).substring(0, 10),
+            proxy.$TOOL.dateFormat(endTime.value).substring(0, 10),
         ]);
         //请求参数
         let commonParams = {
-            start_time: proxy.$TOOL.date.formateDate(startTime.value),
-            end_time: proxy.$TOOL.date.formateDate(endTime.value),
-            // shed_id: currShed.id,
+            start_time: proxy.$TOOL.dateFormat(startTime.value),
+            end_time: proxy.$TOOL.dateFormat(endTime.value),
+            shed_id: currShed.value,
         };
 
         //日期选择器
         const visibleChange = function (e) {
             console.log("选择日期", e);
             console.log(
-                proxy.$TOOL.date.formateDate(e[0]),
-                proxy.$TOOL.date.formateDate(e[1]).substring(0, 10) + " 23:59:59"
+                proxy.$TOOL.dateFormat(e[0]),
+                proxy.$TOOL.dateFormat(e[1]).substring(0, 10) + " 23:59:59"
             );
-            commonParams.start_time = proxy.$TOOL.date.formateDate(e[0]);
+            commonParams.start_time = proxy.$TOOL.dateFormat(e[0]);
             commonParams.end_time =
-                proxy.$TOOL.date.formateDate(e[1]).substring(0, 10) +
+                proxy.$TOOL.dateFormat(e[1]).substring(0, 10) +
                 " 23:59:59";
             console.log("参数", commonParams);
             getCarbonDioxideData();

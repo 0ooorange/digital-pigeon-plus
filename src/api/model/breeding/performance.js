@@ -15,7 +15,7 @@ export default {
 				pageSize: data.pageSize,
 			};
             console.log("最后的请求参数", params);
-			return await http.post(this.url + '?endTime=' + params.endTime + '&shedId=' + params.shedId + '&startTime=' + params.startTime + '&fieldCommon=' + params.fieldCommon + '&pageNum=' + params.pageNum + '&pageSize' + params.pageSize, params);
+			return await http.post(this.url + '?endTime=' + params.endTime + '&shedId=1518124016571797507' + '&startTime=' + params.startTime + '&fieldCommon=' + params.fieldCommon + '&pageNum=' + params.pageNum + '&pageSize' + params.pageSize, params);
 		},
 	}
 };

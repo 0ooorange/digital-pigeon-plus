@@ -1,12 +1,11 @@
 <template>
-  <!-- 经典布局 -->
   <template v-if="layout=='menu'">
     <header>
       <el-row class="adminui-header">
         <el-col :span="firstSpan">
           <div :class="menuIsCollapse?'panel-item adminui-header-left beCenter':'panel-item adminui-header-left'" @click="toNavigator">
             <div class="logo-bar">
-              <img class="logo" :src="smallLogo">
+              <img class="logo" :src='smallLogo'>
               <span class="isShowText" v-if="!menuIsCollapse">{{ $CONFIG.APP_NAME }}</span>
             </div>
           </div>
@@ -34,7 +33,7 @@
         <div class="adminui-side-scroll">
           <el-scrollbar>
             <el-menu :default-active="active" router :collapse="menuIsCollapse" :unique-opened="$CONFIG.MENU_UNIQUE_OPENED">
-              <NavMenu :navMenus="menu"></NavMenu>
+              <NavMenu :navMenus="currMenu"></NavMenu>
             </el-menu>
           </el-scrollbar>
         </div>
@@ -69,13 +68,17 @@
 </template>
 
 <script>
-import tool from '../utils/tool'
 import SideM from './components/sideM.vue'
 import Topbar from './components/topbar.vue'
 import NavMenu from './components/NavMenu.vue'
 import userbar from './components/userbar.vue'
 import iframeView from './components/iframeView.vue'
 import smallLogo from '../assets/images/logo-2.png'
+import tool from '@/utils/tool'
+import router from '@/router'
+import store from '@/store'
+import { ref, computed, watch, nextTick } from 'vue'
+import { getBaseAndShed } from '@api/bases/layout'
 
 export default {
   name: 'index',
@@ -86,114 +89,86 @@ export default {
     userbar,
     iframeView,
   },
-  props: {},
-  data() {
-    return {
-      smallLogo: smallLogo,
-      settingDialog: false,
-      currBase: {},
-      currShed: {},
-      currOperator: {},
-      currBaseName: '',
-      currShedCode: '',
-      bases: [],
-      dovecotes: [],
-      menu: [],
-      nextMenu: [],
-      pmenu: {},
-      active: '',
-      thirdSpan: 8,
-    }
-  },
-  computed: {
-    ismobile() {
-      return this.$store.state.global.ismobile
-    },
-    layout() {
-      return this.$store.state.global.layout
-    },
-    layoutTags() {
-      return this.$store.state.global.layoutTags
-    },
-    menuIsCollapse() {
-      return this.$store.state.global.menuIsCollapse
-    },
-    firstSpan() {
-      return this.$store.state.global.menuIsCollapse ? 1 : 4
-    },
-    secondSpan() {
-      return this.$store.state.global.menuIsCollapse ? 15 : 12
-    },
-  },
-  async created() {
-    this.baseInfo = this.$TOOL.data.get('BASE_INFO')
-    let {data: baseAndShed} = await this.$API.layout.getBaseAndShed.get(this.baseInfo.id)
-    // console.log('baseAndShed: ', baseAndShed)
-    this.bases = baseAndShed.baseList
-    this.dovecotes = baseAndShed.shedList
-    let currInfo = this.$TOOL.data.get('CURR_INFO')
-    if (currInfo) {
-      this.currBase = currInfo.CURR_BASE
-      this.currShed = currInfo.CURR_SHED
-      this.currOperator = currInfo.CHARGE_NAME
-    } else {
-      this.currBase = baseAndShed.baseList[0]
-      this.currShed = baseAndShed.shedList[0]
-      this.currOperator = baseAndShed.userList[0].name
-    }
-    this.currBaseName = this.currBase.code
-    this.currShedCode = this.currShed.code
-    this.currInfo = {
-      CURR_BASE: this.currBase,
-      CURR_SHED: this.currShed,
-      CHARGE_NAME: this.currOperator,
-    }
-    this.$TOOL.data.set('CURR_INFO', this.currInfo)
-
-    this.onLayoutResize()
-    window.addEventListener('resize', this.onLayoutResize)
-    // var menu = this.$router.sc_getMenu()
-    var menu = tool.data.get('CURR_MENU')
-    this.menu = this.filterUrl(menu)
-    this.showThis()
-  },
-  watch: {
-    $route() {
-      this.showThis()
-    },
-    layout: {
-      handler(val) {
-        document.body.setAttribute('data-layout', val)
-      },
-      immediate: true,
-    },
-  },
-  methods: {
-    openSetting() {
-      this.settingDialog = true
-    },
-    onLayoutResize() {
-      this.$store.commit('SET_ismobile', document.body.clientWidth < 992)
-    },
-    //路由监听高亮
-    showThis() {
-      this.pmenu = this.$route.meta.breadcrumb ? this.$route.meta.breadcrumb[0] : {}
-      this.nextMenu = this.filterUrl(this.pmenu.children)
-      this.$nextTick(() => {
-        this.active = this.$route.meta.active || this.$route.fullPath
-      })
-    },
-    //点击显示
-    showMenu(route) {
-      this.pmenu = route
-      this.nextMenu = this.filterUrl(route.children)
-      if ((!route.children || route.children.length == 0) && route.component) {
-        this.$router.push({ path: route.path })
+  setup() {
+    const route = router.currentRoute.value
+    // 计算属性
+    const ismobile = computed(() => store.state.global.ismobile)
+    const layout = computed(() => store.state.global.layout)
+    // const layoutTags = computed(() => store.state.global.layoutTags)
+    const menuIsCollapse = computed(() => store.state.global.menuIsCollapse)
+    const firstSpan = computed(() => (store.state.global.menuIsCollapse ? 1 : 4))
+    const secondSpan = computed(() => (store.state.global.menuIsCollapse ? 15 : 12))
+    // watch
+    watch(
+      () => route,
+      () => {
+        showThis()
       }
-    },
+    )
+    watch(
+      () => layout,
+      (val) => {
+        document.body.setAttribute('data-layout', val)
+      }
+    )
+
+    // 基地和棚
+    const bases = ref([])
+    const dovecotes = ref([])
+    const currBaseName = ref('')
+    const currShedCode = ref('')
+    const currOperator = ref('')
+    let baseInfo = tool.data.get('BASE_INFO')
+    getBaseAndShed(baseInfo.id).then((res) => {
+      let currInfo = ref(tool.data.get('CURR_INFO'))
+      let currBase = ref({})
+      let currShed = ref({})
+      if (currInfo.value) {
+        currBase.value = currInfo.value.CURR_BASE
+        currShed.value = currInfo.value.CURR_SHED
+        currOperator.value = currInfo.value.CHARGE_NAME
+      } else {
+        currBase.value = res.data.baseList[0]
+        currShed.value = res.data.shedList[0]
+        currOperator.value = res.data.userList[0].name
+      }
+      currInfo.value = {
+        CURR_BASE: currBase.value,
+        CURR_SHED: currShed.value,
+        CHARGE_NAME: currOperator.value,
+      }
+      tool.data.set('CURR_INFO', currInfo.value)
+
+      bases.value = res.data.baseList
+      dovecotes.value = res.data.shedList
+      currBaseName.value = currInfo.value.CURR_BASE.code
+      currShedCode.value = currInfo.value.CURR_SHED.code
+    })
+
+    const nextMenu = ref([])
+    const pmenu = ref({})
+    const active = ref('')
+    const thirdSpan = ref(8)
+
+    //路由监听高亮
+    const showThis = () => {
+      pmenu.value = route.meta.breadcrumb ? route.meta.breadcrumb[0] : {}
+      nextMenu.value = filterUrl(pmenu.value.children)
+      nextTick(() => {
+        active.value = route.meta.active || route.fullPath
+      })
+    }
+    // //点击显示
+    // const showMenu = (route) => {
+    //   pmenu.value = route
+    //   nextMenu.value = filterUrl.value(route.children)
+    //   if ((!route.children || route.children.length == 0) && route.component) {
+    //     router.push({ path: route.path })
+    //   }
+    // }
     //转换外部链接的路由
-    filterUrl(map) {
-      var newMap = []
+    const filterUrl = (map) => {
+      const newMap = ref([])
       map &&
         map.forEach((item) => {
           item.meta = item.meta ? item.meta : {}
@@ -207,85 +182,55 @@ export default {
           }
           //递归循环
           if (item.children && item.children.length > 0) {
-            item.children = this.filterUrl(item.children)
+            item.children = filterUrl(item.children)
           }
-          newMap.push(item)
+          newMap.value.push(item)
         })
-      return newMap
-    },
+      return newMap.value
+    }
     //退出最大化
-    exitMaximize() {
+    const exitMaximize = () => {
       document.getElementById('app').classList.remove('main-maximize')
-    },
+    }
     // 返回导航页
-    toNavigator() {
-      this.$router.replace({
+    const toNavigator = () => {
+      router.replace({
         path: '/navigator',
       })
-    },
+    }
     // 切换基地
-    async currBaseChange(e) {
-      for (let i = 0; i < this.bases.length; i++) {
-        if (this.bases[i].name === e) {
-          this.currBase = JSON.parse(JSON.stringify(this.bases[i]))
-          break
-        }
-      }
-      let { data: changeBaseRes } = await this.$API.layout.changeBase.post(this.currBase.id)
-      this.dovecotes = changeBaseRes.shed
-      this.currShed = this.dovecotes[0]
-      if (changeBaseRes.shed.length === 0) {
-        this.dovecotes = [
-          {
-            id: null,
-            gmtCreate: null,
-            gmtModified: null,
-            isDeleted: 0,
-            version: 0,
-            code: '没有棚',
-            chargeId: null,
-            baseId: 0,
-          },
-        ]
-        this.currOperator = '无信息'
-        this.currShed = this.dovecotes[0]
-      } else {
-        let { data: changeShedRes } = await this.$API.layout.getChargeName.post(
-          this.currShed.chargeId
-        )
-        this.currOperator = changeShedRes.chargeName
-      }
-      this.currBaseName = this.currBase.name
-      this.currShedCode = this.currShed.code
-
-      this.currInfo = {
-        CURR_BASE: this.currBase,
-        CURR_SHED: this.currShed,
-        CHARGE_NAME: this.currOperator,
-      }
-      this.$TOOL.data.set('CURR_INFO', this.currInfo)
-      this.$store.commit('setCurrInfo', this.$TOOL.data.get('CURR_INFO'))
-    },
+    const currBaseChange = async () => {}
     // 切换鸽棚
-    async currShedChange(currShedName) {
-      var { data: changeShedRes } = await this.$API.layout.getChargeName.post(
-        this.currShed.chargeId
-      )
-      this.currOperator = changeShedRes.chargeName
-      for (var i = 0; i < this.dovecotes.length; i++) {
-        if (this.dovecotes[i].code === currShedName) {
-          this.currShed = this.dovecotes[i]
-        }
-      }
-      this.currInfo = {
-        CURR_BASE: this.currBase,
-        CURR_SHED: this.currShed,
-        CHARGE_NAME: this.currOperator,
-      }
-      this.$TOOL.data.set('CURR_INFO', this.currInfo)
-      this.$store.commit('setCurrInfo', this.$TOOL.data.get('CURR_INFO'))
-      this.$store.commit('setShedId', this.$TOOL.data.get('CURR_INFO').CURR_SHED.id)
-    },
+    const currShedChange = async () => {}
+
+    const onLayoutResize = () => {
+      store.commit('SET_ismobile', document.body.clientWidth < 992)
+    }
+    window.addEventListener('resize', onLayoutResize())
+    const currMenu = ref(tool.data.get('CURR_MENU'))
+    currMenu.value = filterUrl(currMenu.value)
+    showThis()
+
+    return {
+      firstSpan,
+      secondSpan,
+      thirdSpan,
+      bases,
+      dovecotes,
+      currBaseName,
+      currShedCode,
+      currOperator,
+      smallLogo,
+      currMenu,
+      currBaseChange,
+      currShedChange,
+      exitMaximize,
+      toNavigator,
+      ismobile,
+      layout,
+      menuIsCollapse,
+      active,
+    }
   },
 }
 </script>

@@ -115,23 +115,14 @@ export default defineComponent({
         const tableSearch = ref(null);
 
         //当前鸽棚鸽笼信息
-        const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;
+        const currShed = computed(() => {
+            return proxy.$store.state.baseInfo.SHED_ID;
+        });
+
+        console.log("鸽棚信息", currShed.value);
 
         let searchTypes = reactive([]);
-        let cardData = reactive(
-            [
-            {
-                cardText: "喜粮",
-                cardNumber: "100kg",
-            },
-            {
-                cardText: "中粮",
-                cardNumber: "20kg",
-            },
-            {
-                cardText: "玉粮",
-                cardNumber: "80kg",
-            },
+        let cardData = reactive([
             {
                 cardText: "加料量",
                 cardNumber: "160kg",
@@ -160,8 +151,19 @@ export default defineComponent({
                 cardText: "上月均用量",
                 cardNumber: "1kg",
             },
-        ]
-        );
+            {
+                cardText: "喜粮",
+                cardNumber: "100kg",
+            },
+            {
+                cardText: "中粮",
+                cardNumber: "20kg",
+            },
+            // {
+            //     cardText: "玉粮",
+            //     cardNumber: "80kg",
+            // },
+        ]);
         let cardWidth = ref("14%");
 
         //查询下拉框数组
@@ -295,15 +297,15 @@ export default defineComponent({
                 formatDate(startTime.value),
                 formatDate(endTime.value)
             );
-            getCardData()
+            getCardData();
             getFeedStatisticParams.startTime = formatDate(startTime.value);
             getFeedStatisticParams.endTime = formatDate(endTime.value);
-            
+
             proxy.$nextTick(() => {
-                console.log(getFeedStatisticParams.value,1111)
+                console.log(getFeedStatisticParams.value, 1111);
                 // proxy.$refs.table.getData()
-            })
-};
+            });
+        };
 
         const outTable = function () {
             console.log("哈哈哈，我被点击了噢");
@@ -418,31 +420,15 @@ export default defineComponent({
         //调接口
         //获取各品牌饲料剩余量
         const getCardData = async function () {
-            // console.log("当前鸽棚", currShed.id);
+            console.log("当前鸽棚", currShed);
             let data = {
-                currShed: currShed.id,
+                currShed: currShed.value,
             };
-            // console.log("参数", data);
-            const feedBrandNum = await proxy.$API.fodder.feedBrandNum.get(
-                "getFeedBrandNumByShedID",
-                data
-            );
-            if (feedBrandNum.code == 200) {
-                // console.log("各种饲料量数据", data);
-                feedBrandNum.data.data.forEach((item, index) => {
-                    let temp = {
-                        cardText: item.brand,
-                        cardNumber: item.num + item.unit,
-                    };
-                    // return temp;
-                    cardData[index] = temp;
-                });
-                // cardData.push(...temp);
-            }
+            console.log("参数", data);
 
             //根据鸽棚ID和起止时间查询饲料加料量
             const getFeedNumByIDTimeData = {
-                currShed: currShed.id,
+                currShed: currShed,
                 startTime: formatDate(startTime.value),
                 endTime: formatDate(endTime.value),
             };
@@ -459,13 +445,13 @@ export default defineComponent({
                 };
                 // console.log("加料量数据", temp);
                 // cardData.push(temp);
-                cardData[3] = temp;
+                cardData[0] = temp;
             }
 
             //根据鸽棚ID和起止时间查询饲料复称量
 
             let getTwiceNumByIDTimeData = {
-                currShed: currShed.id,
+                currShed: currShed,
                 startTime: formatDate(startTime.value),
                 endTime: formatDate(endTime.value),
             };
@@ -482,7 +468,7 @@ export default defineComponent({
                 };
                 // console.log("复称量数据", temp);
                 // cardData.push(temp);
-                cardData[4] = temp;
+                cardData[1] = temp;
             }
 
             //获取食用量
@@ -491,20 +477,20 @@ export default defineComponent({
 
                 let firstData = FeedNum.data.data.substring(
                     0,
-                    FeedNum.data.data.indexOf("k")
+                    FeedNum.data.data.indexOf("斤")
                 );
                 let endData = TwiceNum.data.data.substring(
                     0,
-                    TwiceNum.data.data.indexOf("k")
+                    TwiceNum.data.data.indexOf("斤")
                 );
                 const hadEat = firstData - endData;
                 // console.log(hadEat, "食用量");
                 let temp = {
                     cardText: "食用量",
-                    cardNumber: hadEat + "kg",
+                    cardNumber: hadEat + "斤",
                 };
                 // cardData.push(temp);
-                cardData[5] = temp;
+                cardData[2] = temp;
             }
 
             //本月饲料使用量
@@ -514,7 +500,7 @@ export default defineComponent({
             // );
 
             let getMonthNumByIDTimeData = {
-                currShed: currShed.id,
+                currShed: currShed,
                 startTime: formatDate(thisBegin.value),
                 endTime: formatDate(endTime.value),
             };
@@ -531,12 +517,12 @@ export default defineComponent({
                 };
                 // console.log("本月已用量", temp);
                 // cardData.push(temp);
-                cardData[6] = temp;
+                cardData[3] = temp;
             }
 
             //本月均用量
             let getMonthAvgNumByIDTimeData = {
-                currShed: currShed.id,
+                currShed: currShed,
                 startTime: formatDate(thisBegin.value),
                 endTime: formatDate(endTime.value),
             };
@@ -549,21 +535,22 @@ export default defineComponent({
                 let data = monthAvgNum.data.data;
                 let temp = {
                     cardText: "本月均用量",
-                    cardNumber:
-                        parseFloat(
-                            data.substring(0, data.indexOf("k"))
-                        ).toFixed(3) + "kg",
+                    cardNumber: data,
+                    // cardNumber:
+                    //     parseFloat(
+                    //         data.substring(0, data.indexOf("k"))
+                    //     ).toFixed(3) + "kg",
                 };
-                // console.log("本月均用量", temp);
+                console.log("本月均用量", data);
                 // cardData.push(temp);
-                cardData[7] = temp;
+                cardData[4] = temp;
             }
 
             //查询上月饲料用量
             // console.log("上个月第一天", formatDate(lastMonthStartDate.value));
             // console.log("上个月最后一天", lastMonthEndDate.value);
             let getLastMonthNumBYIDTimedata = {
-                currShed: currShed.id,
+                currShed: currShed,
                 startTime: formatDate(lastMonthStartDate.value),
                 endTime: formatDate(lastMonthEndDate.value),
             };
@@ -580,12 +567,12 @@ export default defineComponent({
                 };
                 // console.log("上月用量", temp);
                 // cardData.push(temp);
-                cardData[8] = temp;
+                cardData[5] = temp;
             }
 
             //上月饲料均用量
             let getLastAvgNUmByIDTimedata = {
-                currShed: currShed.id,
+                currShed: currShed,
                 startTime: formatDate(lastMonthStartDate.value),
                 endTime: formatDate(lastMonthEndDate.value),
             };
@@ -598,14 +585,36 @@ export default defineComponent({
                 let data = lastAvgNUm.data.data;
                 let temp = {
                     cardText: "上月均用量",
-                    cardNumber:
-                        parseFloat(
-                            data.substring(0, data.indexOf("k"))
-                        ).toFixed(3) + "kg",
+                    cardNumber: data,
+                    // cardNumber:
+                    //     parseFloat(
+                    //         data.substring(0, data.indexOf("k"))
+                    //     ).toFixed(3) + "kg",
                 };
-                // console.log("上月饲料用量", temp);
+                console.log("上月饲料用量", data);
                 // cardData.push(temp);
-                cardData[9] = temp;
+                cardData[6] = temp;
+            }
+            let current = 6;
+
+            const feedBrandNum = await proxy.$API.fodder.feedBrandNum.get(
+                "getFeedBrandNumByShedID",
+                data
+            );
+            console.log("数据11111111", feedBrandNum);
+            if (feedBrandNum.code == 200) {
+                // console.log("各种饲料量数据", data);
+                feedBrandNum.data.data.forEach((item) => {
+                    let temp = {
+                        cardText: item.brand,
+                        cardNumber: item.num + item.unit,
+                    };
+                    // return temp;
+                    cardData[current + 1] = temp;
+                    current++;
+                });
+                // cardData.length = 7 + feedBrandNum.data.data.length
+                // cardData.push(...temp);
             }
         };
 
@@ -613,15 +622,17 @@ export default defineComponent({
         //接口
         const getFeedStatisticApi = proxy.$API.fodder.FeedStatisticByIDTIme;
         //参数
-        const getFeedStatisticParams = reactive(computed(() => {
-            console.log('监听改变')
-            return {
-            currShed: currShed.id,
-            startTime: formatDate(startTime.value),
-            endTime: formatDate(endTime.value),
-            }
-        }))
-        
+        const getFeedStatisticParams = reactive(
+            computed(() => {
+                console.log("监听改变");
+                return {
+                    currShed: currShed,
+                    startTime: formatDate(startTime.value),
+                    endTime: formatDate(endTime.value),
+                };
+            })
+        );
+
         // reactive({
 
         // });
@@ -630,7 +641,7 @@ export default defineComponent({
         // const getList = function () {
         //     //上月饲料均用量
         //     let getLastAvgNUmByIDTimedata = {
-        //         currShed: currShed.id,
+        //         currShed: currShed,
         //         startTime: formatDate(lastMonthStartDate.value),
         //         endTime: formatDate(lastMonthEndDate.value),
         //     };
