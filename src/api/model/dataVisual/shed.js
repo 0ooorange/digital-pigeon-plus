@@ -14,3 +14,9 @@ export const getEggAbnormal = (shed_id) => http.post(`${baseUrl}/getEggAbnormal?
 
 // 仔数统计
 export const getCubStatistics = (shed_id, start_time, end_time) => http.post(`${baseUrl}/getCubStatistics?startTime=${start_time}&endTime=${end_time}&shedId=${shed_id}`)
+
+// 产蛋统计
+export const getLayEggNumStatistics = (shed_id) => http.post(`${baseUrl}/getLayEggNumStatistics?shedId=${shed_id}`)
+
+// 产蛋统计
+export const getSensor = (shed_id, type) => http.post(`${baseUrl}/getSensor?shedid=${shed_id}&type=${type}`)
