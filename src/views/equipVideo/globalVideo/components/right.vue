@@ -46,13 +46,9 @@
       13539393933
     </el-descriptions-item>
   </el-descriptions>
-  <div class="map">
-    <!-- <SCMap adress="兴宁" /> -->
-  </div>
 </template>
 
 <script>
-// import SCMap from '@/components/scMap'
 </script>
 
 <style lang="less" scoped>
