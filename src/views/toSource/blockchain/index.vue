@@ -116,6 +116,10 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
+.table {
+	width: 100%;
+	height: 90%;
+}
 .text_truncation {
   width: 200px;
   // height: 100px;
