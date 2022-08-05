@@ -22,12 +22,23 @@ module.exports = {
 				// 	"^/digitalPigeon": "/digitalPigeon",
 				// },
 			},
-
-			images: {
-				target: "http://106.12.160.172:8013",
+			//预测中心的
+			"/api": {
+				target: "http://106.12.160.172:8014",
+				ws: true,
+				changeOrigin: true, 
 				pathRewrite: {
-					"^/images": "/images",
+					"^/predict": "",
 				},
+			},
+			"/images": {
+				// target: "http://172.17.44.237:5001",
+				target: "http://106.12.160.172:8013",
+				ws: true,
+				changeOrigin: true, 
+				// pathRewrite: {
+				// 	"^/images": "/images",
+				// },
 			},
 		},
 	},
