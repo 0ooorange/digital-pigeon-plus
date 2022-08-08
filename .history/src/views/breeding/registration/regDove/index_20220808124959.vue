@@ -360,8 +360,8 @@ export default defineComponent({
     };
     const searchClick = (params) => {
       getparams.value = {
-        startTime: formatDateStart(datePk[0]),
-        endTime: formatDateEnd(datePk[1]),
+        startTime: formatDate(datePk[0]),
+        endTime: formatDate(datePk[1]),
         shedId: currShed,
         codes: params.inputValue,
       };
@@ -386,6 +386,7 @@ export default defineComponent({
       api,
       getparams,
       dataChange,
+      formatDate,
       updateDove,
       addDove,
       removeDove,

@@ -386,6 +386,7 @@ export default defineComponent({
       api,
       getparams,
       dataChange,
+      formatDate,
       updateDove,
       addDove,
       removeDove,

@@ -337,7 +337,7 @@ export default defineComponent({
         year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
       return newDate;
     };
-    const formatDateEnd = (dat) => {
+    const formatDateStart = (dat) => {
       //获取年月日，时间
       var year = dat.getFullYear();
       var mon =

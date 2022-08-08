@@ -1,18 +1,16 @@
 <template>
   <div class="container">
     <div class="tag">
-      <el-button type="primary" plain @click="addDovedialog = true"
-        >添加鸽子</el-button
+      <el-button type="primary" plain @click="addOutcagedialog = true"
+        >添加出栏</el-button
       >
       <table-search
-        :searchTypes="searchTypes"
         :dateDefault="dateDefault"
         :datePkDefalt="datePk"
-        @searchClick="searchClick"
-        @reset="reset"
         @outTable="outTable"
         @printTable="printTable"
         @panelChange="panelChange"
+        :showSearch="false"
       />
     </div>
     <el-main class="main">
@@ -22,28 +20,40 @@
         stripe
         highlightCurrentRow
         :apiObj="api"
-        :params="getparams"
+        :params="params"
         requestMethods="post"
         @dataChange="dataChange"
       >
         <el-table-column
-          prop="gmtCreate"
+          prop="deliverTime"
           label="时间"
-          width="220"
+          width="150"
           sortable
+          align="center"
+        />
+        <el-table-column
+          prop="category"
+          label="种类"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="num"
+          label="数量"
+          width="120"
+          sortable
+          align="center"
+        />
+        <el-table-column
+          prop="destination"
+          label="去向"
+          width="120"
           align="center"
         />
         <el-table-column
           prop="codes"
-          label="鸽笼号"
-          width="220"
-          sortable
-          align="center"
-        />
-        <el-table-column
-          prop="age"
-          label="鸽龄(天)"
-          width="220"
+          label="单据号"
+          width="120"
           sortable
           align="center"
         />
@@ -54,7 +64,7 @@
               type="primary"
               text
               icon="el-icon-edit"
-              @click="showDovedialog(scope.row.id)"
+              @click="showOutcagedialog(scope.row)"
               >编辑</el-button
             >
             <el-button
@@ -62,7 +72,7 @@
               type="danger"
               text
               icon="el-icon-delete"
-              @click="removeDove()"
+              @click="removeOutcage(scope.row.id)"
               >删除</el-button
             >
           </template>
@@ -70,8 +80,8 @@
       </scTable>
     </el-main>
     <el-dialog
-      title="添加鸽子"
-      v-model="addDovedialog"
+      title="添加出栏"
+      v-model="addOutcagedialog"
       width="25%"
       @close="addDialogClosed"
     >
@@ -82,26 +92,48 @@
         style="width: 250px"
         :rules="formRules"
       >
-        <el-form-item label="鸽笼号:" prop="pigeonCageCodes">
+        <el-form-item label="时间:" prop="deliverTime">
+          <el-date-picker
+            v-model="addInfo.deliverTime"
+            :default-value="addInfo.deliverTime"
+            type="datetime"
+            format="YYYY-MM-DD HH:mm:ss"
+            unlink-panels
+            placeholder="请输入时间"
+          />
+        </el-form-item>
+        <el-form-item label="种类:" prop="category">
           <el-input
-            v-model="addInfo.pigeonCageCodes"
-            placeholder="请输入鸽笼号"
+            v-model="addInfo.category"
+            placeholder="请输入种类"
           ></el-input>
         </el-form-item>
-        <el-form-item label="鸽龄(天):" prop="age">
-          <el-input v-model="addInfo.age" placeholder="请输入鸽龄"></el-input>
+        <el-form-item label="数量:" prop="num">
+          <el-input v-model="addInfo.num" placeholder="请输入数量"></el-input>
+        </el-form-item>
+        <el-form-item label="去向:" prop="destination">
+          <el-input
+            v-model="addInfo.destination"
+            placeholder="请输入去向"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="单据号:" prop="codes">
+          <el-input
+            v-model="addInfo.codes"
+            placeholder="请输入单据号"
+          ></el-input>
         </el-form-item>
       </el-form>
       <span class="dialog-footer">
-        <el-button @click="addDovedialog = false">取 消</el-button>
-        <el-button type="primary" plain @click="addDove()">确 定</el-button>
+        <el-button @click="addOutcagedialog = false">取 消</el-button>
+        <el-button type="primary" plain @click="addOutcage()">确 定</el-button>
       </span>
     </el-dialog>
     <el-dialog
-      title="编辑鸽子"
-      v-model="dovedialog"
+      title="编辑出栏"
+      v-model="Outcagedialog"
       width="25%"
-      @close="editDoveClosed"
+      @close="editDialogClosed"
     >
       <el-form
         :model="editInfo"
@@ -110,46 +142,54 @@
         style="width: 250px"
         :rules="formRules"
       >
-        <el-form-item label="时间:" prop="gmtCreate">
+        <el-form-item label="时间:" prop="deliverTime">
           <el-input
-            v-model="editInfo.gmtCreate"
+            v-model="editInfo.deliverTime"
             placeholder="请输入时间"
           ></el-input>
         </el-form-item>
-        <el-form-item label="鸽笼号:" prop="codes">
+        <el-form-item label="种类:" prop="category">
           <el-input
-            v-model="editInfo.codes"
-            placeholder="请输入鸽笼号"
+            v-model="editInfo.category"
+            placeholder="请输入种类"
           ></el-input>
         </el-form-item>
-        <el-form-item label="鸽龄(天):" prop="age">
-          <el-input v-model="editInfo.age" placeholder="请输入鸽龄"></el-input>
+        <el-form-item label="数量:" prop="num">
+          <el-input v-model="editInfo.num" placeholder="请输入数量"></el-input>
+        </el-form-item>
+        <el-form-item label="去向:" prop="destination">
+          <el-input
+            v-model="editInfo.destination"
+            placeholder="请输入去向"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="单据号:" prop="codes">
+          <el-input
+            v-model="editInfo.codes"
+            placeholder="请输入单据号"
+          ></el-input>
         </el-form-item>
       </el-form>
       <span class="dialog-footer">
-        <el-button @click="dovedialog = false">取 消</el-button>
-        <el-button type="primary" plain @click="updateDove()">确 定</el-button>
+        <el-button @click="Outcagedialog = false">取 消</el-button>
+        <el-button type="primary" plain @click="updateOutcage()"
+          >确 定</el-button
+        >
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref, getCurrentInstance, reactive } from "vue";
+import { defineComponent, ref, getCurrentInstance} from "vue";
 import { useStore } from "vuex";
 export default defineComponent({
-  name: "doveRegistration", // 鸽子登记
+  name: "outCageRegistration", // 出栏登记
   components: {},
   setup() {
     const { proxy } = getCurrentInstance();
     const store = useStore();
     const currShed = store.state.baseInfo.SHED_ID;
-    const searchTypes = reactive([
-      {
-        value: "鸽笼号",
-        label: "鸽笼号",
-      },
-    ]);
     // 时间选择器
     const shortcuts = [
       {
@@ -180,9 +220,25 @@ export default defineComponent({
         },
       },
     ];
-    let addDovedialog = ref(false);
-    let dovedialog = ref(false);
     //格式化时间
+    const formatDate = (dat) => {
+      //获取年月日，时间
+      var year = dat.getFullYear();
+      var mon =
+        dat.getMonth() + 1 < 10
+          ? "0" + (dat.getMonth() + 1)
+          : dat.getMonth() + 1;
+      var data = dat.getDate() < 10 ? "0" + dat.getDate() : dat.getDate();
+      var hour = dat.getHours() < 10 ? "0" + dat.getHours() : dat.getHours();
+      var min =
+        dat.getMinutes() < 10 ? "0" + dat.getMinutes() : dat.getMinutes();
+      var seon =
+        dat.getSeconds() < 10 ? "0" + dat.getSeconds() : dat.getSeconds();
+
+      var newDate =
+        year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
+      return newDate;
+    };
     const formatDateStart = (dat) => {
       //获取年月日，时间
       var year = dat.getFullYear();
@@ -206,105 +262,112 @@ export default defineComponent({
           ? "0" + (dat.getMonth() + 1)
           : dat.getMonth() + 1;
       var data = dat.getDate() < 10 ? "0" + dat.getDate() : dat.getDate();
-      var hour = "23";
-      var min = "59";
-      var seon = "59";
+      var hour = "00";
+      var min = "00";
+      var seon = "00";
       var newDate =
         year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
       return newDate;
     };
+    let addOutcagedialog = ref(false);
+    let Outcagedialog = ref(false);
     // 设置默认时间段，组件内默认半年
     let end = new Date();
     let start = new Date();
     start.setTime(start.getTime() - 3600 * 1000 * 24 * 183); // 半年
     let dateDefault = [start, end];
-    let datePk = [start, end];
+    let datePk = ref([start, end]);
+    const formRules = ref({
+      deliverTime: [{ message: "请输入时间", trigger: "blur", required: true }],
+      shedId: [{ message: "请输入鸽棚", trigger: "blur", required: true }],
+      category: [{ message: "请输入种类", trigger: "blur", required: true }],
+      num: [{ message: "请输入数量", trigger: "blur", required: true }],
+      destination: [{ message: "请输入去向", trigger: "blur", required: true }],
+      codes: [{ message: "请输入单据号", trigger: "blur", required: true }],
+    });
     const tableData = ref([
       {
-        gmtCreate: "",
+        deliverTime: "",
+        category: "",
+        num: "",
+        destination: "",
         codes: "",
-        age: "",
+        id: "",
       },
     ]);
-    const editInfo = ref({
-      gmtCreate: "",
-      codes: "",
-      age: "",
-    });
-    const addInfo = reactive({
+    const addInfo = ref({
+      deliverTime: formatDate(end),
       shedId: currShed,
-      pigeonCageCodes: "",
-      version: 0,
-      age: "",
+      category: "",
+      num: "",
+      destination: "",
+      codes: "",
     });
-    const formRules = ref({
-      gmtCreate: [{ message: "请输入时间", trigger: "blur", required: true }],
-      codes: [{ message: "请输入鸽笼号", trigger: "blur", required: true }],
-      age: [{ message: "请输入鸽龄", trigger: "blur", required: true }],
+    const editInfo = ref({
+      deliverTime: formatDate(end),
+      category: "",
+      num: "",
+      destination: "",
+      codes: "",
     });
+    const outTable = () => {
+      console.log("点击导出");
+    };
+
     const printTable = () => {
       console.log("点击打印");
     };
     const panelChange = (date) => {
       datePk.value = date;
-      getparams.value = {
-        startTime: formatDateStart(datePk.value[0]),
-        endTime: formatDateEnd(datePk.value[1]),
+      params.value = {
+        startTime: formatDate(datePk.value[0]),
+        endTime: formatDate(datePk.value[1]),
         shedId: currShed,
       };
     };
-    const reset = () => {
-      console.log("点击重置");
-    };
-    const outTable = () => {
-      console.log("点击导出");
-    };
     //把这一行的信息传入对话框
-    const showDovedialog = (item) => {
-      dovedialog.value = true;
+    const showOutcagedialog = (item) => {
+      Outcagedialog.value = true;
       editInfo.value = Object.assign(item, { shedId: currShed });
     };
-    const api = proxy.$API.regDove.getpigeon;
-    let getparams = ref({
-      startTime: formatDateStart(datePk[0]),
-      endTime: formatDateEnd(datePk[1]),
+    const api = proxy.$API.regOutCage.delivermanagement;
+    let params = ref({
+      startTime: formatDate(datePk.value[0]),
+      endTime: formatDate(datePk.value[1]),
       shedId: currShed,
-      codes: "",
     });
-    const addDove = () => {
+    const addOutcage = () => {
+      addInfo.value.deliverTime = formatDate(addInfo.value.deliverTime);
       proxy.$refs.addRef.validate(async (valid) => {
         if (!valid) {
           return;
         }
-        await proxy.$API.regDove.addpigeon.post(addInfo).then((res) => {
-          if (res.success) {
-            proxy.$message({
-              message: "添加成功",
-              type: "success",
-            });
-          } else {
-            proxy.$message({
-              message: "添加失败",
-              type: "error",
-            });
-          }
-        });
+        await proxy.$API.regOutCage.adddeliver
+          .post(addInfo.value)
+          .then((res) => {
+            if (res.success) {
+              proxy.$message({
+                message: "添加成功",
+                type: "success",
+              });
+            } else {
+              proxy.$message({
+                message: "添加失败",
+                type: "error",
+              });
+            }
+          });
         proxy.$refs.addRef.resetFields();
-        addDovedialog.value = false;
-        getparams.value = {
-          startTime: formatDateStart(datePk[0]),
-          endTime: formatDateEnd(datePk[1]),
-          shedId: currShed,
-          codes: "",
-        };
+        addOutcagedialog.value = false;
+        proxy.$refs.table.getData();
       });
     };
-    const updateDove = () => {
-      /* proxy.$refs.editRef.validate(async (valid) => {
+    const updateOutcage = () => {
+      proxy.$refs.editRef.validate(async (valid) => {
         if (!valid) {
           return;
         }
-        await proxy.$API.regDove.modifypigeon
+        await proxy.$API.regOutCage.modifydeliver
           .post(editInfo.value)
           .then((res) => {
             if (res.success) {
@@ -319,23 +382,23 @@ export default defineComponent({
               });
             }
           });
-        dovedialog.value = false;
+        Outcagedialog.value = false;
         proxy.$refs.table.getData();
-      });*/
+      });
     };
-    const removeDove = async () => {
-      /* const confirmResult = await proxy
+    const removeOutcage = async (id) => {
+      const confirmResult = await proxy
         .$confirm("此操作将永久删除该记录, 是否继续?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
-          customClass:'del-model',
+          customClass: "del-model",
         })
         .catch((err) => err);
       if (confirmResult !== "confirm") {
         return proxy.$message.info("已取消删除操作");
       }
-      await proxy.$API.regDove.deletepigeon.post(id).then((res) => {
+      await proxy.$API.regOutCage.deletedeliver.post(id).then((res) => {
         if (res.success) {
           proxy.$message({
             message: "删除成功",
@@ -348,35 +411,24 @@ export default defineComponent({
           });
         }
       });
-      proxy.$refs.table.getData(); */
+      proxy.$refs.table.getData();
     };
     const addDialogClosed = () => {
       proxy.$refs.addRef.resetFields();
     };
-    const editDialogClosed = () => {};
     const dataChange = (res) => {
       if (parseInt(res.data.total) > 0)
         proxy.$refs.table.total = parseInt(res.data.total);
     };
-    const searchClick = (params) => {
-      getparams.value = {
-        startTime: formatDateStart(datePk[0]),
-        endTime: formatDateEnd(datePk[1]),
-        shedId: currShed,
-        codes: params.inputValue,
-      };
-    };
+    const editDialogClosed = () => {};
     return {
       store,
       tableData,
       addInfo,
-      addDovedialog,
-      dovedialog,
+      addOutcagedialog,
+      Outcagedialog,
       editInfo,
       shortcuts,
-      searchTypes,
-      searchClick,
-      reset,
       panelChange,
       outTable,
       printTable,
@@ -384,14 +436,14 @@ export default defineComponent({
       datePk,
       formRules,
       api,
-      getparams,
+      params,
       dataChange,
-      updateDove,
-      addDove,
-      removeDove,
+      updateOutcage,
+      addOutcage,
+      removeOutcage,
       addDialogClosed,
       editDialogClosed,
-      showDovedialog,
+      showOutcagedialog,
     };
   },
 });
@@ -409,13 +461,13 @@ export default defineComponent({
   display: flex;
   justify-content: flex-end;
 }
-/* .del-model{
-    .el-message-box__btns {
+.del-model {
+  .el-message-box__btns {
     .el-button:nth-child(2) {
-      margin-right:10px;
-      background-color:#2d8cf0;
-      border-color:#2d8cf0;
+      margin-right: 10px;
+      background-color: #2d8cf0;
+      border-color: #2d8cf0;
     }
   }
-} */
+}
 </style>

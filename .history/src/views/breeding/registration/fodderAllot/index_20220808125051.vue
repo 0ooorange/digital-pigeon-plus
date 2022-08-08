@@ -310,8 +310,8 @@ export default defineComponent({
     const panelChange = (date) => {
       datePk.value = date;
       params.value = {
-        startTime: formatDateStart(datePk.value[0]),
-        endTime: formatDateEnd(datePk.value[1]),
+        startTime: formatDate(datePk.value[0]),
+        endTime: formatDate(datePk.value[1]),
         shedId: currShed,
       };
     };
@@ -337,25 +337,10 @@ export default defineComponent({
         year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
       return newDate;
     };
-    const formatDateEnd = (dat) => {
-      //获取年月日，时间
-      var year = dat.getFullYear();
-      var mon =
-        dat.getMonth() + 1 < 10
-          ? "0" + (dat.getMonth() + 1)
-          : dat.getMonth() + 1;
-      var data = dat.getDate() < 10 ? "0" + dat.getDate() : dat.getDate();
-      var hour = "23";
-      var min = "59";
-      var seon = "59";
-      var newDate =
-        year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
-      return newDate;
-    };
     const api = proxy.$API.fodderAllot.getallocatefeed;
     let params = ref({
-      startTime: formatDateStart(datePk[0]),
-      endTime: formatDateEnd(datePk[1]),
+      startTime: formatDate(datePk[0]),
+      endTime: formatDate(datePk[1]),
       shedId: currShed,
     });
     const tableData = ref([
@@ -540,6 +525,7 @@ export default defineComponent({
       api,
       params,
       checkForm,
+      formatDate,
       updateFodder,
       addFodder,
       addInput,

@@ -248,8 +248,8 @@ export default defineComponent({
     const panelChange = (date) => {
       datePk.value = date;
       getparams.value = {
-        startTime: formatDateStart(datePk.value[0]),
-        endTime: formatDateEnd(datePk.value[1]),
+        startTime: S(datePk.value[0]),
+        endTime: formatDate(datePk.value[1]),
         shedId: currShed,
       };
     };
@@ -266,8 +266,8 @@ export default defineComponent({
     };
     const api = proxy.$API.regDove.getpigeon;
     let getparams = ref({
-      startTime: formatDateStart(datePk[0]),
-      endTime: formatDateEnd(datePk[1]),
+      startTime: formatDate(datePk[0]),
+      endTime: formatDate(datePk[1]),
       shedId: currShed,
       codes: "",
     });
@@ -292,8 +292,8 @@ export default defineComponent({
         proxy.$refs.addRef.resetFields();
         addDovedialog.value = false;
         getparams.value = {
-          startTime: formatDateStart(datePk[0]),
-          endTime: formatDateEnd(datePk[1]),
+          startTime: formatDate(datePk[0]),
+          endTime: formatDate(datePk[1]),
           shedId: currShed,
           codes: "",
         };
@@ -360,8 +360,8 @@ export default defineComponent({
     };
     const searchClick = (params) => {
       getparams.value = {
-        startTime: formatDateStart(datePk[0]),
-        endTime: formatDateEnd(datePk[1]),
+        startTime: formatDate(datePk[0]),
+        endTime: formatDate(datePk[1]),
         shedId: currShed,
         codes: params.inputValue,
       };
@@ -386,6 +386,7 @@ export default defineComponent({
       api,
       getparams,
       dataChange,
+      formatDate,
       updateDove,
       addDove,
       removeDove,
