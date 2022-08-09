@@ -176,7 +176,7 @@ export default {
     startTime = ref(startTime)
     endTime = ref(endTime)
     dateVals.value = [startTime.value, endTime.value]
-    console.log(startTime, endTime);
+    // console.log(startTime, endTime);
     // 改变时间
     const isComponents = ref(true)
     const dateChange = () => {

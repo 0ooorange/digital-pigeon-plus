@@ -95,7 +95,7 @@ export default {
     const showPage_methods = {
       async showPageApi() {
         const res = await showPageApi.get();
-        console.log('页面展示数据',res);
+        // console.log('页面展示数据',res);
         showPage_state.tableData = res.data.shedList;
       },
     };

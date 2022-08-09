@@ -131,7 +131,7 @@ export default {
 			Object.assign({},item,{code: codeArr[index]})
 			)
 		});
-		console.log(showPage_state.tableData);
+		// console.log(showPage_state.tableData);
       },
     };
     const editInfo_state = reactive({

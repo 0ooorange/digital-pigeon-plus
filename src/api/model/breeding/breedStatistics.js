@@ -28,7 +28,7 @@ export const getNumOfDeath = (shed_id, start_time, end_time) => http.get(`${base
 export const getFeedShedByIDTime = (shed_id, start_time, end_time) => http.get(`${baseUrl}/getFeedShedByIDTime/${shed_id}/${start_time}/${end_time}`)
 
 // 监控视频———获取监控视频id
-export const getMonitorByShedID = (data) => http.post(`/digitalPigeon/aliyun/video/getListVideoUrlList?sheId=${data}`)
+export const getMonitorByShedID = () => http.post(`/digitalPigeon/environment/enviroment/camera/getCamera`)
 
 // 当日预警信息———根据鸽棚ID和起止时间查询未查仔鸽笼
 export const getUnCheckPigeonCage = (shed_id, start_time, end_time) => http.get(`${baseUrl}/getUnCheckPigeonCage/${shed_id}/${start_time}/${end_time}`)

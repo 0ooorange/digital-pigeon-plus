@@ -36,9 +36,9 @@ export default {
             center: [115.74446, 24.21877] //初始化地图中心点位置
           })
         })
-        .catch((e) => {
-          console.log(e)
-        })
+        // .catch((e) => {
+        //   console.log(e)
+        // })
     }
   }
 }

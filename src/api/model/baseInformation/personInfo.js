@@ -3,7 +3,7 @@ export const getUserInfoApi =  {
 	url: `/digitalPigeon/ucenter/ucenter/new-user/getUserInfoById`,
 	name: "获取个人信息",
 	get: async function () {
-		console.log("url", this.url);
+		// console.log("url", this.url);
 		return await http.get(this.url);
 	},
 }

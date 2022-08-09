@@ -17,10 +17,11 @@
         <template #header>
           <span>{{ '摄像头' + (index + 1) }}</span>
         </template>
-        <video class="video" controls autoplay muted loop>
+        <iframe class="video" :src="item" allow="autoplay" frameBorder="0" allowfullscreen="true"/>
+        <!-- <video class="video" controls autoplay muted loop>
           <source :src="item.url" type="video/mp4" />
           <source :src="item.url" type="video/quicktime" />
-        </video>
+        </video> -->
       </el-card>
     </div>
     <div class="v-box">
@@ -48,16 +49,16 @@
       <h4>添加监控</h4>
     </template>
     <template #default>
-      <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
+      <el-table ref="multipleTableRef" :data="monitorInfo" style="width: 100%" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" />
         <el-table-column label="名称" width="120">
-          <template #default="scope">{{ scope.row.date }}</template>
+          <template #default="scope">{{ scope.row.name }}</template>
         </el-table-column>
-        <el-table-column property="model" label="型号" width="120" />
-        <el-table-column property="site" label="位置" show-overflow-tooltip />
+        <el-table-column property="serial" label="型号" width="120" />
+        <el-table-column property="place" label="位置" show-overflow-tooltip />
         <el-table-column property="type" label="监控方式" show-overflow-tooltip />
-        <el-table-column property="userid" label="区域负责人" show-overflow-tooltip />
-        <el-table-column property="name" label="联系方式" width="120" />
+        <el-table-column property="person" label="区域负责人" show-overflow-tooltip />
+        <!-- <el-table-column property="name" label="联系方式" width="120" /> -->
       </el-table>
     </template>
     <template #footer>
@@ -70,71 +71,60 @@
 </template>
 
 <script setup>
-import { ref } from '@vue/reactivity'
+import { ref, defineEmits } from '@vue/reactivity'
 import { getMonitorList, getMonitorInfo } from '@api/equipVideo/globalVideo'
 import { CirclePlus } from '@element-plus/icons-vue'
+import store from '@/store'
 
 /* 视频逻辑 */
 const videoList = ref([])
-const shedID = '1518124016571797507'
-getMonitorList(shedID).then((res) => {
-  const urlList = res.data?.urlList || []
-  videoList.value = urlList.map((url) => ({ url, id: '1545974946201624577' }))
+getMonitorList().then((res) => {
+  const urlList = res.data.data || []
+  for(let i = 0; i < urlList.length; i++) {
+    videoList.value.push('https://v.qkeep.cn/?v=' + urlList[i].hls.replace('http', 'https') + '?rel=0&amp;autoplay=1');
+  }
 })
 /* 查摄像头信息 */
 // eslint-disable-next-line no-unused-vars
-let monitorInfo = {}
+// 还没有完善好，逻辑不清晰，是否是添加已有但是未展示的监控？如果是的话，那应该有删除展示某个监控的功能......
+let monitorInfo = ref([{name: '', serial: '', status: '', place: '', person: ''}])
 const getMonitorData = async (id = '1545974946201624577') => {
   await getMonitorInfo(id).then((res) => {
-    // console.log(res.data.data, 'getMonitorInfo')
-    monitorInfo = res.data?.data || {}
+    res = res.data?.data || {}
+    monitorInfo.value.push({
+      name: res.name.split('(')[0],
+      serial: res.serial,
+      status: res.status === 0 ? '在线' : '掉线',
+      place: store.state.baseInfo.CURR_INFO.CURR_BASE.code + '基地' + store.state.baseInfo.CURR_INFO.CURR_SHED.code + '棚',
+      person: store.state.baseInfo.CURR_INFO.CHARGE_NAME
+    })
   })
 }
 getMonitorData()
 
+
 // 添加对话框
 const isDrawerShow = ref(false)
-// const addTableData = ref([
-//   {
-//     date: '2016-05-03',
-//     name: 'Tom',
-//     address: 'No. 189, Grove St, Los Angeles',
-//   },
-//   {
-//     date: '2016-05-02',
-//     name: 'Tom',
-//     address: 'No. 189, Grove St, Los Angeles',
-//   },
-//   {
-//     date: '2016-05-04',
-//     name: 'Tom',
-//     address: 'No. 189, Grove St, Los Angeles',
-//   },
-//   {
-//     date: '2016-05-01',
-//     name: 'Tom',
-//     address: 'No. 189, Grove St, Los Angeles',
-//   },
-//   {
-//     date: '2016-05-08',
-//     name: 'Tom',
-//     address: 'No. 189, Grove St, Los Angeles',
-//   },
-//   {
-//     date: '2016-05-06',
-//     name: 'Tom',
-//     address: 'No. 189, Grove St, Los Angeles',
-//   },
-//   {
-//     date: '2016-05-07',
-//     name: 'Tom',
-//     address: 'No. 189, Grove St, Los Angeles',
-//   },
-// ])
 /* 添加监控 */
 const addVideo = () => {
   isDrawerShow.value = true
 }
+
+const cancelClick = () => {}
+const confirmClick = () => {}
+
+/* 右侧 监控信息 */
+// const curInfo = reactive({})
+const emits = defineEmits(['changeIndex']);
+const curIndex = ref(1)
+const videoChange = ({ id }, i) => {
+  curIndex.value = i
+  getMonitorData(id)
+  // 更新监控信息
+  emits('changeIndex', i)
+}
+
+
 </script>
 
 <style lang="less" scoped>

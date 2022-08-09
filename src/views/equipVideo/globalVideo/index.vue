@@ -5,10 +5,10 @@
         </div>
         <!-- 视频列表 -->
         <div class="center">
-            <Center />
+            <Center @changeIndex="changeIndex" />
         </div>
         <div class="right">
-            <Right />
+            <Right :curIndex="curIndex" />
             <div class="map">
                 <SCMap adress="" />
             </div>
@@ -20,25 +20,20 @@ import Left from "./components/left.vue"
 import Center from "./components/center.vue"
 import Right from "./components/right.vue"
 import SCMap from '@/components/scMap'
-// import { reactive, ref } from '@vue/reactivity'
+import { ref } from '@vue/reactivity'
 export default {
     name: 'globalVideo',
     components: { Left, Center, Right, SCMap },
     setup() {
-
-        /* 右侧 监控信息 */
-        // const curInfo = reactive({})
-        // const curIndex = ref(1)
-        // const videoChange = ({ id }, i) => {
-        //   curIndex.value = i
-        //   getMonitorData(id)
-        //   // 更新监控信息
-        // }
-        return {
-            // curIndex,
-            // curInfo,
-            // videoChange,
-        }
+      let curIndex = ref(1)
+       /* 右侧 监控信息 */
+      const changeIndex = i => {
+        curIndex.value = i
+      }
+      return {
+        curIndex,
+        changeIndex
+      }
     },
 }
 </script>

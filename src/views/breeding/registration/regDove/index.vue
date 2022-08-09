@@ -210,13 +210,13 @@ export default defineComponent({
       codes: [{ message: "请输入鸽笼号", trigger: "blur", required: true }],
     });
     const printTable = () => {
-      console.log("点击打印");
+      // console.log("点击打印");
     };
     const reset = () => {
-      console.log("点击重置");
+      // console.log("点击重置");
     };
     const outTable = () => {
-      console.log("点击导出");
+      // console.log("点击导出");
     };
     //把这一行的信息传入对话框
     const showDovedialog = (item) => {

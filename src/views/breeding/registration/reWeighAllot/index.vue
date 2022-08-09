@@ -201,11 +201,11 @@ export default defineComponent({
     });
     
     const outTable = () => {
-      console.log("点击导出");
+      // console.log("点击导出");
     };
 
     const printTable = () => {
-      console.log("点击打印");
+      // console.log("点击打印");
     };
     //把这一行的信息传入对话框
     const showReWeightdialog = (item) => {

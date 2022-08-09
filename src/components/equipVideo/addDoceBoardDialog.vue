@@ -99,7 +99,7 @@ export default defineComponent({
 
         //添加鸽板弹框显示
         const show = function () {
-            console.log("cu");
+            // console.log("cu");
             dialogFormVisible.value = true;
         };
 
@@ -125,7 +125,7 @@ export default defineComponent({
 
         //选择鸽笼弹框
         const showChooseCageDialog = function () {
-            console.log("执行");
+            // console.log("执行");
             emit("showChooseCageDialog");
         };
 
@@ -136,7 +136,7 @@ export default defineComponent({
 
         const closeDialog = function () {
             // emit("closeDialog");
-            console.log("关闭");
+            // console.log("关闭");
             showTag.value = false;
             titleButton.value = '选择鸽笼'
 

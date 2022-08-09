@@ -7,7 +7,7 @@ export const getThresholdBYDay = (day) =>
 			day
 	);
 export const setThreshold = (form) => {
-    console.log(form,'参数')
+    // console.log(form,'参数')
 	// return http.post(
 	// 	"/digitalPigeon/environment/enviroment/threshold/setThreshold?day=" +
 	// 		form.day +

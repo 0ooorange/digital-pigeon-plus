@@ -155,7 +155,7 @@ export default defineComponent({
         //当前时间
 
         const currentTime = new Date();
-        console.log("当前时间", currentTime.getHours());
+        // console.log("当前时间", currentTime.getHours());
 
         //临时变量
         var temp = "";
@@ -178,9 +178,10 @@ export default defineComponent({
         ];
 
         //改变时间
-        const changeTime = function (e) {
-            console.log("选择器发生改变", e);
-            console.log(timeValue.value, 555);
+        const changeTime = function () {
+        // const changeTime = function (e) {
+            // console.log("选择器发生改变", e);
+            // console.log(timeValue.value, 555);
 
             resultList.length = 0;
             getThresholdBYDayMethods();
@@ -198,12 +199,12 @@ export default defineComponent({
                     params = 1;
                     break;
             }
-            console.log("参数", params);
+            // console.log("参数", params);
             let res = await getThresholdBYDay(params);
-            console.log("获取数据列表结果", res);
+            // console.log("获取数据列表结果", res);
             if (res.code == 200) {
                 resultList.push(...res.data.data);
-                console.log(resultList, "结果");
+                // console.log(resultList, "结果");
             }
         };
         getThresholdBYDayMethods();
@@ -234,7 +235,7 @@ export default defineComponent({
         });
 
         const editData = function (e) {
-            console.log("编辑数据", e);
+            // console.log("编辑数据", e);
             // console.log(eitSetDialog.value, 11111);
             dialogForm.name = e.name;
             dialogForm.min = e.min;

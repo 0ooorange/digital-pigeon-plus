@@ -758,7 +758,7 @@ export default {
 					commonParams,
 					"二氧化碳"
 				);
-			console.log("二氧化碳请求结果", CarbonDioxRes);
+			// console.log("二氧化碳请求结果", CarbonDioxRes);
 
 			if (CarbonDioxRes.code === 200) {
 				carbonDioxide = CarbonDioxRes.data.data;
@@ -770,7 +770,7 @@ export default {
 					commonParams,
 					"空气温度"
 				);
-			console.log("空气温度请求结果", temperatureRes);
+			// console.log("空气温度请求结果", temperatureRes);
 			if (temperatureRes.code === 200) {
 				temperature = temperatureRes.data.data;
 				//数据赋值
@@ -788,7 +788,7 @@ export default {
 
 				//数据赋值
 				humidityOption.dataset.source = humidityc;
-				console.log("空气湿度请求结果", humidityRes);
+				// console.log("空气湿度请求结果", humidityRes);
 			}
 
 			//光照强度
@@ -802,7 +802,7 @@ export default {
 				//数据赋值
 				illuminationIntensityOption.dataset.source =
 					illuminationIntensity;
-				console.log("光照强度请求结果", illuminationIntensityRes);
+				// console.log("光照强度请求结果", illuminationIntensityRes);
 			}
 
 			//PM2.5
@@ -814,7 +814,7 @@ export default {
 				PM = PMRes.data.data;
 				//数据赋值
 				PMOption.dataset.source = PM;
-				console.log("PM2.5请求结果", PMRes);
+				// console.log("PM2.5请求结果", PMRes);
 			}
 
 			//PM10
@@ -827,7 +827,7 @@ export default {
 				PM10 = PM10Res.data.data;
 				//数据赋值
 				PM10Option.dataset.source = PM10;
-				console.log("PM10请求结果", PM10Res);
+				// console.log("PM10请求结果", PM10Res);
 			}
 
 			//氨气浓度
@@ -840,7 +840,7 @@ export default {
 				ammoniaGas = ammoniaGasRes.data.data;
 				//数据赋值
 				ammoniaGasOption.dataset.source = ammoniaGas;
-				console.log("氨气浓度请求结果", ammoniaGasRes);
+				// console.log("氨气浓度请求结果", ammoniaGasRes);
 			}
 
 			//硫化氢浓度
@@ -853,7 +853,7 @@ export default {
 				sulfurettedHydrogen = sulfurettedHydrogenRes.data.data;
 				//数据赋值
 				sulfurettedHydrogenOption.dataset.source = sulfurettedHydrogen;
-				console.log("硫化氢请求结果", sulfurettedHydrogenRes);
+				// console.log("硫化氢请求结果", sulfurettedHydrogenRes);
 			}
 
 			//TSP浓度
@@ -865,7 +865,7 @@ export default {
 				TSP = TSPRes.data.data;
 				//数据赋值
 				TSPOption.dataset.source = TSP;
-				console.log("TSP请求结果", TSPRes);
+				// console.log("TSP请求结果", TSPRes);
 			}
 
 			//噪音
@@ -874,12 +874,12 @@ export default {
 					commonParams,
 					"噪音"
 				);
-			console.log("噪音", noiseRes);
+			// console.log("噪音", noiseRes);
 			if (noiseRes.code === 200) {
 				noise = noiseRes.data.data;
 				//数据赋值
 				noiseOption.dataset.source = noise;
-				console.log("噪音请求结果", noiseRes);
+				// console.log("噪音请求结果", noiseRes);
 			}
 		};
 

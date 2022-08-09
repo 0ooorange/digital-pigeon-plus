@@ -831,7 +831,7 @@ export default defineComponent({
 
         //全选的事件
         const selectAll = function () {
-            console.log("选择的值", selectedArr.value);
+            // console.log("选择的值", selectedArr.value);
             if (checked.value) {
                 selectedArr.value.length = 0;
                 for (let i = 0; i < selectOptions.length; i++) {
@@ -852,8 +852,9 @@ export default defineComponent({
         };
 
         //选择框内容发生改变时
-        const changeSelect = function (val) {
-            console.log("选择的值", val, selectedArr.value);
+        const changeSelect = function () {
+        // const changeSelect = function (val) {
+            // console.log("选择的值", val, selectedArr.value);
             if (selectedArr.value.length == selectOptions.length) {
                 checked.value = true;
             } else {
@@ -892,7 +893,7 @@ export default defineComponent({
                         }
                     });
                 });
-                console.log("左边的结果", temp);
+                // console.log("左边的结果", temp);
                 echartArray.length = 0;
 
                 echartArray.push(...temp);

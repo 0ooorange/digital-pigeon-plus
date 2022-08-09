@@ -86,7 +86,7 @@ export default {
       async editInfoFun() {
         // console.log(showPage_state.editInfo);
         const res = await updateUserInfoApi.post(showPage_state.editInfo);
-        console.log("asdasd",res);
+        // console.log("asdasd",res);
         if (res.code === 200) {
           ElMessage.success("编辑成功！");
           showPage_methods.showPage();
@@ -104,7 +104,7 @@ export default {
 		}
 		// 调用接口修改密码
 		const res = await updatePasswordApi.post(newPassword);
-		console.log(res);
+		// console.log(res);
 		 if (res.code === 200) {
           ElMessage.success("修改成功！");
           showPage_methods.showPage();

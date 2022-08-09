@@ -8,35 +8,36 @@
   <div class="video2">
     <div class="contList">
       <div class="boxVideo">
-        <video class="video-js video-btn" data-setup="{}" controls :src="monitor_id"></video>
+        <iframe class="video-js video-btn" :src="monitor_id" scrolling="no" allow="autoplay" frameBorder="0" allowfullscreen="true"/>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue'
+import { ref } from 'vue'
 import { getMonitorByShedID } from '@api/breeding/breedStatistics'
-const props = defineProps({ shed_id: { type: String, require: true} })
 // 下拉框选项值
 const videoSelect = ref('')
 // 获取监控视频id
 const monitor_idlist = ref([])
 const monitor_id = ref('')
 const monitor_namelist = ref([])
-getMonitorByShedID(props.shed_id)
-  .then((res) => { monitor_idlist.value = res.data.urlList }) // 获取监控列表
-  .then(() => { monitor_id.value = monitor_idlist.value[0] }) // 获取当前监控
-  .then(() => { for (let i = 1; i <= monitor_idlist.value.length; i++) { monitor_namelist.value.push('监控' + i) } }) // 获取监控下拉框选项名
+getMonitorByShedID()
+  .then((res) => {monitor_idlist.value = res.data.data}) // 获取监控列表
+  .then(() => {monitor_id.value = 'https://v.qkeep.cn/?v=' + monitor_idlist.value[0].hls.replace('http', 'https') + '#toolbar=0'; monitor_id.value.slice(25, 's')}) // 获取当前监控
+  .then(() => {for (let i = 1; i <= monitor_idlist.value.length; i++) {monitor_namelist.value.push('监控' + i)}}) // 获取监控下拉框选项名
 // 选项变化
-const change = (e) => { monitor_id.value = monitor_idlist.value[parseInt(e.split('')[2])] }
+const change = (e) => { 
+  monitor_id.value = 'https://v.qkeep.cn/?v=' + monitor_idlist.value[parseInt(e.split('')[2])].hls.replace('http', 'https') + '#toolbar=0'; 
+  monitor_id.value.slice(25, 's')
+}
 </script>
 
 <style lang="scss" scoped>
 /* 监控样式 */
-.bottomLeft {
-  width: 25%;
-  .video {display: flex; flex-direction: row;justify-content: space-between;}
+.bottomLeft {width: 25%;
+  .video {display: flex; flex-direction: row; justify-content: space-between;}
   .video2 {width: 100%; height: 28vh;
     .contList {position: relative; width: 100%; height: 11vw; margin: 1vw auto 0;
       .boxVideo {width: 100%; height: 100%;

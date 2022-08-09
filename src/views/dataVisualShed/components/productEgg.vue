@@ -32,7 +32,6 @@ const option = ref({
 })
 
 getLayEggNumStatistics(store.state.baseInfo.SHED_ID).then(res => {
-  console.log(res);
   for(let i = 0; i < 7; i++) {
     if(res.data.data[`day${i}`][0]) {option.value.series[0].data.push(res.data.data[`day${i}`][0].countLayEgg)}
     else {option.value.series[0].data.push(0)}

@@ -38,7 +38,7 @@ export default defineComponent({
     var isShowSearchType = ref(true)
     if (props.searchTypes.length <= 1) {
       isShowSearchType.value = false
-      console.log(props.searchTypes[0], '<=1')
+      // console.log(props.searchTypes[0], '<=1')
     } else {
       isShowSearchType.value = true
     }
@@ -133,7 +133,7 @@ export default defineComponent({
         inputValue: inputValue.value
 
       }
-      console.log(params,'测试')
+      // console.log(params,'测试')
       emit('searchClick',params)
     } // 搜索
     const reset = () => {

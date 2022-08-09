@@ -13,7 +13,9 @@ export default {
 		// 卡片
     const cardData = ref([])
 
-    const outTable = () => {console.log('导出')}
+    const outTable = () => {
+      // console.log('导出')
+    }
 
 		// 表格
     const tablelist = ref([])

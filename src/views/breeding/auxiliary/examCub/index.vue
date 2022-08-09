@@ -14,7 +14,7 @@ export default {
     const cardData = ref([])
 
     const outTable = () => {
-      console.log('导出')
+      // console.log('导出')
     }
 
     // 表格

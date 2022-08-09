@@ -97,7 +97,7 @@ var http = {
 	 * @param  {参数} config
 	 */
 	post: function(url, data={}, config={}) {
-		console.log(url,data,config)
+		// console.log(url,data,config)
 		return new Promise((resolve, reject) => {
 			axios({
 				method: 'post',
@@ -108,7 +108,7 @@ var http = {
 				
 				resolve(response.data);
 			}).catch((error) => {
-				console.log('请求',error)
+				// console.log('请求',error)
 				reject(error);
 			})
 		})

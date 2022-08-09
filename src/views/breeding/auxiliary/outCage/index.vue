@@ -15,7 +15,9 @@ export default {
 		// 卡片
     const cardData = ref([{cardText: '出栏个数', cardNumber: '35个'}])
 
-    const outTable = () => {console.log('导出')}
+    const outTable = () => {
+      // console.log('导出')
+    }
 
 		// 表格
     const tablelist = ref([])
