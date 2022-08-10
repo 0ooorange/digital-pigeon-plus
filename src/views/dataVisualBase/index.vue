@@ -52,7 +52,9 @@
         </div>
         <div class="echarts3 box-background">
           <div class="title">位置信息</div>
-          <img src="./img/tempMap.jpg" alt="error">
+          <div class="map">
+            <SCMap adress="" />
+          </div>
         </div>
       </div>
       <div class="center">
@@ -124,6 +126,7 @@
 
 <script>
 import ScEcharts from '@/components/scEcharts'
+import SCMap from '@/components/scMap'
 import { ElMessage } from 'element-plus'
 
 import { ref, h } from 'vue'
@@ -137,6 +140,7 @@ export default {
   name: 'dataVisualBase',
   components: {
     ScEcharts,
+    SCMap
   },
   setup() {
     // 接收路由传参的值
@@ -699,8 +703,10 @@ html,
   display: flex;
   justify-content: center;
   align-items: center;
-  img {
-    width: 80%;
+  .map {
+    width: 90%;
+    height: 90%;
+	  padding: 10px 0 20px;
   }
 }
 

@@ -26,12 +26,6 @@
     </el-descriptions-item>
     <el-descriptions-item>
       <template #label>
-        <div class="cell-item">监控方式</div>
-      </template>
-      固定点
-    </el-descriptions-item>
-    <el-descriptions-item>
-      <template #label>
         <div class="cell-item">区域负责人</div>
       </template>
       <el-tag size="small">{{monitorInfo.person || '-'}}</el-tag>
