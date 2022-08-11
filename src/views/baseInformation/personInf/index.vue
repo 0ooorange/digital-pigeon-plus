@@ -76,6 +76,7 @@ export default {
 	passwordDialogVisible:false,
 		newPassword:'',
     });
+
     const showPage_methods = {
       async showPage() {
         const res = await getUserInfoApi.get();
@@ -83,6 +84,7 @@ export default {
         showPage_state.editInfo = res.data.userInfo;
       },
       //编辑个人信息
+
       async editInfoFun() {
         // console.log(showPage_state.editInfo);
         const res = await updateUserInfoApi.post(showPage_state.editInfo);
@@ -147,8 +149,8 @@ export default {
 }
 
 .box-card {
-  margin: 0 auto;
-  width: 800px;
+  margin: 2% auto;
+  width: 60%;
 }
 .img_avatar {
   width: 150px;

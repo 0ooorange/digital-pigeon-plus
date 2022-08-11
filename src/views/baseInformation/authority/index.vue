@@ -7,7 +7,7 @@
       >
     </div>
     <scTable :data="tableData" stripe>
-      <el-table-column prop="billNum" label="角色标签" align="center" />
+      <el-table-column prop="roleName" label="角色标签" align="center" />
       <el-table-column label="查看操作" align="center">
         <template #default="scope" @click="showOutcagedialog(scope.row)">
           <el-button type="warning" @click="roleRightsDialogVisible = true"> 查看权限</el-button>
@@ -87,7 +87,8 @@
 <script>
 import scTable from "@/components/scTable/index.vue";
 import { onMounted, reactive, toRefs } from "vue";
-import { getAllAuthorityApi } from "@/api/model/baseInformation/authority";
+import { getAllAuthorityApi,
+getAllRole } from "@/api/model/baseInformation/authority";
 
 export default {
   name: "authority", // 权限管理
@@ -97,20 +98,19 @@ export default {
   setup() {
     onMounted(() => {
       authority_methods.getAllAuthority();
+	  showPage_methods.getAllRole()
     });
     const showPage_state = reactive({
-      tableData: [
-        {
-          date: "111",
-          dovecoteNumber: "111",
-          number: "assda",
-          billNum: "12341",
-          batchNum: "asdas",
-        },
-      ],
+      tableData: [],
       visible: false,
     });
-    const showPage_methods = {};
+    const showPage_methods = {
+		async getAllRole(){
+			const res = await getAllRole.get()
+			showPage_state.tableData = res.data.roleList
+			console.log(res);
+		}
+	};
     const authority_state = reactive({
 
 		//   查看权限

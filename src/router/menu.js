@@ -335,11 +335,21 @@ export default {
 			name: "personInf",
 			path: "/baseInformation/personInf",
 			meta: {
-				title: "个人信息管理",
+				title: "个人信息",
 				icon: "el-icon-histogram",
 				type: "menu",
 			},
 			component: "baseInformation/personInf/index",
+		},
+		{
+			name: "baseInfo",
+			path: "/baseInformation/baseInfo",
+			meta: {
+				title: "基地信息",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			component: "baseInformation/baseInfo/index",
 		},
 		{
 			name: "employee",
@@ -362,14 +372,14 @@ export default {
 			component: "baseInformation/dovecote/index",
 		},
 		{
-			name: "base",
-			path: "/baseInformation/base",
+			name: "baseInfoMana",
+			path: "/baseInformation/baseInfoMana",
 			meta: {
 				title: "基地信息管理",
 				icon: "el-icon-histogram",
 				type: "menu",
 			},
-			component: "baseInformation/base/index",
+			component: "baseInformation/baseInfoMana/index",
 		},
 		{
 			name: "authority",
