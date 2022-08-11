@@ -6,7 +6,7 @@ export default {
     url:`digitalPigeon/breed/informationinput/getallocatefeed`,
     name:'获取饲料记录',
     post: async function (data) {
-			console.log("url", this.url);
+			// console.log("url", this.url);
       let params =qs.stringify({
         pageNum:data.page,
         pageSize:data.pageSize,
@@ -14,7 +14,7 @@ export default {
         startTime:data.startTime,
         endTime:data.endTime
       })
-      console.log("参数",params);
+      // console.log("参数",params);
 			return await http.post(this.url, params);
 		},
   },
@@ -22,8 +22,8 @@ export default {
     url:`digitalPigeon/breed/informationinput/addallocatefeed`,
     name:'添加饲料记录',
     post: async function (data) {
-			console.log("url", this.url);
-      console.log(data.brand);
+			// console.log("url", this.url);
+      // console.log(data.brand);
       let n=data.brand.length;
       let index=0;
       while(n){
@@ -34,22 +34,22 @@ export default {
           shedId:data.shedId,
           size:data.size[index],
           weight:data.weight[index],
-          type:2,
+          origin:data.origin,
+          type:0,
           unit:"斤",
-          origin:"金绿货仓"
         }
-        await http.post(this.url, params)
-        console.log(index)
-        index++;
         n--;
+        if(n===0)
+        return await http.post(this.url, params);
+        await http.post(this.url, params);
+        index++;
 		}
-    return;
   }},
   modifyallocatefeed:{
     url:`digitalPigeon/breed/informationinput/modifyallocatefeed`,
     name:'修改饲料记录',
     post: async function (data) {
-			console.log("url", this.url);
+			// console.log("url", this.url);
 			return await http.post(this.url, data);
 		},
   },
@@ -57,7 +57,7 @@ export default {
     url:`digitalPigeon/breed/informationinput/deleteallocatefeed`,
     name:'删除饲料记录',
     post: async function (id) {
-			console.log("url", this.url);
+			// console.log("url", this.url);
 			return await http.post(this.url,id,{headers:{'Content-Type':'application/json'}});
 		},
   },

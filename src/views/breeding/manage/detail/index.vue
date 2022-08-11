@@ -230,7 +230,7 @@ export default defineComponent({
         startTime = tool.dateFormat(st)
         endTime = tool.dateFormat(et)
       }
-      console.log(startTime, endTime, 'startTime endTime')
+      // console.log(startTime, endTime, 'startTime endTime')
       query.startTime = startTime
       query.endTime = endTime
       queryData()
@@ -241,7 +241,7 @@ export default defineComponent({
         queryData()
         return
       }
-      console.log(dateType, 'dateTypeChange')
+      // console.log(dateType, 'dateTypeChange')
       query.fieldTime = dateType
       queryData()
     }

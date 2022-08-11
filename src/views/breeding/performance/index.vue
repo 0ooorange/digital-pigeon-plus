@@ -142,7 +142,7 @@ export default defineComponent({
          const currShed = computed(() => {
             return proxy.$store.state.baseInfo.SHED_ID
          })
-        console.log("当前鸽棚", currShed.value);
+        // console.log("当前鸽棚", currShed.value);
 
         //格式化时间
         const formatDate = function (date) {
@@ -353,13 +353,13 @@ export default defineComponent({
         ];
 
         const searchClick = function (e) {
-            console.log("嘻嘻嘻，我被点击啦",e);
+            // console.log("嘻嘻嘻，我被点击啦",e);
             params.fieldCommon = e.inputValue
-            console.log('请求的参数',params)
+            // console.log('请求的参数',params)
         };
 
         const outTable = function () {
-            console.log("哈哈哈，我被点击了噢");
+            // console.log("哈哈哈，我被点击了噢");
         };
 
         return {

@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@amap/amap-jsapi-loader": "^1.0.1",
     "@element-plus/icons": "0.0.11",
     "@tinymce/tinymce-vue": "4.0.5",
     "axios": "0.25.0",
@@ -16,7 +17,7 @@
     "crypto-js": "4.1.1",
     "echarts": "^5.3.0",
     "echarts-stat": "^1.2.0",
-    "element-plus": "^2.1.7",
+    "element-plus": "^2.0.2",
     "less": "^4.1.2",
     "less-loader": "^6.2.0",
     "lodash": "^4.17.21",

@@ -8,11 +8,11 @@
           <li><a href="javascript:;">加工</a></li>
         </ul>
       </div>
-      <h1 class="top_center">金绿现代农业发展有限公司</h1>
+      <h1 class="top_center">{{curr_shed}}</h1>
       <div class="top_right">
         <ul>
           <li>
-            <router-link to="/dataVisual">返回</router-link>
+            <span @click="toLast">返回</span>
           </li>
         </ul>
       </div>
@@ -21,51 +21,50 @@
     <div class="content">
       <div class="left">
         <div class="echarts1 box-background">
-          <div class="title">视频监控</div>
-          <div class="videoSelect">
-            <el-select style="width: 100px;" v-model="videoValue" placeholder="监控1">
-              <el-option v-for="item in videoOptions" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </div>
-          <div class="videoDiv">
-            <video class="video" data-setup="{}" controls>
-              <source :src="videoUrl" type="application/x-mpegURL" />
-            </video>
-          </div>
+          <div class="title">鸽棚信息</div>
+          <ShedInfo v-if="isComponents" />
         </div>
         <div class="echarts2 box-background">
-          <div class="title">蛋异常统计</div>
-          <ScEcharts :option="eggAbnormalOption" height="90%" width="100%"></ScEcharts>
+          <div class="title">环境参数</div>
+          <EnviroInfo v-if="isComponents" />
         </div>
         <div class="echarts3 box-background">
           <div class="title">产蛋统计</div>
-          <ScEcharts :option="productEggOption" height="90%" width="100%"></ScEcharts>
+          <ProductEgg v-if="isComponents" />
+        </div>
+        <div class="echarts4 box-background">
+          <div class="title">视频监控</div>
+          <Video v-if="isComponents" />
         </div>
       </div>
       <div class="center">
+        <div class="center-top">
+          <el-date-picker v-model="dateVals" type="daterange" format="YYYY-MM-DD" unlink-panels range-separator="至" start-placeholder="起始时间" end-placeholder="结束时间" :shortcuts="shortcuts" @blur="dateChange" />
+        </div>
         <div class="map-echart">
           <img class="image" src="./img/shed.png" alt="error">
         </div>
         <div class="box-background centerEcharts">
-          <div class="title">环境参数</div>
-          <ScEcharts class="e1" :option="environmentOption " height="85%" width="90%"></ScEcharts>
+          <div class="title">环境参数统计</div>
+          <AllEnviro v-if="isComponents" :start_time="startTime" :end_time="endTime" />
         </div>
       </div>
       <div class="right">
-        <div class="echarts4 box-background">
-          <div class="title">养殖品种介绍</div>
-          <div class="echarts4-img">
-            <img class="image" src="./img/variety1.jpg" alt="error">
-          </div>
+        <div class="echarts5 box-background">
+          <div class="title">蛋异常统计</div>
+          <EggAbnormal v-if="isComponents" />
         </div>
         <div class="echarts5 box-background">
-          <div class="title">出栏统计</div>
-          <ScEcharts class="" :option="outCageOption" height="90%" width="100%"></ScEcharts>
+          <div class="title">仔数统计</div>
+          <Cub v-if="isComponents" :start_time="startTime" :end_time="endTime" />
         </div>
         <div class="echarts6 box-background">
           <div class="title">饲料统计</div>
-          <ScEcharts class="" :option="fodderOption " height="90%" width="100%"></ScEcharts>
+          <Fodder v-if="isComponents" />
+        </div>
+        <div class="echarts8 box-background">
+          <div class="title">养殖品种介绍</div>
+          <Types v-if="isComponents" />
         </div>
       </div>
     </div>
@@ -74,22 +73,44 @@
 
 <script>
 import ScEcharts from '@/components/scEcharts'
+import ShedInfo from './components/shedInfo.vue' // 鸽棚信息
+import EnviroInfo from './components/enviroInfo.vue' // 环境参数
+import ProductEgg from './components/productEgg.vue' // 产蛋统计
+import Video from './components/video.vue' // 视频监控
+import AllEnviro from './components/allEnviro.vue' // 环境参数统计
+import EggAbnormal from './components/eggAbnormal.vue' // 蛋异常统计
+import Cub from './components/cub.vue' // 仔数统计
+import Fodder from './components/fodder.vue' // 饲料统计
+import Types from './components/types.vue' // 养殖品种介绍
 
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 
 import tool from '@/utils/tool'
+import router from '@/router'
+import store from '@/store'
 import { getBaseAndShed } from '@api/bases/layout'
 
 export default {
   name: 'dataVisual',
   components: {
     ScEcharts,
+    ShedInfo,
+    Video,
+    EnviroInfo,
+    ProductEgg,
+    AllEnviro,
+    EggAbnormal,
+    Cub,
+    Fodder,
+    Types,
   },
   setup() {
+    const curr_shed = store.state.dataVisual.CURR_SHED.code
     // 基地和棚
     let baseInfo = tool.data.get('BASE_INFO')
+    const shed = ref([])
     getBaseAndShed(baseInfo.id).then((res) => {
-      console.log('res', res)
+      shed.value = res.data.shedList
       let currInfo = ref(tool.data.get('CURR_INFO'))
       let currBase = ref({})
       let currShed = ref({})
@@ -110,280 +131,74 @@ export default {
       }
       tool.data.set('CURR_INFO', currInfo.value)
     })
+    // 鸽棚选择
+    const currShedName = ref('')
+    const currShedChange = () => {}
+    // 前往上一页
+    const toLast = () => {
+      router.go(-1)
+    }
 
-    // 视频
-    const videoValue = ref('')
-    const videoOptions = [
+    const shortcuts = ref([
       {
-        value: 'A01仓',
-        label: 'A01仓',
+        text: '近一周',
+        value: () => {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+          return [start, end]
+        },
       },
       {
-        value: 'A02仓',
-        label: 'A02仓',
-      },
-    ]
-
-    // centerEcharts
-    const environmentOption = {
-      tooltip: {
-        trigger: 'axis',
-      },
-      legend: {
-        data: ['温度', '湿度', '二氧化碳', '光照强度', 'PM2.5', '氮气'],
-      },
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true,
-      },
-      toolbox: {
-        feature: {
-          saveAsImage: {},
+        text: '近一个月',
+        value: () => {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+          return [start, end]
         },
       },
-      xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        data: ['00:00', '4:00', '8:00', '12:00', '16:00', '20:00', '24:00'],
-      },
-      yAxis: {
-        type: 'value',
-      },
-      series: [
-        {
-          name: '温度',
-          type: 'line',
-          stack: 'Total',
-          data: ['100', '70', '40', '60', '50', '90', '80'],
-        },
-        {
-          name: '湿度',
-          type: 'line',
-          stack: 'Total',
-          data: ['20', '62', '31', '64', '90', '73', '100'],
-        },
-        {
-          name: '二氧化碳',
-          type: 'line',
-          stack: 'Total',
-          data: ['30', '232', '201', '154', '190', '330', '410'],
-        },
-        {
-          name: '光照强度',
-          type: 'line',
-          stack: 'Total',
-          data: [320, 332, 301, 334, 390, 330, 320],
-        },
-        {
-          name: 'PM2.5',
-          type: 'line',
-          stack: 'Total',
-          data: [100, 93, 351, 74, 160, 300, 400],
-        },
-        {
-          name: '氮气',
-          type: 'line',
-          stack: 'Total',
-          data: [120, 250, 100, 98, 500, 420, 200],
-        },
-      ],
-    }
-
-    // echarts2
-    const eggAbnormalOption = {
-      tooltip: {
-        trigger: 'item',
-      },
-      legend: {
-        // orient: 'vertical',
-        top: 'top',
-      },
-      series: [
-        {
-          name: '蛋异常统计',
-          type: 'pie',
-          radius: '70%',
-          label: {
-            show: false,
-          },
-          data: [
-            { value: 1048, name: '单蛋' },
-            { value: 735, name: '光蛋1' },
-            { value: 484, name: '光蛋2' },
-            { value: 580, name: '踩蛋1' },
-            { value: 300, name: '踩蛋2' },
-          ],
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)',
-            },
-          },
-        },
-      ],
-    }
-
-    // echarts3
-    const productEggOption = {
-      tooltip: {
-        trigger: 'axis',
-      },
-      xAxis: {
-        boundaryGap: false,
-        type: 'category',
-        data: (function () {
-          // var now = new Date()
-          var nowres = 30
-          var res = []
-          res.unshift(nowres)
-          // var len = 30
-          while (nowres >= 0) {
-            // res.unshift(now.toLocaleTimeString().replace(/^\D*/, ''))
-            nowres -= 5
-            if (nowres <= 0) break
-            res.unshift(nowres)
-          }
-          res.unshift(1)
-          return res
-        })(),
-      },
-      yAxis: [
-        {
-          type: 'value',
-          name: '产蛋数',
-          splitLine: {
-            show: false,
-          },
-        },
-      ],
-      series: [
-        {
-          name: '产蛋数',
-          type: 'line',
-          symbol: 'none',
-          lineStyle: {
-            width: 1,
-            color: '#409EFF',
-          },
-          areaStyle: {
-            opacity: 0.1,
-            color: '#79bbff',
-          },
-          data: (function () {
-            var res = []
-            var len = 30
-            while (len--) {
-              res.push(Math.round(Math.random() * 250))
-            }
-            return res
-          })(),
-        },
-      ],
-    }
-
-    // echarts5
-    const outCageOption = {
-      tooltip: {
-        trigger: 'item',
-      },
-      legend: {
-        // orient: 'vertical',
-        top: 'top',
-      },
-      series: [
-        {
-          name: '出栏统计',
-          type: 'pie',
-          radius: '70%',
-          label: {
-            show: false,
-          },
-          data: [
-            { value: 100, name: '死仔数' },
-            { value: 2000, name: '出栏数' },
-            { value: 3000, name: '出仔数' },
-          ],
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)',
-            },
-          },
-        },
-      ],
-    }
-
-    // echarts6
-    const fodderOption = {
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'shadow',
+      {
+        text: '近3个月',
+        value: () => {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+          return [start, end]
         },
       },
-      legend: {
-        data: ['饲料A', '饲料B'],
-      },
-      toolbox: {
-        show: true,
-        orient: 'vertical',
-        left: 'right',
-        top: 'center',
-        feature: {
-          mark: { show: true },
-          dataView: { show: true, readOnly: false },
-          magicType: { show: true, type: ['line', 'bar', 'stack'] },
-          restore: { show: true },
-          saveAsImage: { show: true },
-        },
-      },
-      xAxis: [
-        {
-          type: 'category',
-          axisTick: { show: false },
-          data: ['1', '5', '10', '15', '20', '25', '30'],
-        },
-      ],
-      yAxis: [
-        {
-          type: 'value',
-        },
-      ],
-      series: [
-        {
-          name: '饲料A',
-          type: 'bar',
-          barGap: 0,
-          emphasis: {
-            focus: 'series',
-          },
-          data: [320, 332, 301, 334, 390, 260, 330],
-        },
-        {
-          name: '饲料B',
-          type: 'bar',
-          emphasis: {
-            focus: 'series',
-          },
-          data: [220, 182, 191, 234, 290, 180, 270],
-        },
-      ],
+    ])
+    //设置默认日期
+    let dateVals = ref('')
+    let startTime = new Date()
+    let endTime = new Date()
+    startTime.setTime(startTime.getTime() - 3600 * 1000 * 24 * 7)
+    startTime = ref(startTime)
+    endTime = ref(endTime)
+    dateVals.value = [startTime.value, endTime.value]
+    // console.log(startTime, endTime);
+    // 改变时间
+    const isComponents = ref(true)
+    const dateChange = () => {
+      isComponents.value = false
+      nextTick(function () {
+        isComponents.value = true
+      })
     }
 
     return {
-      fodderOption,
-
-      videoValue,
-      videoOptions,
-
-      environmentOption,
-      eggAbnormalOption,
-      productEggOption,
-      outCageOption,
+      curr_shed,
+      shed,
+      currShedName,
+      currShedChange,
+      toLast,
+      
+      dateVals,
+      shortcuts,
+      startTime,
+      endTime,
+      isComponents,
+      dateChange
     }
   },
 }
@@ -492,10 +307,14 @@ html,
       float: right;
       text-align: center;
       margin-right: 1%;
+      cursor: pointer;
       a {
         text-decoration: none;
         color: #fff;
       }
+    }
+    .shedSelect {
+      width: 150px;
     }
   }
 }
@@ -513,6 +332,9 @@ html,
   }
   .center {
     flex: 1;
+    .center-top {
+      text-align: center;
+    }
   }
   .right {
     display: flex;
@@ -529,7 +351,9 @@ html,
 .echarts3,
 .echarts4,
 .echarts5,
-.echarts6 {
+.echarts6,
+.echarts7,
+.echarts8 {
   position: relative;
 }
 .title {
@@ -541,50 +365,32 @@ html,
   font-weight: 700;
   font-size: 14px;
 }
-// 图表背景
-.box-background {
-  margin-bottom: 7px;
-  height: 28%;
-  width: 85%;
-  background: url('./img/amiddboxttop.png') no-repeat;
-  background-size: 100% 100%;
-}
-// 图表1
-.echarts1 {
+
+// 图表位置
+.echarts1,
+.echarts2,
+.echarts5,
+.echarts6,
+.echarts7,
+.echarts8,
+.centerEcharts {
   display: flex;
-  flex-direction: column;
-  .videoSelect {
-    align-self: flex-end;
-    margin: 20px 10px 5px 0;
-  }
-  .videoDiv {
-    align-self: center;
-    .video {
-      height: 88%;
-    }
-  }
+  justify-content: center;
+  align-items: flex-end;
 }
 // 图表4
 .echarts4 {
   display: flex;
   justify-content: center;
-  align-items: center;
-  .echarts4-img {
-    margin-top: 10px;
-    height: 80%;
-    .image {
-      height: 100%;
-    }
-  }
 }
-// 图表3、图表5
-.echarts2,
-.echarts3,
-.echarts5,
-.echarts6,
-.centerEcharts {
-  display: flex;
-  align-items: flex-end;
+
+// 图表背景
+.box-background {
+  margin-bottom: 7px;
+  height: 21%;
+  width: 95%;
+  background: url('./img/amiddboxttop.png') no-repeat;
+  background-size: 100% 100%;
 }
 
 .map-echart {
@@ -605,56 +411,5 @@ html,
   padding: 0 0 10px 0;
   height: 28%;
   width: 100%;
-  .centerContent {
-    width: 90%;
-    height: 90%;
-    .cContent {
-      height: 50%;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      font-weight: 700;
-      .c1 {
-        padding-left: 15%;
-        background: url('./img/dove1.png') no-repeat;
-        background-size: 35%;
-        background-position: 0 -10px;
-      }
-      .c2 {
-        padding-left: 15%;
-        background: url('./img/dove2.png') no-repeat;
-        background-size: 20%;
-        background-position: 10px 4px;
-      }
-      .c3 {
-        padding-left: 15%;
-        background: url('./img/dove1.png') no-repeat;
-        background-size: 35%;
-        background-position: 0 -10px;
-      }
-      .c4 {
-        padding-left: 15%;
-        background: url('./img/dove3.png') no-repeat;
-        background-size: 25%;
-        background-position: 5px -2px;
-      }
-      .t1 {
-        color: #ee4000;
-        font-size: 18px;
-      }
-      .t2 {
-        color: #ee9a49;
-        font-size: 18px;
-      }
-      .t3 {
-        color: #eee685;
-        font-size: 18px;
-      }
-      .t4 {
-        color: #43cd80;
-        font-size: 18px;
-      }
-    }
-  }
 }
 </style>
