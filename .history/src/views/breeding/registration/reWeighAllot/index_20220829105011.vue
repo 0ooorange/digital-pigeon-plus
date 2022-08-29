@@ -99,10 +99,7 @@
         :rules="formRules"
       >
         <el-form-item label="时间:" prop="gmtCreate">
-          <el-input
-            v-model="editInfo.gmtCreate"
-            placeholder="请输入时间"
-          ></el-input>
+          <el-input v-model="editInfo.gmtCreate" placeholder="请输入时间"></el-input>
         </el-form-item>
         <el-form-item label="重量(斤):" prop="weight">
           <el-input
@@ -126,7 +123,8 @@ import { defineComponent, ref, getCurrentInstance } from "vue";
 import { useStore } from "vuex";
 export default defineComponent({
   name: "reWeighAllot", // 复称调拨
-  components: {},
+  components: {
+  },
   setup() {
     const { proxy } = getCurrentInstance();
     const store = useStore();
@@ -217,7 +215,7 @@ export default defineComponent({
     const formRules = ref({
       weight: [{ message: "请输入重量", trigger: "blur", required: true }],
     });
-
+    
     const outTable = () => {
       // console.log("点击导出");
     };
@@ -236,7 +234,7 @@ export default defineComponent({
     //把这一行的信息传入对话框
     const showReWeightdialog = (item) => {
       ReWeightdialog.value = true;
-      editInfo.value = Object.assign(item, { shedId: currShed });
+      editInfo.value = Object.assign(item,{shedId:currShed})
     };
     const api = proxy.$API.reWeighAllot.getreweighfeed;
     let params = ref({
@@ -249,21 +247,19 @@ export default defineComponent({
         if (!valid) {
           return;
         }
-        await proxy.$API.reWeighAllot.addreweighfeed
-          .post(addInfo.value)
-          .then((res) => {
-            if (res.success) {
-              proxy.$message({
-                message: "添加成功",
-                type: "success",
-              });
-            } else {
-              proxy.$message({
-                message: "添加失败",
-                type: "error",
-              });
-            }
-          });
+        await proxy.$API.reWeighAllot.addreweighfeed.post(addInfo.value).then((res) => {
+          if (res.success) {
+            proxy.$message({
+              message: "添加成功",
+              type: "success",
+            });
+          } else {
+            proxy.$message({
+              message: "添加失败",
+              type: "error",
+            });
+          }
+        });
         proxy.$refs.addRef.resetFields();
         addReWeightdialog.value = false;
         proxy.$refs.table.getData();
@@ -318,15 +314,16 @@ export default defineComponent({
           });
         }
       });
-      proxy.$refs.table.getData();
+     proxy.$refs.table.getData();
     };
     const addDialogClosed = () => {
       proxy.$refs.addRef.resetFields();
     };
-    const editDialogClosed = () => {};
+    const editDialogClosed = () => {
+    };
     const dataChange = (res) => {
-      if (parseInt(res.data.total) > 0)
-        proxy.$refs.table.total = parseInt(res.data.total);
+      if(parseInt(res.data.total)>0)
+      proxy.$refs.table.total = parseInt(res.data.total);
     };
     return {
       store,
@@ -368,6 +365,7 @@ export default defineComponent({
   display: flex;
   justify-content: flex-end;
 }
+<<<<<<< HEAD
 .del-model {
   .el-message-box__btns {
     .el-button:nth-child(2) {

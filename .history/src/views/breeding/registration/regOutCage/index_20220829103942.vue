@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="tag">
-      <el-button type="primary" plain @click="addReWeightdialog = true"
-        >复称饲料</el-button
+      <el-button type="primary" plain @click="addOutcagedialog = true"
+        >添加出栏</el-button
       >
       <table-search
         :dateDefault="dateDefault"
@@ -25,16 +25,35 @@
         @dataChange="dataChange"
       >
         <el-table-column
-          prop="gmtCreate"
+          prop="deliverTime"
           label="时间"
-          width="200"
+          width="150"
           sortable
           align="center"
         />
         <el-table-column
-          prop="weight"
-          label="重量(斤)"
-          width="200"
+          prop="category"
+          label="种类"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="num"
+          label="数量"
+          width="120"
+          sortable
+          align="center"
+        />
+        <el-table-column
+          prop="destination"
+          label="去向"
+          width="120"
+          align="center"
+        />
+        <el-table-column
+          prop="codes"
+          label="单据号"
+          width="120"
           sortable
           align="center"
         />
@@ -45,7 +64,7 @@
               type="primary"
               text
               icon="el-icon-edit"
-              @click="showReWeightdialog(scope.row)"
+              @click="showOutcagedialog(scope.row)"
               >编辑</el-button
             >
             <el-button
@@ -53,7 +72,7 @@
               type="danger"
               text
               icon="el-icon-delete"
-              @click="removeReWeight(scope.row.id)"
+              @click="removeOutcage(scope.row.id)"
               >删除</el-button
             >
           </template>
@@ -61,8 +80,8 @@
       </scTable>
     </el-main>
     <el-dialog
-      title="复称饲料"
-      v-model="addReWeightdialog"
+      title="添加出栏"
+      v-model="addOutcagedialog"
       width="25%"
       @close="addDialogClosed"
     >
@@ -73,21 +92,53 @@
         style="width: 250px"
         :rules="formRules"
       >
-        <el-form-item label="重量(斤):" prop="weight">
+        <el-form-item label="时间:" prop="deliverTime">
+<<<<<<< HEAD
+          <el-date-picker
+            v-model="addInfo.deliverTime"
+            :default-value="addInfo.deliverTime"
+            type="datetime"
+            format="YYYY-MM-DD HH:mm:ss"
+            unlink-panels
+            placeholder="请输入时间"
+          />
+=======
           <el-input
-            v-model="addInfo.weight"
-            placeholder="请输入重量"
+            v-model="addInfo.deliverTime"
+            placeholder="请输入时间"
+          ></el-input>
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
+        </el-form-item>
+        <el-form-item label="种类:" prop="category">
+          <el-input
+            v-model="addInfo.category"
+            placeholder="请输入种类"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="数量:" prop="num">
+          <el-input v-model="addInfo.num" placeholder="请输入数量"></el-input>
+        </el-form-item>
+        <el-form-item label="去向:" prop="destination">
+          <el-input
+            v-model="addInfo.destination"
+            placeholder="请输入去向"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="单据号:" prop="codes">
+          <el-input
+            v-model="addInfo.codes"
+            placeholder="请输入单据号"
           ></el-input>
         </el-form-item>
       </el-form>
       <span class="dialog-footer">
-        <el-button @click="addReWeightdialog = false">取 消</el-button>
-        <el-button type="primary" plain @click="addReWeight()">确 定</el-button>
+        <el-button @click="addOutcagedialog = false">取 消</el-button>
+        <el-button type="primary" plain @click="addOutcage()">确 定</el-button>
       </span>
     </el-dialog>
     <el-dialog
-      title="编辑饲料"
-      v-model="ReWeightdialog"
+      title="编辑出栏"
+      v-model="Outcagedialog"
       width="25%"
       @close="editDialogClosed"
     >
@@ -98,22 +149,37 @@
         style="width: 250px"
         :rules="formRules"
       >
-        <el-form-item label="时间:" prop="gmtCreate">
+        <el-form-item label="时间:" prop="deliverTime">
           <el-input
-            v-model="editInfo.gmtCreate"
+            v-model="editInfo.deliverTime"
             placeholder="请输入时间"
           ></el-input>
         </el-form-item>
-        <el-form-item label="重量(斤):" prop="weight">
+        <el-form-item label="种类:" prop="category">
           <el-input
-            v-model="editInfo.weight"
-            placeholder="请输入重量"
+            v-model="editInfo.category"
+            placeholder="请输入种类"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="数量:" prop="num">
+          <el-input v-model="editInfo.num" placeholder="请输入数量"></el-input>
+        </el-form-item>
+        <el-form-item label="去向:" prop="destination">
+          <el-input
+            v-model="editInfo.destination"
+            placeholder="请输入去向"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="单据号:" prop="codes">
+          <el-input
+            v-model="editInfo.codes"
+            placeholder="请输入单据号"
           ></el-input>
         </el-form-item>
       </el-form>
       <span class="dialog-footer">
-        <el-button @click="ReWeightdialog = false">取 消</el-button>
-        <el-button type="primary" plain @click="updateReWeight()"
+        <el-button @click="Outcagedialog = false">取 消</el-button>
+        <el-button type="primary" plain @click="updateOutcage()"
           >确 定</el-button
         >
       </span>
@@ -122,10 +188,10 @@
 </template>
 
 <script>
-import { defineComponent, ref, getCurrentInstance } from "vue";
+import { defineComponent, ref, getCurrentInstance} from "vue";
 import { useStore } from "vuex";
 export default defineComponent({
-  name: "reWeighAllot", // 复称调拨
+  name: "outCageRegistration", // 出栏登记
   components: {},
   setup() {
     const { proxy } = getCurrentInstance();
@@ -161,15 +227,26 @@ export default defineComponent({
         },
       },
     ];
-    let addReWeightdialog = ref(false);
-    let ReWeightdialog = ref(false);
-    // 设置默认时间段，组件内默认半年
-    let end = new Date();
-    let start = new Date();
-    start.setTime(start.getTime() - 3600 * 1000 * 24 * 183); // 半年
-    let dateDefault = [start, end];
-    let datePk = [start, end];
     //格式化时间
+    const formatDate = (dat) => {
+      //获取年月日，时间
+      var year = dat.getFullYear();
+      var mon =
+        dat.getMonth() + 1 < 10
+          ? "0" + (dat.getMonth() + 1)
+          : dat.getMonth() + 1;
+      var data = dat.getDate() < 10 ? "0" + dat.getDate() : dat.getDate();
+      var hour = dat.getHours() < 10 ? "0" + dat.getHours() : dat.getHours();
+      var min =
+        dat.getMinutes() < 10 ? "0" + dat.getMinutes() : dat.getMinutes();
+      var seon =
+        dat.getSeconds() < 10 ? "0" + dat.getSeconds() : dat.getSeconds();
+
+      var newDate =
+        year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
+      return newDate;
+    };
+
     const formatDateStart = (dat) => {
       //获取年月日，时间
       var year = dat.getFullYear();
@@ -200,30 +277,54 @@ export default defineComponent({
         year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
       return newDate;
     };
+    let addOutcagedialog = ref(false);
+    let Outcagedialog = ref(false);
+    // 设置默认时间段，组件内默认半年
+    let end = new Date();
+    let start = new Date();
+    start.setTime(start.getTime() - 3600 * 1000 * 24 * 183); // 半年
+    let dateDefault = [start, end];
+    let datePk = ref([start, end]);
+    const formRules = ref({
+      deliverTime: [{ message: "请输入时间", trigger: "blur", required: true }],
+      shedId: [{ message: "请输入鸽棚", trigger: "blur", required: true }],
+      category: [{ message: "请输入种类", trigger: "blur", required: true }],
+      num: [{ message: "请输入数量", trigger: "blur", required: true }],
+      destination: [{ message: "请输入去向", trigger: "blur", required: true }],
+      codes: [{ message: "请输入单据号", trigger: "blur", required: true }],
+    });
     const tableData = ref([
       {
-        gmtCreate: "",
-        weight: "",
+        deliverTime: "",
+        category: "",
+        num: "",
+        destination: "",
+        codes: "",
+        id: "",
       },
     ]);
     const addInfo = ref({
+      deliverTime: formatDate(end),
       shedId: currShed,
-      weight: "",
+      category: "",
+      num: "",
+      destination: "",
+      codes: "",
     });
     const editInfo = ref({
-      gmtCreate: "",
-      weight: "",
+      deliverTime: formatDate(end),
+      category: "",
+      num: "",
+      destination: "",
+      codes: "",
     });
-    const formRules = ref({
-      weight: [{ message: "请输入重量", trigger: "blur", required: true }],
-    });
-
     const outTable = () => {
-      // console.log("点击导出");
+<<<<<<< HEAD
+      console.log("点击导出");
     };
 
     const printTable = () => {
-      // console.log("点击打印");
+      console.log("点击打印");
     };
     const panelChange = (date) => {
       datePk.value = date;
@@ -232,24 +333,36 @@ export default defineComponent({
         endTime: formatDateEnd(datePk.value[1]),
         shedId: currShed,
       };
+=======
+      // console.log("点击导出");
+    };
+
+    const printTable = () => {
+      // console.log("点击打印");
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
     };
     //把这一行的信息传入对话框
-    const showReWeightdialog = (item) => {
-      ReWeightdialog.value = true;
+    const showOutcagedialog = (item) => {
+      Outcagedialog.value = true;
+<<<<<<< HEAD
       editInfo.value = Object.assign(item, { shedId: currShed });
+=======
+      editInfo.value = Object.assign(item,{shedId:currShed.id});
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
     };
-    const api = proxy.$API.reWeighAllot.getreweighfeed;
+    const api = proxy.$API.regOutCage.delivermanagement;
     let params = ref({
-      startTime: formatDateStart(datePk[0]),
-      endTime: formatDateEnd(datePk[1]),
+      startTime: formatDateStart(datePk.value[0]),
+      endTime: formatDateEnd(datePk.value[1]),
       shedId: currShed,
     });
-    const addReWeight = () => {
+    const addOutcage = () => {
+      addInfo.value.deliverTime = formatDate(addInfo.value.deliverTime);
       proxy.$refs.addRef.validate(async (valid) => {
         if (!valid) {
           return;
         }
-        await proxy.$API.reWeighAllot.addreweighfeed
+        await proxy.$API.regOutCage.adddeliver
           .post(addInfo.value)
           .then((res) => {
             if (res.success) {
@@ -265,16 +378,16 @@ export default defineComponent({
             }
           });
         proxy.$refs.addRef.resetFields();
-        addReWeightdialog.value = false;
+        addOutcagedialog.value = false;
         proxy.$refs.table.getData();
       });
     };
-    const updateReWeight = () => {
+    const updateOutcage = () => {
       proxy.$refs.editRef.validate(async (valid) => {
         if (!valid) {
           return;
         }
-        await proxy.$API.reWeighAllot.modifyreweighfeed
+        await proxy.$API.regOutCage.modifydeliver
           .post(editInfo.value)
           .then((res) => {
             if (res.success) {
@@ -289,11 +402,11 @@ export default defineComponent({
               });
             }
           });
-        ReWeightdialog.value = false;
+        Outcagedialog.value = false;
         proxy.$refs.table.getData();
       });
     };
-    const removeReWeight = async (id) => {
+    const removeOutcage = async (id) => {
       const confirmResult = await proxy
         .$confirm("此操作将永久删除该记录, 是否继续?", "提示", {
           confirmButtonText: "确定",
@@ -305,7 +418,7 @@ export default defineComponent({
       if (confirmResult !== "confirm") {
         return proxy.$message.info("已取消删除操作");
       }
-      await proxy.$API.reWeighAllot.deletereweighfeed.post(id).then((res) => {
+      await proxy.$API.regOutCage.deletedeliver.post(id).then((res) => {
         if (res.success) {
           proxy.$message({
             message: "删除成功",
@@ -323,34 +436,43 @@ export default defineComponent({
     const addDialogClosed = () => {
       proxy.$refs.addRef.resetFields();
     };
-    const editDialogClosed = () => {};
     const dataChange = (res) => {
+<<<<<<< HEAD
       if (parseInt(res.data.total) > 0)
         proxy.$refs.table.total = parseInt(res.data.total);
+=======
+      if(parseInt(res.data.total)>0)
+      proxy.$refs.table.total = parseInt(res.data.total);
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
     };
+    const editDialogClosed = () => {};
     return {
       store,
       tableData,
       addInfo,
-      addReWeightdialog,
-      ReWeightdialog,
+      addOutcagedialog,
+      Outcagedialog,
       editInfo,
       shortcuts,
       panelChange,
       outTable,
       printTable,
-      dataChange,
       dateDefault,
       datePk,
       formRules,
       api,
       params,
-      updateReWeight,
-      addReWeight,
-      removeReWeight,
+      dataChange,
+<<<<<<< HEAD
+=======
+      formatDate,
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
+      updateOutcage,
+      addOutcage,
+      removeOutcage,
       addDialogClosed,
       editDialogClosed,
-      showReWeightdialog,
+      showOutcagedialog,
     };
   },
 });
@@ -360,9 +482,19 @@ export default defineComponent({
 .container {
   margin: 0 20px;
 }
+.top {
+  display: flex;
+}
 .tag {
   display: flex;
   padding: 0 15px;
+}
+.form {
+  width: 80%;
+}
+.submit {
+  align-self: flex-end;
+  margin-bottom: 10px;
 }
 .dialog-footer {
   display: flex;

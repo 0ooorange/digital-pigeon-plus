@@ -1,16 +1,18 @@
 <template>
   <div class="container">
     <div class="tag">
-      <el-button type="primary" plain @click="addReWeightdialog = true"
-        >复称饲料</el-button
+      <el-button type="primary" plain @click="addDovedialog = true"
+        >添加鸽子</el-button
       >
       <table-search
+        :searchTypes="searchTypes"
         :dateDefault="dateDefault"
         :datePkDefalt="datePk"
+        @searchClick="searchClick"
+        @reset="reset"
         @outTable="outTable"
         @printTable="printTable"
         @panelChange="panelChange"
-        :showSearch="false"
       />
     </div>
     <el-main class="main">
@@ -20,21 +22,28 @@
         stripe
         highlightCurrentRow
         :apiObj="api"
-        :params="params"
+        :params="getparams"
         requestMethods="post"
         @dataChange="dataChange"
       >
         <el-table-column
           prop="gmtCreate"
           label="时间"
-          width="200"
+          width="220"
           sortable
           align="center"
         />
         <el-table-column
-          prop="weight"
-          label="重量(斤)"
-          width="200"
+          prop="codes"
+          label="鸽笼号"
+          width="220"
+          sortable
+          align="center"
+        />
+        <el-table-column
+          prop="age"
+          label="鸽龄(天)"
+          width="220"
           sortable
           align="center"
         />
@@ -45,7 +54,7 @@
               type="primary"
               text
               icon="el-icon-edit"
-              @click="showReWeightdialog(scope.row)"
+              @click="showDovedialog(scope.row.id)"
               >编辑</el-button
             >
             <el-button
@@ -53,7 +62,7 @@
               type="danger"
               text
               icon="el-icon-delete"
-              @click="removeReWeight(scope.row.id)"
+              @click="removeDove()"
               >删除</el-button
             >
           </template>
@@ -61,8 +70,8 @@
       </scTable>
     </el-main>
     <el-dialog
-      title="复称饲料"
-      v-model="addReWeightdialog"
+      title="添加鸽子"
+      v-model="addDovedialog"
       width="25%"
       @close="addDialogClosed"
     >
@@ -73,23 +82,26 @@
         style="width: 250px"
         :rules="formRules"
       >
-        <el-form-item label="重量(斤):" prop="weight">
+        <el-form-item label="鸽笼号:" prop="pigeonCageCodes">
           <el-input
-            v-model="addInfo.weight"
-            placeholder="请输入重量"
+            v-model="addInfo.pigeonCageCodes"
+            placeholder="请输入鸽笼号"
           ></el-input>
+        </el-form-item>
+        <el-form-item label="鸽龄(天):" prop="age">
+          <el-input v-model="addInfo.age" placeholder="请输入鸽龄"></el-input>
         </el-form-item>
       </el-form>
       <span class="dialog-footer">
-        <el-button @click="addReWeightdialog = false">取 消</el-button>
-        <el-button type="primary" plain @click="addReWeight()">确 定</el-button>
+        <el-button @click="addDovedialog = false">取 消</el-button>
+        <el-button type="primary" plain @click="addDove()">确 定</el-button>
       </span>
     </el-dialog>
     <el-dialog
-      title="编辑饲料"
-      v-model="ReWeightdialog"
+      title="编辑鸽子"
+      v-model="dovedialog"
       width="25%"
-      @close="editDialogClosed"
+      @close="editDoveClosed"
     >
       <el-form
         :model="editInfo"
@@ -104,33 +116,40 @@
             placeholder="请输入时间"
           ></el-input>
         </el-form-item>
-        <el-form-item label="重量(斤):" prop="weight">
+        <el-form-item label="鸽笼号:" prop="codes">
           <el-input
-            v-model="editInfo.weight"
-            placeholder="请输入重量"
+            v-model="editInfo.codes"
+            placeholder="请输入鸽笼号"
           ></el-input>
+        </el-form-item>
+        <el-form-item label="鸽龄(天):" prop="age">
+          <el-input v-model="editInfo.age" placeholder="请输入鸽龄"></el-input>
         </el-form-item>
       </el-form>
       <span class="dialog-footer">
-        <el-button @click="ReWeightdialog = false">取 消</el-button>
-        <el-button type="primary" plain @click="updateReWeight()"
-          >确 定</el-button
-        >
+        <el-button @click="dovedialog = false">取 消</el-button>
+        <el-button type="primary" plain @click="updateDove()">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref, getCurrentInstance } from "vue";
+import { defineComponent, ref, getCurrentInstance, reactive } from "vue";
 import { useStore } from "vuex";
 export default defineComponent({
-  name: "reWeighAllot", // 复称调拨
+  name: "doveRegistration", // 鸽子登记
   components: {},
   setup() {
     const { proxy } = getCurrentInstance();
     const store = useStore();
     const currShed = store.state.baseInfo.SHED_ID;
+    const searchTypes = reactive([
+      {
+        value: "鸽笼号",
+        label: "鸽笼号",
+      },
+    ]);
     // 时间选择器
     const shortcuts = [
       {
@@ -161,14 +180,8 @@ export default defineComponent({
         },
       },
     ];
-    let addReWeightdialog = ref(false);
-    let ReWeightdialog = ref(false);
-    // 设置默认时间段，组件内默认半年
-    let end = new Date();
-    let start = new Date();
-    start.setTime(start.getTime() - 3600 * 1000 * 24 * 183); // 半年
-    let dateDefault = [start, end];
-    let datePk = [start, end];
+    let addDovedialog = ref(false);
+    let dovedialog = ref(false);
     //格式化时间
     const formatDateStart = (dat) => {
       //获取年月日，时间
@@ -200,81 +213,98 @@ export default defineComponent({
         year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
       return newDate;
     };
+    // 设置默认时间段，组件内默认半年
+    let end = new Date();
+    let start = new Date();
+    start.setTime(start.getTime() - 3600 * 1000 * 24 * 183); // 半年
+    let dateDefault = [start, end];
+    let datePk = [start, end];
     const tableData = ref([
       {
         gmtCreate: "",
-        weight: "",
+        codes: "",
+        age: "",
       },
     ]);
-    const addInfo = ref({
-      shedId: currShed,
-      weight: "",
-    });
     const editInfo = ref({
       gmtCreate: "",
-      weight: "",
+      codes: "",
+      age: "",
+    });
+    const addInfo = reactive({
+      shedId: currShed,
+      pigeonCageCodes: "",
+      version: 0,
+      age: "",
     });
     const formRules = ref({
-      weight: [{ message: "请输入重量", trigger: "blur", required: true }],
+      gmtCreate: [{ message: "请输入时间", trigger: "blur", required: true }],
+      codes: [{ message: "请输入鸽笼号", trigger: "blur", required: true }],
+      age: [{ message: "请输入鸽龄", trigger: "blur", required: true }],
     });
-
-    const outTable = () => {
-      // console.log("点击导出");
-    };
-
     const printTable = () => {
       // console.log("点击打印");
     };
     const panelChange = (date) => {
       datePk.value = date;
-      params.value = {
+      getparams.value = {
         startTime: formatDateStart(datePk.value[0]),
         endTime: formatDateEnd(datePk.value[1]),
         shedId: currShed,
       };
     };
+    const reset = () => {
+      // console.log("点击重置");
+    };
+    const outTable = () => {
+      // console.log("点击导出");
+    };
     //把这一行的信息传入对话框
-    const showReWeightdialog = (item) => {
-      ReWeightdialog.value = true;
+    const showDovedialog = (item) => {
+      dovedialog.value = true;
       editInfo.value = Object.assign(item, { shedId: currShed });
     };
-    const api = proxy.$API.reWeighAllot.getreweighfeed;
-    let params = ref({
+    const api = proxy.$API.regDove.getpigeon;
+    let getparams = ref({
       startTime: formatDateStart(datePk[0]),
       endTime: formatDateEnd(datePk[1]),
       shedId: currShed,
+      codes: "",
     });
-    const addReWeight = () => {
+    const addDove = () => {
       proxy.$refs.addRef.validate(async (valid) => {
         if (!valid) {
           return;
         }
-        await proxy.$API.reWeighAllot.addreweighfeed
-          .post(addInfo.value)
-          .then((res) => {
-            if (res.success) {
-              proxy.$message({
-                message: "添加成功",
-                type: "success",
-              });
-            } else {
-              proxy.$message({
-                message: "添加失败",
-                type: "error",
-              });
-            }
-          });
+        await proxy.$API.regDove.addpigeon.post(addInfo).then((res) => {
+          if (res.success) {
+            proxy.$message({
+              message: "添加成功",
+              type: "success",
+            });
+          } else {
+            proxy.$message({
+              message: "添加失败",
+              type: "error",
+            });
+          }
+        });
         proxy.$refs.addRef.resetFields();
-        addReWeightdialog.value = false;
-        proxy.$refs.table.getData();
+        addDovedialog.value = false;
+        getparams.value = {
+          startTime: formatDateStart(datePk[0]),
+          endTime: formatDateEnd(datePk[1]),
+          shedId: currShed,
+          codes: "",
+        };
       });
     };
-    const updateReWeight = () => {
-      proxy.$refs.editRef.validate(async (valid) => {
+    const updateDove = () => {
+      /* proxy.$refs.editRef.validate(async (valid) => {
         if (!valid) {
           return;
         }
-        await proxy.$API.reWeighAllot.modifyreweighfeed
+        await proxy.$API.regDove.modifypigeon
           .post(editInfo.value)
           .then((res) => {
             if (res.success) {
@@ -289,23 +319,23 @@ export default defineComponent({
               });
             }
           });
-        ReWeightdialog.value = false;
+        dovedialog.value = false;
         proxy.$refs.table.getData();
-      });
+      });*/
     };
-    const removeReWeight = async (id) => {
-      const confirmResult = await proxy
+    const removeDove = async () => {
+      /* const confirmResult = await proxy
         .$confirm("此操作将永久删除该记录, 是否继续?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
-          customClass: "del-model",
+          customClass:'del-model',
         })
         .catch((err) => err);
       if (confirmResult !== "confirm") {
         return proxy.$message.info("已取消删除操作");
       }
-      await proxy.$API.reWeighAllot.deletereweighfeed.post(id).then((res) => {
+      await proxy.$API.regDove.deletepigeon.post(id).then((res) => {
         if (res.success) {
           proxy.$message({
             message: "删除成功",
@@ -318,7 +348,7 @@ export default defineComponent({
           });
         }
       });
-      proxy.$refs.table.getData();
+      proxy.$refs.table.getData(); */
     };
     const addDialogClosed = () => {
       proxy.$refs.addRef.resetFields();
@@ -328,29 +358,40 @@ export default defineComponent({
       if (parseInt(res.data.total) > 0)
         proxy.$refs.table.total = parseInt(res.data.total);
     };
+    const searchClick = (params) => {
+      getparams.value = {
+        startTime: formatDateStart(datePk[0]),
+        endTime: formatDateEnd(datePk[1]),
+        shedId: currShed,
+        codes: params.inputValue,
+      };
+    };
     return {
       store,
       tableData,
       addInfo,
-      addReWeightdialog,
-      ReWeightdialog,
+      addDovedialog,
+      dovedialog,
       editInfo,
       shortcuts,
+      searchTypes,
+      searchClick,
+      reset,
       panelChange,
       outTable,
       printTable,
-      dataChange,
       dateDefault,
       datePk,
       formRules,
       api,
-      params,
-      updateReWeight,
-      addReWeight,
-      removeReWeight,
+      getparams,
+      dataChange,
+      updateDove,
+      addDove,
+      removeDove,
       addDialogClosed,
       editDialogClosed,
-      showReWeightdialog,
+      showDovedialog,
     };
   },
 });
@@ -364,17 +405,29 @@ export default defineComponent({
   display: flex;
   padding: 0 15px;
 }
+<<<<<<< HEAD
+=======
+.form {
+  width: 80%;
+}
+.submit {
+  margin-left: 20px;
+}
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
 }
-.del-model {
-  .el-message-box__btns {
+<<<<<<< HEAD
+/* .del-model{
+    .el-message-box__btns {
     .el-button:nth-child(2) {
-      margin-right: 10px;
-      background-color: #2d8cf0;
-      border-color: #2d8cf0;
+      margin-right:10px;
+      background-color:#2d8cf0;
+      border-color:#2d8cf0;
     }
   }
-}
+} */
+=======
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
 </style>

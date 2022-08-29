@@ -58,12 +58,7 @@
           sortable
           align="center"
         />
-        <el-table-column
-          prop="origin"
-          label="来源"
-          width="120"
-          align="center"
-        />
+        <el-table-column prop="origin" label="来源" width="120" align="center" />
         <el-table-column label="操作" width="220" align="center" fixed="right">
           <template #default="scope">
             <el-button
@@ -107,11 +102,7 @@
               v-for="(item, index) in addInfo.brand"
               :key="index"
             >
-              <el-select
-                v-model="addInfo.brand[index]"
-                placeholder="请选择"
-                :change="sizeChange(index)"
-              >
+              <el-select v-model="addInfo.brand[index]" placeholder="请选择" :change="sizeChange(index)">
                 <el-option
                   v-for="item in fodderbrand"
                   :key="item"
@@ -144,7 +135,11 @@
         </el-form-item>
         <el-form-item label="数量:" prop="num">
           <el-row :gutter="10" style="width: 380px">
-            <el-col :span="8" v-for="(item, index) in addInfo.num" :key="index">
+            <el-col
+              :span="8"
+              v-for="(item, index) in addInfo.num"
+              :key="index"
+            >
               <el-input
                 v-model="addInfo.num[index]"
                 placeholder="请输入数量"
@@ -166,10 +161,7 @@
           ></el-row>
         </el-form-item>
         <el-form-item label="来源:" prop="origin">
-          <el-input
-            v-model="addInfo.origin"
-            placeholder="请输入来源"
-          ></el-input>
+          <el-input v-model="addInfo.origin" placeholder="请输入来源"></el-input>
         </el-form-item>
       </el-form>
       <span class="dialog-footer">
@@ -191,17 +183,10 @@
         :rules="editformRules"
       >
         <el-form-item label="时间:" prop="gmtCreate">
-          <el-input
-            v-model="editInfo.gmtCreate"
-            placeholder="请输入时间"
-          ></el-input>
+          <el-input v-model="editInfo.gmtCreate" placeholder="请输入时间"></el-input>
         </el-form-item>
         <el-form-item label="饲料种类:" prop="brand">
-          <el-select
-            v-model="editInfo.brand"
-            placeholder="请选择"
-            :change="editsizeChange()"
-          >
+          <el-select v-model="editInfo.brand" placeholder="请选择" :change="editsizeChange()">
             <el-option
               v-for="item in fodderbrand"
               :key="item"
@@ -212,7 +197,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="规格:" prop="size">
-          <el-input v-model="editInfo.size" placeholder="请输入规格"></el-input>
+          <el-input
+            v-model="editInfo.size"
+            placeholder="请输入规格"
+          ></el-input>
         </el-form-item>
         <el-form-item label="数量:" prop="num">
           <el-input
@@ -228,10 +216,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="来源:" prop="origin">
-          <el-input
-            v-model="editInfo.origin"
-            placeholder="请输入来源"
-          ></el-input>
+          <el-input v-model="editInfo.origin" placeholder="请输入来源"></el-input>
         </el-form-item>
       </el-form>
       <span class="dialog-footer">
@@ -249,7 +234,8 @@ import { defineComponent, ref, getCurrentInstance, reactive } from "vue";
 import { useStore } from "vuex";
 export default defineComponent({
   name: "fodderAllot", // 饲料调拨
-  components: {},
+  components: {
+  },
   setup() {
     const { proxy } = getCurrentInstance();
     const store = useStore();
@@ -287,7 +273,7 @@ export default defineComponent({
     let addFodderdialog = ref(false);
     let fodderdialog = ref(false);
     let doptions = reactive(["A1", "A2", "A3"]);
-    let fodderbrand = reactive(["鸽料138", "中粮", "混料", "王中王", "双汇"]);
+    let fodderbrand = reactive(["鸽料138", "中粮","混料","王中王","双汇"]);
     const checkForm = (rule, value, callback) => {
       for (let index in value) {
         if (!value[index]) callback(new Error("请输入"));
@@ -332,7 +318,7 @@ export default defineComponent({
     //把这一行的信息传入对话框
     const showFodderdialog = (item) => {
       fodderdialog.value = true;
-      editInfo.value = Object.assign(item, { shedId: currShed });
+      editInfo.value = Object.assign(item,{shedId:currShed})
     };
     let datePk = [start, end];
     //格式化时间
@@ -379,8 +365,8 @@ export default defineComponent({
         size: "",
         num: "",
         weight: "",
-        origin: "",
-        id: "",
+        origin:"",
+        id:""
       },
     ]);
     const addInfo = reactive({
@@ -389,7 +375,7 @@ export default defineComponent({
       num: ["", ""],
       weight: ["", ""],
       origin: "",
-      shedId: currShed,
+      shedId:currShed
     });
     const addInput = () => {
       addInfo.brand.push("");
@@ -455,21 +441,19 @@ export default defineComponent({
         if (!valid) {
           return;
         }
-        await proxy.$API.fodderAllot.addallocatefeed
-          .post(addInfo)
-          .then((res) => {
-            if (res.success) {
-              proxy.$message({
-                message: "添加成功",
-                type: "success",
-              });
-            } else {
-              proxy.$message({
-                message: "添加失败",
-                type: "error",
-              });
-            }
-          });
+        await proxy.$API.fodderAllot.addallocatefeed.post(addInfo).then((res) => {
+          if (res.success) {
+            proxy.$message({
+              message: "添加成功",
+              type: "success",
+            });
+          } else {
+            proxy.$message({
+              message: "添加失败",
+              type: "error",
+            });
+          }
+        });
         proxy.$refs.addRef.resetFields();
         addFodderdialog.value = false;
         proxy.$refs.table.getData();
@@ -505,7 +489,7 @@ export default defineComponent({
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
-          customClass: "del-model",
+          customClass:'del-model',
         })
         .catch((err) => err);
       if (confirmResult !== "confirm") {
@@ -529,10 +513,11 @@ export default defineComponent({
     const addDialogClosed = () => {
       proxy.$refs.addRef.resetFields();
     };
-    const editDialogClosed = () => {};
+    const editDialogClosed = () => {
+    };
     const dataChange = (res) => {
-      if (parseInt(res.data.total) > 0)
-        proxy.$refs.table.total = parseInt(res.data.total);
+      if(parseInt(res.data.total)>0)
+      proxy.$refs.table.total = parseInt(res.data.total);
     };
     return {
       store,
@@ -572,6 +557,7 @@ export default defineComponent({
 });
 </script>
 
+<<<<<<< HEAD
 <style lang="scss">
 .container {
   margin: 0 20px;
@@ -580,17 +566,27 @@ export default defineComponent({
   display: flex;
   padding: 0 15px;
 }
+<<<<<<< HEAD
+=======
+.submit {
+  align-self: flex-end;
+  margin-bottom: 10px;
+}
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
 }
-.del-model {
-  .el-message-box__btns {
+<<<<<<< HEAD
+.del-model{
+    .el-message-box__btns {
     .el-button:nth-child(2) {
-      margin-right: 10px;
-      background-color: #2d8cf0;
-      border-color: #2d8cf0;
+      margin-right:10px;
+      background-color:#2d8cf0;
+      border-color:#2d8cf0;
     }
   }
 }
+=======
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
 </style>
