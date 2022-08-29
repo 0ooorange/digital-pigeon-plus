@@ -452,8 +452,9 @@ export default defineComponent({
         // ];
 
         //日期选择器改变
-        const datePickerChange = function (e) {
-            console.log("日期改变", e);
+        const datePickerChange = function () {
+        // const datePickerChange = function (e) {
+            // console.log("日期改变", e);
         };
         const searchClick = function (e) {
             isSearch.value = true;
@@ -482,7 +483,7 @@ export default defineComponent({
             //     formatDate(endTime.value).substring(0, 10)
             // );
 
-            console.log("拿到的参数", e);
+            // console.log("拿到的参数", e);
             findAbnormalApi.value =
                 proxy.$API.operateLog.findAbnormalByPigeonCodesAndDate;
             findAbnormalParams.pigeonId = e.inputValue;
@@ -495,7 +496,7 @@ export default defineComponent({
         };
 
         const outTable = function () {
-            console.log("哈哈哈，我被点击了噢");
+            // console.log("哈哈哈，我被点击了噢");
         };
 
         //获取操作记录
@@ -518,9 +519,9 @@ export default defineComponent({
                     findCageDataParams)
             }
             if (getDataList.code == 200) {
-                console.log("各种数据", getDataList);
+                // console.log("各种数据", getDataList);
                 let data = getDataList.data.data;
-                console.log("各种数据", data);
+                // console.log("各种数据", data);
                 dataCount[0].count = data.layEggNum + "个";
                 dataCount[1].count = data.takeEggNum + "个";
                 dataCount[2].count = data.hatchEggNum + "个";

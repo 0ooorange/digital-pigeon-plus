@@ -93,6 +93,7 @@
         :rules="formRules"
       >
         <el-form-item label="时间:" prop="deliverTime">
+<<<<<<< HEAD
           <el-date-picker
             v-model="addInfo.deliverTime"
             :default-value="addInfo.deliverTime"
@@ -101,6 +102,12 @@
             unlink-panels
             placeholder="请输入时间"
           />
+=======
+          <el-input
+            v-model="addInfo.deliverTime"
+            placeholder="请输入时间"
+          ></el-input>
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
         </el-form-item>
         <el-form-item label="种类:" prop="category">
           <el-input
@@ -181,15 +188,24 @@
 </template>
 
 <script>
+<<<<<<< HEAD
 import { defineComponent, ref, getCurrentInstance} from "vue";
 import { useStore } from "vuex";
+=======
+import { defineComponent, ref, getCurrentInstance } from "vue";
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
 export default defineComponent({
   name: "outCageRegistration", // 出栏登记
   components: {},
   setup() {
     const { proxy } = getCurrentInstance();
+<<<<<<< HEAD
     const store = useStore();
     const currShed = store.state.baseInfo.SHED_ID;
+=======
+    const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;
+    
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
     // 时间选择器
     const shortcuts = [
       {
@@ -239,6 +255,7 @@ export default defineComponent({
         year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
       return newDate;
     };
+<<<<<<< HEAD
     const formatDateStart = (dat) => {
       //获取年月日，时间
       var year = dat.getFullYear();
@@ -269,6 +286,8 @@ export default defineComponent({
         year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
       return newDate;
     };
+=======
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
     let addOutcagedialog = ref(false);
     let Outcagedialog = ref(false);
     // 设置默认时间段，组件内默认半年
@@ -311,6 +330,7 @@ export default defineComponent({
       codes: "",
     });
     const outTable = () => {
+<<<<<<< HEAD
       console.log("点击导出");
     };
 
@@ -324,11 +344,22 @@ export default defineComponent({
         endTime: formatDateEnd(datePk.value[1]),
         shedId: currShed,
       };
+=======
+      // console.log("点击导出");
+    };
+
+    const printTable = () => {
+      // console.log("点击打印");
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
     };
     //把这一行的信息传入对话框
     const showOutcagedialog = (item) => {
       Outcagedialog.value = true;
+<<<<<<< HEAD
       editInfo.value = Object.assign(item, { shedId: currShed });
+=======
+      editInfo.value = Object.assign(item,{shedId:currShed.id});
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
     };
     const api = proxy.$API.regOutCage.delivermanagement;
     let params = ref({
@@ -417,8 +448,13 @@ export default defineComponent({
       proxy.$refs.addRef.resetFields();
     };
     const dataChange = (res) => {
+<<<<<<< HEAD
       if (parseInt(res.data.total) > 0)
         proxy.$refs.table.total = parseInt(res.data.total);
+=======
+      if(parseInt(res.data.total)>0)
+      proxy.$refs.table.total = parseInt(res.data.total);
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
     };
     const editDialogClosed = () => {};
     return {
@@ -438,6 +474,10 @@ export default defineComponent({
       api,
       params,
       dataChange,
+<<<<<<< HEAD
+=======
+      formatDate,
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
       updateOutcage,
       addOutcage,
       removeOutcage,
@@ -453,9 +493,19 @@ export default defineComponent({
 .container {
   margin: 0 20px;
 }
+.top {
+  display: flex;
+}
 .tag {
   display: flex;
   padding: 0 15px;
+}
+.form {
+  width: 80%;
+}
+.submit {
+  align-self: flex-end;
+  margin-bottom: 10px;
 }
 .dialog-footer {
   display: flex;

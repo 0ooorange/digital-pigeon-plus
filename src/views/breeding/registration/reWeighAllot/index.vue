@@ -217,11 +217,11 @@ export default defineComponent({
     });
     
     const outTable = () => {
-      console.log("点击导出");
+      // console.log("点击导出");
     };
 
     const printTable = () => {
-      console.log("点击打印");
+      // console.log("点击打印");
     };
     const panelChange = (date) => {
       datePk.value = date;
@@ -353,18 +353,39 @@ export default defineComponent({
 });
 </script>
 
+<<<<<<< HEAD
 <style lang="scss">
 .container {
   margin: 0 20px;
 }
+=======
+<style scoped>
+.container {
+  margin: 0 20px;
+}
+.top {
+  display: flex;
+}
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
 .tag {
   display: flex;
   padding: 0 15px;
 }
+<<<<<<< HEAD
+=======
+.form {
+  width: 80%;
+}
+.submit {
+  align-self: flex-end;
+  margin-bottom: 10px;
+}
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
 }
+<<<<<<< HEAD
 .del-model {
   .el-message-box__btns {
     .el-button:nth-child(2) {
@@ -374,4 +395,6 @@ export default defineComponent({
     }
   }
 }
+=======
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
 </style>

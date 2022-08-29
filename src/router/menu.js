@@ -328,6 +328,16 @@ export default {
 			},
 			component: "AIControl/forecastCenter/index",
 		},
+		{
+			name: "forecastVideo",
+			path: "/AIControl/forecastVideo",
+			meta: {
+				title: "预测视频",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			component: "AIControl/forecastVideo/index",
+		},
 	],
 	// 基础信息管理
 	baseInformation: [

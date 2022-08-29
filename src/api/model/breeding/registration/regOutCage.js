@@ -6,7 +6,11 @@ export default {
     url:`digitalPigeon/breed/informationinput/delivermanagement`,
     name:'获取出栏记录',
     post: async function (data) {
+<<<<<<< HEAD
 			console.log("url", this.url);
+=======
+			// console.log("url", this.url);
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
       let params =qs.stringify({
         pageNum:data.page,
         pageSize:data.pageSize,
@@ -14,7 +18,11 @@ export default {
         startTime:data.startTime,
         endTime:data.endTime
       })
+<<<<<<< HEAD
       console.log("参数",params);
+=======
+      // console.log("参数",params);
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
 			return await http.post(this.url, params);
 		},
   },
@@ -22,7 +30,11 @@ export default {
     url:`digitalPigeon/breed/informationinput/adddeliver`,
     name:'增加出栏记录',
     post: async function (data) {
+<<<<<<< HEAD
 			console.log("url", this.url);
+=======
+			// console.log("url", this.url);
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
 			return await http.post(this.url, data);
 		},
   },
@@ -30,7 +42,11 @@ export default {
     url:`digitalPigeon/breed/informationinput/modifydeliver`,
     name:'修改出栏记录',
     post: async function (data) {
+<<<<<<< HEAD
 			console.log("url", this.url);
+=======
+			// console.log("url", this.url);
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
 			return await http.post(this.url, data);
 		},
   },
@@ -38,7 +54,11 @@ export default {
     url:`digitalPigeon/breed/informationinput/deletedeliver`,
     name:'删除出栏记录',
     post: async function (id) {
+<<<<<<< HEAD
 			console.log("url", this.url);
+=======
+			// console.log("url", this.url);
+>>>>>>> 7ead86bfa0533e573907fb7c1f5665a7c47594c4
 			return await http.post(this.url,id,{headers:{'Content-Type':'application/json'}});
 		},
   },

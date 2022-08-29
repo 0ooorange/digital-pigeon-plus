@@ -180,17 +180,17 @@ export default defineComponent({
 
         //日期选择器
         const visibleChange = function (e) {
-            console.log("选择日期", e);
-            console.log(
-                proxy.$TOOL.dateFormat(e[0]),
-                proxy.$TOOL.dateFormat(e[1]).substring(0, 10) +
-                    " 23:59:59"
-            );
+            // console.log("选择日期", e);
+            // console.log(
+            //     proxy.$TOOL.dateFormat(e[0]),
+            //     proxy.$TOOL.dateFormat(e[1]).substring(0, 10) +
+            //         " 23:59:59"
+            // );
             params.start_time = proxy.$TOOL.dateFormat(e[0]);
             params.end_time =
                 proxy.$TOOL.dateFormat(e[1]).substring(0, 10) +
                 " 23:59:59";
-            console.log("参数", params);
+            // console.log("参数", params);
             getData();
         };
 
@@ -212,15 +212,15 @@ export default defineComponent({
                  rightData.push(...data.slice(Math.ceil(data.length / 2)));
                 
                 // leftData.length = 0;
-                console.log( Math.ceil(data.length / 2), "左边数据");
-                console.log((data.length / 2) + 1, "右边数据");
+                // console.log( Math.ceil(data.length / 2), "左边数据");
+                // console.log((data.length / 2) + 1, "右边数据");
             } else {
                 ElMessage({
                     message: "暂无数据",
                     type: "warning",
                 });
             }
-            console.log("请求结果", res);
+            // console.log("请求结果", res);
         };
 
         getData();
