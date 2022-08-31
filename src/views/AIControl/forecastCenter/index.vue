@@ -62,55 +62,48 @@
                         :value="item.value"
                     ></el-option>
                 </el-select>
-                <!-- <el-row class="right--row">
-                    <el-col :span="8" class="right--row__label">
-                        <span></span>
-                    </el-col>
-                    <el-col :span="16">
-                        <el-select
-                            class="right--option"
-                            multiple
-                            filterable
-                            v-model="selectedArr"
-                            :loading="false"
-                            :collapse-tags="true"
-                            placeholder="请选择"
-                            @change="changeSelect"
-                            @remove-tag="removeTag"
-                        >
-                            <el-checkbox
-                                v-model="checked"
-                                @change="selectAll"
-                                style="margin-left: 20px"
-                                >全选</el-checkbox
-                            >
-                            <el-option
-                                v-for="item in selectOptions"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                            ></el-option>
-                        </el-select>
-                    </el-col>
-                </el-row> -->
-
-                <!-- <el-select
-                    size="mini"
-                    multiple
-                    filterable
-                    :collapse-tags="true"
-                    v-model="selectedArr"
-                    placeholder="请选择"
-                    @change="changeSelect"
-                >
-
-                    <el-option
-                        v-for="item in selectOptions"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                    ></el-option>
-                </el-select> -->
+                <div class="right--tip">
+                    <el-tag
+                        class="right--tip__tag"
+                        color="#fef0f0"
+                        style="color: #f15d5d"
+                        v-show="selectedArr.indexOf('0') != -1"
+                        >二氧化碳</el-tag
+                    >
+                    <el-tag
+                        class="right--tip__tag"
+                        color="#F3EAFA"
+                        style="color: #ab82ff"
+                        v-show="selectedArr.indexOf('1') != -1"
+                        >温度</el-tag
+                    >
+                    <el-tag
+                        class="right--tip__tag"
+                        color="#edf4ed"
+                        style="color: #548b54"
+                        v-show="selectedArr.indexOf('2') != -1"
+                        >湿度</el-tag
+                    >
+                    <el-tag
+                        class="right--tip__tag"
+                        type="warning"
+                        v-show="selectedArr.indexOf('3') != -1"
+                        >光照强度</el-tag
+                    >
+                    <el-tag
+                        class="right--tip__tag"
+                        type="success"
+                        v-show="selectedArr.indexOf('4') != -1"
+                        >PM2.5</el-tag
+                    >
+                    <el-tag
+                        class="right--tip__tag"
+                        color="#fef0f0"
+                        style="color: #f15d5d"
+                        v-show="selectedArr.indexOf('5') != -1"
+                        >PM10</el-tag
+                    >
+                </div>
             </div>
         </el-card>
     </div>
@@ -124,8 +117,11 @@ import {
     getCurrentInstance,
 } from "vue";
 import ScEcharts from "@/components/scEcharts";
+import { ElMessage } from "element-plus";
+import { getPredict } from "@api/AiControl/predict";
+import { getCarbonDioxideData } from "@api/equipVideo/envForecast";
 export default defineComponent({
-     name: "forecastCenter", // 预测中心
+    name: "forecastCenter", // 预测中心
     components: {
         ScEcharts,
     },
@@ -138,22 +134,10 @@ export default defineComponent({
 
         //相同维度
         let commonDimensions = [
-            "id",
-            "deviceid",
-            "devicecode",
-            "dataid",
-            "datacode",
             "dataname",
             "datavalue",
-            "datavalueText",
             "dataunit",
-            "dataicon",
-            "dataLevel",
             "devicetime",
-            "gmtCreate",
-            "gmtModified",
-            "isDeleted",
-            "version",
         ];
 
         //相同y轴部分
@@ -170,32 +154,6 @@ export default defineComponent({
                 //  width: 80,
                 fontSize: 12,
             },
-            // visualMap: {
-            //     top: "top",
-            //     left: "center",
-            //     orient: "horizontal",
-            //     textStyle: {
-            //         color: "#fff",
-            //     },
-            //     dimension: 0,
-            //     pieces: [
-            //         {
-            //             gt: 0,
-            //             lte: 22,
-            //             color: "cyan",
-            //             label: "真实值",
-            //         },
-
-            //         {
-            //             gt: 22,
-            //             color: "purple",
-            //             label: "预测值",
-            //         },
-            //     ],
-            //     outOfRange: {
-            //         color: "#000",
-            //     },
-            // },
         };
 
         //相同series
@@ -204,30 +162,21 @@ export default defineComponent({
             type: "line",
             symbol: "none",
             smooth: true,
-            dimensions: ["devicetime", "datavalue"],
+            dimensions: ["time", "datavalue"],
             encode: {
-                x: ["devicetime"], // 表示维度 3、1、5 映射到 x 轴。
+                x: ["time"], // 表示维度 3、1、5 映射到 x 轴。
                 y: "datavalue", // 表示维度 2 映射到 y 轴。
             },
         };
         //相同的tooltip
         let commonTooltip = {
             trigger: "axis",
-            //部分格式化，给数值加单位
-            // valueFormatter: (value) => value + "%",
             //位置
             position: function () {
                 return { left: "50%", top: 40 };
             },
-        };
-
-        let commonAnothetTooltip = {
-            trigger: "axis",
-            //部分格式化，给数值加单位
-            // valueFormatter: (value) => value + "%",
-            //位置
-            position: function () {
-                return { left: "25%", top: "25%" };
+            formatter(params) {
+                return commomFormatter(params);
             },
         };
 
@@ -235,8 +184,17 @@ export default defineComponent({
         let commomOption = {
             xAxis: {
                 boundaryGap: false,
-                type: "time",
+                type: "category",
                 // name: "时间",
+
+                axisLabel: {
+                    //x轴文字的配置
+                    show: true,
+                    interval: 0, //使x轴文字显示全
+                },
+                axisTick: {
+                    show: false,
+                },
             },
             data: [
                 {
@@ -247,56 +205,62 @@ export default defineComponent({
             ],
         };
 
+        //相同的预测配置
+        let commonPredictSeries = {
+            name: "预测值",
+            type: "line",
+            symbol: "none",
+            smooth: true,
+            dimensions: ["name", "forcastValue"],
+            encode: {
+                x: ["name"],
+                y: "forcastValue",
+            },
+            lineStyle: {
+                width: 2,
+                color: "#6495ED",
+            },
+        };
+
+        // 图表相同的提示框配置函数
+        let commomFormatter = (params) => {
+            var result = "";
+            let value1 = "";
+            let value2 = "";
+            if (params[0].data.datavalue == undefined) {
+                value1 = params[0].data.forcastValue;
+            } else {
+                value1 = params[0].data.datavalue;
+            }
+            if (params[0].data.devicetime == undefined) {
+                value2 = params[0].data.name;
+            } else {
+                value2 = params[0].data.devicetime;
+            }
+            var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${params[0].data.color}"></span>`;
+            var textHtml = `<span style="font-weight: 700;">${value1}${params[0].data.dataunit} </span>`;
+            // console.log(params, "数据对象");
+            result += value2 + "</br>" + dotHtml + textHtml;
+            return result;
+        };
+
         //二氧化碳的图表值
         let carbonDioxideYAxis = [{ ...commonY, name: "二氧化碳/ppm" }];
         let carbonDioxideDataset = { dimensions: commonDimensions, source: [] };
         let carbonDioxideSeriesObject = {
             ...seriesObject,
             lineStyle: {
-                width: 1,
+                width: 2,
                 color: "#f15d5d",
             },
-            // areaStyle: {
-            //     opacity: 0.1,
-            //     color: "#f15d5d",
-            // },
         };
-        let carbonDioxideTooltip = {
-            ...commonTooltip,
-            formatter(params) {
-                var result = "";
-                var dotHtml =
-                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#f15d5d"></span>';
-                var textHtml = `<span style="font-weight: 700;right:20px; position: absolute;">${params[0].value.datavalue}${params[0].value.dataunit} </span>`;
-                // console.log(params, "数据对象");
-                result +=
-                    params[0].value.devicetime + "</br>" + dotHtml + textHtml;
-                return result;
-            },
-            // valueFormatter: (value) => value + temperatureDataunit,
-            axisPointer: {
-                //线的颜色
-                lineStyle: {
-                    color: "#f15d5d",
-                },
-            },
-        };
+
         let carbonDioxideOptionStatic = {
             ...commomOption,
             yAxis: carbonDioxideYAxis,
             dataset: carbonDioxideDataset,
-            series: [
-                carbonDioxideSeriesObject,
-                // {
-                //     name: "lineAQI",
-                //     type: "line",
-                //     data: [
-                //         4, 2, 1, 0.8, 1, 4, 9, 11.5, 12, 13, 13.2, 13, 12, 11,
-                //         12, 11, 10, 9, 8, 8.2, 7, 7.2, 6, 5, 4,
-                //     ],
-                // },
-            ],
-            tooltip: carbonDioxideTooltip,
+            series: [carbonDioxideSeriesObject, commonPredictSeries],
+            tooltip: commonTooltip,
         };
         //二氧化碳
         const carbonDioxideOption = reactive(carbonDioxideOptionStatic);
@@ -307,40 +271,17 @@ export default defineComponent({
         let temperatureSeriesObject = {
             ...seriesObject,
             lineStyle: {
-                width: 1,
-                color: "#EE9A00",
-            },
-            // areaStyle: {
-            //     opacity: 0.1,
-            //     color: "#EE9A00",
-            // },
-        };
-        let temperatureTooltip = {
-            ...commonTooltip,
-            formatter(params) {
-                var result = "";
-                var dotHtml =
-                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#EE9A00"></span>';
-                var textHtml = `<span style="font-weight: 700;right:20px; position: absolute;">${params[0].value.datavalue}${params[0].value.dataunit} </span>`;
-                // console.log(params, "数据对象");
-                result +=
-                    params[0].value.devicetime + "</br>" + dotHtml + textHtml;
-                return result;
-            },
-            // valueFormatter: (value) => value + temperatureDataunit,
-            axisPointer: {
-                //线的颜色
-                lineStyle: {
-                    color: "#EE9A00",
-                },
+                width: 2,
+                color: "#AB82FF",
             },
         };
+
         let temperatureOptionStatic = {
             ...commomOption,
             yAxis: temperatureYAxis,
             dataset: temperatureDataset,
-            series: [temperatureSeriesObject],
-            tooltip: temperatureTooltip,
+            series: [temperatureSeriesObject, commonPredictSeries],
+            tooltip: commonTooltip,
         };
 
         //空气温度
@@ -351,41 +292,18 @@ export default defineComponent({
         let humidityDataset = { dimensions: commonDimensions, source: [] };
         let humiditySeriesObject = {
             ...seriesObject,
-            // lineStyle: {
-            //     width: 1,
-            //     color: "#EEEE00",
-            // },
-            // areaStyle: {
-            //     opacity: 0.1,
-            //     color: "#46adff",
-            // },
-        };
-        let humidityTooltip = {
-            ...commonTooltip,
-            formatter(params) {
-                var result = "";
-                var dotHtml =
-                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#46adff"></span>';
-                var textHtml = `<span style="font-weight: 700;right:20px; position: absolute;">${params[0].value.datavalue}${params[0].value.dataunit} </span>`;
-                // console.log(params, "数据对象");
-                result +=
-                    params[0].value.devicetime + "</br>" + dotHtml + textHtml;
-                return result;
-            },
-            // valueFormatter: (value) => value + humidityDataunit,
-            axisPointer: {
-                //线的颜色
-                lineStyle: {
-                    color: "#46adff",
-                },
+            lineStyle: {
+                width: 2,
+                color: "#548B54",
             },
         };
+
         let humidityOptionStatic = {
             ...commomOption,
             yAxis: humidityYAxis,
             dataset: humidityDataset,
-            series: [humiditySeriesObject],
-            tooltip: humidityTooltip,
+            series: [humiditySeriesObject, commonPredictSeries],
+            tooltip: commonTooltip,
         };
 
         //湿度
@@ -400,40 +318,17 @@ export default defineComponent({
         let illuminationIntensitySeriesObject = {
             ...seriesObject,
             lineStyle: {
-                width: 1,
+                width: 2,
                 color: "#EEEE00",
             },
-            // areaStyle: {
-            //     opacity: 0.1,
-            //     color: "#EEEE00",
-            // },
         };
-        let illuminationIntensityTooltip = {
-            ...commonTooltip,
-            formatter(params) {
-                var result = "";
-                var dotHtml =
-                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#EEEE00"></span>';
-                var textHtml = `<span style="font-weight: 700;right:20px; position: absolute;">${params[0].value.datavalue}${params[0].value.dataunit} </span>`;
-                // console.log(params, "数据对象");
-                result +=
-                    params[0].value.devicetime + "</br>" + dotHtml + textHtml;
-                return result;
-            },
-            // valueFormatter: (value) => value + illuminationIntensityDataunit,
-            axisPointer: {
-                //线的颜色
-                lineStyle: {
-                    color: "#EEEE00",
-                },
-            },
-        };
+
         let illuminationIntensityOptionStatic = {
             ...commomOption,
             yAxis: illuminationIntensityYAxis,
             dataset: illuminationIntensityDataset,
-            series: [illuminationIntensitySeriesObject],
-            tooltip: illuminationIntensityTooltip,
+            series: [illuminationIntensitySeriesObject, commonPredictSeries],
+            tooltip: commonTooltip,
         };
 
         //光照强度
@@ -450,43 +345,20 @@ export default defineComponent({
         let PMSeriesObject = {
             ...seriesObject,
             lineStyle: {
-                width: 1,
+                width: 2,
                 color: "#5ee59e",
             },
-            // areaStyle: {
-            //     opacity: 0.1,
-            //     color: "#5ee59e",
-            // },
         };
-        let PMTooltip = {
-            ...commonTooltip,
-            formatter(params) {
-                var result = "";
-                var dotHtml =
-                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#5ee59e"></span>';
-                var textHtml = `<span style="font-weight: 700;right:20px; position: absolute;">${params[0].value.datavalue}${params[0].value.dataunit} </span>`;
-                // console.log(params, "数据对象");
-                result +=
-                    params[0].value.devicetime + "</br>" + dotHtml + textHtml;
-                return result;
-            },
-            // valueFormatter: (value) => value + PMDataunit,
-            axisPointer: {
-                //线的颜色
-                lineStyle: {
-                    color: "#5ee59e",
-                },
-            },
-        };
+
         let PMOptionStatic = {
             ...commomOption,
             yAxis: PMYAxis,
             dataset: PMDataset,
-            series: [PMSeriesObject],
-            tooltip: PMTooltip,
+            series: [PMSeriesObject, commonPredictSeries],
+            tooltip: commonTooltip,
         };
 
-        //PM2.5
+        //PM10
         const PMOption = reactive(PMOptionStatic);
 
         //PM10的图表值
@@ -498,238 +370,22 @@ export default defineComponent({
         let PM10SeriesObject = {
             ...seriesObject,
             lineStyle: {
-                width: 1,
-                color: "#a59ffa",
-            },
-            // areaStyle: {
-            //     opacity: 0.1,
-            //     color: "#a59ffa",
-            // },
-        };
-        let PM10Tooltip = {
-            ...commonTooltip,
-            formatter(params) {
-                var result = "";
-                var dotHtml =
-                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#a59ffa"></span>';
-                var textHtml = `<span style="font-weight: 700;right:20px; position: absolute;">${params[0].value.datavalue}${params[0].value.dataunit} </span>`;
-                // console.log(params, "数据对象");
-                result +=
-                    params[0].value.devicetime + "</br>" + dotHtml + textHtml;
-                return result;
-            },
-            // valueFormatter: (value) => value + PM10Dataunit,
-            axisPointer: {
-                //线的颜色
-                lineStyle: {
-                    color: "#a59ffa",
-                },
+                width: 2,
+                color: "#f15d5d",
             },
         };
+
         let PM10OptionStatic = {
             ...commomOption,
             yAxis: PM10YAxis,
             dataset: PM10Dataset,
-            series: [PM10SeriesObject],
-            tooltip: PM10Tooltip,
+            series: [PM10SeriesObject, commonPredictSeries],
+            tooltip: commonTooltip,
         };
 
         //PM10
         const PM10Option = reactive(PM10OptionStatic);
 
-        //氨气的图表值
-        let ammoniaGasYAxis = [{ ...commonY, name: "氨气/ppm" }];
-        let ammoniaGasDataset = {
-            dimensions: commonDimensions,
-            source: [],
-        };
-        let ammoniaGasSeriesObject = {
-            ...seriesObject,
-            lineStyle: {
-                width: 1,
-                color: "#EE6AA7",
-            },
-            // areaStyle: {
-            //     opacity: 0.1,
-            //     color: "#EE6AA7",
-            // },
-        };
-        let ammoniaGasTooltip = {
-            ...commonAnothetTooltip,
-            formatter(params) {
-                var result = "";
-                var dotHtml =
-                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#EE6AA7"></span>';
-                var textHtml = `<span style="font-weight: 700;right:20px; position: absolute;">${params[0].value.datavalue}${params[0].value.dataunit} </span>`;
-                // console.log(params, "数据对象");
-                result +=
-                    params[0].value.devicetime + "</br>" + dotHtml + textHtml;
-                return result;
-            },
-            // valueFormatter: (value) => value + ammoniaGasDataunit,
-            axisPointer: {
-                //线的颜色
-                lineStyle: {
-                    color: "#EE6AA7",
-                },
-            },
-        };
-        let ammoniaGasOptionStatic = {
-            ...commomOption,
-            yAxis: ammoniaGasYAxis,
-            dataset: ammoniaGasDataset,
-            series: [ammoniaGasSeriesObject],
-            tooltip: ammoniaGasTooltip,
-        };
-
-        //ammoniaGas
-        const ammoniaGasOption = reactive(ammoniaGasOptionStatic);
-
-        //硫化氢的图表值
-        let sulfurettedHydrogenYAxis = [{ ...commonY, name: "硫化氢/ppm" }];
-        let sulfurettedHydrogenDataset = {
-            dimensions: commonDimensions,
-            source: [],
-        };
-        let sulfurettedHydrogenSeriesObject = {
-            ...seriesObject,
-            lineStyle: {
-                width: 1,
-                color: "#1C86EE",
-            },
-            // areaStyle: {
-            //     opacity: 0.1,
-            //     color: "#1C86EE",
-            // },
-        };
-        let sulfurettedHydrogenTooltip = {
-            ...commonAnothetTooltip,
-            formatter(params) {
-                var result = "";
-                var dotHtml =
-                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#1C86EE"></span>';
-                var textHtml = `<span style="font-weight: 700;right:20px; position: absolute;">${params[0].value.datavalue}${params[0].value.dataunit} </span>`;
-                // console.log(params, "数据对象");
-                result +=
-                    params[0].value.devicetime + "</br>" + dotHtml + textHtml;
-                return result;
-            },
-            // valueFormatter: (value) => value + sulfurettedHydrogenDataunit,
-            axisPointer: {
-                //线的颜色
-                lineStyle: {
-                    color: "#1C86EE",
-                },
-            },
-        };
-        let sulfurettedHydrogenOptionStatic = {
-            ...commomOption,
-            yAxis: sulfurettedHydrogenYAxis,
-            dataset: sulfurettedHydrogenDataset,
-            series: [sulfurettedHydrogenSeriesObject],
-            tooltip: sulfurettedHydrogenTooltip,
-        };
-
-        //硫化氢配置
-        const sulfurettedHydrogenOption = reactive(
-            sulfurettedHydrogenOptionStatic
-        );
-
-        //TSP的图表值
-        let TSPYAxis = [{ ...commonY, name: "TSP" }];
-        let TSPDataset = {
-            dimensions: commonDimensions,
-            source: [],
-        };
-        let TSPSeriesObject = {
-            ...seriesObject,
-            lineStyle: {
-                width: 1,
-                color: "#EE9A00",
-            },
-            // areaStyle: {
-            //     opacity: 0.1,
-            //     color: "#EE9A00",
-            // },
-        };
-        let TSPTooltip = {
-            ...commonAnothetTooltip,
-            formatter(params) {
-                var result = "";
-                var dotHtml =
-                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#EE9A00"></span>';
-                var textHtml = `<span style="font-weight: 700;right:20px; position: absolute;">${params[0].value.datavalue}${params[0].value.dataunit} </span>`;
-                // console.log(params, "数据对象");
-                result +=
-                    params[0].value.devicetime + "</br>" + dotHtml + textHtml;
-                return result;
-            },
-            // valueFormatter: (value) => value + TSPDataunit,
-            axisPointer: {
-                //线的颜色
-                lineStyle: {
-                    color: "#EE9A00",
-                },
-            },
-        };
-        let TSPOptionStatic = {
-            ...commomOption,
-            yAxis: TSPYAxis,
-            dataset: TSPDataset,
-            series: [TSPSeriesObject],
-            tooltip: TSPTooltip,
-        };
-
-        //硫化氢配置
-        const TSPOption = reactive(TSPOptionStatic);
-
-        //噪声的图表值
-        let noiseYAxis = [{ ...commonY, name: "噪声/dB" }];
-        let noiseDataset = {
-            dimensions: commonDimensions,
-            source: [],
-        };
-        let noiseSeriesObject = {
-            ...seriesObject,
-            lineStyle: {
-                width: 1,
-                color: "#5ee59e",
-            },
-            // areaStyle: {
-            //     opacity: 0.1,
-            //     color: "#5ee59e",
-            // },
-        };
-        let noiseTooltip = {
-            ...commonAnothetTooltip,
-            formatter(params) {
-                var result = "";
-                var dotHtml =
-                    '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#5ee59e"></span>';
-                var textHtml = `<span style="font-weight: 700;right:20px; position: absolute;">${params[0].value.datavalue}${params[0].value.dataunit} </span>`;
-                // console.log(params, "数据对象");
-                result +=
-                    params[0].value.devicetime + "</br>" + dotHtml + textHtml;
-                return result;
-            },
-            // valueFormatter: (value) => value + noiseDataunit,
-            axisPointer: {
-                //线的颜色
-                lineStyle: {
-                    color: "#5ee59e",
-                },
-            },
-        };
-        let noiseOptionStatic = {
-            ...commomOption,
-            yAxis: noiseYAxis,
-            dataset: noiseDataset,
-            series: [noiseSeriesObject],
-            tooltip: noiseTooltip,
-        };
-
-        //硫化氢配置
-        const noiseOption = reactive(noiseOptionStatic);
         //当前日期
         const nowTime = new Date();
 
@@ -740,9 +396,9 @@ export default defineComponent({
                 nowTime.getFullYear(),
                 nowTime.getMonth(),
                 nowTime.getDate(),
-                23,
-                59,
-                59
+                nowTime.getHours(),
+                nowTime.getMinutes(),
+                nowTime.getSeconds()
             )
         );
 
@@ -750,7 +406,10 @@ export default defineComponent({
             new Date(
                 nowTime.getFullYear(),
                 nowTime.getMonth(),
-                nowTime.getDate() - 1
+                nowTime.getDate(),
+                nowTime.getHours() - 2,
+                nowTime.getMinutes(),
+                nowTime.getSeconds()
             )
         );
         //请求参数
@@ -837,12 +496,12 @@ export default defineComponent({
                 for (let i = 0; i < selectOptions.length; i++) {
                     selectedArr.value.push(selectOptions[i].value);
                 }
-                let temp = [];
-                selectOptions.forEach((item1) => {
-                    temp.push(item1);
-                });
+                // let temp = [];
+                // selectOptions.forEach((item1) => {
+                //     temp.push(item1);
+                // });
                 echartArray.length = 0;
-                echartArray.push(...temp);
+                echartArray.push(...selectOptions);
                 // echartArray.value = temp;
             } else {
                 if (selectedArr.value.length == selectOptions.length) {
@@ -865,25 +524,17 @@ export default defineComponent({
             if (selectedArr.value.length == 0) {
                 selectedArr.value.push("0");
                 echartArray.length = 0;
-                echartArray.push([
-                    {
-                        ref: "carbonDioxideRef",
-                        label: "二氧化碳",
-                        value: "0",
-                        option: carbonDioxideOption,
-                        // changeSize: false,
-                    },
-                ]);
-                // echartArray.value = [
-                //     {
-                //         ref: "carbonDioxideRef",
-                //         label: "二氧化碳",
-                //         value: "0",
-                //         option: carbonDioxideOption,
-                //         changeSize: false,
-                //     },
-                // ];
-                // echartArray.value[0].changeSize = !echartArray.value[0].changeSize;
+                echartArray.push({
+                    ref: "carbonDioxideRef",
+                    label: "二氧化碳",
+                    value: "0",
+                    option: carbonDioxideOption,
+                });
+                ElMessage({
+                    message: "默认显示二氧化碳",
+                    type: "success",
+                    duration: 2000,
+                });
             } else {
                 let temp = [];
                 selectedArr.value.forEach((item) => {
@@ -897,161 +548,299 @@ export default defineComponent({
                 echartArray.length = 0;
 
                 echartArray.push(...temp);
-                // echartArray.value[0].changeSize = true;
             }
-            // console.log(echartArray.length,'第一个元素')
-            // echartArray[0].changeSize = !echartArray[0].changeSize;
         };
 
-        let carbonDioxide = [];
-        let temperature = [];
-        let humidityc = [];
-        let illuminationIntensity = [];
-        let PM = [];
-        let PM10 = [];
-        let ammoniaGas = [];
-        let sulfurettedHydrogen = [];
-        let TSP = [];
-        let noise = [];
-
         //获取环境数据
-        const getCarbonDioxideData = async function () {
-            let CarbonDioxRes =
-                await proxy.$API.envForecast.getCarbonDioxideData.post(
-                    commonParams,
-                    "二氧化碳"
-                );
-            // console.log("二氧化碳请求结果", CarbonDioxRes);
+        const getCarbonDioxideDataMethod = async function () {
+            console.log("参数", commonParams);
+            let CarbonDioxRes = await getCarbonDioxideData(
+                commonParams,
+                "二氧化碳"
+            );
+            console.log("二氧化碳请求结果", CarbonDioxRes);
 
             if (CarbonDioxRes.code === 200) {
-                carbonDioxide = CarbonDioxRes.data.data;
-                //数据赋值
-                carbonDioxideOption.dataset.source = carbonDioxide;
-                // console.log(
-                //     "二氧化碳请求结果",
-                //     CarbonDioxRes,
-                //     carbonDioxideOption
-                // );
+                let data = CarbonDioxRes.data.data;
+
+                //获取预测的数据
+                let forcastValue = data.map((item) => {
+                    return item.datavalue;
+                });
+                console.log("预测的数据", forcastValue);
+
+                let carbonDioxideTemp = data.map((item) => {
+                    item.time = item.devicetime.substring(10, 16);
+                    item.color = "#f15d5d";
+                    return item;
+                });
+                console.log("数据处理", carbonDioxideTemp);
+
+                let predictPramse = {
+                    feature: "CO2",
+                    data: forcastValue,
+                    target_length: 6,
+                };
+
+                let predictRes = await getPredict(predictPramse);
+                console.log("预测结果11", predictRes);
+                if (predictRes.success) {
+                    let carbonDioxidePredict = predictRes.output.map(
+                        (item, index) => {
+                            console.log(item);
+                            let temp = {
+                                name: "预测值" + (index + 1),
+                                dataunit: "ppm",
+                                forcastValue: item,
+                                color: "#1C86EE",
+                            };
+                            console.log(temp);
+                            return temp;
+                        }
+                    );
+                    console.log("处理后的数据", carbonDioxidePredict);
+                    //数据赋值
+                    carbonDioxideOption.dataset.source = carbonDioxideTemp;
+                    carbonDioxideOption.dataset.source.push(
+                        ...carbonDioxidePredict
+                    );
+                }
             }
-            let temperatureRes =
-                await proxy.$API.envForecast.getCarbonDioxideData.post(
-                    commonParams,
-                    "空气温度"
-                );
-            // console.log("空气温度请求结果", temperatureRes);
+            let temperatureRes = await getCarbonDioxideData(
+                commonParams,
+                "空气温度"
+            );
+            console.log("空气温度请求结果", temperatureRes);
             if (temperatureRes.code === 200) {
-                temperature = temperatureRes.data.data;
-                //数据赋值
-                temperatureOption.dataset.source = temperature;
+                let data = temperatureRes.data.data;
+
+                //获取预测的数据
+                let forcastValue = data.map((item) => {
+                    return item.datavalue;
+                });
+
+                console.log("预测的数据", forcastValue);
+                let temperatureTemp = data.map((item) => {
+                    item.time = item.devicetime.substring(10, 16);
+                    item.color = "#f15d5d";
+                    return item;
+                });
+                console.log("数据处理", temperatureTemp);
+                let predictPramse = {
+                    feature: "temperature",
+                    data: forcastValue,
+                    target_length: 6,
+                };
+
+                let predictRes = await getPredict(predictPramse);
+                console.log("预测结果11", predictRes);
+                if (predictRes.success) {
+                    let temperaturePredict = predictRes.output.map(
+                        (item, index) => {
+                            console.log(item);
+                            let temp = {
+                                name: "预测值" + (index + 1),
+                                dataunit: "ppm",
+                                forcastValue: item,
+                                color: "#1C86EE",
+                            };
+                            return temp;
+                        }
+                    );
+                    //数据赋值
+                    temperatureOption.dataset.source = temperatureTemp;
+                    temperatureOption.dataset.source.push(
+                        ...temperaturePredict
+                    );
+                }
             }
             // console.log("环境数据请求结果", temperatureRes);
 
-            let humidityRes =
-                await proxy.$API.envForecast.getCarbonDioxideData.post(
-                    commonParams,
-                    "空气湿度"
-                );
+            let humidityRes = await getCarbonDioxideData(
+                commonParams,
+                "空气湿度"
+            );
             if (humidityRes.code === 200) {
-                humidityc = humidityRes.data.data;
+                let data = humidityRes.data.data;
+
+                //获取预测的数据
+                let forcastValue = data.map((item) => {
+                    return item.datavalue;
+                });
+                console.log("预测的数据", forcastValue);
+
+                let humidityTemp = data.map((item) => {
+                    item.time = item.devicetime.substring(10, 16);
+                    item.color = "#f15d5d";
+                    return item;
+                });
+                console.log("数据处理", humidityTemp);
+                let predictPramse = {
+                    feature: "humidity",
+                    data: forcastValue,
+                    target_length: 6,
+                };
+
+                let predictRes = await getPredict(predictPramse);
+                console.log("预测结果11", predictRes);
+                if (predictRes.success) {
+                    let humidityPredict = predictRes.output.map(
+                        (item, index) => {
+                            console.log(item);
+                            let temp = {
+                                name: "预测值" + (index + 1),
+                                dataunit: "ppm",
+                                forcastValue: item,
+                                color: "#1C86EE",
+                            };
+                            return temp;
+                        }
+                    );
+                    //数据赋值
+                    humidityOption.dataset.source = humidityTemp;
+                    humidityOption.dataset.source.push(...humidityPredict);
+                }
 
                 //数据赋值
-                humidityOption.dataset.source = humidityc;
                 // console.log("空气湿度请求结果", humidityRes);
             }
 
             //光照强度
-            let illuminationIntensityRes =
-                await proxy.$API.envForecast.getCarbonDioxideData.post(
-                    commonParams,
-                    "光照强度"
-                );
+            let illuminationIntensityRes = await getCarbonDioxideData(
+                commonParams,
+                "光照强度"
+            );
             if (illuminationIntensityRes.code === 200) {
-                illuminationIntensity = illuminationIntensityRes.data.data;
-                //数据赋值
-                illuminationIntensityOption.dataset.source =
-                    illuminationIntensity;
-                // console.log("光照强度请求结果", illuminationIntensityRes);
+                let data = illuminationIntensityRes.data.data;
+                //获取预测的数据
+                let forcastValue = data.map((item) => {
+                    return item.datavalue;
+                });
+                console.log("预测的数据", forcastValue);
+
+                let illuminationIntensityTemp = data.map((item) => {
+                    item.time = item.devicetime.substring(10, 16);
+                    item.color = "#f15d5d";
+                    return item;
+                });
+                console.log("数据处理", illuminationIntensityTemp);
+
+                let predictPramse = {
+                    feature: "Light_intensity",
+                    data: forcastValue,
+                    target_length: 6,
+                };
+
+                let predictRes = await getPredict(predictPramse);
+                if (predictRes.success) {
+                    let illuminationIntensityPredict = predictRes.output.map(
+                        (item, index) => {
+                            console.log(item);
+                            let temp = {
+                                name: "预测值" + (index + 1),
+                                dataunit: "ppm",
+                                forcastValue: item,
+                                color: "#1C86EE",
+                            };
+                            return temp;
+                        }
+                    );
+                    //数据赋值
+                    illuminationIntensityOption.dataset.source =
+                        illuminationIntensityTemp;
+                    illuminationIntensityOption.dataset.source.push(
+                        ...illuminationIntensityPredict
+                    );
+                }
             }
 
             //PM2.5
-            let PMRes = await proxy.$API.envForecast.getCarbonDioxideData.post(
-                commonParams,
-                "二氧化碳"
-            );
+            let PMRes = await getCarbonDioxideData(commonParams, "PM2.5");
+            console.log("Pm2.5", PMRes);
             if (PMRes.code === 200) {
-                PM = PMRes.data.data;
-                //数据赋值
-                PMOption.dataset.source = PM;
-                // console.log("PM2.5请求结果", PMRes);
+                let data = PMRes.data.data;
+                //获取预测的数据
+                let forcastValue = data.map((item) => {
+                    return item.datavalue;
+                });
+                console.log("预测的数据", forcastValue);
+
+                let PMTemp = data.map((item) => {
+                    item.time = item.devicetime.substring(10, 16);
+                    item.color = "#f15d5d";
+                    return item;
+                });
+                console.log("数据处理", PMTemp);
+                let predictPramse = {
+                    feature: "pm2.5",
+                    data: forcastValue,
+                    target_length: 6,
+                };
+
+                let predictRes = await getPredict(predictPramse);
+                console.log("预测结果", predictRes);
+                if (predictRes.success) {
+                    let PMPredict = predictRes.output.map((item, index) => {
+                        console.log(item);
+                        let temp = {
+                            name: "预测值" + (index + 1),
+                            dataunit: "μg/m3",
+                            forcastValue: item,
+                            color: "#1C86EE",
+                        };
+                        return temp;
+                    });
+                    //数据赋值
+                    PMOption.dataset.source = PMTemp;
+                    PMOption.dataset.source.push(...PMPredict);
+                    console.log("PM2.5请求结果", PMRes);
+                }
             }
 
             //PM10
-            let PM10Res =
-                await proxy.$API.envForecast.getCarbonDioxideData.post(
-                    commonParams,
-                    "二氧化碳"
-                );
+            let PM10Res = await getCarbonDioxideData(commonParams, "PM10");
             if (PM10Res.code === 200) {
-                PM10 = PM10Res.data.data;
-                //数据赋值
-                PM10Option.dataset.source = PM10;
-                // console.log("PM10请求结果", PM10Res);
-            }
+                let data = PM10Res.data.data;
+                //获取预测的数据
+                let forcastValue = data.map((item) => {
+                    return item.datavalue;
+                });
+                console.log("预测的数据", forcastValue);
+                let PM10Temp = data.map((item) => {
+                    item.time = item.devicetime.substring(10, 16);
+                    item.color = "#f15d5d";
+                    return item;
+                });
+                console.log("数据处理", PM10Temp);
 
-            //氨气浓度
-            let ammoniaGasRes =
-                await proxy.$API.envForecast.getCarbonDioxideData.post(
-                    commonParams,
-                    "氨气浓度"
-                );
-            if (ammoniaGasRes.code === 200) {
-                ammoniaGas = ammoniaGasRes.data.data;
-                //数据赋值
-                ammoniaGasOption.dataset.source = ammoniaGas;
-                // console.log("氨气浓度请求结果", ammoniaGasRes);
-            }
+                let predictPramse = {
+                    feature: "pm10",
+                    data: forcastValue,
+                    target_length: 6,
+                };
 
-            //硫化氢浓度
-            let sulfurettedHydrogenRes =
-                await proxy.$API.envForecast.getCarbonDioxideData.post(
-                    commonParams,
-                    "硫化氢"
-                );
-            if (sulfurettedHydrogenRes.code === 200) {
-                sulfurettedHydrogen = sulfurettedHydrogenRes.data.data;
-                //数据赋值
-                sulfurettedHydrogenOption.dataset.source = sulfurettedHydrogen;
-                // console.log("硫化氢请求结果", sulfurettedHydrogenRes);
-            }
-
-            //TSP浓度
-            let TSPRes = await proxy.$API.envForecast.getCarbonDioxideData.post(
-                commonParams,
-                "二氧化碳"
-            );
-            if (TSPRes.code === 200) {
-                TSP = TSPRes.data.data;
-                //数据赋值
-                TSPOption.dataset.source = TSP;
-                // console.log("TSP请求结果", TSPRes);
-            }
-
-            //噪音
-            let noiseRes =
-                await proxy.$API.envForecast.getCarbonDioxideData.post(
-                    commonParams,
-                    "噪音"
-                );
-            // console.log("噪音", noiseRes);
-            if (noiseRes.code === 200) {
-                noise = noiseRes.data.data;
-                //数据赋值
-                noiseOption.dataset.source = noise;
-                // console.log("噪音请求结果", noiseRes);
+                let predictRes = await getPredict(predictPramse);
+                console.log("预测结果", predictRes);
+                if (predictRes.success) {
+                    let PM10Predict = predictRes.output.map((item, index) => {
+                        console.log(item);
+                        let temp = {
+                            name: "预测值" + (index + 1),
+                            dataunit: "μg/m3",
+                            forcastValue: item,
+                            color: "#1C86EE",
+                        };
+                        return temp;
+                    });
+                    //数据赋值
+                    PM10Option.dataset.source = PM10Temp;
+                    PM10Option.dataset.source.push(...PM10Predict);
+                    // console.log("PM10请求结果", PM10Res);
+                }
             }
         };
 
-        getCarbonDioxideData();
+        getCarbonDioxideDataMethod();
 
         return {
             checked,
@@ -1126,6 +915,27 @@ export default defineComponent({
             }
             .right--option {
                 margin-top: 15px;
+            }
+            .right--tip {
+                width: 100%;
+                // height: 400px;
+                // background-color: pink;
+                // margin-top: 20px;
+                // padding-left: 10px;
+                padding-right: 40px;
+                text-align: center;
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                .right--tip__tag {
+                    display: block;
+                    width: 47%;
+                    height: 40px;
+                    line-height: 40px;
+                    // margin: auto;
+                    margin-top: 30px;
+                    margin-left: 0px !important;
+                }
             }
         }
     }
