@@ -13,7 +13,7 @@
         <el-col :span="secondSpan" style="display:flex; ">
           <div class="selectDivs">
             <span class="selectText">基地：</span>
-            <el-select style="width: 150px" v-model="currBaseName" class="m-2" placeholder="Select" @change="currBaseChange($event)">
+            <el-select style="width: 150px" v-model="currBaseName" class="m-2" placeholder="Select" @change="currBaseChange">
               <el-option v-for="item in bases" :key="item.id" :label="item.code" :value="item.code" />
             </el-select>
             <span class="selectText">鸽棚：</span>
@@ -51,7 +51,7 @@
         <div class="adminui-main" id="adminui-main">
           <router-view v-slot="{ Component }">
             <keep-alive :include="this.$store.state.keepAlive.keepLiveRoute">
-              <component :is="Component" :key="$route.fullPath" v-if="$store.state.keepAlive.routeShow" />
+              <component :is="Component" :key="$route.fullPath" v-if="menuFlag" />
             </keep-alive>
           </router-view>
           <iframe-view></iframe-view>
@@ -78,7 +78,7 @@ import tool from '@/utils/tool'
 import router from '@/router'
 import store from '@/store'
 import { ref, computed, watch, nextTick } from 'vue'
-import { getBaseAndShed } from '@api/bases/layout'
+import { getBaseAndShed, getBaseInfoById, getShedByShedId } from '@api/bases/layout'
 
 export default {
   name: 'index',
@@ -118,32 +118,30 @@ export default {
     const currBaseName = ref('')
     const currShedCode = ref('')
     const currOperator = ref('')
-    let baseInfo = tool.data.get('BASE_INFO')
-    getBaseAndShed(baseInfo.id).then((res) => {
-      let currInfo = ref(tool.data.get('CURR_INFO'))
-      let currBase = ref({})
-      let currShed = ref({})
-      if (currInfo.value) {
-        currBase.value = currInfo.value.CURR_BASE
-        currShed.value = currInfo.value.CURR_SHED
-        currOperator.value = currInfo.value.CHARGE_NAME
-      } else {
-        currBase.value = res.data.baseList[0]
-        currShed.value = res.data.shedList[0]
-        currOperator.value = res.data.userList[0].name
-      }
-      currInfo.value = {
-        CURR_BASE: currBase.value,
-        CURR_SHED: currShed.value,
-        CHARGE_NAME: currOperator.value,
-      }
-      tool.data.set('CURR_INFO', currInfo.value)
+    let baseInfo = tool.data.get('USER_INFO')
+    let baseAndShed = () => {
+      getBaseAndShed(baseInfo.id).then((res) => {
+        let currInfo = ref(tool.data.get('CURR_INFO'))
+        let currBase = ref({})
+        let currShed = ref({})
+        currBase.value = currInfo.value ? currInfo.value.CURR_BASE : res.data.baseList[0]
+        currShed.value = currInfo.value ? currInfo.value.CURR_SHED : res.data.shedList[0]
+        currOperator.value = currInfo.value ? currInfo.value.CHARGE_NAME : res.data.userList[0].name
 
-      bases.value = res.data.baseList
-      dovecotes.value = res.data.shedList
-      currBaseName.value = currInfo.value.CURR_BASE.code
-      currShedCode.value = currInfo.value.CURR_SHED.code
-    })
+        currInfo.value = {
+          CURR_BASE: currBase.value,
+          CURR_SHED: currShed.value,
+          CHARGE_NAME: currOperator.value,
+        }
+        tool.data.set('CURR_INFO', currInfo.value)
+
+        bases.value = res.data.baseList
+        dovecotes.value = res.data.shedList
+        currBaseName.value = currInfo.value.CURR_BASE.code
+        currShedCode.value = currInfo.value.CURR_SHED.code
+      })
+    }
+    baseAndShed()
 
     const nextMenu = ref([])
     const pmenu = ref({})
@@ -199,9 +197,75 @@ export default {
       })
     }
     // 切换基地
-    const currBaseChange = async () => {}
+    const currBaseChange = async (e) => {
+      let currInfo = ref(tool.data.get('CURR_INFO'))
+      let currShed = ref({})
+      currShed.value = currInfo.value.CURR_SHED
+      currOperator.value = currInfo.value.CHARGE_NAME
+      bases.value.forEach((val) => {
+        if (val.code === e) {
+          currInfo.value = {
+            CURR_BASE: val,
+            CURR_SHED: currShed.value,
+            CHARGE_NAME: currOperator.value,
+          }
+          tool.data.set('CURR_INFO', currInfo.value)
+          return
+        }
+      })
+      let currBaseId = tool.data.get('CURR_INFO').CURR_BASE.id
+      let currShedId = tool.data.get('CURR_INFO').CURR_SHED.id
+      getBaseInfoById(currBaseId).then((res1) => {
+        getShedByShedId(currShedId).then((res2) => {
+          currInfo.value = {
+            CURR_BASE: res1.data.baseInfo,
+            CURR_SHED: res2.data.shed,
+            CHARGE_NAME: currOperator.value,
+          }
+          tool.data.set('CURR_INFO', currInfo.value)
+        })
+      })
+
+      menuFlag.value = false
+      baseAndShed()
+      nextTick(function () {
+        menuFlag.value = true
+      })
+    }
     // 切换鸽棚
-    const currShedChange = async () => {}
+    let menuFlag = ref(true)
+    const currShedChange = async (e) => {
+      let currInfo = ref(tool.data.get('CURR_INFO'))
+      let currBase = ref({})
+      currBase.value = currInfo.value.CURR_BASE
+      currOperator.value = currInfo.value.CHARGE_NAME
+      dovecotes.value.forEach((val) => {
+        if (val.code === e) {
+          currInfo.value = {
+            CURR_BASE: currBase.value,
+            CURR_SHED: val,
+            CHARGE_NAME: currOperator.value,
+          }
+          tool.data.set('CURR_INFO', currInfo.value)
+          return
+        }
+      })
+      let currShedId = tool.data.get('CURR_INFO').CURR_SHED.id
+      getShedByShedId(currShedId).then((res) => {
+        currInfo.value = {
+          CURR_BASE: currBase.value,
+          CURR_SHED: res.data.shed,
+          CHARGE_NAME: currOperator.value,
+        }
+        tool.data.set('CURR_INFO', currInfo.value)
+      })
+
+      menuFlag.value = false
+      baseAndShed()
+      nextTick(function () {
+        menuFlag.value = true
+      })
+    }
 
     const onLayoutResize = () => {
       store.commit('SET_ismobile', document.body.clientWidth < 992)
@@ -224,6 +288,7 @@ export default {
       currMenu,
       currBaseChange,
       currShedChange,
+      menuFlag,
       exitMaximize,
       toNavigator,
       ismobile,

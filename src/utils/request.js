@@ -19,7 +19,7 @@ axios.interceptors.request.use(
 			config.params['_'] = new Date().getTime();
 		}
 		Object.assign(config.headers, sysConfig.HEADERS)
-		console.log('请求中的配置',config)
+		// console.log('请求中的配置',config)
 		return config;
 	},
 	(error) => {
