@@ -14,7 +14,7 @@ export default defineComponent({
           const start = new Date()
           start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
           return [start, end]
-        }
+        },
       },
       {
         text: '近一个月',
@@ -23,7 +23,7 @@ export default defineComponent({
           const start = new Date()
           start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
           return [start, end]
-        }
+        },
       },
       {
         text: '近3个月',
@@ -32,7 +32,7 @@ export default defineComponent({
           const start = new Date()
           start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
           return [start, end]
-        }
+        },
       },
       {
         text: '近半年',
@@ -41,8 +41,8 @@ export default defineComponent({
           const start = new Date()
           start.setTime(start.getTime() - 3600 * 1000 * 24 * 360)
           return [start, end]
-        }
-      }
+        },
+      },
     ]
     const query = reactive({
       startTime: '2022-3-05 00:00:00',
@@ -56,19 +56,19 @@ export default defineComponent({
       pageNum: 1,
       pageSize: 5,
       panelCode: '',
-      death_time: ''
-      /*
-	  	fieldTime：选择哪个字段时间查询
-		startTime：开始时间
-		endTime：结束时间
-		codes：鸽笼编号
-		incubationDay：孵化天数
-		layEggDay：下蛋天数
-		panelCode：鸽板编号
-		shedId：鸽棚id
-		pageNum：页数
-		pageSize：页面大小
-	 */
+      death_time: '',
+      /**
+	  	* fieldTime：选择哪个字段时间查询
+		  * startTime：开始时间
+		  * endTime：结束时间
+		  * codes：鸽笼编号
+		  * incubationDay：孵化天数
+		  * layEggDay：下蛋天数
+		  * panelCode：鸽板编号
+		  * shedId：鸽棚id
+		  * pageNum：页数
+		  * pageSize：页面大小
+	    **/
     })
     /* table */
     const eggsList = ref([])
@@ -80,7 +80,7 @@ export default defineComponent({
         sortable: true,
         hide: false,
         checked: true,
-        disabled: false
+        disabled: false,
       },
       {
         label: '鸽板编号',
@@ -89,7 +89,7 @@ export default defineComponent({
         sortable: true,
         hide: false,
         checked: true,
-        disabled: false
+        disabled: false,
       },
       {
         label: '抽蛋/孵蛋', //=
@@ -97,7 +97,7 @@ export default defineComponent({
         width: '90',
         hide: false,
         checked: true,
-        disabled: false
+        disabled: false,
       },
       {
         label: '下蛋时间',
@@ -106,7 +106,7 @@ export default defineComponent({
         sortable: true,
         hide: false,
         checked: true,
-        disabled: false
+        disabled: false,
       },
       {
         label: '下蛋天数',
@@ -114,7 +114,7 @@ export default defineComponent({
         width: '90',
         hide: false,
         checked: true,
-        disabled: false
+        disabled: false,
       },
       {
         label: '查蛋时间', //
@@ -122,7 +122,7 @@ export default defineComponent({
         width: '180',
         hide: false,
         checked: true,
-        disabled: false
+        disabled: false,
       },
       {
         label: '蛋状态', //=
@@ -130,7 +130,7 @@ export default defineComponent({
         width: '70',
         hide: false,
         checked: true,
-        disabled: false
+        disabled: false,
       },
       {
         label: '孵化天数',
@@ -138,7 +138,7 @@ export default defineComponent({
         width: '90',
         hide: false,
         checked: true,
-        disabled: false
+        disabled: false,
       },
       //   {
       //     label: '查仔时间',
@@ -154,7 +154,7 @@ export default defineComponent({
         width: '70',
         hide: false,
         checked: true,
-        disabled: false
+        disabled: false,
       },
       {
         label: '死仔时间', //
@@ -162,7 +162,7 @@ export default defineComponent({
         width: '180',
         hide: false,
         checked: true,
-        disabled: false
+        disabled: false,
       },
       {
         label: '死仔个数',
@@ -170,7 +170,7 @@ export default defineComponent({
         width: '100',
         hide: false,
         checked: true,
-        disabled: false
+        disabled: false,
       },
       {
         label: '回蛋时间',
@@ -178,7 +178,7 @@ export default defineComponent({
         width: '180',
         hide: false,
         checked: true,
-        disabled: false
+        disabled: false,
       },
       {
         label: '备注',
@@ -186,8 +186,8 @@ export default defineComponent({
         width: '180',
         hide: false,
         checked: true,
-        disabled: false
-      }
+        disabled: false,
+      },
     ])
     const queryData = () => {
       const queryStringify = tool.http.stringify(query)
@@ -197,31 +197,39 @@ export default defineComponent({
     }
     queryData() // 初始化
     /* 工具栏  下拉框 时间类型选择 */
-    const dateType = ref('')
+    const dateType = ref('下蛋日期')
     const dateTypes = [
       {
         label: '下蛋日期',
-        value: 'lay_egg_time'
+        value: 'lay_egg_time',
       },
       {
         label: '回蛋日期',
-        value: 're_lay_egg_time'
+        value: 're_lay_egg_time',
       },
       {
         label: '死仔日期',
-        value: 'death_time'
+        value: 'death_time',
       },
       {
         label: '查蛋日期',
-        value: 'check_egg_record.gmt_create'
+        value: 'check_egg_record.gmt_create',
       },
       {
         label: '查仔日期',
-        value: 'check_cub_record.gmt_create'
-      }
+        value: 'check_cub_record.gmt_create',
+      },
     ]
+    
+    //设置默认日期
+    let dateValue = ref([])
+    let startTime = new Date()
+    let endTime = new Date()
+    startTime.setTime(startTime.getTime() - 3600 * 1000 * 24 * 7)
+    startTime = ref(startTime)
+    endTime = ref(endTime)
+    dateValue.value = [startTime.value, endTime.value]
     // 时间选择器
-    const dateValue = ref([])
     const datePickerChange = (dateValue) => {
       let [startTime = '', endTime = ''] = dateValue || []
 
@@ -235,6 +243,7 @@ export default defineComponent({
       query.endTime = endTime
       queryData()
     }
+    datePickerChange()
     const dateTypeChange = (dateType) => {
       if (!dateType) {
         query.fieldTime = ''
@@ -273,28 +282,28 @@ export default defineComponent({
       input: [
         {
           value: 'codes',
-          label: '鸽笼编号'
+          label: '鸽笼编号',
         },
         {
           value: 'panelCode',
-          label: '鸽板编号'
+          label: '鸽板编号',
         },
         {
           value: 'layEggDays',
-          label: '下蛋天数'
+          label: '下蛋天数',
         },
         {
           value: 'incubationDays',
-          label: '孵化天数'
+          label: '孵化天数',
         },
         {
           value: 'deathNumber',
-          label: '死仔个数'
+          label: '死仔个数',
         },
         {
           value: 'remarks',
-          label: '备注'
-        }
+          label: '备注',
+        },
       ],
       select: [
         // {
@@ -328,7 +337,7 @@ export default defineComponent({
         //     { label: '死精2', value: 4 }
         //   ]
         // }
-      ]
+      ],
     }
     const searchForm = reactive({})
     const isShowMore = ref(false)
@@ -337,12 +346,20 @@ export default defineComponent({
         <el-form label-width="70px" inline>
           {searchMoreList.input.map((item) => (
             <el-form-item label={item.label} key={item.value}>
-              <el-input v-model={searchForm[item.value]} placeholder={'请输入' + item.label} clearable />
+              <el-input
+                v-model={searchForm[item.value]}
+                placeholder={'请输入' + item.label}
+                clearable
+              />
             </el-form-item>
           ))}
           {searchMoreList.select.map((item) => (
             <el-form-item label={item.label} key={item.label}>
-              <el-select v-model={searchForm[item.value]} placeholder={'请输入' + item.label} clearable>
+              <el-select
+                v-model={searchForm[item.value]}
+                placeholder={'请输入' + item.label}
+                clearable
+              >
                 {item.option.map((opt) => (
                   <el-option key={opt.value} label={opt.label} value={opt.value} />
                 ))}
@@ -405,7 +422,7 @@ export default defineComponent({
             <el-cascader
               v-model={dateType.value}
               options={dateTypes}
-              placeholder="日期类型"
+              placeholder="下蛋日期"
               style={{ width: '150px' }}
               onChange={dateTypeChange}
               clearable
@@ -414,7 +431,6 @@ export default defineComponent({
               v-model={dateValue.value}
               type="daterange"
               format="YYYY-MM-DD"
-              value-format="YYYY-MM-DD HH:mm:ss"
               unlink-panels
               range-separator="-"
               start-placeholder="起始时间"
@@ -426,20 +442,32 @@ export default defineComponent({
           </el-col>
           <el-col span={isShowMore.value ? 4 : 2} class="col-center">
             {isShowMore.value && <el-button onClick={queryData}>搜索</el-button>}
-            <el-button type="warning" icon={Search} circle onClick={() => (isShowMore.value = !isShowMore.value)} />
+            <el-button
+              type="warning"
+              icon={Search}
+              circle
+              onClick={() => (isShowMore.value = !isShowMore.value)}
+            />
             <el-popover width="200" trigger="hover">
               {{
                 reference: () => <el-button type="danger" icon={Setting} circle />,
-                default: renderColList
+                default: renderColList,
               }}
             </el-popover>
           </el-col>
         </el-row>
 
-        <sc-table ref="table" column={column} data={eggsList} pageSize={5} stripe highlightCurrentRow />
+        <sc-table
+          ref="table"
+          column={column}
+          data={eggsList}
+          pageSize={10}
+          stripe
+          highlightCurrentRow
+        />
       </>
     )
-  }
+  },
 })
 </script>
 <style scoped>
