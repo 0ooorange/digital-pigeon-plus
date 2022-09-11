@@ -121,7 +121,7 @@ export default {
   },
   setup() {
     // 基地和棚
-    let baseInfo = tool.data.get('BASE_INFO')
+    let baseInfo = tool.data.get('USER_INFO')
     const bases = ref([])
     getBaseAndShed(baseInfo.id).then((res) => {
       bases.value = res.data.baseList
