@@ -107,7 +107,7 @@ export default {
   setup() {
     const curr_shed = store.state.dataVisual.CURR_SHED.code
     // 基地和棚
-    let baseInfo = tool.data.get('BASE_INFO')
+    let baseInfo = tool.data.get('USER_INFO')
     const shed = ref([])
     getBaseAndShed(baseInfo.id).then((res) => {
       shed.value = res.data.shedList

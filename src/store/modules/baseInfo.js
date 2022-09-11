@@ -4,7 +4,7 @@ import tool from '../../utils/tool'
 export default {
 	state: {
     // 基础信息
-    BASE_INFO: tool.data.get('BASE_INFO') || {},
+    USER_INFO: tool.data.get('USER_INFO') || {},
 		// 基地列表
 		BASES: tool.data.get('BASES') || [],
 		// 鸽棚列表
@@ -15,8 +15,8 @@ export default {
 		SHED_ID: tool.data.get('CURR_INFO') && tool.data.get('CURR_INFO').CURR_SHED.id || ''
 	},
 	mutations: {
-		setBaseInfo(state, basesInfo) {
-			state.BASE_INFO = basesInfo;
+		setUserInfo(state, userInfo) {
+			state.USER_INFO = userInfo;
 		},
 		setBase(state, bases) {
 			state.BASES = bases;

@@ -108,7 +108,7 @@ export default defineComponent({
         const showTag = ref(false);
 
         //当前基地/鸽棚信息
-        const baseInfo = proxy.$TOOL.data.get("BASE_INFO");
+        const baseInfo = proxy.$TOOL.data.get("USER_INFO");
         const bases = reactive(baseInfo.base);
         const currInfo = proxy.$TOOL.data.get("CURR_INFO");
         const dovecotes = reactive(baseInfo.shed);

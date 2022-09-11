@@ -60,7 +60,7 @@ export default defineComponent({
     document.documentElement.style.fontSize =
       (document.documentElement.clientWidth / 768) * 100 + 'px'
     const baseid = ref('')
-    baseid.value = store.state.baseInfo.BASE_INFO
+    baseid.value = store.state.baseInfo.USER_INFO
     const shortcuts = ref([
       {
         text: '近一周',
