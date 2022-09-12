@@ -122,7 +122,7 @@ export default {
         //监听从props里拿到值了
         data() {
             this.tableData = this.data;
-            this.total = this.tableData.length;
+            // this.total = this.tableData.length;
         },
         apiObj() {
             this.tableParams = this.params;
@@ -204,6 +204,7 @@ export default {
                 this.column
             );
             this.userColumn = userColumn;
+            // console.log('获取表格头',this.userColumn)
         },
         //获取数据
         async getData() {
@@ -249,6 +250,7 @@ export default {
                     // this.tableData = response.rows || [];
                     this.tableData = response.data || [];
                 }
+                console.log(response.total, '总条数')
                 this.total = response.total || 0;
                 this.summary = response.summary || {};
                 this.loading = false;

@@ -65,7 +65,7 @@ export default defineComponent({
             <>
               <el-card class="mostCard" style={{ width: '17%' }}>
                 <span class="cardText">{item.cardText + '：'}</span>
-                <span class="cardNumber" style={{ color: colors[index] }}>
+                <span class="cardNumber" style={{ color: colors[index % colors.length - 1] }}>
                   {item.cardNumber}
                 </span>
               </el-card>

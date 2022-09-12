@@ -116,6 +116,7 @@ import {
     computed,
     getCurrentInstance,
 } from "vue";
+import { dateFormat } from "@/hooks/dateFormat.js";
 import ScEcharts from "@/components/scEcharts";
 import { ElMessage } from "element-plus";
 import { getPredict } from "@api/AiControl/predict";
@@ -154,11 +155,17 @@ export default defineComponent({
                 //  width: 80,
                 fontSize: 12,
             },
+            grid: {
+                left: "3%",
+                right: "4%",
+                bottom: "3%",
+                containLabel: true,
+            },
         };
 
         //相同series
         let seriesObject = {
-            name: "",
+            name: "真实值",
             type: "line",
             symbol: "none",
             smooth: true,
@@ -167,6 +174,7 @@ export default defineComponent({
                 x: ["time"], // 表示维度 3、1、5 映射到 x 轴。
                 y: "datavalue", // 表示维度 2 映射到 y 轴。
             },
+            connectNulls: true,
         };
         //相同的tooltip
         let commonTooltip = {
@@ -182,7 +190,11 @@ export default defineComponent({
 
         //相同的配置
         let commomOption = {
+            textStyle: {
+                color: "#000",
+            },
             xAxis: {
+                // axisLabel:{},
                 boundaryGap: false,
                 type: "category",
                 // name: "时间",
@@ -191,18 +203,20 @@ export default defineComponent({
                     //x轴文字的配置
                     show: true,
                     interval: 0, //使x轴文字显示全
+                    color: "#000",
                 },
                 axisTick: {
                     show: false,
                 },
-            },
-            data: [
-                {
-                    textStyle: {
-                        fontSize: 28,
-                    },
+                // nameTextStyle: {
+                //     color: 'red'
+                // },
+                textStyle: {
+                    fontSize: 50,
+                    color: "red",
+                    // fontWeight: "bold",
                 },
-            ],
+            },
         };
 
         //相同的预测配置
@@ -211,15 +225,16 @@ export default defineComponent({
             type: "line",
             symbol: "none",
             smooth: true,
-            dimensions: ["name", "forcastValue"],
+            dimensions: ["time", "forcastValue"],
             encode: {
-                x: ["name"],
+                x: ["time"],
                 y: "forcastValue",
             },
             lineStyle: {
                 width: 2,
                 color: "#6495ED",
             },
+            connectNulls: true,
         };
 
         // 图表相同的提示框配置函数
@@ -233,7 +248,7 @@ export default defineComponent({
                 value1 = params[0].data.datavalue;
             }
             if (params[0].data.devicetime == undefined) {
-                value2 = params[0].data.name;
+                value2 = params[0].data.time;
             } else {
                 value2 = params[0].data.devicetime;
             }
@@ -253,10 +268,41 @@ export default defineComponent({
                 width: 2,
                 color: "#f15d5d",
             },
+            connectNulls: true,
         };
 
         let carbonDioxideOptionStatic = {
             ...commomOption,
+                        legend: {
+                // top: "20%",
+                right: "5%",
+                // width: "50%",
+                data: [
+                    {
+                        name: "真实值",
+                        // 强制设置图形为圆。
+                        icon: "circle",
+                        // 设置文本为红色
+                        textStyle: {
+                            color: "#000",
+                        },
+                        itemStyle: {
+                            color: "red",
+                        },
+                    },
+                    {
+                        name: "预测值",
+                        // 强制设置图形为圆。
+                        icon: "circle",
+                        textStyle: {
+                            color: "#000",
+                        },
+                        itemStyle: {
+                            color: "#6da2fe",
+                        },
+                    },
+                ],
+            },
             yAxis: carbonDioxideYAxis,
             dataset: carbonDioxideDataset,
             series: [carbonDioxideSeriesObject, commonPredictSeries],
@@ -278,6 +324,36 @@ export default defineComponent({
 
         let temperatureOptionStatic = {
             ...commomOption,
+                                    legend: {
+                // top: "20%",
+                right: "5%",
+                // width: "50%",
+                data: [
+                    {
+                        name: "真实值",
+                        // 强制设置图形为圆。
+                        icon: "circle",
+                        // 设置文本为红色
+                        textStyle: {
+                            color: "#000",
+                        },
+                        itemStyle: {
+                            color: "#AB82FF",
+                        },
+                    },
+                    {
+                        name: "预测值",
+                        // 强制设置图形为圆。
+                        icon: "circle",
+                        textStyle: {
+                            color: "#000",
+                        },
+                        itemStyle: {
+                            color: "#6da2fe",
+                        },
+                    },
+                ],
+            },
             yAxis: temperatureYAxis,
             dataset: temperatureDataset,
             series: [temperatureSeriesObject, commonPredictSeries],
@@ -300,6 +376,36 @@ export default defineComponent({
 
         let humidityOptionStatic = {
             ...commomOption,
+                        legend: {
+                // top: "20%",
+                right: "5%",
+                // width: "50%",
+                data: [
+                    {
+                        name: "真实值",
+                        // 强制设置图形为圆。
+                        icon: "circle",
+                        // 设置文本为红色
+                        textStyle: {
+                            color: "#000",
+                        },
+                        itemStyle: {
+                            color: "#548B54",
+                        },
+                    },
+                    {
+                        name: "预测值",
+                        // 强制设置图形为圆。
+                        icon: "circle",
+                        textStyle: {
+                            color: "#000",
+                        },
+                        itemStyle: {
+                            color: "#6da2fe",
+                        },
+                    },
+                ],
+            },
             yAxis: humidityYAxis,
             dataset: humidityDataset,
             series: [humiditySeriesObject, commonPredictSeries],
@@ -325,6 +431,36 @@ export default defineComponent({
 
         let illuminationIntensityOptionStatic = {
             ...commomOption,
+                                    legend: {
+                // top: "20%",
+                right: "5%",
+                // width: "50%",
+                data: [
+                    {
+                        name: "真实值",
+                        // 强制设置图形为圆。
+                        icon: "circle",
+                        // 设置文本为红色
+                        textStyle: {
+                            color: "#000",
+                        },
+                        itemStyle: {
+                            color: "#EEEE00",
+                        },
+                    },
+                    {
+                        name: "预测值",
+                        // 强制设置图形为圆。
+                        icon: "circle",
+                        textStyle: {
+                            color: "#000",
+                        },
+                        itemStyle: {
+                            color: "#6da2fe",
+                        },
+                    },
+                ],
+            },
             yAxis: illuminationIntensityYAxis,
             dataset: illuminationIntensityDataset,
             series: [illuminationIntensitySeriesObject, commonPredictSeries],
@@ -352,6 +488,36 @@ export default defineComponent({
 
         let PMOptionStatic = {
             ...commomOption,
+                                                legend: {
+                // top: "20%",
+                right: "5%",
+                // width: "50%",
+                data: [
+                    {
+                        name: "真实值",
+                        // 强制设置图形为圆。
+                        icon: "circle",
+                        // 设置文本为红色
+                        textStyle: {
+                            color: "#000",
+                        },
+                        itemStyle: {
+                            color: "#5ee59e",
+                        },
+                    },
+                    {
+                        name: "预测值",
+                        // 强制设置图形为圆。
+                        icon: "circle",
+                        textStyle: {
+                            color: "#000",
+                        },
+                        itemStyle: {
+                            color: "#6da2fe",
+                        },
+                    },
+                ],
+            },
             yAxis: PMYAxis,
             dataset: PMDataset,
             series: [PMSeriesObject, commonPredictSeries],
@@ -377,6 +543,36 @@ export default defineComponent({
 
         let PM10OptionStatic = {
             ...commomOption,
+                                                            legend: {
+                // top: "20%",
+                right: "5%",
+                // width: "50%",
+                data: [
+                    {
+                        name: "真实值",
+                        // 强制设置图形为圆。
+                        icon: "circle",
+                        // 设置文本为红色
+                        textStyle: {
+                            color: "#000",
+                        },
+                        itemStyle: {
+                            color: "#f15d5d",
+                        },
+                    },
+                    {
+                        name: "预测值",
+                        // 强制设置图形为圆。
+                        icon: "circle",
+                        textStyle: {
+                            color: "#000",
+                        },
+                        itemStyle: {
+                            color: "#6da2fe",
+                        },
+                    },
+                ],
+            },
             yAxis: PM10YAxis,
             dataset: PM10Dataset,
             series: [PM10SeriesObject, commonPredictSeries],
@@ -559,9 +755,33 @@ export default defineComponent({
             );
             console.log("二氧化碳请求结果", CarbonDioxRes);
 
+            let lastTime = null;
+            let protectTime = [];
+
             if (CarbonDioxRes.code === 200) {
                 let data = CarbonDioxRes.data.data;
+                // console.log(data[data.length - 1], "时间");
 
+                if (data[data.length - 1]) {
+                    lastTime =
+                        data[data.length - 1] &&
+                        data[data.length - 1].devicetime;
+                    lastTime = new Date(lastTime);
+                    for (let i = 0; i < 6; i++) {
+                        lastTime = new Date(
+                            lastTime.getFullYear(),
+                            lastTime.getMonth(),
+                            lastTime.getDate(),
+                            lastTime.getHours(),
+                            lastTime.getMinutes() + 10
+                        );
+                        protectTime.push(
+                            dateFormat(lastTime).substring(10, 16)
+                        );
+                    }
+                }
+
+                console.log("预测时间数组", protectTime);
                 //获取预测的数据
                 let forcastValue = data.map((item) => {
                     return item.datavalue;
@@ -588,6 +808,7 @@ export default defineComponent({
                         (item, index) => {
                             console.log(item);
                             let temp = {
+                                time: protectTime[index],
                                 name: "预测值" + (index + 1),
                                 dataunit: "ppm",
                                 forcastValue: item,
@@ -597,12 +818,57 @@ export default defineComponent({
                             return temp;
                         }
                     );
-                    console.log("处理后的数据", carbonDioxidePredict);
+                    // console.log("处理后的数据", carbonDioxidePredict);
+                    // let carbonDioxidePredict = [
+                    //     // {
+                    //     //     devicetime: "22:50",
+                    //     //     dataunit: "ppm",
+                    //     //     datavalue: 576,
+                    //     //     color: "#1C86EE",
+                    //     // },
+                    //     // {
+                    //     //     devicetime: "23:00",
+                    //     //     dataunit: "ppm",
+                    //     //     datavalue: 576,
+                    //     //     color: "#1C86EE",
+                    //     // },
+                    //     {
+                    //         time: "21:31",
+                    //         dataunit: "ppm",
+                    //         forcastValue: 686,
+                    //         color: "#1C86EE",
+                    //     },
+                    //     {
+                    //         time: "21:41",
+                    //         dataunit: "ppm",
+                    //         forcastValue: 614,
+                    //         color: "#1C86EE",
+                    //     },
+                    //     {
+                    //         time: "21:51",
+                    //         dataunit: "ppm",
+                    //         forcastValue: 606,
+                    //         color: "#1C86EE",
+                    //     },
+                    //     {
+                    //         time: "22:01",
+                    //         dataunit: "ppm",
+                    //         forcastValue: 580,
+                    //         color: "#1C86EE",
+                    //     },
+                    //     {
+                    //         time: "22:11",
+                    //         dataunit: "ppm",
+                    //         forcastValue: 536,
+                    //         color: "#1C86EE",
+                    //     },
+                    // ];
                     //数据赋值
                     carbonDioxideOption.dataset.source = carbonDioxideTemp;
                     carbonDioxideOption.dataset.source.push(
                         ...carbonDioxidePredict
                     );
+                    // console.log(carbonDioxideOption,'配置')
                 }
             }
             let temperatureRes = await getCarbonDioxideData(
@@ -638,6 +904,7 @@ export default defineComponent({
                         (item, index) => {
                             console.log(item);
                             let temp = {
+                                 time: protectTime[index],
                                 name: "预测值" + (index + 1),
                                 dataunit: "ppm",
                                 forcastValue: item,
@@ -646,6 +913,7 @@ export default defineComponent({
                             return temp;
                         }
                     );
+
                     //数据赋值
                     temperatureOption.dataset.source = temperatureTemp;
                     temperatureOption.dataset.source.push(
@@ -687,6 +955,7 @@ export default defineComponent({
                         (item, index) => {
                             console.log(item);
                             let temp = {
+                                 time: protectTime[index],
                                 name: "预测值" + (index + 1),
                                 dataunit: "ppm",
                                 forcastValue: item,
@@ -736,6 +1005,7 @@ export default defineComponent({
                         (item, index) => {
                             console.log(item);
                             let temp = {
+                                 time: protectTime[index],
                                 name: "预测值" + (index + 1),
                                 dataunit: "ppm",
                                 forcastValue: item,
@@ -782,6 +1052,7 @@ export default defineComponent({
                     let PMPredict = predictRes.output.map((item, index) => {
                         console.log(item);
                         let temp = {
+                             time: protectTime[index],
                             name: "预测值" + (index + 1),
                             dataunit: "μg/m3",
                             forcastValue: item,
@@ -824,6 +1095,7 @@ export default defineComponent({
                     let PM10Predict = predictRes.output.map((item, index) => {
                         console.log(item);
                         let temp = {
+                             time: protectTime[index],
                             name: "预测值" + (index + 1),
                             dataunit: "μg/m3",
                             forcastValue: item,

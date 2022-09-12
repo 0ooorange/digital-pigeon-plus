@@ -5,6 +5,7 @@
             :cardData="cardData"
             :cardWidth="cardWidth"
             @searchClick="searchClick"
+            @printTable="printTable"
             @outTable="outTable"
             class="table_search"
             :datePkDefalt="defaultTimeValue"
@@ -51,6 +52,8 @@
             :data="[]"
             :apiObj="getFeedStatisticApi"
             :params="getFeedStatisticParams"
+            :column="column"
+            :tableName="food"
         >
             <!-- <el-table-column
                 align="center"
@@ -59,7 +62,7 @@
                 width="200"
                 sortable
             ></el-table-column> -->
-            <el-table-column
+            <!-- <el-table-column 
                 align="center"
                 label="加料时间"
                 prop="gmtCreate"
@@ -92,7 +95,7 @@
                 prop="weight"
                 width="220"
                 sortable
-            ></el-table-column>
+            ></el-table-column> -->
         </scTable>
     </div>
 </template>
@@ -106,6 +109,9 @@ import {
     onMounted,
     computed,
 } from "vue";
+import print from "@/utils/print";
+import LAY_EXCEL from "lay-excel";
+import { ElMessage } from "element-plus";
 export default defineComponent({
     name: "fodderStatistics", // 饲料统计
     setup() {
@@ -113,6 +119,9 @@ export default defineComponent({
 
         //搜索实例
         const tableSearch = ref(null);
+
+        //表格实例
+        const table = ref(null);
 
         //当前鸽棚鸽笼信息
         const currShed = computed(() => {
@@ -171,6 +180,40 @@ export default defineComponent({
             {
                 value: "料槽编号",
                 label: "料槽编号",
+            },
+        ];
+
+        //表格头
+        const column = [
+            {
+                label: "加料时间",
+                prop: "gmtCreate",
+                width: 240,
+                sortable: true,
+            },
+            {
+                label: "饲料品种",
+                prop: "brand",
+                width: 220,
+                sortable: true,
+            },
+            {
+                label: "数量",
+                prop: "num",
+                width: 220,
+                sortable: true,
+            },
+            {
+                label: "规格",
+                prop: "size",
+                width: 220,
+                sortable: true,
+            },
+            {
+                label: "加料量",
+                prop: "weight",
+                width: 220,
+                sortable: true,
             },
         ];
 
@@ -272,6 +315,7 @@ export default defineComponent({
         const datePickerChange = function (e) {
             console.log("日期改变", e);
         };
+
         const searchClick = function (e) {
             let dataValue = e.dateValue;
             console.log(dataValue[0], e, "时间数据");
@@ -307,8 +351,63 @@ export default defineComponent({
             });
         };
 
+                const printTable = function () {
+            console.log(table.value);
+            print(table.value);
+                }
+        let isExport = false;
+
         const outTable = function () {
-            console.log("哈哈哈，我被点击了噢");
+            console.log(table.value.tableData, "表格组件");
+            let tableData = table.value.tableData.slice(0);
+            if (tableData.length === 0) {
+                console.log("没有数据导出");
+                ElMessage({
+                    message: `表格无数据,暂时无法导出`,
+                    type: "warning",
+                    duration: 2000,
+                });
+            } else {
+                if (!isExport) {
+                    isExport = true;
+                    setTimeout(() => {
+                        isExport = false;
+                    }, 2000);
+                    tableData.unshift({
+                        gmtCreate: "加料时间",
+                        brand: "饲料品种",
+                        num: "数量",
+                        size: "规格",
+                        weight: "加料量",
+                    });
+                    tableData = LAY_EXCEL.filterExportData(tableData, [
+                        "gmtCreate",
+                        "brand",
+                        "num",
+                        "size",
+                        "weight",
+                    ]);
+                    LAY_EXCEL.exportExcel(
+                        {
+                            sheet1: tableData,
+                        },
+                        "饲料统计导出表格.xlsx",
+                        "xlsx"
+                    );
+                    ElMessage({
+                        message: `表格导出成功,请查收`,
+                        type: "success",
+                        duration: 2000,
+                    });
+                    console.log("导出成功");
+                } else {
+                    ElMessage({
+                        message: `表格导出中,请勿重复操作`,
+                        type: "warning",
+                        duration: 2000,
+                    });
+                }
+            }
         };
 
         //和日期相关的
@@ -679,7 +778,9 @@ export default defineComponent({
         // getTwiceNumByIDTime()
 
         return {
+            column, //表格头
             tableSearch, //搜索实例
+            table,
             searchTypes,
             cardWidth,
             defaultTimeValue, //默认时间
@@ -687,9 +788,11 @@ export default defineComponent({
             cardData,
             getFeedStatisticApi, //表格请求接口
             getFeedStatisticParams, //表格请求参数
+            // tableDataChange, //表格数据改变后触发
             datePickerChange,
             searchClick,
             outTable,
+            printTable,
         };
     },
 });

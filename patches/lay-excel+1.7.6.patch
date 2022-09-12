@@ -1,0 +1,16 @@
+diff --git a/node_modules/lay-excel/src/excel.js b/node_modules/lay-excel/src/excel.js
+index 6adba7e..b4a72c6 100644
+--- a/node_modules/lay-excel/src/excel.js
++++ b/node_modules/lay-excel/src/excel.js
+@@ -64,7 +64,10 @@ function make_lay_excel(global) {
+      */
+     downloadExl: function(data, filename, type) {
+       type = type ? type : 'xlsx';
+-      this.exportExcel({sheet1: data}, filename+'.'+type, type, null);
++      let sheet = new Object()
++      sheet.sheet1 = data
++      console.log(data,'插件部分')
++      this.exportExcel(sheet, filename+'.'+type, type, null);
+     },
+     /**
+      * 导出Excel并弹出下载框，具体使用方法和范围请参考文档

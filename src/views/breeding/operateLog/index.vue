@@ -5,12 +5,13 @@
             :cardData="[]"
             @searchClick="searchClick"
             @outTable="outTable"
+            @printTable="printTable"
             class="table_search"
             :datePkDefalt="defaultTimeValue"
             ref="tableSearch"
         >
         </table-search>
-        <div class="table_box">
+        <div class="table_box" ref="tableBox">
             <div class="table_item">
                 <el-card class="item_title" style="color: #6959cd">
                     操作记录
@@ -19,7 +20,7 @@
                 <scTable
                     class="table"
                     height="auto"
-                    ref="table"
+                    ref="optionTable"
                     row-key="id"
                     stripe
                     highlightCurrentRow
@@ -57,7 +58,7 @@
                 <!-- <div class="item_title"></div> -->
                 <scTable
                     class="table"
-                    ref="table"
+                    ref="abnormalTable"
                     row-key="id"
                     stripe
                     highlightCurrentRow
@@ -156,12 +157,18 @@
 </template>
 
 <script>
+import LAY_EXCEL from "lay-excel";
+import print from "@/utils/print";
+import { ElMessage } from "element-plus";
 import { defineComponent, reactive, ref, getCurrentInstance } from "vue";
 export default defineComponent({
     name: "operateLog", // 饲料统计
     setup() {
         const { proxy } = getCurrentInstance();
-
+        const tableBox = ref(null) //页面的表格组件
+        //获取两个表格
+        const optionTable = ref(null);
+        const abnormalTable = ref(null);
         let searchTypes = reactive([]);
         let cardData = reactive([]);
         let cardWidth = ref("14%");
@@ -491,11 +498,76 @@ export default defineComponent({
                 proxy.$API.operateLog.findLogByPigeonCodesAndDate;
             findLogParams.pigeonId = e.inputValue;
             findCageDataParams.pigeonId = e.inputValue;
-            getDataList()
+            getDataList();
         };
+                const printTable = function () {
+            console.log(tableBox.value);
+            print(tableBox.value);
+        };
+        let isExport = false;
 
         const outTable = function () {
-            console.log("哈哈哈，我被点击了噢");
+
+            let  optionTableData= optionTable.value.tableData.slice(0);
+            let abnormalTableData = abnormalTable.value.tableData.slice(0);
+            
+            if (optionTableData.length === 0 && abnormalTableData.length === 0) {
+                console.log("没有数据导出");
+                ElMessage({
+                    message: `表格无数据,暂时无法导出`,
+                    type: "warning",
+                    duration: 2000,
+                });
+            } else {
+                if (!isExport) {
+                    isExport = true;
+                    setTimeout(() => {
+                        isExport = false;
+                    }, 2000);
+                    optionTableData.unshift({
+                        time: "时间",
+                        codes: "鸽笼编号",
+                        message: "操作记录",
+                    });
+                    optionTableData = LAY_EXCEL.filterExportData(optionTableData, [
+                        "time",
+                        "codes",
+                        "message",
+                    ]);
+
+                    abnormalTableData.unshift({
+                        time: "时间",
+                        codes: "鸽笼编号",
+                        message: "异常信息",
+                    });
+                    abnormalTableData = LAY_EXCEL.filterExportData(abnormalTableData, [
+                        "time",
+                        "codes",
+                        "message",
+                    ]);
+                    LAY_EXCEL.exportExcel(
+                        {
+                            sheet1: optionTableData,
+                            sheet2: abnormalTableData
+                        },
+                        
+                        "操作日志导出表格.xlsx",
+                        "xlsx"
+                    );
+                    ElMessage({
+                        message: `表格导出成功,请查收`,
+                        type: "success",
+                        duration: 2000,
+                    });
+                    console.log("导出成功");
+                } else {
+                    ElMessage({
+                        message: `表格导出中,请勿重复操作`,
+                        type: "warning",
+                        duration: 2000,
+                    });
+                }
+            }
         };
 
         //获取操作记录
@@ -506,16 +578,18 @@ export default defineComponent({
 
         //获取各种数据
         const getDataList = async function () {
-            let getDataList 
+            let getDataList;
             if (isSearch.value) {
                 getDataList =
                     await proxy.$API.operateLog.findCageDataByPigeonAndDate.get(
                         findCageDataParams
                     );
-                isSearch.value = false
+                isSearch.value = false;
             } else {
-                 getDataList = await proxy.$API.allState.findCageDataByPigeonIdAndDate.get(
-                    findCageDataParams)
+                getDataList =
+                    await proxy.$API.allState.findCageDataByPigeonIdAndDate.get(
+                        findCageDataParams
+                    );
             }
             if (getDataList.code == 200) {
                 console.log("各种数据", getDataList);
@@ -532,6 +606,9 @@ export default defineComponent({
         getDataList();
 
         return {
+            tableBox,
+            optionTable,
+            abnormalTable,
             searchTypes,
             cardWidth,
             defaultTimeValue,
@@ -550,6 +627,7 @@ export default defineComponent({
             datePickerChange,
             searchClick,
             outTable,
+            printTable
         };
     },
 });
@@ -574,11 +652,12 @@ export default defineComponent({
         .item_title {
             height: 55px;
             line-height: 30px;
-            width: 60%;
+            // width: 60%;
             margin: auto;
             margin-bottom: 10px;
             text-align: center;
-            font-size: 18px;
+            font-size: 22px;
+            letter-spacing: 18px;
             :deep(.el-card__body) {
                 height: 100%;
                 padding: 10px !important;
