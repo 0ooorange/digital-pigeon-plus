@@ -1,6 +1,12 @@
 import http from "@/utils/request";
 
-//获取环境数据环境
-// export const getPredict = (data) => http.post('/predict/api/v1/predict/?feature=' + data.feature + '&data=' + data.data + '&target_length=' + data.target_length);
-
-export const getPredict = (data) => http.post('/api/v1/predict/',data);
+export default {
+	getPredict: {
+		url: `/api/v1/predict/`,
+		name: "预测环境",
+		post: async function (data = {}) {
+			console.log("url", this.url,data);
+			return await http.post(this.url + '?feature=' + data.feature + '&data=' + data.data + '&target_length=' + data.target_length);
+		},
+	}
+};

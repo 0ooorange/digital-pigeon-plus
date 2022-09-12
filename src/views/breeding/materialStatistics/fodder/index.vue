@@ -128,7 +128,7 @@ export default defineComponent({
             return proxy.$store.state.baseInfo.SHED_ID;
         });
 
-        console.log("鸽棚信息", currShed.value);
+        // console.log("鸽棚信息", currShed.value);
 
         let searchTypes = reactive([]);
         let cardData = reactive([
@@ -312,14 +312,15 @@ export default defineComponent({
         // ];
 
         //日期选择器改变
-        const datePickerChange = function (e) {
-            console.log("日期改变", e);
+        const datePickerChange = function () {
+            // const datePickerChange = function (e) {
+            // console.log("日期改变", e);
         };
 
         const searchClick = function (e) {
             let dataValue = e.dateValue;
-            console.log(dataValue[0], e, "时间数据");
-            console.log(new Date(dataValue[0]));
+            // console.log(dataValue[0], e, "时间数据");
+            // console.log(new Date(dataValue[0]));
             let startTimeTemp = new Date(dataValue[0]);
             let endTimeTemp = new Date(dataValue[1]);
             startTime.value = new Date(
@@ -335,26 +336,26 @@ export default defineComponent({
                 59,
                 59
             );
-            console.log(
-                "开始时间",
-                "结束时间",
-                formatDate(startTime.value),
-                formatDate(endTime.value)
-            );
+            // console.log(
+            //     "开始时间",
+            //     "结束时间",
+            //     formatDate(startTime.value),
+            //     formatDate(endTime.value)
+            // );
             getCardData();
             getFeedStatisticParams.startTime = formatDate(startTime.value);
             getFeedStatisticParams.endTime = formatDate(endTime.value);
 
             proxy.$nextTick(() => {
-                console.log(getFeedStatisticParams.value, 1111);
+                // console.log(getFeedStatisticParams.value, 1111);
                 // proxy.$refs.table.getData()
             });
         };
 
-                const printTable = function () {
+        const printTable = function () {
             console.log(table.value);
             print(table.value);
-                }
+        };
         let isExport = false;
 
         const outTable = function () {
@@ -394,6 +395,7 @@ export default defineComponent({
                         "饲料统计导出表格.xlsx",
                         "xlsx"
                     );
+
                     ElMessage({
                         message: `表格导出成功,请查收`,
                         type: "success",
@@ -479,19 +481,19 @@ export default defineComponent({
         const thisBegin = ref(
             new Date(endTime.value.getFullYear(), endTime.value.getMonth(), 1)
         );
-        console.log("上月开始时间", thisBegin.value);
+        // console.log("上月开始时间", thisBegin.value);
 
         //时间组件的默认时间
         const defaultTimeValue = reactive([
             formatDate(startTime.value).substring(0, 10),
             formatDate(endTime.value).substring(0, 10),
         ]);
-        console.log(
-            formatDate(endTime.value),
-            formatDate(startTime.value),
-            defaultTimeValue,
-            "当前时间"
-        );
+        // console.log(
+        //     formatDate(endTime.value),
+        //     formatDate(startTime.value),
+        //     defaultTimeValue,
+        //     "当前时间"
+        // );
 
         //上个月的起止时间
 
@@ -519,11 +521,11 @@ export default defineComponent({
         //调接口
         //获取各品牌饲料剩余量
         const getCardData = async function () {
-            console.log("当前鸽棚", currShed);
+            // console.log("当前鸽棚", currShed);
             let data = {
                 currShed: currShed.value,
             };
-            console.log("参数", data);
+            // console.log("参数", data);
 
             //根据鸽棚ID和起止时间查询饲料加料量
             const getFeedNumByIDTimeData = {
@@ -640,7 +642,7 @@ export default defineComponent({
                     //         data.substring(0, data.indexOf("k"))
                     //     ).toFixed(3) + "kg",
                 };
-                console.log("本月均用量", data);
+                // console.log("本月均用量", data);
                 // cardData.push(temp);
                 cardData[4] = temp;
             }
@@ -690,7 +692,7 @@ export default defineComponent({
                     //         data.substring(0, data.indexOf("k"))
                     //     ).toFixed(3) + "kg",
                 };
-                console.log("上月饲料用量", data);
+                // console.log("上月饲料用量", data);
                 // cardData.push(temp);
                 cardData[6] = temp;
             }
@@ -700,7 +702,7 @@ export default defineComponent({
                 "getFeedBrandNumByShedID",
                 data
             );
-            console.log("数据11111111", feedBrandNum);
+            // console.log("数据11111111", feedBrandNum);
             if (feedBrandNum.code == 200) {
                 // console.log("各种饲料量数据", data);
                 feedBrandNum.data.data.forEach((item) => {
@@ -723,7 +725,7 @@ export default defineComponent({
         //参数
         const getFeedStatisticParams = reactive(
             computed(() => {
-                console.log("监听改变");
+                // console.log("监听改变");
                 return {
                     currShed: currShed,
                     startTime: formatDate(startTime.value),
@@ -765,7 +767,7 @@ export default defineComponent({
         // };
 
         onMounted(() => {
-            console.log(proxy.$refs.tableSearch, "搜索组件");
+            // console.log(proxy.$refs.tableSearch, "搜索组件");
         });
 
         //获取各品牌数量

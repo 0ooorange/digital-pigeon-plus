@@ -1,90 +1,47 @@
 <template>
   <div>
-    <sc-table class="table"
-              :data="blockchainList"
-              stripe
-              highlightCurrentRow
-              hidePagination>
-      <el-table-column align="center"
-                       label="ID"
-                       prop="id"
-                       width="50" />
-      <el-table-column align="center"
-                       label="数据类型"
-                       prop="dataType"
-                       width="100" />
-      <el-table-column align="center"
-                       label="数据"
-                       prop="status"
-                       width="200">
+    <sc-table class="table" :data="blockchainList" stripe highlightCurrentRow hidePagination>
+      <el-table-column align="center" label="ID" prop="id" width="50" />
+      <el-table-column align="center" label="数据类型" prop="dataType" width="100" />
+      <el-table-column align="center" label="数据" prop="status" width="200">
         <template v-slot="{row}">
           <span class="text_truncation">{{row.data}}</span>
           <i class="el-icon-caret-right"></i>
         </template>
       </el-table-column>
-      <el-table-column align="center"
-                       label="当前节点Hash"
-                       prop="currentblockinfo"
-                       width="150" />
-      <el-table-column align="center"
-                       label="前节点Hash"
-                       prop="previousblockinfo"
-                       width="150" />
-      <el-table-column align="center"
-                       label="链高度"
-                       prop="blockheight"
-                       width="50" />
+      <el-table-column align="center" label="当前节点Hash" prop="currentblockinfo" width="150" />
+      <el-table-column align="center" label="前节点Hash" prop="previousblockinfo" width="150" />
+      <el-table-column align="center" label="链高度" prop="blockheight" width="50" />
 
-      <el-table-column align="center"
-                       label="Hash寻址码"
-                       prop="hashAddress"
-                       width="100" />
-      <el-table-column align="center"
-                       label="溯源二维码"
-                       prop="status"
-                       width="150">
+      <el-table-column align="center" label="Hash寻址码" prop="hashAddress" width="100" />
+      <el-table-column align="center" label="溯源二维码" prop="status" width="150">
         <template v-slot="{row}">
-          <vue-qr :text="row.traceabilityAddress"
-                  :size="150" />
+          <vue-qr :text="row.traceabilityAddress" :size="120" />
         </template>
       </el-table-column>
-      <el-table-column align="center"
-                       label="溯源码网址"
-                       prop="traceabilityAddress"
-                       width="100" />
-      <el-table-column align="center"
-                       label="操作"
-                       fixed="right"
-                       width="200">
+      <el-table-column align="center" label="溯源码网址" prop="traceabilityAddress" width="100" />
+      <el-table-column align="center" label="操作" fixed="right">
         <template #default>
-          <el-button type="text"
-                     icon="el-icon-set-up"
-                     @click="resultDialog = true">对比
+          <el-button type="text" icon="el-icon-set-up" @click="resultDialog = true">对比
           </el-button>
-          <el-button type="text"
-                     style="color: #FA6962"
-                     icon="el-icon-delete">
+          <el-button type="text" style="color: #FA6962" icon="el-icon-delete">
             删除
           </el-button>
         </template>
       </el-table-column>
     </sc-table>
     <!-- 对比结果 -->
-    <el-dialog title="比对结果"
-               :modelValue="resultDialog"
-               width="40%">
+    <el-dialog title="比对结果" :modelValue="resultDialog" width="40%">
       <div class="dialog_result">
         <span class="dialog_result_success">
           hash值一致，未被篡改！
         </span>
-        <img :src="successImg"
-             class="dialog_result_img">
+        <img :src="successImg" class="dialog_result_img">
       </div>
       <template v-slot:footer>
         <span>
           <el-button @click="resultDialog = false">取 消</el-button>
-          <el-button type="primary"
-                     @click="resultDialog = false">确 定</el-button>
+          <el-button type="primary" @click="resultDialog = false">确 定</el-button>
         </span>
       </template>
 
@@ -93,7 +50,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref } from 'vue'
 import vueQr from 'vue-qr/src/packages/vue-qr.vue'
 import successImg from '@images/hashNotChange.png'
 
@@ -101,21 +58,25 @@ import res from './data.json'
 export default defineComponent({
   name: 'blockchain',
   components: {
-    vueQr
+    vueQr,
   },
-  setup () {
+  setup() {
     const blockchainList = res.records || []
     const resultDialog = ref(false)
     return {
       blockchainList,
       resultDialog,
-      successImg
+      successImg,
     }
-  }
+  },
 })
 </script>
 
 <style lang="less" scoped>
+.table {
+  width: 100%;
+  height: 90%;
+}
 .text_truncation {
   width: 200px;
   // height: 100px;

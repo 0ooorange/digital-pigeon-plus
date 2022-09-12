@@ -82,8 +82,8 @@ export default defineComponent({
         //弹框显示
         const dialogFormVisible = ref(false);
         const show = function (title) {
-             console.log("cu", props.dialogForm);
-            console.log("cu", props.dialogForm.name);
+            //  console.log("cu", props.dialogForm);
+            // console.log("cu", props.dialogForm.name);
             form.name = props.dialogForm.name;
             form.min = props.dialogForm.min;
             form.mininfo = props.dialogForm.mininfo;
@@ -95,7 +95,7 @@ export default defineComponent({
             form.id = props.dialogForm.id;
             form.isDeleted = props.dialogForm.isDeleted;
             form.version = props.dialogForm.version;
-            console.log(form,'表单111')
+            // console.log(form,'表单111')
             dialogFormVisible.value = true;
             dialogTitle.value = title + "的阀值所属";
         };
@@ -105,7 +105,7 @@ export default defineComponent({
 
         //选择弹框
         const showEitSetDialog = function () {
-            console.log("执行");
+            // console.log("执行");
             emit("showEitSetDialog");
         };
 
@@ -137,8 +137,8 @@ export default defineComponent({
                     break;
             }
             let res = await setThreshold(form);
-            console.log("请求参数", form);
-            console.log("请求参数", res);
+            // console.log("请求参数", form);
+            // console.log("请求参数", res);
             dialogFormVisible.value = false;
 
             if (res.code == 200) {

@@ -210,27 +210,28 @@ export default defineComponent({
         const chooseCageDialogRef = ref(null);
 
         //日期选择器改变
-        const datePickerChange = function (e) {
-            console.log("日期改变", e);
+        const datePickerChange = function () {
+        // const datePickerChange = function (e) {
+            // console.log("日期改变", e);
         };
         const searchClick = function () {
-            console.log("嘻嘻嘻，我被点击啦");
+            // console.log("嘻嘻嘻，我被点击啦");
         };
 
         const outTable = function () {
-            console.log("哈哈哈，我被点击了噢");
+            // console.log("哈哈哈，我被点击了噢");
         };
 
         const showTag = ref(false)
 
         const closeDialog = function () {
             showTag.value = true
-            console.log(showTag)
+            // console.log(showTag)
             addDoceBoardDialogRef.value?.changeShowTag()
         }
 
         const beforeChange = function (scope) {
-            console.log("改变", scope);
+            // console.log("改变", scope);
             let action = "";
 
             if (scope.row.stop) {
@@ -268,14 +269,14 @@ export default defineComponent({
 
         //添加鸽板
         const addDoceBoard = function () {
-            console.log("促发");
-            console.log(addDoceBoardDialogRef.value, 111);
+            // console.log("促发");
+            // console.log(addDoceBoardDialogRef.value, 111);
             addDoceBoardDialogRef.value?.show();
         };
 
         const showChooseCageDialog = function () {
-            console.log("选择鸽笼");
-            console.log(chooseCageDialogRef.value, 11111);
+            // console.log("选择鸽笼");
+            // console.log(chooseCageDialogRef.value, 11111);
             chooseCageDialogRef.value?.show();
         };
 

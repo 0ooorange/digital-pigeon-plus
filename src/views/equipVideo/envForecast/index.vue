@@ -213,17 +213,17 @@ export default defineComponent({
 
         //日期选择器
         const visibleChange = function (e) {
-            console.log("选择日期", e);
-            console.log(
-                proxy.$TOOL.dateFormat(e[0]),
-                proxy.$TOOL.dateFormat(e[1]).substring(0, 10) + " 23:59:59"
-            );
+            // console.log("选择日期", e);
+            // console.log(
+            //     proxy.$TOOL.dateFormat(e[0]),
+            //     proxy.$TOOL.dateFormat(e[1]).substring(0, 10) + " 23:59:59"
+            // );
             commonParams.start_time = proxy.$TOOL.dateFormat(e[0]);
             commonParams.end_time =
                 proxy.$TOOL.dateFormat(e[1]).substring(0, 10) +
                 " 23:59:59";
-            console.log("参数", commonParams);
-            getCarbonDioxideDataMethod();
+            // console.log("参数", commonParams);
+            getCarbonDioxideData();
         };
 
         //相同的配置
@@ -925,7 +925,7 @@ export default defineComponent({
                     commonParams,
                     "二氧化碳"
                 );
-                 console.log("二氧化碳请求结果", CarbonDioxRes);
+                //  console.log("二氧化碳请求结果", CarbonDioxRes);
 
             if (CarbonDioxRes.code === 200) {
                 carbonDioxide = CarbonDioxRes.data.data;
@@ -937,7 +937,7 @@ export default defineComponent({
                     commonParams,
                     "空气温度"
                 );
-                 console.log("空气温度请求结果", temperatureRes);
+                //  console.log("空气温度请求结果", temperatureRes);
             if (temperatureRes.code === 200) {
                 temperature = temperatureRes.data.data;
                 //数据赋值
@@ -955,7 +955,7 @@ export default defineComponent({
 
                 //数据赋值
                 humidityOption.dataset.source = humidityc;
-                console.log("空气湿度请求结果", humidityRes);
+                // console.log("空气湿度请求结果", humidityRes);
             }
 
             //光照强度
@@ -969,7 +969,7 @@ export default defineComponent({
                 //数据赋值
                 illuminationIntensityOption.dataset.source =
                     illuminationIntensity;
-                console.log("光照强度请求结果", illuminationIntensityRes);
+                // console.log("光照强度请求结果", illuminationIntensityRes);
             }
 
             //PM2.5
@@ -981,7 +981,7 @@ export default defineComponent({
                 PM = PMRes.data.data;
                 //数据赋值
                 PMOption.dataset.source = PM;
-                console.log("PM2.5请求结果", PMRes);
+                // console.log("PM2.5请求结果", PMRes);
             }
 
             //PM10
@@ -994,7 +994,7 @@ export default defineComponent({
                 PM10 = PM10Res.data.data;
                 //数据赋值
                 PM10Option.dataset.source = PM10;
-                console.log("PM10请求结果", PM10Res);
+                // console.log("PM10请求结果", PM10Res);
             }
 
             //氨气浓度
@@ -1007,7 +1007,7 @@ export default defineComponent({
                 ammoniaGas = ammoniaGasRes.data.data;
                 //数据赋值
                 ammoniaGasOption.dataset.source = ammoniaGas;
-                console.log("氨气浓度请求结果", ammoniaGasRes);
+                // console.log("氨气浓度请求结果", ammoniaGasRes);
             }
 
             //硫化氢浓度
@@ -1020,7 +1020,7 @@ export default defineComponent({
                 sulfurettedHydrogen = sulfurettedHydrogenRes.data.data;
                 //数据赋值
                 sulfurettedHydrogenOption.dataset.source = sulfurettedHydrogen;
-                console.log("硫化氢请求结果", sulfurettedHydrogenRes);
+                // console.log("硫化氢请求结果", sulfurettedHydrogenRes);
             }
 
             //TSP浓度
@@ -1032,7 +1032,7 @@ export default defineComponent({
                 TSP = TSPRes.data.data;
                 //数据赋值
                 TSPOption.dataset.source = TSP;
-                console.log("TSP请求结果", TSPRes);
+                // console.log("TSP请求结果", TSPRes);
             }
 
             //噪音
@@ -1041,12 +1041,12 @@ export default defineComponent({
                     commonParams,
                     "噪音"
                 );
-                console.log("噪音",noiseRes)
+                // console.log("噪音",noiseRes)
             if (noiseRes.code === 200) {
                 noise = noiseRes.data.data;
                 //数据赋值
                 noiseOption.dataset.source = noise;
-                console.log("噪音请求结果", noiseRes);
+                // console.log("噪音请求结果", noiseRes);
             }
         };
 

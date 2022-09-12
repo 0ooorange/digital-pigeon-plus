@@ -151,11 +151,11 @@ export default defineComponent({
         ];
 
         //获取鸽棚id
-        //当前鸽棚鸽笼信息
-        const currShed = computed(() => {
-            return proxy.$store.state.baseInfo.SHED_ID;
-        });
-        console.log("当前鸽棚", currShed.value);
+                      //当前鸽棚鸽笼信息
+         const currShed = computed(() => {
+            return proxy.$store.state.baseInfo.SHED_ID
+         })
+        // console.log("当前鸽棚", currShed.value);
 
         //格式化时间
         const formatDate = function (date) {

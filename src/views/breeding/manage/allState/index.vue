@@ -380,7 +380,7 @@ export default {
             nowTime.getMonth() - 6,
             nowTime.getDate()
         );
-        console.log("半个月前", this.formatDate(this.passDay));
+        // console.log("半个月前", this.formatDate(this.passDay));
         this.passDay = this.formatDate(this.passDay);
         this.today = this.formatDate(this.today);
         this.getAllCage();
@@ -595,7 +595,7 @@ export default {
     },
     computed: {
        currShed() {
-        console.log(this.$store.state.baseInfo.SHED_ID,'触发这里')
+        // console.log(this.$store.state.baseInfo.SHED_ID,'触发这里')
         return this.$store.state.baseInfo.SHED_ID
        } 
     },
@@ -617,7 +617,7 @@ export default {
         //改变查看状态
         changeStatus(index) {
             this.currentStatus = index;
-            console.log("当前状态", this.currentStatus);
+            // console.log("当前状态", this.currentStatus);
             ElMessage({
                 message: `切换状态成功，当前为${
                     this.methodsArray[this.currentStatus]
@@ -629,11 +629,11 @@ export default {
 
         //改变当前鸽笼数
         changeCurrentBox(index) {
-            console.log("点击1111");
-            console.log(index, 111);
+            // console.log("点击1111");
+            // console.log(index, 111);
             this.currentBox = index;
             this.$refs.dialogBox.scrollLeft = index * 1100;
-            console.log(this.$refs.dialogBox.scrollLeft);
+            // console.log(this.$refs.dialogBox.scrollLeft);
         },
 
         //改变查看鸽笼层级
@@ -656,34 +656,34 @@ export default {
                 // shedId: this.currShed,
                 shedId: "1518124016571797507"
             };
-            console.log("获取所有鸽笼参数", data);
+            // console.log("获取所有鸽笼参数", data);
             const findCageByState =
                 await this.$API.allState.findCageByState.get(data);
             if (findCageByState.code == 200) {
-                console.log("全部鸽笼", findCageByState);
+                // console.log("全部鸽笼", findCageByState);
                 this.cageArray = findCageByState.data.data;
                 this.findLogParams.pigeonId =
                     this.cageArray[0][0] && this.cageArray[0][0].pigeonId;
-                console.log(this.cageArray, "鸽笼数据");
+                // console.log(this.cageArray, "鸽笼数据");
                 this.findLogApi = this.$API.allState.findLogByPigeonIdAndDate;
                 this.findLogParams.beginDate = this.passDay;
                 this.findLogParams.endDate = this.today;
                 this.findLogParams.pigeonId =
                     this.cageArray[0][0] && this.cageArray[0][0].pigeonId;
                 this.currentPigeon = this.cageArray[0][0].codes;
-                console.log(this.findLogParams, "请求参数1111");
+                // console.log(this.findLogParams, "请求参数1111");
 
                 //异常信息
                 this.dataParams.pigeonId =
                     this.cageArray[0][0] && this.cageArray[0][0].pigeonId;
-                console.log(this.cageArray, "鸽笼数据");
+                // console.log(this.cageArray, "鸽笼数据");
                 this.findAbnormalApi =
                     this.$API.allState.findAbnormalByPigeonIdAndDate;
                 this.dataParams.beginDate = this.passDay;
                 this.dataParams.endDate = this.today;
                 this.dataParams.pigeonId =
                     this.cageArray[0][0] && this.cageArray[0][0].pigeonId;
-                console.log(this.dataParams, "异常信息请求参数1111");
+                // console.log(this.dataParams, "异常信息请求参数1111");
                 // this.findCageDataParams.beginDate = this.passDay;
                 // this.findCageDataParams.endDate = this.today;
                 // this.findCageDataParams.pigeonId =
@@ -693,16 +693,16 @@ export default {
         },
         //获取鸽笼具体信息
         async getCageDataInfo() {
-            console.log(this.dataParams, "各种数据参数1111");
+            // console.log(this.dataParams, "各种数据参数1111");
             const getDataList =
                 await this.$API.allState.findCageDataByPigeonIdAndDate.get(
                     this.dataParams
                 );
-            console.log("请求各种数据", getDataList);
+            // console.log("请求各种数据", getDataList);
             if (getDataList.code == 200) {
-                console.log("各种数据", getDataList);
+                // console.log("各种数据", getDataList);
                 let data = getDataList.data.data;
-                console.log("各种数据", data);
+                // console.log("各种数据", data);
                 this.allKindsOfData.layEggNum = data.layEggNum + "个";
                 this.allKindsOfData.takeEggNum = data.takeEggNum + "个";
                 this.allKindsOfData.hatchEggNum = data.hatchEggNum + "个";
@@ -715,7 +715,7 @@ export default {
             this.dataParams.pigeonId = item.pigeonId;
             this.dataParams.pigeonId = item.pigeonId;
             this.currentPigeon = item.codes;
-            console.log("点击鸽笼", this.findLogParams);
+            // console.log("点击鸽笼", this.findLogParams);
             // this.$refs.logTable.getData()
             ElMessage({
                 message: `当前可查看编号为 ${this.currentPigeon} 的鸽笼的详细信息`,

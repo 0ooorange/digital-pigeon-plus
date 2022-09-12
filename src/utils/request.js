@@ -5,7 +5,6 @@ import tool from '@/utils/tool';
 import router from '@/router';
 
 // axios.defaults.baseURL = 'http://106.12.160.172:8000'
-
 axios.defaults.timeout = sysConfig.TIMEOUT
 
 // HTTP request 拦截器
@@ -20,7 +19,7 @@ axios.interceptors.request.use(
 			config.params['_'] = new Date().getTime();
 		}
 		Object.assign(config.headers, sysConfig.HEADERS)
-		console.log('请求中的配置',config)
+		// console.log('请求中的配置',config)
 		return config;
 	},
 	(error) => {
@@ -99,7 +98,7 @@ var http = {
 	 * @param  {参数} config
 	 */
 	post: function(url, data={}, config={}) {
-		console.log(url,data,config)
+		// console.log(url,data,config)
 		return new Promise((resolve, reject) => {
 			axios({
 				method: 'post',
@@ -110,7 +109,7 @@ var http = {
 				
 				resolve(response.data);
 			}).catch((error) => {
-				console.log('请求',error)
+				// console.log('请求',error)
 				reject(error);
 			})
 		})

@@ -15,13 +15,16 @@
         v-loading="loading"
     >
         <div class="scTable-table">
+			<!-- 先删了，感觉没必要用到
+			:height="height == 'auto' ? null : '100%'"-->
+
             <el-table
                 v-bind="$attrs"
                 :data="tableData"
                 :row-key="rowKey"
                 :key="toggleIndex"
                 ref="scTable"
-                :height="height == 'auto' ? null : '100%'"
+
                 :size="config.size"
                 :border="config.border"
                 :stripe="config.stripe"

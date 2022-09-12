@@ -196,7 +196,7 @@ export default defineComponent({
 
         //添加鸽板弹框显示
         const show = function () {
-            console.log("cu");
+            // console.log("cu");
             dialogFormVisible.value = true;
         };
 
@@ -268,25 +268,26 @@ export default defineComponent({
             ],
         ];
 
-        const clickCage = function (e) {
-            console.log("详情", e);
-            console.log("点击对象左侧", e.target.offsetLeft - 17);
-            console.log("点击对象上侧", e.target.offsetTop - 17);
-            console.log("点击对象", e.target.style.width);
+        const clickCage = function () {
+        // const clickCage = function (e) {
+            // console.log("详情", e);
+            // console.log("点击对象左侧", e.target.offsetLeft - 17);
+            // console.log("点击对象上侧", e.target.offsetTop - 17);
+            // console.log("点击对象", e.target.style.width);
         };
 
                 //改变当前鸽笼数
         const changeCurrentBox = function(index) {
-            console.log("点击1111");
-            console.log(index, 111);
+            // console.log("点击1111");
+            // console.log(index, 111);
             currentBox.value = index
             proxy.$refs.dialogBox.scrollLeft = index * 1300;
-            console.log(this.$refs.dialogBox.scrollLeft);
+            // console.log(this.$refs.dialogBox.scrollLeft);
         }
 
         const closeDialog = function() {
             emit("closeDialog")
-            console.log('关闭')
+            // console.log('关闭')
         }
 
         return {

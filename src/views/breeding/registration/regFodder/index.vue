@@ -6,9 +6,10 @@
       >
       <table-search
         :dateDefault="dateDefault"
-        @reset="reset"
+        :datePkDefalt="datePk"
         @outTable="outTable"
         @printTable="printTable"
+        @panelChange="panelChange"
         :showSearch="false"
       />
     </div>
@@ -33,27 +34,27 @@
         <el-table-column
           prop="brand"
           label="饲料种类"
-          width="120"
+          width="150"
           align="center"
         />
         <el-table-column
           prop="size"
           label="规格"
-          width="120"
+          width="150"
           sortable
           align="center"
         />
         <el-table-column
           prop="num"
           label="数量"
-          width="120"
+          width="150"
           sortable
           align="center"
         />
         <el-table-column
           prop="weight"
-          label="重量"
-          width="120"
+          label="重量(斤)"
+          width="150"
           sortable
           align="center"
         />
@@ -91,10 +92,10 @@
         ref="addRef"
         label-width="auto"
         style="width: 380px"
-        :rules="formRules"
+        :rules="addformRules"
       >
         <el-form-item label="饲料种类:" prop="brand">
-          <el-row :gutter="10">
+          <el-row :gutter="10" style="width: 380px">
             <el-col
               :span="8"
               v-for="(item, index) in addInfo.brand"
@@ -122,12 +123,8 @@
             </el-col>
           </el-row>
         </el-form-item>
-        <el-form-item
-          label="规格:"
-          prop="size"
-          :rules="formRules.size[index]"
-        >
-          <el-row :gutter="10">
+        <el-form-item label="规格:" prop="size">
+          <el-row :gutter="10" style="width: 380px">
             <el-col
               :span="8"
               v-for="(item, index) in addInfo.size"
@@ -140,12 +137,8 @@
           ></el-row>
         </el-form-item>
         <el-form-item label="数量:" prop="num">
-          <el-row :gutter="10">
-            <el-col
-              :span="8"
-              v-for="(item, index) in addInfo.num"
-              :key="index"
-            >
+          <el-row :gutter="10" style="width: 380px">
+            <el-col :span="8" v-for="(item, index) in addInfo.num" :key="index">
               <el-input
                 v-model="addInfo.num[index]"
                 placeholder="请输入数量"
@@ -153,8 +146,8 @@
               ></el-input> </el-col
           ></el-row>
         </el-form-item>
-        <el-form-item label="重量:" prop="weight">
-          <el-row :gutter="10">
+        <el-form-item label="重量(斤):" prop="weight">
+          <el-row :gutter="10" style="width: 380px">
             <el-col
               :span="8"
               v-for="(item, index) in addInfo.weight"
@@ -183,10 +176,13 @@
         ref="editRef"
         label-width="auto"
         style="width: 250px"
-        :rules="formRules"
+        :rules="editformRules"
       >
         <el-form-item label="时间:" prop="gmtCreate">
-          <el-input v-model="editInfo.gmtCreate" placeholder="请输入时间"></el-input>
+          <el-input
+            v-model="editInfo.gmtCreate"
+            placeholder="请输入时间"
+          ></el-input>
         </el-form-item>
         <el-form-item label="饲料种类:" prop="brand">
           <el-select
@@ -204,10 +200,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="规格:" prop="size">
-          <el-input
-            v-model="editInfo.size"
-            placeholder="请输入规格"
-          ></el-input>
+          <el-input v-model="editInfo.size" placeholder="请输入规格"></el-input>
         </el-form-item>
         <el-form-item label="数量:" prop="num">
           <el-input
@@ -216,7 +209,7 @@
             :change="editNumChange()"
           ></el-input>
         </el-form-item>
-        <el-form-item label="重量:" prop="weight">
+        <el-form-item label="重量(斤):" prop="weight">
           <el-input
             v-model="editInfo.weight"
             placeholder="请输入重量"
@@ -237,11 +230,10 @@
 import { defineComponent, ref, getCurrentInstance, reactive } from "vue";
 export default defineComponent({
   name: "fodderRegistration", // 饲料登记
-  components: {
-  },
+  components: {},
   setup() {
     const { proxy } = getCurrentInstance();
-    const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;
+    const currShed = proxy.$TOOL.data.get('CURR_INFO').CURR_SHED.id
     // 时间选择器
     const shortcuts = [
       {
@@ -274,16 +266,44 @@ export default defineComponent({
     ];
     let addFodderdialog = ref(false);
     let fodderdialog = ref(false);
-    let doptions = reactive([
-      {
-        value: "1518124016571797507",
-        label: "A1",
-      },{
-        value: "1518124016571797511",
-        label: "A4",
-      }
-      ]);
     let fodderbrand = reactive(["鸽料138", "混料"]);
+    // 设置默认时间段，组件内默认半年
+    let end = new Date();
+    let start = new Date();
+    start.setTime(start.getTime() - 3600 * 1000 * 24 * 183); // 半年
+    let dateDefault = [start, end];
+    let datePk = [start, end];
+    //格式化时间
+    const formatDateStart = (dat) => {
+      //获取年月日，时间
+      var year = dat.getFullYear();
+      var mon =
+        dat.getMonth() + 1 < 10
+          ? "0" + (dat.getMonth() + 1)
+          : dat.getMonth() + 1;
+      var data = dat.getDate() < 10 ? "0" + dat.getDate() : dat.getDate();
+      var hour = "00";
+      var min = "00";
+      var seon = "00";
+      var newDate =
+        year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
+      return newDate;
+    };
+    const formatDateEnd = (dat) => {
+      //获取年月日，时间
+      var year = dat.getFullYear();
+      var mon =
+        dat.getMonth() + 1 < 10
+          ? "0" + (dat.getMonth() + 1)
+          : dat.getMonth() + 1;
+      var data = dat.getDate() < 10 ? "0" + dat.getDate() : dat.getDate();
+      var hour = "23";
+      var min = "59";
+      var seon = "59";
+      var newDate =
+        year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
+      return newDate;
+    };
     const tableData = ref([
       {
         gmtCreate: "",
@@ -291,7 +311,7 @@ export default defineComponent({
         size: "",
         num: "",
         weight: "",
-        id:""
+        id: "",
       },
     ]);
     const addInfo = reactive({
@@ -299,7 +319,7 @@ export default defineComponent({
       size: ["", ""],
       num: ["", ""],
       weight: ["", ""],
-      shedId:currShed.id
+      shedId: currShed,
     });
     const addInput = () => {
       addInfo.brand.push("");
@@ -325,78 +345,65 @@ export default defineComponent({
       if (addInfo.brand[index] === "鸽料138") {
         addInfo.size[index] = "80斤/包";
       } else if (addInfo.brand[index] === "混料") {
+        addInfo.size[index] = "80斤/包";
+      } /* else if (addInfo.brand[index] === "中粮") {
         addInfo.size[index] = "40斤/包";
-      }
+      }  else if (addInfo.brand[index] === "王中王") {
+        addInfo.size[index] = "110斤/包";
+      } else if (addInfo.brand[index] === "双汇") {
+        addInfo.size[index] = "60斤/包";
+      } */
     };
     const numChange = (index) => {
       if (addInfo.num[index]) {
         addInfo.weight[index] =
-          parseInt(addInfo.num[index]) * parseInt(addInfo.size[index]);
+          parseInt(addInfo.num[index]) * parseInt(addInfo.size[index]) + "";
       }
     };
     const editsizeChange = () => {
       if (editInfo.value.brand === "鸽料138") {
-        editInfo.value.size = "80kg/包";
+        editInfo.value.size = "80斤/包";
       } else if (editInfo.value.brand === "混料") {
-        editInfo.value.size = "40kg/包";
-      }
+        editInfo.value.size = "80斤/包";
+      } /* else if (editInfo.value.brand === "中粮") {
+        editInfo.value.size = "40斤/包";
+      }  else if (editInfo.value.brand === "王中王") {
+        editInfo.value.size = "110斤/包";
+      } else if (editInfo.value.brand === "中粮") {
+        editInfo.value.size = "60斤/包";
+      } */
     };
     const editNumChange = () => {
       if (editInfo.value.num) {
         editInfo.value.weight =
-          parseInt(editInfo.value.num) * parseInt(editInfo.value.size);
+          parseInt(editInfo.value.num) * parseInt(editInfo.value.size) + "";
       }
     };
-    const formRules = ref({
-      date: [{ message: "请输入时间", trigger: "blur", required: true }],
+    const checkForm = (rule, value, callback) => {
+      for (let index in value) {
+        if (!value[index]) callback(new Error("请输入"));
+      }
+      callback();
+    };
+    const addformRules = ref({
+      brand: [{ validator: checkForm, trigger: "blur", required: true }],
+      size: [{ validator: checkForm, trigger: "blur", required: true }],
+      num: [{ validator: checkForm, trigger: "blur", required: true }],
+      weight: [{ validator: checkForm, trigger: "blur", required: true }],
+    });
+    const editformRules = ref({
+      gmtCreate: [{ message: "请输入时间", trigger: "blur", required: true }],
       brand: [{ message: "请输入饲料种类", trigger: "blur", required: true }],
       size: [{ message: "请输入规格", trigger: "blur", required: true }],
       num: [{ message: "请输入数量", trigger: "blur", required: true }],
       weight: [{ message: "请输入重量", trigger: "blur", required: true }],
     });
-    // 设置默认时间段，组件内默认半年
-    let end = new Date();
-    let start = new Date();
-    start.setTime(start.getTime() - 3600 * 1000 * 24 * 183); // 半年
-    let dateDefault = [start, end];
-    const outTable = () => {
-      console.log("点击导出");
-    };
-
-    const printTable = () => {
-      console.log("点击打印");
-    };
-    //把这一行的信息传入对话框
-    const showFodderdialog = (item) => {
-      fodderdialog.value = true;
-      editInfo.value = item;
-    };
-    let datePk = [start, end];
-    //格式化时间
-    const formatDate = (dat) => {
-      //获取年月日，时间
-      var year = dat.getFullYear();
-      var mon =
-        dat.getMonth() + 1 < 10
-          ? "0" + (dat.getMonth() + 1)
-          : dat.getMonth() + 1;
-      var data = dat.getDate() < 10 ? "0" + dat.getDate() : dat.getDate();
-      var hour = dat.getHours() < 10 ? "0" + dat.getHours() : dat.getHours();
-      var min =
-        dat.getMinutes() < 10 ? "0" + dat.getMinutes() : dat.getMinutes();
-      var seon =
-        dat.getSeconds() < 10 ? "0" + dat.getSeconds() : dat.getSeconds();
-
-      var newDate =
-        year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
-      return newDate;
-    };
     const api = proxy.$API.regFodder.getfeed;
-    const params = {
-      startTime: formatDate(datePk[0]),
-      endTime: formatDate(datePk[1]),
-      shedId: currShed.id,
-    };
+    let params = ref({
+      startTime: formatDateStart(datePk[0]),
+      endTime: formatDateEnd(datePk[1]),
+      shedId: currShed,
+    });
     const addFodder = () => {
       proxy.$refs.addRef.validate(async (valid) => {
         if (!valid) {
@@ -446,10 +453,11 @@ export default defineComponent({
     };
     const removeFodder = async (id) => {
       const confirmResult = await proxy
-        .$confirm("此操作将永久删除该用户, 是否继续?", "提示", {
+        .$confirm("此操作将永久删除该记录, 是否继续?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
+          customClass: "del-model",
         })
         .catch((err) => err);
       if (confirmResult !== "confirm") {
@@ -468,32 +476,53 @@ export default defineComponent({
           });
         }
       });
-        proxy.$refs.table.getData();
+      proxy.$refs.table.getData();
+    };
+    const outTable = () => {
+      // console.log("点击导出");
+    };
+
+    const printTable = () => {
+      // console.log("点击打印");
+    };
+    const panelChange = (date) => {
+      datePk.value = date;
+      params.value = {
+        startTime: formatDateStart(datePk.value[0]),
+        endTime: formatDateEnd(datePk.value[1]),
+        shedId: currShed,
+      };
+    };
+    //把这一行的信息传入对话框
+    const showFodderdialog = (item) => {
+      fodderdialog.value = true;
+      editInfo.value = Object.assign(item, { shedId: currShed });
     };
     const addDialogClosed = () => {
       proxy.$refs.addRef.resetFields();
     };
-    const editDialogClosed = () => {
+    const editDialogClosed = () => {};
+    const dataChange = (res) => {
+      if (parseInt(res.data.total) > 0)
+        proxy.$refs.table.total = parseInt(res.data.total);
     };
-    const dataChange=(res)=>{
-      if(parseInt(res.data.total)>0)
-      proxy.$refs.table.total=parseInt(res.data.total)
-    }
     return {
       tableData,
       addInfo,
       addFodderdialog,
       fodderdialog,
       editInfo,
-      doptions,
       shortcuts,
       fodderbrand,
+      panelChange,
       outTable,
       printTable,
       dataChange,
+      checkForm,
       dateDefault,
       datePk,
-      formRules,
+      addformRules,
+      editformRules,
       api,
       params,
       updateFodder,
@@ -513,5 +542,25 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss">
+.container {
+  margin: 0 20px;
+}
+.tag {
+  display: flex;
+  padding: 0 15px;
+}
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+.del-model {
+  .el-message-box__btns {
+    .el-button:nth-child(2) {
+      margin-right: 10px;
+      background-color: #2d8cf0;
+      border-color: #2d8cf0;
+    }
+  }
+}
 </style>

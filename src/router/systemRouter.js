@@ -66,6 +66,17 @@ const routes = [
 		},
 	},
 	{
+		name: "dataVisualBase",
+		path: "/dataVisualBase",
+		component: () =>
+			import(
+				/* webpackChunkName: "dataVisual-chunk" */ "@/views/dataVisualBase"
+			),
+		meta: {
+			title: "基地可视化",
+		},
+	},
+	{
 		name: "dataVisualShed",
 		path: "/dataVisualShed",
 		component: () =>
@@ -73,7 +84,7 @@ const routes = [
 				/* webpackChunkName: "dataVisual-chunk" */ "@/views/dataVisualShed"
 			),
 		meta: {
-			title: "基地可视化",
+			title: "鸽棚可视化",
 		},
 	},
 ];
