@@ -6,7 +6,7 @@
         >添加鸽棚</el-button
       >
     </div>
-    <scTable :data="tableData" stripe>
+    <scTable :data="tableData" stripe :hidePagination='true'>
       <el-table-column
         prop="code"
         label="
@@ -313,6 +313,7 @@ export default {
     });
     const edit_methods = {
       async editDovecote(id) {
+		console.log(id);
         const res = await getEditInfoApi.get(id);
         edit_state.editInfo = res.data.shed;
         edit_state.editVisible = true;
@@ -329,7 +330,7 @@ export default {
         }
       },
       editHandleClose() {
-        edit_state.editVisibleL = false;
+        edit_state.editVisible = false;
       },
     };
     return {

@@ -19,3 +19,15 @@ app.use(scui);
 
 //挂载app
 app.mount("#app");
+
+
+// 视频插件
+
+
+
+// import VideoPlayer from 'vue-video-player'
+// import 'video.js/dist/video-js.css'
+// import 'vue-video-player/src/custom-theme.css'
+
+// app.use(VideoPlayer)
+
