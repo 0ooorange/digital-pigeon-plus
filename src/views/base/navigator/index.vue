@@ -119,7 +119,7 @@ export default {
     // 获取基本信息
     let res = await this.$API.login.getUserInfo.get()
     if (res.code == 200) {
-      this.$TOOL.data.set('BASE_INFO', res.data.userInfo)
+      this.$TOOL.data.set('USER_INFO', res.data.userInfo)
       // console.log('200: ', res.data)
     } else {
       this.$message.warning(res.message)

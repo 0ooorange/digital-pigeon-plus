@@ -6,9 +6,11 @@
       >
       <table-search
         :dateDefault="dateDefault"
+        :datePkDefalt="datePk"
         @outTable="outTable"
         @printTable="printTable"
         :showSearch="false"
+        @panelChange="panelChange"
       />
     </div>
     <el-main class="main">
@@ -32,13 +34,13 @@
         <el-table-column
           prop="brand"
           label="饲料种类"
-          width="120"
+          width="130"
           align="center"
         />
         <el-table-column
           prop="size"
           label="规格"
-          width="120"
+          width="130"
           sortable
           align="center"
         />
@@ -56,7 +58,12 @@
           sortable
           align="center"
         />
-        <el-table-column prop="origin" label="来源" width="120" align="center" />
+        <el-table-column
+          prop="origin"
+          label="来源"
+          width="140"
+          align="center"
+        />
         <el-table-column label="操作" width="220" align="center" fixed="right">
           <template #default="scope">
             <el-button
@@ -94,13 +101,17 @@
         :rules="addformRules"
       >
         <el-form-item label="饲料种类:" prop="brand">
-          <el-row :gutter="10">
+          <el-row :gutter="10" style="width: 380px">
             <el-col
               :span="8"
               v-for="(item, index) in addInfo.brand"
               :key="index"
             >
-              <el-select v-model="addInfo.brand[index]" placeholder="请选择" :change="sizeChange(index)">
+              <el-select
+                v-model="addInfo.brand[index]"
+                placeholder="请选择"
+                :change="sizeChange(index)"
+              >
                 <el-option
                   v-for="item in fodderbrand"
                   :key="item"
@@ -119,7 +130,7 @@
           </el-row>
         </el-form-item>
         <el-form-item label="规格:" prop="size">
-          <el-row :gutter="10">
+          <el-row :gutter="10" style="width: 380px">
             <el-col
               :span="8"
               v-for="(item, index) in addInfo.size"
@@ -132,12 +143,8 @@
           ></el-row>
         </el-form-item>
         <el-form-item label="数量:" prop="num">
-          <el-row :gutter="10">
-            <el-col
-              :span="8"
-              v-for="(item, index) in addInfo.num"
-              :key="index"
-            >
+          <el-row :gutter="10" style="width: 380px">
+            <el-col :span="8" v-for="(item, index) in addInfo.num" :key="index">
               <el-input
                 v-model="addInfo.num[index]"
                 placeholder="请输入数量"
@@ -146,7 +153,7 @@
           ></el-row>
         </el-form-item>
         <el-form-item label="重量(斤):" prop="weight">
-          <el-row :gutter="10">
+          <el-row :gutter="10" style="width: 380px">
             <el-col
               :span="8"
               v-for="(item, index) in addInfo.weight"
@@ -159,7 +166,15 @@
           ></el-row>
         </el-form-item>
         <el-form-item label="来源:" prop="origin">
-          <el-input v-model="addInfo.origin" placeholder="请输入来源"></el-input>
+          <el-select v-model="addInfo.origin" placeholder="请选择来源">
+            <el-option
+              v-for="item in origin"
+              :key="item"
+              :label="item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <span class="dialog-footer">
@@ -181,10 +196,17 @@
         :rules="editformRules"
       >
         <el-form-item label="时间:" prop="gmtCreate">
-          <el-input v-model="editInfo.gmtCreate" placeholder="请输入时间"></el-input>
+          <el-input
+            v-model="editInfo.gmtCreate"
+            placeholder="请输入时间"
+          ></el-input>
         </el-form-item>
         <el-form-item label="饲料种类:" prop="brand">
-          <el-select v-model="editInfo.brand" placeholder="请选择" :change="editsizeChange()">
+          <el-select
+            v-model="editInfo.brand"
+            placeholder="请选择"
+            :change="editsizeChange()"
+          >
             <el-option
               v-for="item in fodderbrand"
               :key="item"
@@ -195,10 +217,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="规格:" prop="size">
-          <el-input
-            v-model="editInfo.size"
-            placeholder="请输入规格"
-          ></el-input>
+          <el-input v-model="editInfo.size" placeholder="请输入规格"></el-input>
         </el-form-item>
         <el-form-item label="数量:" prop="num">
           <el-input
@@ -214,7 +233,15 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="来源:" prop="origin">
-          <el-input v-model="editInfo.origin" placeholder="请输入来源"></el-input>
+          <el-select v-model="editInfo.origin" placeholder="请选择来源">
+            <el-option
+              v-for="item in origin"
+              :key="item"
+              :label="item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <span class="dialog-footer">
@@ -231,11 +258,10 @@
 import { defineComponent, ref, getCurrentInstance, reactive } from "vue";
 export default defineComponent({
   name: "fodderAllot", // 饲料调拨
-  components: {
-  },
+  components: {},
   setup() {
     const { proxy } = getCurrentInstance();
-    const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;
+    const currShed = proxy.$TOOL.data.get('CURR_INFO').CURR_SHED.id
     // 时间选择器
     const shortcuts = [
       {
@@ -269,7 +295,8 @@ export default defineComponent({
     let addFodderdialog = ref(false);
     let fodderdialog = ref(false);
     let doptions = reactive(["A1", "A2", "A3"]);
-    let fodderbrand = reactive(["鸽料138", "中粮"]);
+    let fodderbrand = reactive(["鸽料138", "混料"]);
+    let origin = reactive(["金绿货仓"]);
     const checkForm = (rule, value, callback) => {
       for (let index in value) {
         if (!value[index]) callback(new Error("请输入"));
@@ -303,14 +330,22 @@ export default defineComponent({
     const printTable = () => {
       // console.log("点击打印");
     };
+    const panelChange = (date) => {
+      datePk.value = date;
+      params.value = {
+        startTime: formatDateStart(datePk.value[0]),
+        endTime: formatDateEnd(datePk.value[1]),
+        shedId: currShed,
+      };
+    };
     //把这一行的信息传入对话框
     const showFodderdialog = (item) => {
       fodderdialog.value = true;
-      editInfo.value = Object.assign(item,{shedId:currShed.id})
+      editInfo.value = Object.assign(item, { shedId: currShed });
     };
     let datePk = [start, end];
     //格式化时间
-    const formatDate = (dat) => {
+    const formatDateStart = (dat) => {
       //获取年月日，时间
       var year = dat.getFullYear();
       var mon =
@@ -318,22 +353,34 @@ export default defineComponent({
           ? "0" + (dat.getMonth() + 1)
           : dat.getMonth() + 1;
       var data = dat.getDate() < 10 ? "0" + dat.getDate() : dat.getDate();
-      var hour = dat.getHours() < 10 ? "0" + dat.getHours() : dat.getHours();
-      var min =
-        dat.getMinutes() < 10 ? "0" + dat.getMinutes() : dat.getMinutes();
-      var seon =
-        dat.getSeconds() < 10 ? "0" + dat.getSeconds() : dat.getSeconds();
-
+      var hour = "00";
+      var min = "00";
+      var seon = "00";
       var newDate =
-        year + "-" + mon + "-" + data + " " + (hour+1) + ":" + min + ":" + seon;
+        year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
+      return newDate;
+    };
+    const formatDateEnd = (dat) => {
+      //获取年月日，时间
+      var year = dat.getFullYear();
+      var mon =
+        dat.getMonth() + 1 < 10
+          ? "0" + (dat.getMonth() + 1)
+          : dat.getMonth() + 1;
+      var data = dat.getDate() < 10 ? "0" + dat.getDate() : dat.getDate();
+      var hour = "23";
+      var min = "59";
+      var seon = "59";
+      var newDate =
+        year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
       return newDate;
     };
     const api = proxy.$API.fodderAllot.getallocatefeed;
-    const params = {
-      startTime: formatDate(datePk[0]),
-      endTime: formatDate(datePk[1]),
-      shedId: currShed.id,
-    };
+    let params = ref({
+      startTime: formatDateStart(datePk[0]),
+      endTime: formatDateEnd(datePk[1]),
+      shedId: currShed,
+    });
     const tableData = ref([
       {
         gmtCreate: "",
@@ -341,8 +388,8 @@ export default defineComponent({
         size: "",
         num: "",
         weight: "",
-        origin:"",
-        id:""
+        origin: "",
+        id: "",
       },
     ]);
     const addInfo = reactive({
@@ -351,7 +398,7 @@ export default defineComponent({
       num: ["", ""],
       weight: ["", ""],
       origin: "",
-      shedId:currShed.id
+      shedId: currShed,
     });
     const addInput = () => {
       addInfo.brand.push("");
@@ -377,9 +424,15 @@ export default defineComponent({
     const sizeChange = (index) => {
       if (addInfo.brand[index] === "鸽料138") {
         addInfo.size[index] = "80斤/包";
-      } else if (addInfo.brand[index] === "中粮") {
+      } else if (addInfo.brand[index] === "混料") {
+        addInfo.size[index] = "80斤/包";
+      } /* else if (addInfo.brand[index] === "中粮") {
         addInfo.size[index] = "40斤/包";
-      }
+      }  else if (addInfo.brand[index] === "王中王") {
+        addInfo.size[index] = "110斤/包";
+      } else if (addInfo.brand[index] === "双汇") {
+        addInfo.size[index] = "60斤/包";
+      } */
     };
     const numChange = (index) => {
       if (addInfo.num[index]) {
@@ -390,9 +443,15 @@ export default defineComponent({
     const editsizeChange = () => {
       if (editInfo.value.brand === "鸽料138") {
         editInfo.value.size = "80斤/包";
-      } else if (editInfo.value.brand === "中粮") {
+      } else if (editInfo.value.brand === "混料") {
+        editInfo.value.size = "80斤/包";
+      } /* else if (editInfo.value.brand === "中粮") {
         editInfo.value.size = "40斤/包";
-      }
+      } else if (editInfo.value.brand === "王中王") {
+        editInfo.value.size = "110斤/包";
+      } else if (editInfo.value.brand === "中粮") {
+        editInfo.value.size = "60斤/包";
+      } */
     };
     const editNumChange = () => {
       if (editInfo.value.num) {
@@ -405,19 +464,21 @@ export default defineComponent({
         if (!valid) {
           return;
         }
-        await proxy.$API.fodderAllot.addallocatefeed.post(addInfo).then((res) => {
-          if (res.success) {
-            proxy.$message({
-              message: "添加成功",
-              type: "success",
-            });
-          } else {
-            proxy.$message({
-              message: "添加失败",
-              type: "error",
-            });
-          }
-        });
+        await proxy.$API.fodderAllot.addallocatefeed
+          .post(addInfo)
+          .then((res) => {
+            if (res.success) {
+              proxy.$message({
+                message: "添加成功",
+                type: "success",
+              });
+            } else {
+              proxy.$message({
+                message: "添加失败",
+                type: "error",
+              });
+            }
+          });
         proxy.$refs.addRef.resetFields();
         addFodderdialog.value = false;
         proxy.$refs.table.getData();
@@ -453,6 +514,7 @@ export default defineComponent({
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
+          customClass: "del-model",
         })
         .catch((err) => err);
       if (confirmResult !== "confirm") {
@@ -476,11 +538,10 @@ export default defineComponent({
     const addDialogClosed = () => {
       proxy.$refs.addRef.resetFields();
     };
-    const editDialogClosed = () => {
-    };
+    const editDialogClosed = () => {};
     const dataChange = (res) => {
-      if(parseInt(res.data.total)>0)
-      proxy.$refs.table.total = parseInt(res.data.total);
+      if (parseInt(res.data.total) > 0)
+        proxy.$refs.table.total = parseInt(res.data.total);
     };
     return {
       tableData,
@@ -491,6 +552,8 @@ export default defineComponent({
       doptions,
       shortcuts,
       fodderbrand,
+      origin,
+      panelChange,
       outTable,
       printTable,
       dataChange,
@@ -501,7 +564,6 @@ export default defineComponent({
       api,
       params,
       checkForm,
-      formatDate,
       updateFodder,
       addFodder,
       addInput,
@@ -519,23 +581,25 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss">
 .container {
   margin: 0 20px;
-}
-.top {
-  display: flex;
 }
 .tag {
   display: flex;
   padding: 0 15px;
 }
-.submit {
-  align-self: flex-end;
-  margin-bottom: 10px;
-}
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
+}
+.del-model {
+  .el-message-box__btns {
+    .el-button:nth-child(2) {
+      margin-right: 10px;
+      background-color: #2d8cf0;
+      border-color: #2d8cf0;
+    }
+  }
 }
 </style>

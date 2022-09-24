@@ -4,7 +4,7 @@ import sysConfig from "@/config";
 import tool from '@/utils/tool';
 import router from '@/router';
 
-axios.defaults.baseURL = 'http://106.12.160.172:8000'
+// axios.defaults.baseURL = 'http://106.12.160.172:8000'
 axios.defaults.timeout = sysConfig.TIMEOUT
 
 // HTTP request 拦截器
@@ -19,6 +19,7 @@ axios.interceptors.request.use(
 			config.params['_'] = new Date().getTime();
 		}
 		Object.assign(config.headers, sysConfig.HEADERS)
+		// console.log('请求中的配置',config)
 		return config;
 	},
 	(error) => {

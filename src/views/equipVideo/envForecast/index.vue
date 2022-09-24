@@ -129,6 +129,7 @@
 <script >
 import { defineComponent, ref, reactive, getCurrentInstance,computed } from "vue";
 import ScEcharts from "@/components/scEcharts";
+import { getCarbonDioxideData } from "@api/equipVideo/envForecast";
 export default defineComponent({
     name: "envForecast", // 环境监测
     components: {
@@ -441,10 +442,10 @@ export default defineComponent({
                 width: 1,
                 color: "#f15d5d",
             },
-            areaStyle: {
-                opacity: 0.1,
-                color: "#f15d5d",
-            },
+            // areaStyle: {
+            //     opacity: 0.1,
+            //     color: "#f15d5d",
+            // },
         };
         let carbonDioxideTooltip = {
             ...commonTooltip,
@@ -485,10 +486,10 @@ export default defineComponent({
                 width: 1,
                 color: "#EE9A00",
             },
-            areaStyle: {
-                opacity: 0.1,
-                color: "#EE9A00",
-            },
+            // areaStyle: {
+            //     opacity: 0.1,
+            //     color: "#EE9A00",
+            // },
         };
         let temperatureTooltip = {
             ...commonTooltip,
@@ -530,10 +531,10 @@ export default defineComponent({
             //     width: 1,
             //     color: "#EEEE00",
             // },
-            areaStyle: {
-                opacity: 0.1,
-                color: "#46adff",
-            },
+            // areaStyle: {
+            //     opacity: 0.1,
+            //     color: "#46adff",
+            // },
         };
         let humidityTooltip = {
             ...commonTooltip,
@@ -578,10 +579,10 @@ export default defineComponent({
                 width: 1,
                 color: "#EEEE00",
             },
-            areaStyle: {
-                opacity: 0.1,
-                color: "#EEEE00",
-            },
+            // areaStyle: {
+            //     opacity: 0.1,
+            //     color: "#EEEE00",
+            // },
         };
         let illuminationIntensityTooltip = {
             ...commonTooltip,
@@ -628,10 +629,10 @@ export default defineComponent({
                 width: 1,
                 color: "#5ee59e",
             },
-            areaStyle: {
-                opacity: 0.1,
-                color: "#5ee59e",
-            },
+            // areaStyle: {
+            //     opacity: 0.1,
+            //     color: "#5ee59e",
+            // },
         };
         let PMTooltip = {
             ...commonTooltip,
@@ -676,10 +677,10 @@ export default defineComponent({
                 width: 1,
                 color: "#a59ffa",
             },
-            areaStyle: {
-                opacity: 0.1,
-                color: "#a59ffa",
-            },
+            // areaStyle: {
+            //     opacity: 0.1,
+            //     color: "#a59ffa",
+            // },
         };
         let PM10Tooltip = {
             ...commonTooltip,
@@ -724,10 +725,10 @@ export default defineComponent({
                 width: 1,
                 color: "#EE6AA7",
             },
-            areaStyle: {
-                opacity: 0.1,
-                color: "#EE6AA7",
-            },
+            // areaStyle: {
+            //     opacity: 0.1,
+            //     color: "#EE6AA7",
+            // },
         };
         let ammoniaGasTooltip = {
             ...commonAnothetTooltip,
@@ -772,10 +773,10 @@ export default defineComponent({
                 width: 1,
                 color: "#1C86EE",
             },
-            areaStyle: {
-                opacity: 0.1,
-                color: "#1C86EE",
-            },
+            // areaStyle: {
+            //     opacity: 0.1,
+            //     color: "#1C86EE",
+            // },
         };
         let sulfurettedHydrogenTooltip = {
             ...commonAnothetTooltip,
@@ -822,10 +823,10 @@ export default defineComponent({
                 width: 1,
                 color: "#EE9A00",
             },
-            areaStyle: {
-                opacity: 0.1,
-                color: "#EE9A00",
-            },
+            // areaStyle: {
+            //     opacity: 0.1,
+            //     color: "#EE9A00",
+            // },
         };
         let TSPTooltip = {
             ...commonAnothetTooltip,
@@ -870,10 +871,10 @@ export default defineComponent({
                 width: 1,
                 color: "#5ee59e",
             },
-            areaStyle: {
-                opacity: 0.1,
-                color: "#5ee59e",
-            },
+            // areaStyle: {
+            //     opacity: 0.1,
+            //     color: "#5ee59e",
+            // },
         };
         let noiseTooltip = {
             ...commonAnothetTooltip,
@@ -918,9 +919,9 @@ export default defineComponent({
         let noise = [];
 
         //获取环境数据
-        const getCarbonDioxideData = async function () {
+        const getCarbonDioxideDataMethod = async function () {
             let CarbonDioxRes =
-                await proxy.$API.envForecast.getCarbonDioxideData.post(
+                await getCarbonDioxideData(
                     commonParams,
                     "二氧化碳"
                 );
@@ -932,7 +933,7 @@ export default defineComponent({
                 carbonDioxideOption.dataset.source = carbonDioxide;
             }
             let temperatureRes =
-                await proxy.$API.envForecast.getCarbonDioxideData.post(
+                await getCarbonDioxideData(
                     commonParams,
                     "空气温度"
                 );
@@ -945,7 +946,7 @@ export default defineComponent({
             // console.log("环境数据请求结果", temperatureRes);
 
             let humidityRes =
-                await proxy.$API.envForecast.getCarbonDioxideData.post(
+                await getCarbonDioxideData(
                     commonParams,
                     "空气湿度"
                 );
@@ -959,7 +960,7 @@ export default defineComponent({
 
             //光照强度
             let illuminationIntensityRes =
-                await proxy.$API.envForecast.getCarbonDioxideData.post(
+                await getCarbonDioxideData(
                     commonParams,
                     "光照强度"
                 );
@@ -972,9 +973,9 @@ export default defineComponent({
             }
 
             //PM2.5
-            let PMRes = await proxy.$API.envForecast.getCarbonDioxideData.post(
+            let PMRes = await getCarbonDioxideData(
                 commonParams,
-                "二氧化碳"
+                "PM2.5"
             );
             if (PMRes.code === 200) {
                 PM = PMRes.data.data;
@@ -985,9 +986,9 @@ export default defineComponent({
 
             //PM10
             let PM10Res =
-                await proxy.$API.envForecast.getCarbonDioxideData.post(
+                await getCarbonDioxideData(
                     commonParams,
-                    "二氧化碳"
+                    "PM10"
                 );
             if (PM10Res.code === 200) {
                 PM10 = PM10Res.data.data;
@@ -998,7 +999,7 @@ export default defineComponent({
 
             //氨气浓度
             let ammoniaGasRes =
-                await proxy.$API.envForecast.getCarbonDioxideData.post(
+                await getCarbonDioxideData(
                     commonParams,
                     "氨气浓度"
                 );
@@ -1011,7 +1012,7 @@ export default defineComponent({
 
             //硫化氢浓度
             let sulfurettedHydrogenRes =
-                await proxy.$API.envForecast.getCarbonDioxideData.post(
+                await getCarbonDioxideData(
                     commonParams,
                     "硫化氢"
                 );
@@ -1023,9 +1024,9 @@ export default defineComponent({
             }
 
             //TSP浓度
-            let TSPRes = await proxy.$API.envForecast.getCarbonDioxideData.post(
+            let TSPRes = await getCarbonDioxideData(
                 commonParams,
-                "二氧化碳"
+                "TSP"
             );
             if (TSPRes.code === 200) {
                 TSP = TSPRes.data.data;
@@ -1036,7 +1037,7 @@ export default defineComponent({
 
             //噪音
             let noiseRes =
-                await proxy.$API.envForecast.getCarbonDioxideData.post(
+                await getCarbonDioxideData(
                     commonParams,
                     "噪音"
                 );
@@ -1049,7 +1050,7 @@ export default defineComponent({
             }
         };
 
-        getCarbonDioxideData();
+        getCarbonDioxideDataMethod();
 
         return {
             shortcuts,

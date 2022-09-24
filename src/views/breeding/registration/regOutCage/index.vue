@@ -9,6 +9,7 @@
         :datePkDefalt="datePk"
         @outTable="outTable"
         @printTable="printTable"
+        @panelChange="panelChange"
         :showSearch="false"
       />
     </div>
@@ -92,25 +93,45 @@
         :rules="formRules"
       >
         <el-form-item label="时间:" prop="deliverTime">
-          <el-input
+          <el-date-picker
             v-model="addInfo.deliverTime"
+            :default-value="addInfo.deliverTime"
+            type="datetime"
+            format="YYYY-MM-DD HH:mm:ss"
+            unlink-panels
             placeholder="请输入时间"
-          ></el-input>
+          />
         </el-form-item>
         <el-form-item label="种类:" prop="category">
-          <el-input
-            v-model="addInfo.category"
-            placeholder="请输入种类"
-          ></el-input>
+          <el-select
+                v-model="addInfo.category"
+                placeholder="请选择种类"
+              >
+                <el-option
+                  v-for="item in category"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+                >
+                </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="数量:" prop="num">
           <el-input v-model="addInfo.num" placeholder="请输入数量"></el-input>
         </el-form-item>
         <el-form-item label="去向:" prop="destination">
-          <el-input
-            v-model="addInfo.destination"
-            placeholder="请输入去向"
-          ></el-input>
+          <el-select
+                v-model="addInfo.destination"
+                placeholder="请选择去向"
+              >
+                <el-option
+                  v-for="item in destination"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+                >
+                </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="单据号:" prop="codes">
           <el-input
@@ -144,19 +165,35 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="种类:" prop="category">
-          <el-input
-            v-model="editInfo.category"
-            placeholder="请输入种类"
-          ></el-input>
+          <el-select
+                v-model="editInfo.category"
+                placeholder="请选择种类"
+              >
+                <el-option
+                  v-for="item in category"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+                >
+                </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="数量:" prop="num">
           <el-input v-model="editInfo.num" placeholder="请输入数量"></el-input>
         </el-form-item>
         <el-form-item label="去向:" prop="destination">
-          <el-input
-            v-model="editInfo.destination"
-            placeholder="请输入去向"
-          ></el-input>
+          <el-select
+                v-model="editInfo.destination"
+                placeholder="请选择去向"
+              >
+                <el-option
+                  v-for="item in destination"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+                >
+                </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="单据号:" prop="codes">
           <el-input
@@ -176,14 +213,13 @@
 </template>
 
 <script>
-import { defineComponent, ref, getCurrentInstance } from "vue";
+import { defineComponent, ref, getCurrentInstance, reactive } from "vue";
 export default defineComponent({
   name: "outCageRegistration", // 出栏登记
   components: {},
   setup() {
     const { proxy } = getCurrentInstance();
-    const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;
-    
+    const currShed = proxy.$TOOL.data.get('CURR_INFO').CURR_SHED.id
     // 时间选择器
     const shortcuts = [
       {
@@ -233,6 +269,36 @@ export default defineComponent({
         year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
       return newDate;
     };
+    const formatDateStart = (dat) => {
+      //获取年月日，时间
+      var year = dat.getFullYear();
+      var mon =
+        dat.getMonth() + 1 < 10
+          ? "0" + (dat.getMonth() + 1)
+          : dat.getMonth() + 1;
+      var data = dat.getDate() < 10 ? "0" + dat.getDate() : dat.getDate();
+      var hour = "00";
+      var min = "00";
+      var seon = "00";
+      var newDate =
+        year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
+      return newDate;
+    };
+    const formatDateEnd = (dat) => {
+      //获取年月日，时间
+      var year = dat.getFullYear();
+      var mon =
+        dat.getMonth() + 1 < 10
+          ? "0" + (dat.getMonth() + 1)
+          : dat.getMonth() + 1;
+      var data = dat.getDate() < 10 ? "0" + dat.getDate() : dat.getDate();
+      var hour = "23";
+      var min = "59";
+      var seon = "59";
+      var newDate =
+        year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
+      return newDate;
+    };
     let addOutcagedialog = ref(false);
     let Outcagedialog = ref(false);
     // 设置默认时间段，组件内默认半年
@@ -240,7 +306,7 @@ export default defineComponent({
     let start = new Date();
     start.setTime(start.getTime() - 3600 * 1000 * 24 * 183); // 半年
     let dateDefault = [start, end];
-    let datePk = [start, end];
+    let datePk = ref([start, end]);
     const formRules = ref({
       deliverTime: [{ message: "请输入时间", trigger: "blur", required: true }],
       shedId: [{ message: "请输入鸽棚", trigger: "blur", required: true }],
@@ -261,7 +327,7 @@ export default defineComponent({
     ]);
     const addInfo = ref({
       deliverTime: formatDate(end),
-      shedId: currShed.id,
+      shedId: currShed,
       category: "",
       num: "",
       destination: "",
@@ -274,24 +340,33 @@ export default defineComponent({
       destination: "",
       codes: "",
     });
+    let category = reactive(["种鸽","乳鸽"]);
+    let destination = reactive(["金绿屠宰场"]);
     const outTable = () => {
       // console.log("点击导出");
     };
-
     const printTable = () => {
       // console.log("点击打印");
+    };
+    const panelChange = (date) => {
+      datePk.value = date;
+      params.value = {
+        startTime: formatDateStart(datePk.value[0]),
+        endTime: formatDateEnd(datePk.value[1]),
+        shedId: currShed,
+      };
     };
     //把这一行的信息传入对话框
     const showOutcagedialog = (item) => {
       Outcagedialog.value = true;
-      editInfo.value = Object.assign(item,{shedId:currShed.id});
+      editInfo.value = Object.assign(item, { shedId: currShed });
     };
     const api = proxy.$API.regOutCage.delivermanagement;
-    const params = {
-      startTime: formatDate(datePk[0]),
-      endTime: formatDate(datePk[1]),
-      shedId:currShed.id,
-    };
+    let params = ref({
+      startTime: formatDateStart(datePk.value[0]),
+      endTime: formatDateEnd(datePk.value[1]),
+      shedId: currShed,
+    });
     const addOutcage = () => {
       proxy.$refs.addRef.validate(async (valid) => {
         if (!valid) {
@@ -347,6 +422,7 @@ export default defineComponent({
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
+          customClass: "del-model",
         })
         .catch((err) => err);
       if (confirmResult !== "confirm") {
@@ -371,8 +447,8 @@ export default defineComponent({
       proxy.$refs.addRef.resetFields();
     };
     const dataChange = (res) => {
-      if(parseInt(res.data.total)>0)
-      proxy.$refs.table.total = parseInt(res.data.total);
+      if (parseInt(res.data.total) > 0)
+        proxy.$refs.table.total = parseInt(res.data.total);
     };
     const editDialogClosed = () => {};
     return {
@@ -382,6 +458,7 @@ export default defineComponent({
       Outcagedialog,
       editInfo,
       shortcuts,
+      panelChange,
       outTable,
       printTable,
       dateDefault,
@@ -389,8 +466,9 @@ export default defineComponent({
       formRules,
       api,
       params,
+      category,
+      destination,
       dataChange,
-      formatDate,
       updateOutcage,
       addOutcage,
       removeOutcage,
@@ -402,7 +480,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss">
 .container {
   margin: 0 20px;
 }
@@ -423,5 +501,14 @@ export default defineComponent({
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
+}
+.del-model {
+  .el-message-box__btns {
+    .el-button:nth-child(2) {
+      margin-right: 10px;
+      background-color: #2d8cf0;
+      border-color: #2d8cf0;
+    }
+  }
 }
 </style>

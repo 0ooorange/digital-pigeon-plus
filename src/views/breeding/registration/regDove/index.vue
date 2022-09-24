@@ -7,10 +7,12 @@
       <table-search
         :searchTypes="searchTypes"
         :dateDefault="dateDefault"
+        :datePkDefalt="datePk"
         @searchClick="searchClick"
         @reset="reset"
         @outTable="outTable"
         @printTable="printTable"
+        @panelChange="panelChange"
       />
     </div>
     <el-main class="main">
@@ -34,11 +36,25 @@
         <el-table-column
           prop="codes"
           label="鸽笼号"
-          width="220"
+          width="200"
           sortable
           align="center"
         />
-        <el-table-column label="操作" width="220" align="center" fixed="right">
+        <el-table-column
+          prop="description"
+          label="种类"
+          width="200"
+          sortable
+          align="center"
+        />
+        <el-table-column
+          prop="age"
+          label="鸽龄(天)"
+          width="200"
+          sortable
+          align="center"
+        />
+        <el-table-column label="操作" width="200" align="center" fixed="right">
           <template #default="scope">
             <el-button
               size="mini"
@@ -79,6 +95,23 @@
             placeholder="请输入鸽笼号"
           ></el-input>
         </el-form-item>
+        <el-form-item label="种类:" prop="description">
+          <el-select
+            v-model="addInfo.description"
+            placeholder="请选择种类"
+          >
+            <el-option
+              v-for="item in description"
+              :key="item"
+              :label="item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="鸽龄(天):" prop="age">
+          <el-input v-model="addInfo.age" placeholder="请输入鸽龄"></el-input>
+        </el-form-item>
       </el-form>
       <span class="dialog-footer">
         <el-button @click="addDovedialog = false">取 消</el-button>
@@ -110,6 +143,23 @@
             placeholder="请输入鸽笼号"
           ></el-input>
         </el-form-item>
+        <el-form-item label="种类:" prop="description">
+          <el-select
+            v-model="editInfo.description"
+            placeholder="请选择种类"
+          >
+            <el-option
+              v-for="item in description"
+              :key="item"
+              :label="item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="鸽龄(天):" prop="age">
+          <el-input v-model="editInfo.age" placeholder="请输入鸽龄"></el-input>
+        </el-form-item>
       </el-form>
       <span class="dialog-footer">
         <el-button @click="dovedialog = false">取 消</el-button>
@@ -126,7 +176,7 @@ export default defineComponent({
   components: {},
   setup() {
     const { proxy } = getCurrentInstance();
-    const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;
+    const currShed = proxy.$TOOL.data.get('CURR_INFO').CURR_SHED.id
     const searchTypes = reactive([
       {
         value: "鸽笼号",
@@ -166,7 +216,7 @@ export default defineComponent({
     let addDovedialog = ref(false);
     let dovedialog = ref(false);
     //格式化时间
-    const formatDate = (dat) => {
+    const formatDateStart = (dat) => {
       //获取年月日，时间
       var year = dat.getFullYear();
       var mon =
@@ -174,12 +224,24 @@ export default defineComponent({
           ? "0" + (dat.getMonth() + 1)
           : dat.getMonth() + 1;
       var data = dat.getDate() < 10 ? "0" + dat.getDate() : dat.getDate();
-      var hour = dat.getHours() < 10 ? "0" + dat.getHours() : dat.getHours();
-      var min =
-        dat.getMinutes() < 10 ? "0" + dat.getMinutes() : dat.getMinutes();
-      var seon =
-        dat.getSeconds() < 10 ? "0" + dat.getSeconds() : dat.getSeconds();
-
+      var hour = "00";
+      var min = "00";
+      var seon = "00";
+      var newDate =
+        year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
+      return newDate;
+    };
+    const formatDateEnd = (dat) => {
+      //获取年月日，时间
+      var year = dat.getFullYear();
+      var mon =
+        dat.getMonth() + 1 < 10
+          ? "0" + (dat.getMonth() + 1)
+          : dat.getMonth() + 1;
+      var data = dat.getDate() < 10 ? "0" + dat.getDate() : dat.getDate();
+      var hour = "23";
+      var min = "59";
+      var seon = "59";
       var newDate =
         year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
       return newDate;
@@ -194,24 +256,41 @@ export default defineComponent({
       {
         gmtCreate: "",
         codes: "",
+        description:"",
+        age: "",
       },
     ]);
     const editInfo = ref({
       gmtCreate: "",
       codes: "",
+      description:"",
+      age: "",
     });
     const addInfo = reactive({
-      shedId: currShed.id,
+      shedId: currShed,
       pigeonCageCodes: "",
-      version:0
+      description: "",
+      version: 0,
+      age: "",
     });
     const formRules = ref({
       gmtCreate: [{ message: "请输入时间", trigger: "blur", required: true }],
       codes: [{ message: "请输入鸽笼号", trigger: "blur", required: true }],
+      description: [{ message: "请输入种类", trigger: "blur", required: true }],
+      age: [{ message: "请输入鸽龄", trigger: "blur", required: true }],
     });
     const printTable = () => {
       // console.log("点击打印");
     };
+    const panelChange = (date) => {
+      datePk.value = date;
+      getparams.value = {
+        startTime: formatDateStart(datePk.value[0]),
+        endTime: formatDateEnd(datePk.value[1]),
+        shedId: currShed,
+      };
+    };
+    let description = reactive(["种鸽", "乳鸽"]);
     const reset = () => {
       // console.log("点击重置");
     };
@@ -221,13 +300,13 @@ export default defineComponent({
     //把这一行的信息传入对话框
     const showDovedialog = (item) => {
       dovedialog.value = true;
-      editInfo.value = Object.assign(item, { shedId: currShed.id });
+      editInfo.value = Object.assign(item, { shedId: currShed });
     };
     const api = proxy.$API.regDove.getpigeon;
     let getparams = ref({
-      startTime: formatDate(datePk[0]),
-      endTime: formatDate(datePk[1]),
-      shedId: currShed.id,
+      startTime: formatDateStart(datePk[0]),
+      endTime: formatDateEnd(datePk[1]),
+      shedId: currShed,
       codes: "",
     });
     const addDove = () => {
@@ -251,9 +330,9 @@ export default defineComponent({
         proxy.$refs.addRef.resetFields();
         addDovedialog.value = false;
         getparams.value = {
-          startTime: formatDate(datePk[0]),
-          endTime: formatDate(datePk[1]),
-          shedId: currShed.id,
+          startTime: formatDateStart(datePk[0]),
+          endTime: formatDateEnd(datePk[1]),
+          shedId: currShed,
           codes: "",
         };
       });
@@ -280,14 +359,15 @@ export default defineComponent({
           });
         dovedialog.value = false;
         proxy.$refs.table.getData();
-      });*/   
-      };
+      });*/
+    };
     const removeDove = async () => {
       /* const confirmResult = await proxy
         .$confirm("此操作将永久删除该记录, 是否继续?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
+          customClass:'del-model',
         })
         .catch((err) => err);
       if (confirmResult !== "confirm") {
@@ -318,9 +398,9 @@ export default defineComponent({
     };
     const searchClick = (params) => {
       getparams.value = {
-        startTime: formatDate(datePk[0]),
-        endTime: formatDate(datePk[1]),
-        shedId: currShed.id,
+        startTime: formatDateStart(datePk[0]),
+        endTime: formatDateEnd(datePk[1]),
+        shedId: currShed,
         codes: params.inputValue,
       };
     };
@@ -330,10 +410,12 @@ export default defineComponent({
       addDovedialog,
       dovedialog,
       editInfo,
+      description,
       shortcuts,
       searchTypes,
       searchClick,
       reset,
+      panelChange,
       outTable,
       printTable,
       dateDefault,
@@ -342,7 +424,6 @@ export default defineComponent({
       api,
       getparams,
       dataChange,
-      formatDate,
       updateDove,
       addDove,
       removeDove,
@@ -354,25 +435,25 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss">
 .container {
   margin: 0 20px;
-}
-.top {
-  display: flex;
 }
 .tag {
   display: flex;
   padding: 0 15px;
 }
-.form {
-  width: 80%;
-}
-.submit {
-  margin-left: 20px;
-}
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
 }
+/* .del-model{
+    .el-message-box__btns {
+    .el-button:nth-child(2) {
+      margin-right:10px;
+      background-color:#2d8cf0;
+      border-color:#2d8cf0;
+    }
+  }
+} */
 </style>

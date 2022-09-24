@@ -6,8 +6,10 @@
       >
       <table-search
         :dateDefault="dateDefault"
+        :datePkDefalt="datePk"
         @outTable="outTable"
         @printTable="printTable"
+        @panelChange="panelChange"
         :showSearch="false"
       />
     </div>
@@ -32,7 +34,7 @@
         <el-table-column
           prop="weight"
           label="重量(斤)"
-          width="200"
+          width="400"
           sortable
           align="center"
         />
@@ -97,7 +99,10 @@
         :rules="formRules"
       >
         <el-form-item label="时间:" prop="gmtCreate">
-          <el-input v-model="editInfo.gmtCreate" placeholder="请输入时间"></el-input>
+          <el-input
+            v-model="editInfo.gmtCreate"
+            placeholder="请输入时间"
+          ></el-input>
         </el-form-item>
         <el-form-item label="重量(斤):" prop="weight">
           <el-input
@@ -120,11 +125,10 @@
 import { defineComponent, ref, getCurrentInstance } from "vue";
 export default defineComponent({
   name: "reWeighAllot", // 复称调拨
-  components: {
-  },
+  components: {},
   setup() {
     const { proxy } = getCurrentInstance();
-    const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;
+    const currShed = proxy.$TOOL.data.get('CURR_INFO').CURR_SHED.id
     // 时间选择器
     const shortcuts = [
       {
@@ -164,7 +168,7 @@ export default defineComponent({
     let dateDefault = [start, end];
     let datePk = [start, end];
     //格式化时间
-    const formatDate = (dat) => {
+    const formatDateStart = (dat) => {
       //获取年月日，时间
       var year = dat.getFullYear();
       var mon =
@@ -172,14 +176,26 @@ export default defineComponent({
           ? "0" + (dat.getMonth() + 1)
           : dat.getMonth() + 1;
       var data = dat.getDate() < 10 ? "0" + dat.getDate() : dat.getDate();
-      var hour = dat.getHours() < 10 ? "0" + dat.getHours() : dat.getHours();
-      var min =
-        dat.getMinutes() < 10 ? "0" + dat.getMinutes() : dat.getMinutes();
-      var seon =
-        dat.getSeconds() < 10 ? "0" + dat.getSeconds() : dat.getSeconds();
-
+      var hour = "00";
+      var min = "00";
+      var seon = "00";
       var newDate =
-        year + "-" + mon + "-" + data + " " + (hour+1) + ":" + min + ":" + seon;
+        year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
+      return newDate;
+    };
+    const formatDateEnd = (dat) => {
+      //获取年月日，时间
+      var year = dat.getFullYear();
+      var mon =
+        dat.getMonth() + 1 < 10
+          ? "0" + (dat.getMonth() + 1)
+          : dat.getMonth() + 1;
+      var data = dat.getDate() < 10 ? "0" + dat.getDate() : dat.getDate();
+      var hour = "23";
+      var min = "59";
+      var seon = "59";
+      var newDate =
+        year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
       return newDate;
     };
     const tableData = ref([
@@ -189,7 +205,7 @@ export default defineComponent({
       },
     ]);
     const addInfo = ref({
-      shedId: currShed.id,
+      shedId: currShed,
       weight: "",
     });
     const editInfo = ref({
@@ -199,7 +215,7 @@ export default defineComponent({
     const formRules = ref({
       weight: [{ message: "请输入重量", trigger: "blur", required: true }],
     });
-    
+
     const outTable = () => {
       // console.log("点击导出");
     };
@@ -207,35 +223,45 @@ export default defineComponent({
     const printTable = () => {
       // console.log("点击打印");
     };
+    const panelChange = (date) => {
+      datePk.value = date;
+      params.value = {
+        startTime: formatDateStart(datePk.value[0]),
+        endTime: formatDateEnd(datePk.value[1]),
+        shedId: currShed,
+      };
+    };
     //把这一行的信息传入对话框
     const showReWeightdialog = (item) => {
       ReWeightdialog.value = true;
-      editInfo.value = Object.assign(item,{shedId:currShed.id})
+      editInfo.value = Object.assign(item, { shedId: currShed });
     };
     const api = proxy.$API.reWeighAllot.getreweighfeed;
-    const params = {
-      startTime: formatDate(datePk[0]),
-      endTime: formatDate(datePk[1]),
-      shedId: currShed.id,
-    };
+    let params = ref({
+      startTime: formatDateStart(datePk[0]),
+      endTime: formatDateEnd(datePk[1]),
+      shedId: currShed,
+    });
     const addReWeight = () => {
       proxy.$refs.addRef.validate(async (valid) => {
         if (!valid) {
           return;
         }
-        await proxy.$API.reWeighAllot.addreweighfeed.post(addInfo.value).then((res) => {
-          if (res.success) {
-            proxy.$message({
-              message: "添加成功",
-              type: "success",
-            });
-          } else {
-            proxy.$message({
-              message: "添加失败",
-              type: "error",
-            });
-          }
-        });
+        await proxy.$API.reWeighAllot.addreweighfeed
+          .post(addInfo.value)
+          .then((res) => {
+            if (res.success) {
+              proxy.$message({
+                message: "添加成功",
+                type: "success",
+              });
+            } else {
+              proxy.$message({
+                message: "添加失败",
+                type: "error",
+              });
+            }
+          });
         proxy.$refs.addRef.resetFields();
         addReWeightdialog.value = false;
         proxy.$refs.table.getData();
@@ -271,6 +297,7 @@ export default defineComponent({
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
+          customClass: "del-model",
         })
         .catch((err) => err);
       if (confirmResult !== "confirm") {
@@ -289,16 +316,15 @@ export default defineComponent({
           });
         }
       });
-     proxy.$refs.table.getData();
+      proxy.$refs.table.getData();
     };
     const addDialogClosed = () => {
       proxy.$refs.addRef.resetFields();
     };
-    const editDialogClosed = () => {
-    };
+    const editDialogClosed = () => {};
     const dataChange = (res) => {
-      if(parseInt(res.data.total)>0)
-      proxy.$refs.table.total = parseInt(res.data.total);
+      if (parseInt(res.data.total) > 0)
+        proxy.$refs.table.total = parseInt(res.data.total);
     };
     return {
       tableData,
@@ -307,6 +333,7 @@ export default defineComponent({
       ReWeightdialog,
       editInfo,
       shortcuts,
+      panelChange,
       outTable,
       printTable,
       dataChange,
@@ -315,7 +342,6 @@ export default defineComponent({
       formRules,
       api,
       params,
-      formatDate,
       updateReWeight,
       addReWeight,
       removeReWeight,
@@ -327,26 +353,25 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss">
 .container {
   margin: 0 20px;
-}
-.top {
-  display: flex;
 }
 .tag {
   display: flex;
   padding: 0 15px;
 }
-.form {
-  width: 80%;
-}
-.submit {
-  align-self: flex-end;
-  margin-bottom: 10px;
-}
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
+}
+.del-model {
+  .el-message-box__btns {
+    .el-button:nth-child(2) {
+      margin-right: 10px;
+      background-color: #2d8cf0;
+      border-color: #2d8cf0;
+    }
+  }
 }
 </style>

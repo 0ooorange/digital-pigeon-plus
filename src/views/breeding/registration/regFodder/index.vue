@@ -6,8 +6,10 @@
       >
       <table-search
         :dateDefault="dateDefault"
+        :datePkDefalt="datePk"
         @outTable="outTable"
         @printTable="printTable"
+        @panelChange="panelChange"
         :showSearch="false"
       />
     </div>
@@ -32,27 +34,27 @@
         <el-table-column
           prop="brand"
           label="饲料种类"
-          width="120"
+          width="150"
           align="center"
         />
         <el-table-column
           prop="size"
           label="规格"
-          width="120"
+          width="150"
           sortable
           align="center"
         />
         <el-table-column
           prop="num"
           label="数量"
-          width="120"
+          width="150"
           sortable
           align="center"
         />
         <el-table-column
           prop="weight"
           label="重量(斤)"
-          width="120"
+          width="150"
           sortable
           align="center"
         />
@@ -93,7 +95,7 @@
         :rules="addformRules"
       >
         <el-form-item label="饲料种类:" prop="brand">
-          <el-row :gutter="10">
+          <el-row :gutter="10" style="width: 380px">
             <el-col
               :span="8"
               v-for="(item, index) in addInfo.brand"
@@ -122,7 +124,7 @@
           </el-row>
         </el-form-item>
         <el-form-item label="规格:" prop="size">
-          <el-row :gutter="10">
+          <el-row :gutter="10" style="width: 380px">
             <el-col
               :span="8"
               v-for="(item, index) in addInfo.size"
@@ -135,7 +137,7 @@
           ></el-row>
         </el-form-item>
         <el-form-item label="数量:" prop="num">
-          <el-row :gutter="10">
+          <el-row :gutter="10" style="width: 380px">
             <el-col :span="8" v-for="(item, index) in addInfo.num" :key="index">
               <el-input
                 v-model="addInfo.num[index]"
@@ -145,7 +147,7 @@
           ></el-row>
         </el-form-item>
         <el-form-item label="重量(斤):" prop="weight">
-          <el-row :gutter="10">
+          <el-row :gutter="10" style="width: 380px">
             <el-col
               :span="8"
               v-for="(item, index) in addInfo.weight"
@@ -231,7 +233,7 @@ export default defineComponent({
   components: {},
   setup() {
     const { proxy } = getCurrentInstance();
-    const currShed = proxy.$TOOL.data.get("CURR_INFO").CURR_SHED;
+    const currShed = proxy.$TOOL.data.get('CURR_INFO').CURR_SHED.id
     // 时间选择器
     const shortcuts = [
       {
@@ -264,7 +266,7 @@ export default defineComponent({
     ];
     let addFodderdialog = ref(false);
     let fodderdialog = ref(false);
-    let fodderbrand = reactive(["鸽料138", "中粮"]);
+    let fodderbrand = reactive(["鸽料138", "混料"]);
     // 设置默认时间段，组件内默认半年
     let end = new Date();
     let start = new Date();
@@ -272,7 +274,7 @@ export default defineComponent({
     let dateDefault = [start, end];
     let datePk = [start, end];
     //格式化时间
-    const formatDate = (dat) => {
+    const formatDateStart = (dat) => {
       //获取年月日，时间
       var year = dat.getFullYear();
       var mon =
@@ -280,15 +282,26 @@ export default defineComponent({
           ? "0" + (dat.getMonth() + 1)
           : dat.getMonth() + 1;
       var data = dat.getDate() < 10 ? "0" + dat.getDate() : dat.getDate();
-      var hour = dat.getHours() < 10 ? "0" + dat.getHours() : dat.getHours();
-      var min =
-        dat.getMinutes() < 10 ? "0" + dat.getMinutes() : dat.getMinutes();
-      var seon =
-        dat.getSeconds() < 10 ? "0" + dat.getSeconds() : dat.getSeconds();
-
+      var hour = "00";
+      var min = "00";
+      var seon = "00";
       var newDate =
-        year + "-" + mon + "-" + data + " " + (hour+1) + ":" + min + ":" + seon;
-      //将时间推后一小时，避免出现无法实时获取添加完后的数据
+        year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
+      return newDate;
+    };
+    const formatDateEnd = (dat) => {
+      //获取年月日，时间
+      var year = dat.getFullYear();
+      var mon =
+        dat.getMonth() + 1 < 10
+          ? "0" + (dat.getMonth() + 1)
+          : dat.getMonth() + 1;
+      var data = dat.getDate() < 10 ? "0" + dat.getDate() : dat.getDate();
+      var hour = "23";
+      var min = "59";
+      var seon = "59";
+      var newDate =
+        year + "-" + mon + "-" + data + " " + hour + ":" + min + ":" + seon;
       return newDate;
     };
     const tableData = ref([
@@ -306,7 +319,7 @@ export default defineComponent({
       size: ["", ""],
       num: ["", ""],
       weight: ["", ""],
-      shedId: currShed.id,
+      shedId: currShed,
     });
     const addInput = () => {
       addInfo.brand.push("");
@@ -331,9 +344,15 @@ export default defineComponent({
     const sizeChange = (index) => {
       if (addInfo.brand[index] === "鸽料138") {
         addInfo.size[index] = "80斤/包";
-      } else if (addInfo.brand[index] === "中粮") {
+      } else if (addInfo.brand[index] === "混料") {
+        addInfo.size[index] = "80斤/包";
+      } /* else if (addInfo.brand[index] === "中粮") {
         addInfo.size[index] = "40斤/包";
-      }
+      }  else if (addInfo.brand[index] === "王中王") {
+        addInfo.size[index] = "110斤/包";
+      } else if (addInfo.brand[index] === "双汇") {
+        addInfo.size[index] = "60斤/包";
+      } */
     };
     const numChange = (index) => {
       if (addInfo.num[index]) {
@@ -343,10 +362,16 @@ export default defineComponent({
     };
     const editsizeChange = () => {
       if (editInfo.value.brand === "鸽料138") {
-        editInfo.value.size = "80kg/包";
+        editInfo.value.size = "80斤/包";
+      } else if (editInfo.value.brand === "混料") {
+        editInfo.value.size = "80斤/包";
+      } /* else if (editInfo.value.brand === "中粮") {
+        editInfo.value.size = "40斤/包";
+      }  else if (editInfo.value.brand === "王中王") {
+        editInfo.value.size = "110斤/包";
       } else if (editInfo.value.brand === "中粮") {
-        editInfo.value.size = "40kg/包";
-      }
+        editInfo.value.size = "60斤/包";
+      } */
     };
     const editNumChange = () => {
       if (editInfo.value.num) {
@@ -374,11 +399,11 @@ export default defineComponent({
       weight: [{ message: "请输入重量", trigger: "blur", required: true }],
     });
     const api = proxy.$API.regFodder.getfeed;
-    const params = {
-      startTime: formatDate(datePk[0]),
-      endTime: formatDate(datePk[1]),
-      shedId: currShed.id,
-    };
+    let params = ref({
+      startTime: formatDateStart(datePk[0]),
+      endTime: formatDateEnd(datePk[1]),
+      shedId: currShed,
+    });
     const addFodder = () => {
       proxy.$refs.addRef.validate(async (valid) => {
         if (!valid) {
@@ -432,6 +457,7 @@ export default defineComponent({
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
+          customClass: "del-model",
         })
         .catch((err) => err);
       if (confirmResult !== "confirm") {
@@ -459,10 +485,18 @@ export default defineComponent({
     const printTable = () => {
       // console.log("点击打印");
     };
+    const panelChange = (date) => {
+      datePk.value = date;
+      params.value = {
+        startTime: formatDateStart(datePk.value[0]),
+        endTime: formatDateEnd(datePk.value[1]),
+        shedId: currShed,
+      };
+    };
     //把这一行的信息传入对话框
     const showFodderdialog = (item) => {
       fodderdialog.value = true;
-      editInfo.value = Object.assign(item,{shedId:currShed.id});
+      editInfo.value = Object.assign(item, { shedId: currShed });
     };
     const addDialogClosed = () => {
       proxy.$refs.addRef.resetFields();
@@ -480,6 +514,7 @@ export default defineComponent({
       editInfo,
       shortcuts,
       fodderbrand,
+      panelChange,
       outTable,
       printTable,
       dataChange,
@@ -507,23 +542,25 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss">
 .container {
   margin: 0 20px;
-}
-.top {
-  display: flex;
 }
 .tag {
   display: flex;
   padding: 0 15px;
 }
-.submit {
-  align-self: flex-end;
-  margin-bottom: 10px;
-}
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
+}
+.del-model {
+  .el-message-box__btns {
+    .el-button:nth-child(2) {
+      margin-right: 10px;
+      background-color: #2d8cf0;
+      border-color: #2d8cf0;
+    }
+  }
 }
 </style>
