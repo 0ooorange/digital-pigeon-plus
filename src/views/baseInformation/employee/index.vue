@@ -3,7 +3,7 @@
     <div class="tag">
       <el-button type="primary" plain @click="addInfoDig()">添加员工</el-button>
     </div>
-    <scTable :data="tableData" stripe  >
+    <scTable :data="tableData" stripe :hidePagination='true' >
       <el-table-column prop="name" label="员工姓名" align="center" />
       <el-table-column prop="phone" label="手机号码" sortable align="center" />
       <el-table-column prop="code" label="管理鸽棚" align="center" />
