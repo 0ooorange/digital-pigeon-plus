@@ -987,11 +987,12 @@ export default {
                 width: 30%;
                 // margin-right: 4%;
                 .item_title {
-                    width: 45%;
+                    // width: 45%;
                     margin: auto;
                     margin-bottom: 10px;
                     text-align: center;
-                    font-size: 14px;
+                    font-size: 18px;
+                    letter-spacing: 6px;
                 }
                 .table {
                     width: 100%;

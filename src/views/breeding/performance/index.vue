@@ -4,6 +4,7 @@
             :searchTypes="searchTypes"
             :cardData="[]"
             @searchClick="searchClick"
+            @printTable="printTable"
             @outTable="outTable"
             class="table_search"
             :datePkDefalt="defaultTimeValue"
@@ -122,11 +123,23 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref, getCurrentInstance,computed } from "vue";
+import LAY_EXCEL from "lay-excel";
+import {
+    defineComponent,
+    reactive,
+    ref,
+    getCurrentInstance,
+    computed,
+} from "vue";
+import { ElMessage } from "element-plus";
 export default defineComponent({
     name: "dovePerformance", // 种鸽性能测试
     setup() {
         const { proxy } = getCurrentInstance();
+
+        //拿到表格组件
+        const table = ref(null);
+
         let searchTypes = reactive([]);
 
         //查询下拉框数组
@@ -353,23 +366,91 @@ export default defineComponent({
         ];
 
         const searchClick = function (e) {
-            // console.log("嘻嘻嘻，我被点击啦",e);
-            params.fieldCommon = e.inputValue
-            // console.log('请求的参数',params)
+            console.log("嘻嘻嘻，我被点击啦", e);
+            params.fieldCommon = e.inputValue;
+            console.log("请求的参数", params);
         };
+
+        let isExport = false;
 
         const outTable = function () {
-            // console.log("哈哈哈，我被点击了噢");
+            console.log(table.value.tableData, "表格组件");
+            let tableData = table.value.tableData.slice(0); //地址形式，不能直接赋值，要拷贝一份
+            if (tableData.length === 0) {
+                console.log("没有数据导出");
+                ElMessage({
+                    message: `表格无数据,暂时无法导出`,
+                    type: "warning",
+                    duration: 2000,
+                });
+            } else {
+                if (!isExport) {
+                    isExport = true;
+                    setTimeout(() => {
+                        isExport = false;
+                    }, 2000);
+                    tableData.unshift({
+                        codes: "鸽笼号",
+                        panelCode: "鸽板编号",
+                        countLayEgg: "生蛋",
+                        countReEgg: "回蛋",
+                        countEggState23: "光蛋",
+                        countEggState1: "单蛋",
+                        countEggState45: "踩蛋",
+                        countCubState12: "冷蛋",
+                        countCubState34: "死精",
+                        countDeadCub: "死仔",
+                        remarks: "备注",
+                    });
+                    tableData = LAY_EXCEL.filterExportData(tableData, [
+                        "codes",
+                        "panelCode",
+                        "countLayEgg",
+                        "countReEgg",
+                        "countEggState23",
+                        "countEggState1",
+                        "countEggState45",
+                        "countCubState12",
+                        "countCubState34",
+                        "countDeadCub",
+                        "remarks",
+                    ]);
+                    LAY_EXCEL.exportExcel(
+                        {
+                            sheet1: tableData,
+                        },
+                        "种鸽性能检测导出表格.xlsx",
+                        "xlsx"
+                    );
+                    ElMessage({
+                        message: `表格导出成功,请查收`,
+                        type: "success",
+                        duration: 2000,
+                    });
+                    console.log("导出成功");
+                } else {
+                    ElMessage({
+                        message: `表格导出中,请勿重复操作`,
+                        type: "warning",
+                        duration: 2000,
+                    });
+                }
+            }
         };
-
+        const printTable = function () {
+            console.log(table.value,"表格组件");
+            print(table.value);
+        };
         return {
             defaultTimeValue,
             searchTypes,
             dataApi,
             params,
+            table,
             tableList,
             searchClick,
             outTable,
+            printTable,
         };
     },
 });
