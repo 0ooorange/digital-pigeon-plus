@@ -185,7 +185,6 @@ export default {
 /deep/ .el-input__inner {
   height: 40px;
   background-color: transparent;
-  box-shadow: 0 0 0 1px #34abdd inset;
   color: white;
 }
 

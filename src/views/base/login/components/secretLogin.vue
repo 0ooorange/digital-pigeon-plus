@@ -27,7 +27,6 @@ const rememberSecret = ref(false)
 const NameOrPhone = ref('刘双印')
 const password = ref('123456')
 
-
 // 登录
 const islogin = ref(true)
 const login = async function () {
@@ -38,7 +37,7 @@ const login = async function () {
     NameOrPhone: NameOrPhone.value,
     password: password.value,
   }
-  
+
   //获取token
   var login = await proxy.$API.login.token.post(data)
   // console.log(login,'登录')
@@ -59,7 +58,7 @@ const login = async function () {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .inlineForm {
   display: flex;
   .input {
@@ -67,6 +66,9 @@ const login = async function () {
     display: inline-block;
     width: 300px;
   }
+}
+/deep/.el-input__wrapper {
+  background-color: transparent;
 }
 .phoneVerify,
 .secretVerify {
