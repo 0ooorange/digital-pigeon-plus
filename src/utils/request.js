@@ -3,8 +3,9 @@ import { ElNotification, ElMessageBox } from 'element-plus';
 import sysConfig from "@/config";
 import tool from '@/utils/tool';
 import router from '@/router';
-
-// axios.defaults.baseURL = 'http://106.12.160.172:8000'
+const baseURL = process.env.NODE_ENV === 'production'
+    ? 'http://106.12.160.172:8000' : '';
+axios.defaults.baseURL = baseURL
 axios.defaults.timeout = sysConfig.TIMEOUT
 
 // HTTP request 拦截器
@@ -106,7 +107,7 @@ var http = {
 				data: data,
 				...config
 			}).then((response) => {
-				
+
 				resolve(response.data);
 			}).catch((error) => {
 				// console.log('请求',error)
