@@ -16,12 +16,13 @@
     <span class="forgetSecret">忘记密码</span>
   </div>
   <DragVerify style="margin-top: 0px;"></DragVerify>
-  <el-button class="btn" @click="login">登录</el-button>
+  <el-button class="btn" @click="log_in">登录</el-button>
 </template>
 
 <script setup>
 import DragVerify from './dragVerify.vue'
 import { ref, getCurrentInstance } from 'vue'
+import { login } from '@api/bases/login'
 const { proxy } = getCurrentInstance()
 const rememberSecret = ref(false)
 const NameOrPhone = ref('刘双印')
@@ -29,32 +30,34 @@ const password = ref('123456')
 
 // 登录
 const islogin = ref(true)
-const login = async function () {
-  // var validate = await proxy.$refs.loginForm.validate().catch(()=>{})
-  // 	if(!validate){ return false }
-  islogin.value = true
-  var data = {
-    NameOrPhone: NameOrPhone.value,
-    password: password.value,
-  }
+// var validate = await proxy.$refs.loginForm.validate().catch(()=>{})
+// 	if(!validate){ return false }
+islogin.value = true
+let data = {
+  NameOrPhone: NameOrPhone.value,
+  password: password.value,
+}
 
-  //获取token
-  var login = await proxy.$API.login.token.post(data)
-  // console.log(login,'登录')
-  if (login.code == 200) {
-    proxy.$TOOL.cookie.set('TOKEN', login.data.token)
-    // console.log("token:",login.data.token);
-  } else {
-    islogin.value = false
-    proxy.$message.warning(login.message)
-    return false
-  }
-
-  proxy.$router.replace({
-    path: '/navigator',
-  })
-  proxy.$message.success('Login Success 登录成功')
-  islogin.value = false
+//获取token
+const log_in = function () {
+  login(data)
+    .then((res) => {
+      console.log('denglu')
+      if (res.code === 200) {
+        proxy.$TOOL.cookie.set('TOKEN', res.data.token)
+      } else {
+        islogin.value = false
+        proxy.$message.warning(res.message)
+        return false
+      }
+    })
+    .then(() => {
+      proxy.$router.replace({
+        path: '/navigator',
+      })
+      proxy.$message.success('Login Success 登录成功')
+      islogin.value = false
+    })
 }
 </script>
 

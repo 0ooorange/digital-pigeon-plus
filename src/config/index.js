@@ -13,7 +13,7 @@ const DEFAULT_CONFIG = {
 	CORE_VER: "1.5.0",
 
 	//接口地址
-	API_URL: "http://172.17.98.87:8000",
+	API_URL: "http://106.12.160.172:8000",
 
 	//请求超时
 	TIMEOUT: 10000,
