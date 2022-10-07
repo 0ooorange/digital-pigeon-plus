@@ -147,7 +147,7 @@ export default {
     const showPage_methods = {
       async getAllBaseInfo() {
         const res = await getBaseInfoApi.get();
-        showPage_state.tableData = res.data.PigeonBaselist;
+        showPage_state.tableData = res.data.PigeonBaselist.splice(5);
       },
     };
     const edit_state = reactive({

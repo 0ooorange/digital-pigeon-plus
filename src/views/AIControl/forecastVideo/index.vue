@@ -1,29 +1,53 @@
 <template>
-  <div class="container">
-    <div class="cell no1">
-      <video controls autoplay id="videoId1">
-        <source :src="videoSrc1" type="video/mp4" />
-        <!-- <source src="movie.ogg" type="video/ogg"> -->
-        <!-- <source src="movie.webm" type="video/webm"> -->
-        您的浏览器不支持 video 属性。
-      </video>
+    <div class="container">
+      <div>
+        <div class="cell no1">
+			<!--autoplay muted 两个属性组合在一起才能自动播放  -->
+          <video id="videoId1" ref="video1" controls autoplay muted >
+            <source
+              src=""
+              type="video/mp4"
+            />
+            您的浏览器不支持 video 元素。
+          </video>
+        </div>
+        <div class="cell no2">
+          <video id="videoId2" ref="video2" controls autoplay muted >
+            <source
+              src=""
+              type="video/mp4"
+            />
+            您的浏览器不支持 video 元素。
+          </video>
+        </div>
+      </div>
+      <div>
+        <div class="cell no3">
+          <video id="videoId3" ref="video3" controls autoplay muted >
+            <source
+              src=""
+              type="video/mp4"
+            />
+            您的浏览器不支持 video 元素。
+          </video>
+        </div>
+        <div class="cell no4">
+          <video id="videoId4" ref="video4" controls autoplay muted >
+            <source
+              src=""
+              type="video/mp4"
+            />
+            您的浏览器不支持 video 元素。
+          </video>
+        </div>
+      </div>
     </div>
-	<!-- <MyVideo video="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" cover=""  /> -->
-    <!-- <div class="demo">
-      <video-player
-        class="video-player vjs-custom-skin"
-        :playsinline="true"
-        :options="playerOptions"
-      >
-      </video-player>
-    </div> -->
-  </div>
 </template>
 
 <script>
-import { onMounted, reactive, toRefs } from "vue";
+import { onMounted, reactive, toRefs, ref } from "vue";
 import { getVideo } from "@/api/model/AiControl/forecastVideo";
-import { MyVideo } from './video.vue';
+import { MyVideo } from "./video.vue";
 
 export default {
   name: "forecastVideo", // 预测视频
@@ -31,63 +55,113 @@ export default {
     MyVideo,
   },
   setup() {
+    let video1 = ref(null);
+	let video2 = ref(null);
+	let video3 = ref(null);
+	let video4 = ref(null);
+
     onMounted(() => {
-      showPage_methods.getRandomVideo();
+      showPage_methods.getRandomVideo1();
+	  showPage_methods.getRandomVideo2();
+	  showPage_methods.getRandomVideo3();
+	  showPage_methods.getRandomVideo4();
     });
     const showPage_state = reactive({
       videoId: [
-        "72f8d217fb534d3ab27a6b76150b2360",
-        "f934c9ed1eb64f72b54098bd4e60e09e",
-        "b5ed2aa1d2b14d2d923b829e906e44a7",
-        "42f1d54c92da47e6b1402d42001680d4",
-        "4ff564b09b6544d5a0ae90568dcfba71",
-        "d7281faaafbe4c418a38e6c22a475744",
-        "589f8d6f72e74ed0b1d9bbf7202f93b1",
-        "dc36ab74ecab4f0687d20a5cc85dec1c",
-        "dc6e635e27b6420ebf02ad1b23a22c0e",
-        "045a547fadd147f295d590d94a66a54e",
+        "589df0a5acb04f7a9a6e6696bed0231a",
+        "b60cffa50ee84ca88be115b17790e825",
+        "70c5fdfc9ae645e49bed83c28a846ecd",
+        "9a323155e6024395a2736df5fdfe09ea",
+        "89e8bc9accfe497183352b6d13e7dd45",
+        "11531dfb082c4ae6836c56ef728c27c7",
+        "c044af7269f4437db763206e00ee24b4",
+        "d5b9c430d6494390abf218edf7ebc1c8",
       ],
       videoSrc1: "",
-      playerOptions: {
-        playbackRates: [0.5, 1.0, 1.5, 2.0], // 可选的播放速度
-        autoplay: false, // 如果为true,浏览器准备好时开始回放
-        muted: false, // 默认情况下将会消除任何音频。
-        loop: false, // 是否视频一结束就重新开始。
-        preload: "auto", // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
-        language: "zh-CN",
-        aspectRatio: "16:9", // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
-        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
-        sources: [
-          {
-            type: "video/mp4", // 类型
-            src: "https://outin-8d4956b72a9911eda11400163e1c9256.oss-cn-shanghai.aliyuncs.com/sv/2f3c5171-18308d7d09b/2f3c5171-18308d7d09b.mp4?Expires=1662304902&OSSAccessKeyId=LTAI3DkxtsbUyNYV&Signature=trfPs7QmWk2jw9l7tNxG6ffjLNs%3D", // url地址
-          },
-        ],
-        poster: "", // 封面地址
-        notSupportedMessage: "此视频暂无法播放，请稍后再试", // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
-        controlBar: {
-          timeDivider: true, // 当前时间和持续时间的分隔符
-          durationDisplay: true, // 显示持续时间
-          remainingTimeDisplay: false, // 是否显示剩余时间功能
-          fullscreenToggle: true, // 是否显示全屏按钮
-        },
-      },
     });
     const showPage_methods = {
-      async getRandomVideo() {
+      async getRandomVideo1() {
+        console.log("这是video", video1.value);
+
         let index =
           Math.floor(Math.random() * showPage_state.videoId.length + 1) - 1;
-        console.log(index);
-        const res = await getVideo.post(showPage_state.videoId[0]);
-        showPage_state.videoSrc1 = res.data.url;
-        // console.log(res);
-        console.log(showPage_state.videoSrc1);
-        var video = document.getElementById("videoId1");
+        // console.log(index);
+        const res = await getVideo.post(showPage_state.videoId[index]);
+        // console.log("这是我的",res);
 
-        video.addEventListener("ended", function () {}, false);
+		// 视频1
+        video1.value.src = res.data.url;
+		const eleVideo1 = document.getElementById('videoId1')
+
+		//播放结束事件
+		eleVideo1.addEventListener('ended', function () {
+			showPage_methods.getRandomVideo1();
+    }, false);
+
+      },
+
+	async getRandomVideo2() {
+        // console.log("这是video", video1.value);
+
+        let index =
+        Math.floor(Math.random() * showPage_state.videoId.length + 1) - 1;
+        const res = await getVideo.post(showPage_state.videoId[index]);
+
+
+		// 视频2
+        video2.value.src = res.data.url;
+		const eleVideo1 = document.getElementById('videoId2')
+
+		//播放结束事件
+		eleVideo1.addEventListener('ended', function () {
+			showPage_methods.getRandomVideo2();
+    }, false);
+      },
+
+
+	async getRandomVideo3() {
+        // console.log("这是video", video1.value);
+
+        let index =
+        Math.floor(Math.random() * showPage_state.videoId.length + 1) - 1;
+        const res = await getVideo.post(showPage_state.videoId[index]);
+
+
+		// 视频3
+        video3.value.src = res.data.url;
+		const eleVideo1 = document.getElementById('videoId3')
+
+		//播放结束事件
+		eleVideo1.addEventListener('ended', function () {
+			showPage_methods.getRandomVideo3();
+    }, false);
+      },
+
+	  async getRandomVideo4() {
+        // console.log("这是video", video1.value);
+
+        let index =
+        Math.floor(Math.random() * showPage_state.videoId.length + 1) - 1;
+        const res = await getVideo.post(showPage_state.videoId[index]);
+
+
+		// 视频4
+        video4.value.src = res.data.url;
+		const eleVideo1 = document.getElementById('videoId4')
+
+		//播放结束事件
+		eleVideo1.addEventListener('ended', function () {
+			showPage_methods.getRandomVideo4();
+    }, false);
       },
     };
+
+
     return {
+      video1,
+	  video2,
+	  video3,
+	  video4,
       ...toRefs(showPage_state),
       ...showPage_methods,
     };
@@ -96,37 +170,26 @@ export default {
 </script>
 
 <style scoped lang="scss">
-/*CSS Reset*/
 .container,
 .container * {
   padding: 0;
   margin: 0;
   line-height: 0;
 }
-.cell {
-  width: 100%;
-  height: 300px;
-  // height: 100%;
-  margin: 0;
-}
-.cell > iframe {
-  width: 100%;
-  height: 100%;
-  // background-color: rgb(203, 238, 230);
-  margin: 0;
-  // padding: 0;
+.cell > video {
+	margin: -11px 20px;
+	width: 540px;
+	height: 100%;
+	background-color: rgb(163, 172, 172);
 }
 
-/*方案二 ———— flex*/
 .container {
   display: flex;
   flex-flow: column;
 }
 .container > div {
   display: flex;
-  // margin: 5px 0;
+  margin: 5px auto;
 }
-.cell > div {
-  // margin: 0 5px;
-}
+
 </style>
