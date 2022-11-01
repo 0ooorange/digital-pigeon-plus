@@ -13,4 +13,4 @@ import http from "@/utils/request";
 
 const url = '/api/v1/predict/'
 
-export const getPredict = (data = {}) => http.post(url + '?feature=' + data.feature + '&data=' + data.data + '&target_length=' + data.target_length);
+export const getPredict = (data = {}) => http.post(url,data);
