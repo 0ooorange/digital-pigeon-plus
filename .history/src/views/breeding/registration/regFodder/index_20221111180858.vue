@@ -85,6 +85,7 @@
       v-model="addFodderdialog"
       width="30%"
       @close="addDialogClosed"
+      style="display: flex"
     >
       <el-form
         :model="addInfo"
@@ -123,7 +124,7 @@
           </el-row>
         </el-form-item>
         <el-form-item label="规格:" prop="size">
-          <el-row :gutter="10" style="width: 380px">
+          <el-row :gutter="10" style="width: 300px">
             <el-col
               :span="8"
               v-for="(item, index) in addInfo.size"
