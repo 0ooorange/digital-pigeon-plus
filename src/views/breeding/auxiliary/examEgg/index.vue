@@ -52,6 +52,7 @@ export default {
                     }, 2000);
                     tableData.unshift({
                         codes: "鸽笼号",
+                        number: "鸽笼编号",
                         panelCode: "板子编号",
                         layEggTime: "生蛋时间",
                         takeOrHatch: "操作",
@@ -59,6 +60,7 @@ export default {
                     });
                     tableData = LAY_EXCEL.filterExportData(tableData, [
                         "codes",
+                        "number",
                         "panelCode",
                         "layEggTime",
                         "takeOrHatch",
@@ -98,6 +100,13 @@ export default {
             {
                 label: "鸽笼号",
                 prop: "codes",
+                sortable: true,
+                width: 120,
+                align: "center",
+            },
+            {
+                label: "鸽笼编号",
+                prop: "number",
                 sortable: true,
                 width: 120,
                 align: "center",

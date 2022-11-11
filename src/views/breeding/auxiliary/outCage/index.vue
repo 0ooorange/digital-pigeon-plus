@@ -52,6 +52,7 @@ export default {
                     }, 2000);
                     tableData.unshift({
                         codes: "鸽笼号",
+                        number: "鸽笼编号",
                         panelCode: "板子编号",
                         checkCubTime: "出仔时间",
                         cubNumber: "出栏个数",
@@ -59,6 +60,7 @@ export default {
                     });
                     tableData = LAY_EXCEL.filterExportData(tableData, [
                         "codes",
+                        "number",
                         "panelCode",
                         "checkCubTime",
                         "cubNumber",
