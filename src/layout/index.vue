@@ -14,7 +14,7 @@
           <div class="selectDivs">
             <span class="selectText">基地：</span>
             <el-select style="width: 150px" v-model="currBaseName" class="m-2" placeholder="Select" @change="currBaseChange">
-              <el-option v-for="item in bases" :key="item.id" :label="item.code" :value="item.code" />
+              <el-option v-for="item in bases" :key="item.id" :label="item.name" :value="item.name" />
             </el-select>
             <span class="selectText">鸽棚：</span>
             <el-select style="width: 150px" v-model="currShedCode" class="m-2" placeholder="Select" @change="currShedChange">
@@ -124,8 +124,8 @@ export default {
         let currInfo = ref(tool.data.get('CURR_INFO'))
         let currBase = ref({})
         let currShed = ref({})
-        currBase.value = currInfo.value ? currInfo.value.CURR_BASE : res.data.baseList[0]
-        currShed.value = currInfo.value ? currInfo.value.CURR_SHED : res.data.shedList[0]
+        currBase.value = currInfo.value && currInfo.value.CURR_BASE ? currInfo.value.CURR_BASE : res.data.baseList[0]
+        currShed.value = currInfo.value && currInfo.value.CURR_SHED ? currInfo.value.CURR_SHED : res.data.shedList[0]
         currOperator.value = currInfo.value ? currInfo.value.CHARGE_NAME : res.data.userList[0].name
 
         currInfo.value = {
@@ -137,7 +137,7 @@ export default {
 
         bases.value = res.data.baseList
         dovecotes.value = res.data.shedList
-        currBaseName.value = currInfo.value.CURR_BASE.code
+        currBaseName.value = currInfo.value.CURR_BASE.name
         currShedCode.value = currInfo.value.CURR_SHED.code
       })
     }
@@ -203,7 +203,7 @@ export default {
       currShed.value = currInfo.value.CURR_SHED
       currOperator.value = currInfo.value.CHARGE_NAME
       bases.value.forEach((val) => {
-        if (val.code === e) {
+        if (val.name === e) {
           currInfo.value = {
             CURR_BASE: val,
             CURR_SHED: currShed.value,
