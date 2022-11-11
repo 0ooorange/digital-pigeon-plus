@@ -213,7 +213,7 @@ export default defineComponent({
 
         //日期选择器
         const visibleChange = function (e) {
-            // console.log("选择日期", e);
+            console.log("选择日期", e);
             // console.log(
             //     proxy.$TOOL.dateFormat(e[0]),
             //     proxy.$TOOL.dateFormat(e[1]).substring(0, 10) + " 23:59:59"
@@ -223,7 +223,7 @@ export default defineComponent({
                 proxy.$TOOL.dateFormat(e[1]).substring(0, 10) +
                 " 23:59:59";
             // console.log("参数", commonParams);
-            getCarbonDioxideData();
+            getCarbonDioxideDataMethod()
         };
 
         //相同的配置
@@ -925,7 +925,7 @@ export default defineComponent({
                     commonParams,
                     "二氧化碳"
                 );
-                //  console.log("二氧化碳请求结果", CarbonDioxRes);
+                 console.log("二氧化碳请求结果", CarbonDioxRes);
 
             if (CarbonDioxRes.code === 200) {
                 carbonDioxide = CarbonDioxRes.data.data;
