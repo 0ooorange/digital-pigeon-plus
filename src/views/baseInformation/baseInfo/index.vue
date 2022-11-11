@@ -198,6 +198,7 @@ export default {
     const showPage_methods = {
       async getgetBaseInfo() {
         const res = await getBaseInfoApi.get();
+		console.log('啊实打实大',res);
         // 页面展示
         showPage_state.baseInfoForm = res.data.baseInfo;
       },
