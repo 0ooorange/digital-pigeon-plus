@@ -749,12 +749,12 @@ export default defineComponent({
 
         //获取环境数据
         const getCarbonDioxideDataMethod = async function () {
-            console.log("参数", commonParams);
+            // console.log("参数", commonParams);
             let CarbonDioxRes = await getCarbonDioxideData(
                 commonParams,
                 "二氧化碳"
             );
-            console.log("二氧化碳请求结果", CarbonDioxRes);
+            // console.log("二氧化碳请求结果", CarbonDioxRes);
 
             let lastTime = null;
             let protectTime = [];
@@ -782,19 +782,19 @@ export default defineComponent({
                     }
                 }
 
-                console.log("预测时间数组", protectTime);
+                // console.log("预测时间数组", protectTime);
                 //获取预测的数据
                 let forcastValue = data.map((item) => {
                     return item.datavalue;
                 });
-                console.log("预测的数据", forcastValue);
+                // console.log("预测的数据", forcastValue);
 
                 let carbonDioxideTemp = data.map((item) => {
                     item.time = item.devicetime.substring(10, 16);
                     item.color = "#f15d5d";
                     return item;
                 });
-                console.log("数据处理", carbonDioxideTemp);
+                // console.log("数据处理", carbonDioxideTemp);
 
                 let predictPramse = {
                     feature: "CO2",
@@ -803,11 +803,11 @@ export default defineComponent({
                 };
 
                 let predictRes = await getPredict(predictPramse);
-                console.log("预测结果11", predictRes);
+                // console.log("预测结果11", predictRes);
                 if (predictRes.success) {
                     let carbonDioxidePredict = predictRes.output.map(
                         (item, index) => {
-                            console.log(item);
+                            // console.log(item);
                             let temp = {
                                 time: protectTime[index],
                                 name: "预测值" + (index + 1),
@@ -815,7 +815,7 @@ export default defineComponent({
                                 forcastValue: item,
                                 color: "#1C86EE",
                             };
-                            console.log(temp);
+                            // console.log(temp);
                             return temp;
                         }
                     );
@@ -876,7 +876,7 @@ export default defineComponent({
                 commonParams,
                 "空气温度"
             );
-            console.log("空气温度请求结果", temperatureRes);
+            // console.log("空气温度请求结果", temperatureRes);
             if (temperatureRes.code === 200) {
                 let data = temperatureRes.data.data;
 
@@ -885,13 +885,13 @@ export default defineComponent({
                     return item.datavalue;
                 });
 
-                console.log("预测的数据", forcastValue);
+                // console.log("预测的数据", forcastValue);
                 let temperatureTemp = data.map((item) => {
                     item.time = item.devicetime.substring(10, 16);
                     item.color = "#f15d5d";
                     return item;
                 });
-                console.log("数据处理", temperatureTemp);
+                // console.log("数据处理", temperatureTemp);
                 let predictPramse = {
                     feature: "temperature",
                     data: forcastValue,
@@ -899,11 +899,11 @@ export default defineComponent({
                 };
 
                 let predictRes = await getPredict(predictPramse);
-                console.log("预测结果11", predictRes);
+                // console.log("预测结果11", predictRes);
                 if (predictRes.success) {
                     let temperaturePredict = predictRes.output.map(
                         (item, index) => {
-                            console.log(item);
+                            // console.log(item);
                             let temp = {
                                  time: protectTime[index],
                                 name: "预测值" + (index + 1),
@@ -935,14 +935,14 @@ export default defineComponent({
                 let forcastValue = data.map((item) => {
                     return item.datavalue;
                 });
-                console.log("预测的数据", forcastValue);
+                // console.log("预测的数据", forcastValue);
 
                 let humidityTemp = data.map((item) => {
                     item.time = item.devicetime.substring(10, 16);
                     item.color = "#f15d5d";
                     return item;
                 });
-                console.log("数据处理", humidityTemp);
+                // console.log("数据处理", humidityTemp);
                 let predictPramse = {
                     feature: "humidity",
                     data: forcastValue,
@@ -950,11 +950,11 @@ export default defineComponent({
                 };
 
                 let predictRes = await getPredict(predictPramse);
-                console.log("预测结果11", predictRes);
+                // console.log("预测结果11", predictRes);
                 if (predictRes.success) {
                     let humidityPredict = predictRes.output.map(
                         (item, index) => {
-                            console.log(item);
+                            // console.log(item);
                             let temp = {
                                  time: protectTime[index],
                                 name: "预测值" + (index + 1),
@@ -985,14 +985,14 @@ export default defineComponent({
                 let forcastValue = data.map((item) => {
                     return item.datavalue;
                 });
-                console.log("预测的数据", forcastValue);
+                // console.log("预测的数据", forcastValue);
 
                 let illuminationIntensityTemp = data.map((item) => {
                     item.time = item.devicetime.substring(10, 16);
                     item.color = "#f15d5d";
                     return item;
                 });
-                console.log("数据处理", illuminationIntensityTemp);
+                // console.log("数据处理", illuminationIntensityTemp);
 
                 let predictPramse = {
                     feature: "Light_intensity",
@@ -1004,7 +1004,7 @@ export default defineComponent({
                 if (predictRes.success) {
                     let illuminationIntensityPredict = predictRes.output.map(
                         (item, index) => {
-                            console.log(item);
+                            // console.log(item);
                             let temp = {
                                  time: protectTime[index],
                                 name: "预测值" + (index + 1),
@@ -1026,21 +1026,21 @@ export default defineComponent({
 
             //PM2.5
             let PMRes = await getCarbonDioxideData(commonParams, "PM2.5");
-            console.log("Pm2.5", PMRes);
+            // console.log("Pm2.5", PMRes);
             if (PMRes.code === 200) {
                 let data = PMRes.data.data;
                 //获取预测的数据
                 let forcastValue = data.map((item) => {
                     return item.datavalue;
                 });
-                console.log("预测的数据", forcastValue);
+                // console.log("预测的数据", forcastValue);
 
                 let PMTemp = data.map((item) => {
                     item.time = item.devicetime.substring(10, 16);
                     item.color = "#f15d5d";
                     return item;
                 });
-                console.log("数据处理", PMTemp);
+                // console.log("数据处理", PMTemp);
                 let predictPramse = {
                     feature: "pm2.5",
                     data: forcastValue,
@@ -1048,10 +1048,10 @@ export default defineComponent({
                 };
 
                 let predictRes = await getPredict(predictPramse);
-                console.log("预测结果", predictRes);
+                // console.log("预测结果", predictRes);
                 if (predictRes.success) {
                     let PMPredict = predictRes.output.map((item, index) => {
-                        console.log(item);
+                        // console.log(item);
                         let temp = {
                              time: protectTime[index],
                             name: "预测值" + (index + 1),
@@ -1064,7 +1064,7 @@ export default defineComponent({
                     //数据赋值
                     PMOption.dataset.source = PMTemp;
                     PMOption.dataset.source.push(...PMPredict);
-                    console.log("PM2.5请求结果", PMRes);
+                    // console.log("PM2.5请求结果", PMRes);
                 }
             }
 
@@ -1076,13 +1076,13 @@ export default defineComponent({
                 let forcastValue = data.map((item) => {
                     return item.datavalue;
                 });
-                console.log("预测的数据", forcastValue);
+                // console.log("预测的数据", forcastValue);
                 let PM10Temp = data.map((item) => {
                     item.time = item.devicetime.substring(10, 16);
                     item.color = "#f15d5d";
                     return item;
                 });
-                console.log("数据处理", PM10Temp);
+                // console.log("数据处理", PM10Temp);
 
                 let predictPramse = {
                     feature: "pm10",
@@ -1091,10 +1091,10 @@ export default defineComponent({
                 };
 
                 let predictRes = await getPredict(predictPramse);
-                console.log("预测结果", predictRes);
+                // console.log("预测结果", predictRes);
                 if (predictRes.success) {
                     let PM10Predict = predictRes.output.map((item, index) => {
-                        console.log(item);
+                        // console.log(item);
                         let temp = {
                              time: protectTime[index],
                             name: "预测值" + (index + 1),

@@ -124,7 +124,7 @@ export default defineComponent({
                 });
                 actUrl.value = blobImage.value;
                 activeIndex.value = 3;
-            }, 500);
+            }, 1000);
         };
         const handleAvatarError = function (Error, UploadFile, UploadFiles) {
             console.log("上传错误", Error, UploadFile, UploadFiles);

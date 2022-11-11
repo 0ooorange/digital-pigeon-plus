@@ -11,6 +11,6 @@ import http from "@/utils/request";
 //	}
 //};
 
-const url = '/api/v1/predict/'
+const url = '/digitalPigeon/predictionAi/api/v1/predict/'
 
 export const getPredict = (data = {}) => http.post(url,data);
