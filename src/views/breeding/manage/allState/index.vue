@@ -338,12 +338,12 @@
                             style="height: 100%; width: 100%; padding: 10px"
                         >
                             <el-carousel-item
-                                v-for="item in 3"
+                                v-for="item in imageArray"
                                 :key="item"
                                 style="height: 100%; width: 100%"
                             >
                                 <img
-                                    src="../../../../assets/images/pigeon2.jpg"
+                                    :src="item"
                                     style="height: 100%; width: 100%"
                                 />
                             </el-carousel-item>
@@ -394,6 +394,11 @@ export default {
             currentStatus: 0,
             currentLever: 0,
             currentPigeon: "", //当前的鸽笼编号
+            imageArray:[
+                "https://digital-pigeon.oss-cn-guangzhou.aliyuncs.com/2022-11-12/0d8242cfdc7142488b89a6fc6cfd3ad3D01_2022073110134766231.648.png",
+                "https://digital-pigeon.oss-cn-guangzhou.aliyuncs.com/2022-11-12/ba618ca4cd3449f8bbda16651cf623c4D02_2022080421275071527.200.png",
+                "https://digital-pigeon.oss-cn-guangzhou.aliyuncs.com/2022-11-12/a904b29d947a43e9a585d7a0e342b353D03_2022081204473233258.324.png"
+            ],
             methodsArray: ["产蛋", "查蛋", "查仔", "回蛋"],
             lever: [
                 {
@@ -660,7 +665,7 @@ export default {
             const findCageByState =
                 await this.$API.allState.findCageByState.get(data);
             if (findCageByState.code == 200) {
-                // console.log("全部鸽笼", findCageByState);
+                console.log("全部鸽笼", findCageByState);
                 this.cageArray = findCageByState.data.data;
                 this.findLogParams.pigeonId =
                     this.cageArray[0][0] && this.cageArray[0][0].pigeonId;
