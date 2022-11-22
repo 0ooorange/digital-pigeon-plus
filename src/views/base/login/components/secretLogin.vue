@@ -25,39 +25,32 @@ import { ref, getCurrentInstance } from 'vue'
 import { login } from '@api/bases/login'
 const { proxy } = getCurrentInstance()
 const rememberSecret = ref(false)
-const NameOrPhone = ref('刘双印')
-const password = ref('123456')
+const NameOrPhone = ref('')
+const password = ref('')
 
 // 登录
 const islogin = ref(true)
 // var validate = await proxy.$refs.loginForm.validate().catch(()=>{})
 // 	if(!validate){ return false }
 islogin.value = true
-let data = {
-  NameOrPhone: NameOrPhone.value,
-  password: password.value,
-}
 
 //获取token
 const log_in = function () {
-  login(data)
-    .then((res) => {
-      console.log('denglu')
-      if (res.code === 200) {
-        proxy.$TOOL.cookie.set('TOKEN', res.data.token)
-      } else {
-        islogin.value = false
-        proxy.$message.warning(res.message)
-        return false
-      }
-    })
-    .then(() => {
-      proxy.$router.replace({
-        path: '/navigator',
-      })
+  let data = {
+    NameOrPhone: NameOrPhone.value,
+    password: password.value,
+  }
+  login(data).then((res) => {
+    if (res.success) {
+      proxy.$TOOL.cookie.set('TOKEN', res.data.token)
+      proxy.$router.replace({ path: '/navigator' })
       proxy.$message.success('Login Success 登录成功')
       islogin.value = false
-    })
+    } else {
+      islogin.value = false
+      proxy.$message.warning(res.message)
+    }
+  })
 }
 </script>
 
