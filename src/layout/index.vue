@@ -11,7 +11,7 @@
           </div>
         </el-col>
         <el-col :span="secondSpan" style="display:flex; ">
-          <div class="selectDivs">
+          <div class="selectDivs" v-if="selectShow">
             <span class="selectText">基地：</span>
             <el-select style="width: 150px" v-model="currBaseName" class="m-2" placeholder="Select" @change="currBaseChange">
               <el-option v-for="item in bases" :key="item.id" :label="item.name" :value="item.name" />
@@ -113,6 +113,9 @@ export default {
     )
 
     // 基地和棚
+    const selectShow = ref(true)
+    const index = tool.data.get('CURR_MENU_INDEX')
+    if(index === 1 || index === 8 || index === 10) selectShow.value = false
     const bases = ref([])
     const dovecotes = ref([])
     const currBaseName = ref('')
@@ -285,6 +288,7 @@ export default {
       currShedCode,
       currOperator,
       smallLogo,
+      selectShow,
       currMenu,
       currBaseChange,
       currShedChange,
