@@ -401,66 +401,189 @@ export default {
 		},
 	],
 	// 基础信息管理
-	baseInformation: [
+	// baseInformation: [
+	// 	{
+	// 		name: "personInf",
+	// 		path: "/baseInformation/personInf",
+	// 		meta: {
+	// 			title: "个人信息",
+	// 			icon: "el-icon-histogram",
+	// 			type: "menu",
+	// 		},
+	// 		component: "baseInformation/personInf/index",
+	// 	},
+	// 	{
+	// 		name: "baseInfo",
+	// 		path: "/baseInformation/baseInfo",
+	// 		meta: {
+	// 			title: "基地信息",
+	// 			icon: "el-icon-histogram",
+	// 			type: "menu",
+	// 		},
+	// 		component: "baseInformation/baseInfo/index",
+	// 	},
+	// 	{
+	// 		name: "employee",
+	// 		path: "/baseInformation/employee",
+	// 		meta: {
+	// 			title: "员工管理",
+	// 			icon: "el-icon-histogram",
+	// 			type: "menu",
+	// 		},
+	// 		component: "baseInformation/employee/index",
+	// 	},
+	// 	{
+	// 		name: "dovecote",
+	// 		path: "/baseInformation/dovecote",
+	// 		meta: {
+	// 			title: "鸽棚管理",
+	// 			icon: "el-icon-histogram",
+	// 			type: "menu",
+	// 		},
+	// 		component: "baseInformation/dovecote/index",
+	// 	},
+	// 	{
+	// 		name: "baseInfoMana",
+	// 		path: "/baseInformation/baseInfoMana",
+	// 		meta: {
+	// 			title: "基地信息管理",
+	// 			icon: "el-icon-histogram",
+	// 			type: "menu",
+	// 		},
+	// 		component: "baseInformation/baseInfoMana/index",
+	// 	},
+	// 	{
+	// 		name: "authority",
+	// 		path: "/baseInformation/authority",
+	// 		meta: {
+	// 			title: "权限管理",
+	// 			icon: "el-icon-histogram",
+	// 			type: "menu",
+	// 		},
+	// 		component: "baseInformation/authority/index",
+	// 	},
+	// ],
+
+	baseInfoMana: [
 		{
-			name: "personInf",
-			path: "/baseInformation/personInf",
+			name: "personalInfo",
+			path: "/baseInfoMana/personalInfo",
 			meta: {
 				title: "个人信息",
 				icon: "el-icon-histogram",
 				type: "menu",
 			},
-			component: "baseInformation/personInf/index",
+			component: "baseInfoMana/personalInfo/index",
 		},
 		{
-			name: "baseInfo",
-			path: "/baseInformation/baseInfo",
+			name: "divisionMana",
+			path: "/baseInfoMana/divisionMana",
 			meta: {
-				title: "基地信息",
+				title: "部门管理",
 				icon: "el-icon-histogram",
 				type: "menu",
 			},
-			component: "baseInformation/baseInfo/index",
+			component: "baseInfoMana/divisionMana/index",
 		},
 		{
-			name: "employee",
-			path: "/baseInformation/employee",
+			name: "baseMana",
+			path: "/baseInfoMana/baseMana",
 			meta: {
-				title: "员工管理",
+				title: "基地管理",
 				icon: "el-icon-histogram",
 				type: "menu",
 			},
-			component: "baseInformation/employee/index",
+			component: "baseInfoMana/baseMana/index",
 		},
 		{
-			name: "dovecote",
-			path: "/baseInformation/dovecote",
+			name: "workshopMana",
+			path: "/baseInfoMana/workshopMana",
 			meta: {
-				title: "鸽棚管理",
+				title: "车间/棚管理",
 				icon: "el-icon-histogram",
 				type: "menu",
 			},
-			component: "baseInformation/dovecote/index",
+			children: [
+				{
+					name: "breedMana",
+					path: "/baseInfoMana/workshopMana/breedMana",
+					meta: {
+						title: "养殖鸽棚管理",
+						icon: "el-icon-histogram",
+						type: "menu",
+					},
+					component:
+								"baseInfoMana/workshopMana/breedMana/index",
+				},
+				{
+					name: "slaughterMana",
+					path: "/baseInfoMana/workshopMana/slaughterMana",
+					meta: {
+						title: "屠宰车间管理",
+						icon: "el-icon-histogram",
+						type: "menu",
+					},
+					component:
+								"baseInfoMana/workshopMana/slaughterMana/index",
+				},
+				{
+					name: "processMana",
+					path: "/baseInfoMana/workshopMana/processMana",
+					meta: {
+						title: "加工车间管理",
+						icon: "el-icon-histogram",
+						type: "menu",
+					},
+					component:
+								"baseInfoMana/workshopMana/processMana/index",
+				},
+				{
+					name: "fodderMana",
+					path: "/baseInfoMana/workshopMana/fodderMana",
+					meta: {
+						title: "饲料厂库管理",
+						icon: "el-icon-histogram",
+						type: "menu",
+					},
+					component:
+								"baseInfoMana/workshopMana/fodderMana/index",
+				},
+			],
 		},
+
 		{
-			name: "baseInfoMana",
-			path: "/baseInformation/baseInfoMana",
+			name: "personnelAllocation",
+			path: "/baseInfoMana/personnelAllocation",
 			meta: {
-				title: "基地信息管理",
+				title: "人员配置",
 				icon: "el-icon-histogram",
 				type: "menu",
 			},
-			component: "baseInformation/baseInfoMana/index",
-		},
-		{
-			name: "authority",
-			path: "/baseInformation/authority",
-			meta: {
-				title: "权限管理",
-				icon: "el-icon-histogram",
-				type: "menu",
-			},
-			component: "baseInformation/authority/index",
+			children: [
+				{
+					name: "personnelMana",
+					path: "/baseInfoMana/personnelAllocation/personnelMana",
+					meta: {
+						title: "员工管理",
+						icon: "el-icon-histogram",
+						type: "menu",
+					},
+					component:
+								"baseInfoMana/personnelAllocation/personnelMana/index",
+				},
+				{
+					name: "authorityMana",
+					path: "/baseInfoMana/personnelAllocation/authorityMana",
+					meta: {
+						title: "权限管理",
+						icon: "el-icon-histogram",
+						type: "menu",
+					},
+					component:
+								"baseInfoMana/personnelAllocation/authorityMana/index",
+				},
+
+			],
 		},
 	],
 };

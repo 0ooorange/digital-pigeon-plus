@@ -31,8 +31,8 @@ const routes = [
 		component: Layout,
 	},
 	{
-		name: "baseInformation",
-		path: "/baseInformation",
+		name: "baseInfoMana",
+		path: "/baseInfoMana",
 		component: Layout,
 	},
 	{
