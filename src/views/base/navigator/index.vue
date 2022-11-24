@@ -83,9 +83,9 @@ export default {
           index: 8,
           name: '基础信息管理',
           icon: 'nav_info',
-          system: 'baseInformation',
+          system: 'baseInfoMana',
           size: '',
-          path: '/baseInformation/personInf',
+          path: '/baseInfoMana/personalInfo',
         },
         {
           index: 9,
