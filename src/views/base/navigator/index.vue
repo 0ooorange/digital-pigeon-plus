@@ -100,7 +100,7 @@ export default {
           system: 'AIControl',
           icon: 'nav_ai',
           size: '',
-          path: '/AIControl/actRcognition',
+          path: '/AIControl/actRcognition/clear',
         },
         {
           index: 11,

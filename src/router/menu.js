@@ -316,13 +316,54 @@ export default {
 				icon: "el-icon-histogram",
 				type: "menu",
 			},
-			component: "AIControl/actRcognition/index",
+			children: [
+				{
+					path: "/AIControl/actRcognition/clear",
+					name: "acClear",
+					meta: {
+						title: "自清洁行为",
+						icon: "el-icon-office-building",
+						type: "menu",
+					},
+					component: "AIControl/actRcognition/clear/index",
+				},
+				{
+					path: "/AIControl/actRcognition/eat",
+					name: "acEat",
+					meta: {
+						title: "摄食行为",
+						icon: "el-icon-office-building",
+						type: "menu",
+					},
+					component: "AIControl/actRcognition/eat/index",
+				},
+				{
+					path: "/AIControl/actRcognition/courtship",
+					name: "acCourtship",
+					meta: {
+						title: "求偶行为",
+						icon: "el-icon-office-building",
+						type: "menu",
+					},
+					component: "AIControl/actRcognition/courtship/index",
+				},
+				{
+					path: "/AIControl/actRcognition/feed",
+					name: "acFeed",
+					meta: {
+						title: "哺育行为",
+						icon: "el-icon-office-building",
+						type: "menu",
+					},
+					component: "AIControl/actRcognition/feed/index",
+				},
+			]
 		},
 		{
 			name: "forecastCenter",
 			path: "/AIControl/forecastCenter",
 			meta: {
-				title: "预测中心",
+				title: "环境预测",
 				icon: "el-icon-histogram",
 				type: "menu",
 			},
@@ -332,11 +373,31 @@ export default {
 			name: "forecastVideo",
 			path: "/AIControl/forecastVideo",
 			meta: {
-				title: "预测视频",
+				title: "智能识别",
 				icon: "el-icon-histogram",
 				type: "menu",
 			},
 			component: "AIControl/forecastVideo/index",
+		},
+		{
+			name: "message",
+			path: "/AIControl/message",
+			meta: {
+				title: "短信预警",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			component: "AIControl/message/index",
+		},
+		{
+			name: "malfunction",
+			path: "/AIControl/malfunction",
+			meta: {
+				title: "故障诊断",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			component: "AIControl/malfunction/index",
 		},
 	],
 	// 基础信息管理
