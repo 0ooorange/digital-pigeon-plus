@@ -15,7 +15,7 @@
     <el-checkbox class="rememberSecret" v-model="rememberSecret" label="记住密码" size="large" />
     <span class="forgetSecret">忘记密码</span>
   </div>
-  <DragVerify style="margin-top: 0px;"></DragVerify>
+  <DragVerify style="margin-top: 0px;" @isSucceed="isSucceed"></DragVerify>
   <el-button class="btn" @click="log_in">登录</el-button>
 </template>
 
@@ -34,6 +34,11 @@ const islogin = ref(true)
 // 	if(!validate){ return false }
 islogin.value = true
 
+const isSuccess = ref(false)
+const isSucceed = () => {
+  isSuccess.value = true
+}
+
 //获取token
 const log_in = function () {
   let data = {
@@ -41,6 +46,10 @@ const log_in = function () {
     password: password.value,
   }
   login(data).then((res) => {
+    if (!isSuccess.value) {
+      proxy.$message.warning('请滑动验证')
+      return
+    }
     if (res.success) {
       proxy.$TOOL.cookie.set('TOKEN', res.data.token)
       proxy.$router.replace({ path: '/navigator' })

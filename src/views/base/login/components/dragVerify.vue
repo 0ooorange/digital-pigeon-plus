@@ -9,6 +9,7 @@
 
 <script>
 export default {
+  emits: ['isSucceed'],
   data() {
     return {
       box: '', // 容器
@@ -113,7 +114,6 @@ export default {
     },
     // 定义一个滑块解锁成功的方法
     success() {
-      this.isSuccess = true
       this.txt.innerHTML = '验证成功'
       this.bgColor.style.backgroundColor = 'rgb(206, 254, 206)'
       this.slider.className = 'slider active'
@@ -121,6 +121,8 @@ export default {
       //滑动成功时，移除鼠标按下事件和鼠标移动事件
       this.slider.onmousedown = null
       document.removeEventListener('mousemove', function () {})
+      this.isSuccess = true
+      this.$emit('isSucceed')
     },
   },
 }
