@@ -36,7 +36,7 @@
 
 <script>
 export default {
-  name: "personalInfo",
+  name: "personalInfo", // 个人信息
 };
 </script>
 
@@ -46,9 +46,9 @@ export default {
   margin: 50px auto;
   width: 750px;
   height: 430px;
-  background-color: rgb(235, 235, 235);
+  background-color: #e9e9eb;
   border-radius: 15px;
-  border: 2px solid rgb(151, 151, 151);
+  border: 2px solid #c8c9cc;
 }
 .personalInfo-edit {
   float: left;
@@ -61,8 +61,7 @@ export default {
   margin: 5% 0;
   width: 460px;
   height: 85%;
-  /* background-color: green; */
-  border-left: 2px solid rgb(62, 62, 62);
+  border-left: 2px solid #c8c9cc;
 }
 /* 左箱子（图片+按钮）样式 */
 /* #region */
@@ -85,21 +84,21 @@ export default {
   color: black;
 }
 .personalInfo-edit-btn-1 {
-  background-color: rgb(147, 233, 255);
-  border: 2px solid rgb(73, 176, 202);
+  background-color: #d9ecff;
+  border: 1px solid #a0cfff;
 }
 .personalInfo-edit-btn-1:hover {
-  background-color: rgb(200, 242, 253);
-  color: rgb(67, 67, 67);
+  background-color: #79bbff;
+  color: #73767a;
   transition: all 0.3s;
 }
 .personalInfo-edit-btn-2 {
-  background-color: rgb(196, 149, 149);
-  border: 2px solid rgb(179, 107, 107);
+  background-color: #fde2e2;
+  border: 1px solid #fab6b6;
 }
 .personalInfo-edit-btn-2:hover {
-  background-color: rgb(207, 169, 169);
-  color: rgb(67, 67, 67);
+  background-color: #f89898;
+  color: #73767a;
   transition: all 0.3s;
 }
 .personalInfo-edit span {
@@ -132,8 +131,8 @@ li {
   padding: 0 10px;
   width: 320px;
   height: 70px;
-  background-color: rgb(248, 237, 150);
-  border: 2px solid rgb(166, 152, 47);
+  background-color: #faecd8;
+  border: 2px solid #f3d19e;
   border-radius: 5px;
 }
 /* #endregion */
