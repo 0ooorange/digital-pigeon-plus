@@ -135,6 +135,10 @@
 				document.body.setAttribute('data-theme', val)
 				this.$TOOL.data.set("APP_THEME", val);
 			},
+			'config.lang'(val){
+				this.$i18n.locale = val
+				this.$TOOL.data.set("APP_LANG", val);
+			}
 		},
 		created: function() {
 			this.$TOOL.data.remove("TOKEN")
