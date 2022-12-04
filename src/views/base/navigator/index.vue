@@ -126,7 +126,7 @@ export default {
   setup() {
     tool.data.set('IS_GET_ROUTER', false)
     tool.data.set('CURR_MENU_INDEX', 0)
-	const menus = ref(allMenus)
+	const menus = ref(tool.data.get('CIRCLE_MENU') || allMenus)
     // 获取基本信息
     getPersonalInfo().then(
       (res) => {
@@ -160,6 +160,8 @@ export default {
 		}
 	  })
 	  .sort((a,b)=> a.sort - b.sort)
+
+	  tool.data.set('CIRCLE_MENU', menus.value)
     })
 
     return {
