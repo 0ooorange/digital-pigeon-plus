@@ -17,7 +17,7 @@ getFeedShedByIDTime(props.shed_id, dateFormat(props.start_time), dateFormat(prop
     if(res.data.data.length === 0) return
     option.value.legend.data = []
     option.value.series[0].data = []
-    res.data.data.forEach((item) => {
+    res.data?.data?.forEach((item) => {
       option.value.series[0].data.push({
         name: item.brand,
         value: item.weight,
