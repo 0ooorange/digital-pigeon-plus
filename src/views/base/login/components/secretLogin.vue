@@ -21,18 +21,18 @@
 
 <script setup>
 import DragVerify from './dragVerify.vue'
-import { ref, getCurrentInstance } from 'vue'
+import { ref } from 'vue'
 import { login } from '@api/bases/login'
-const { proxy } = getCurrentInstance()
+import { ElMessage } from 'element-plus'
+import tool from '@/utils/tool'
+import router from '@/router'
+
 const rememberSecret = ref(false)
 const NameOrPhone = ref('')
 const password = ref('')
 
 // 登录
 const islogin = ref(true)
-// var validate = await proxy.$refs.loginForm.validate().catch(()=>{})
-// 	if(!validate){ return false }
-islogin.value = true
 
 const isSuccess = ref(false)
 const isSucceed = () => {
@@ -47,17 +47,17 @@ const log_in = function () {
   }
   login(data).then((res) => {
     if (!isSuccess.value) {
-      proxy.$message.warning('请滑动验证')
+      ElMessage.warning('请滑动验证')
       return
     }
     if (res.success) {
-      proxy.$TOOL.cookie.set('TOKEN', res.data.token)
-      proxy.$router.replace({ path: '/navigator' })
-      proxy.$message.success('Login Success 登录成功')
+      tool.cookie.set('TOKEN', res.data.token)
+      router.replace({ path: '/navigator' })
+      ElMessage.success('Login Success 登录成功')
       islogin.value = false
     } else {
       islogin.value = false
-      proxy.$message.warning(res.message)
+      ElMessage.warning(res.message)
     }
   })
 }
