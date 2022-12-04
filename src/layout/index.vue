@@ -127,7 +127,11 @@ export default {
 
     const currBaseId = ref('')
     getBreedBaseAndShed().then(res => {
-      currBaseId.value = currInfo?.value?.CURR_BASE.id ? currInfo.value.CURR_BASE.id : res.data.BaseList[0].id
+      if(currInfo?.value?.CURR_BASE.id) {
+        currBaseId.value = currInfo.value.CURR_BASE.id
+      } else {
+        currBaseId.value = res.data.BaseList[0].id
+      }
     })
     getBreedBaseAndShed(currBaseId.value).then(res => {
       // 判断是否采用默认情况
