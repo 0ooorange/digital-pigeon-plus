@@ -19,7 +19,7 @@
           </li>
           <li class="baseSelect">
             <el-select v-model="currBaseName" placeholder="选择基地" @change="currBaseChange($event)" style="width: 150px">
-              <el-option v-for="item in bases" :key="item.id" :label="item.code" :value="item.code" />
+              <el-option v-for="item in bases" :key="item.id" :label="item.name" :value="item.name" />
             </el-select>
           </li>
         </ul>
@@ -112,7 +112,7 @@ import { ref, nextTick, reactive, h } from 'vue'
 import tool from '@/utils/tool'
 import router from '@/router'
 import store from '@/store'
-import { getBaseAndShed } from '@api/bases/layout'
+import { getBreedBaseAndShed } from '@api/bases/login'
 
 export default {
   name: 'dataVisual',
@@ -121,37 +121,19 @@ export default {
   },
   setup() {
     // 基地和棚
-    let baseInfo = tool.data.get('USER_INFO')
     const bases = ref([])
-    getBaseAndShed(baseInfo.id).then((res) => {
-      bases.value = res.data.baseList
-      let currInfo = ref(tool.data.get('CURR_INFO'))
-      let currBase = ref({})
-      let currShed = ref({})
-      let currOperator = ref('')
-      if (currInfo.value) {
-        currBase.value = currInfo.value.CURR_BASE
-        currShed.value = currInfo.value.CURR_SHED
-        currOperator.value = currInfo.value.CHARGE_NAME
-      } else {
-        currBase.value = res.data.baseList[0]
-        currShed.value = res.data.shedList[0]
-        currOperator.value = res.data.userList[0].name
-      }
-      currInfo.value = {
-        CURR_BASE: currBase.value,
-        CURR_SHED: currShed.value,
-        CHARGE_NAME: currOperator.value,
-      }
-      tool.data.set('CURR_INFO', currInfo.value)
-    })
-    // 基地选择
     const currBaseName = ref('')
-    const nextBase = ref([])
-    const currBaseChange = (e) => {
-      bases.value.forEach((val) => {
-        if (val.code === e) {
+    getBreedBaseAndShed('').then(res => {
+      bases.value = res.data.BaseList
+    })
+    // 切换基地
+    const nextBase = ref({})
+    const currBaseChange = e => {
+      // 筛选基地
+      bases.value.some((val) => {
+        if (val.name === e) {
           nextBase.value = val
+          return true
         }
       })
     }

@@ -38,7 +38,6 @@ import SecretLogin from './components/secretLogin.vue'
 import PswLogin from './components/pswLogin.vue'
 
 import tool from '../../../utils/tool'
-import store from '../../../store'
 import { ref, nextTick } from 'vue'
 
 export default {
@@ -46,36 +45,29 @@ export default {
   setup() {
     tool.data.set('IS_GET_ROUTER', true)
     tool.data.set('CURR_MENU_INDEX', 0)
-    tool.data.set('CURR_MENU', [])
     tool.cookie.remove('TOKEN')
     tool.data.remove('USER_INFO')
     tool.data.remove('CURR_INFO')
-    tool.data.remove('MENU')
-    store.commit('clearViewTags')
-    store.commit('clearKeepLive')
-    store.commit('clearIframeList')
     const rememberSecret = ref(false)
 
     const loginMethod = ref(0)
-    const messMethodClass = ref('el-button el-button--text el-button--default selectBtn')
-    const pswMethodClass = ref(
-      'el-button el-button--text el-button--default selectBtn selectBtn-active'
-    )
+    const select = 'el-button el-button--text el-button--default selectBtn'
+    const unSelect = 'el-button el-button--text el-button--default selectBtn selectBtn-active'
+    const messMethodClass = ref(select)
+    const pswMethodClass = ref(unSelect)
     // 密码登录
     const loginByPsw = () => {
       nextTick(() => {
-        pswMethodClass.value =
-          'el-button el-button--text el-button--default selectBtn selectBtn-active'
-        messMethodClass.value = 'el-button el-button--text el-button--default selectBtn'
+        pswMethodClass.value = unSelect
+        messMethodClass.value = select
         loginMethod.value = 0
       })
     }
     // 短信登录
     const loginByMess = () => {
       nextTick(() => {
-        messMethodClass.value =
-          'el-button el-button--text el-button--default selectBtn selectBtn-active'
-        pswMethodClass.value = 'el-button el-button--text el-button--default selectBtn'
+        messMethodClass.value = unSelect
+        pswMethodClass.value = select
         loginMethod.value = 1
       })
     }

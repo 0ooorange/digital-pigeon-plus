@@ -8,7 +8,7 @@
           <li><a href="javascript:;">加工</a></li>
         </ul>
       </div>
-      <h1 class="top_center">{{curr_base}}</h1>
+      <h1 class="top_center">{{currBaseName}}</h1>
       <div class="top_right">
         <ul>
           <li>
@@ -18,8 +18,8 @@
             <span @click="toShed">前往鸽棚</span>
           </li>
           <li class="shedSelect">
-            <el-select v-model="currShedName" placeholder="选择鸽棚" @change="currShedChange($event)" style="width: 150px">
-              <el-option v-for="item in shed" :key="item.id" :label="item.code" :value="item.code" />
+            <el-select v-model="currShedCode" placeholder="选择鸽棚" @change="currShedChange($event)" style="width: 150px">
+              <el-option v-for="item in sheds" :key="item.id" :label="item.code" :value="item.code" />
             </el-select>
           </li>
         </ul>
@@ -134,7 +134,7 @@ import { ref, h } from 'vue'
 import tool from '@/utils/tool'
 import router from '@/router'
 import store from '@/store'
-import { getBaseAndShed } from '@api/bases/layout'
+import { getBreedBaseAndShed } from '@api/bases/login'
 
 export default {
   name: 'dataVisualBase',
@@ -144,40 +144,39 @@ export default {
   },
   setup() {
     // 接收路由传参的值
-    const curr_base = store.state.dataVisual.CURR_BASE.code
+    const currBase = store.state.dataVisual.CURR_BASE
 
     // 基地和棚
-    let baseInfo = tool.data.get('USER_INFO')
-    const shed = ref([])
-    getBaseAndShed(baseInfo.id).then((res) => {
-      shed.value = res.data.shedList
-      let currInfo = ref(tool.data.get('CURR_INFO'))
-      let currBase = ref({})
-      let currShed = ref({})
-      let currOperator = ref('')
-      if (currInfo.value) {
-        currBase.value = currInfo.value.CURR_BASE
-        currShed.value = currInfo.value.CURR_SHED
-        currOperator.value = currInfo.value.CHARGE_NAME
-      } else {
-        currBase.value = res.data.baseList[0]
-        currShed.value = res.data.shedList[0]
-        currOperator.value = res.data.userList[0].name
-      }
+    const sheds = ref([])
+    const currShed = ref({})
+    const currBaseName = currBase.name
+    const currBaseId = currBase.id
+    const currShedCode = ref('')
+    const currOperator = ref('')
+    const currInfo = ref(tool.data.get('CURR_INFO'))
+
+    getBreedBaseAndShed(currBaseId).then(res => {
+      // 判断默认情况
+      currShed.value = currInfo?.value?.CURR_SHED ? currInfo.value.CURR_SHED : res.data.ShedList[0]
+      currOperator.value = currInfo?.value?.CHARGE_NAME ? currInfo.value.CHARGE_NAME : res.data.ShedList[0].userName
+      // 存储当前信息
       currInfo.value = {
-        CURR_BASE: currBase.value,
+        CURR_BASE: currBase,
         CURR_SHED: currShed.value,
         CHARGE_NAME: currOperator.value,
       }
       tool.data.set('CURR_INFO', currInfo.value)
+      // 设置展示信息
+      sheds.value = res.data.ShedList
     })
     // 鸽棚选择
-    const currShedName = ref('')
-    const nextShed = ref([])
+    const nextShed = ref({})
     const currShedChange = (e) => {
-      shed.value.forEach((val) => {
+      // 筛选鸽棚
+      sheds.value.some((val) => {
         if (val.code === e) {
           nextShed.value = val
+          return true
         }
       })
     }
@@ -197,7 +196,7 @@ export default {
     const toShed = () => {
       store.commit('setCurrShed', nextShed.value)
       tool.session.set('CURR_SHED', nextShed.value)
-      if (currShedName.value) {
+      if (currShedCode.value) {
         router.push('/dataVisualShed')
       } else {
         openError()
@@ -376,9 +375,9 @@ export default {
     }
 
     return {
-      curr_base,
-      shed,
-      currShedName,
+      sheds,
+      currBaseName,
+      currShedCode,
       currShedChange,
       toLast,
       toShed,

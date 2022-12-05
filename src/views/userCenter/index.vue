@@ -167,10 +167,6 @@
 				document.body.setAttribute('data-theme', val)
 				this.$TOOL.data.set("APP_THEME", val);
 			},
-			'config.lang'(val){
-				this.$i18n.locale = val
-				this.$TOOL.data.set("APP_LANG", val);
-			},
 			'config.colorPrimary'(val){
 				document.documentElement.style.setProperty('--el-color-primary', val);
 				for (let i = 1; i <= 9; i++) {

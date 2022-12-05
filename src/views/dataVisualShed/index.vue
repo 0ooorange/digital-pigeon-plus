@@ -8,7 +8,7 @@
           <li><a href="javascript:;">加工</a></li>
         </ul>
       </div>
-      <h1 class="top_center">{{curr_shed}}</h1>
+      <h1 class="top_center">{{currShedCode}}</h1>
       <div class="top_right">
         <ul>
           <li>
@@ -88,7 +88,6 @@ import { ref, nextTick } from 'vue'
 import tool from '@/utils/tool'
 import router from '@/router'
 import store from '@/store'
-import { getBaseAndShed } from '@api/bases/layout'
 
 export default {
   name: 'dataVisual',
@@ -105,34 +104,25 @@ export default {
     Types,
   },
   setup() {
-    const curr_shed = store.state.dataVisual.CURR_SHED.code
+    const currInfo = ref(tool.data.get('CURR_INFO'))
+    const currBase = store.state.dataVisual.CURR_BASE
+    const currShed = store.state.dataVisual.CURR_SHED
     // 基地和棚
-    let baseInfo = tool.data.get('USER_INFO')
-    const shed = ref([])
-    getBaseAndShed(baseInfo.id).then((res) => {
-      shed.value = res.data.shedList
-      let currInfo = ref(tool.data.get('CURR_INFO'))
-      let currBase = ref({})
-      let currShed = ref({})
-      let currOperator = ref('')
-      if (currInfo.value) {
-        currBase.value = currInfo.value.CURR_BASE
-        currShed.value = currInfo.value.CURR_SHED
-        currOperator.value = currInfo.value.CHARGE_NAME
-      } else {
-        currBase.value = res.data.baseList[0]
-        currShed.value = res.data.shedList[0]
-        currOperator.value = res.data.userList[0].name
-      }
-      currInfo.value = {
-        CURR_BASE: currBase.value,
-        CURR_SHED: currShed.value,
-        CHARGE_NAME: currOperator.value,
-      }
-      tool.data.set('CURR_INFO', currInfo.value)
-    })
+    // const bases = ref([])
+    const sheds = ref([])
+    // const currBaseName = currBase.name
+    const currShedCode = currShed.code
+    const currOperator = currShed.userName
+
+    // 存储当前信息
+    currInfo.value = {
+      CURR_BASE: currBase,
+      CURR_SHED: currShed,
+      CHARGE_NAME: currOperator,
+    }
+    tool.data.set('CURR_INFO', currInfo.value)
+
     // 鸽棚选择
-    const currShedName = ref('')
     const currShedChange = () => {}
     // 前往上一页
     const toLast = () => {
@@ -187,9 +177,9 @@ export default {
     }
 
     return {
-      curr_shed,
-      shed,
-      currShedName,
+      currShed,
+      sheds,
+      currShedCode,
       currShedChange,
       toLast,
       
