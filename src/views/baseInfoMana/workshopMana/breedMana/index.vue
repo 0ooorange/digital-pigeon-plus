@@ -104,7 +104,10 @@
       center
       class="dialogEditor"
     >
-      <div class="dialogTitle">修改鸽棚信息</div>
+      <div class="dialogTitle">
+		修改鸽棚信息
+		<el-button>选择基地</el-button>
+	  </div>
       <div class="baseInfo">
         <el-form
           :model="FormData.values"
@@ -131,15 +134,10 @@
               v-model="FormData.values.admin"
               placeholder="选择管理员"
               label-width="50px"
-              class="admin-select"
             >
               <el-option label="小明" value="shanghai" />
               <el-option label="小王" value="beijing" />
             </el-select>
-            <div class="admin-btn">
-              <el-button type="primary" plain>添加</el-button>
-              <el-button type="danger" plain>删除</el-button>
-            </div>
           </el-form-item>
           <el-form-item>
             <div class="footer">
@@ -392,13 +390,6 @@ export default {
   float: left;
   padding-top: 10px;
   width: 100%;
-  .admin-select {
-    width: 50%;
-  }
-  .admin-btn {
-    padding-left: 20px;
-    width: 50%;
-  }
 }
 .footer {
   padding-left: 50%;
