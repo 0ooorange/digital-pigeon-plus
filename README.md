@@ -2,7 +2,7 @@
 
 本项目使用 vue3 +  webpack + ElementPlusUI + Vuex +less/sass + npm 编写
 
-~~网址：暂未部署~~
+~~网址：http://106.12.160.172/
 
 # :fire:Quick Start
 

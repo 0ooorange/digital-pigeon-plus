@@ -5,12 +5,12 @@
       <div class="circle" :style="`width:${circle_w}px;height:${circle_h}px`">
         <div class="origin" :style="`width:${box_w}px;height:${box_h}px;transform: rotate(${stard}deg);`">
           <div :style="`width:${box_w}px;height:${box_h}px;transform: rotate(${-stard}deg);`" class="img-box" v-for="(item, index) in menus" :key="index">
-            <router-link v-if="item.index!==9" class="box" :style="{ backgroundImage: `url(${require(`/src/assets/icons/${item.icon}.png`)})`, backgroundSize: `${item.size}%` }" :to="item.path" @click="routerClick(item, index)">
+            <router-link v-if="item.index!==9" class="box" :style="{ backgroundImage: `url(${require(`/src/assets/icons/${item.icon}.png`)})`, backgroundSize: `${item.size}%` }" :to="item.path" @click="routerClick(item)">
               <div class="content">
                 <span class="title">{{ item.name }}</span>
               </div>
             </router-link>
-            <a v-if="item.index===9" href="http://8.134.49.112:8599/dist" class="box" :style="{ backgroundImage: `url(${require(`/src/assets/icons/${item.icon}.png`)})`, backgroundSize: `${item.size}%` }" @click="routerClick(item, index)">
+            <a v-if="item.index===9" href="http://8.134.49.112:8599/dist" class="box" :style="{ backgroundImage: `url(${require(`/src/assets/icons/${item.icon}.png`)})`, backgroundSize: `${item.size}%` }" @click="routerClick(item)">
               <div class="content">
                 <span class="title">{{ item.name }}</span>
               </div>
@@ -59,6 +59,7 @@ export default {
       // console.log('item的值是', item)
       const menu = tool.data.get('MENU')
       tool.data.set('CURR_MENU', menu[item.system])
+      tool.data.set('CURR_MENU_INDEX', item.index)
     },
   },
 }

@@ -44,6 +44,13 @@
             ></el-table-column>
             <el-table-column
                 align="center"
+                label="鸽笼编号"
+                prop="number"
+                width="110"
+                sortable
+            ></el-table-column>
+            <el-table-column
+                align="center"
                 label="鸽板编号"
                 prop="panelCode"
                 width="110"
@@ -391,6 +398,7 @@ export default defineComponent({
                     }, 2000);
                     tableData.unshift({
                         codes: "鸽笼号",
+                        number: "鸽笼编号",
                         panelCode: "鸽板编号",
                         countLayEgg: "生蛋",
                         countReEgg: "回蛋",
@@ -404,6 +412,7 @@ export default defineComponent({
                     });
                     tableData = LAY_EXCEL.filterExportData(tableData, [
                         "codes",
+                        "number",
                         "panelCode",
                         "countLayEgg",
                         "countReEgg",

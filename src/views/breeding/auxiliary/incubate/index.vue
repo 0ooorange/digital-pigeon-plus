@@ -29,6 +29,13 @@
                 align="center"
             ></el-table-column>
             <el-table-column
+                label="鸽笼编号"
+                prop="number"
+                sortable
+                width="120"
+                align="center"
+            ></el-table-column>
+            <el-table-column
                 label="板子编号"
                 prop="panelCode"
                 width="120"
@@ -135,6 +142,7 @@ export default {
                     }, 2000);
                     tableData.unshift({
                         codes: "鸽笼号",
+                        number: "鸽笼编号",
                         panelCode: "板子编号",
                         lastTwoOperate: "上上次",
                         lastTwoDiffer: "时间间隔",
@@ -145,6 +153,7 @@ export default {
                     });
                     tableData = LAY_EXCEL.filterExportData(tableData, [
                         "codes",
+                        "number",
                         "panelCode",
                         "lastTwoOperate",
                         "lastTwoDiffer",

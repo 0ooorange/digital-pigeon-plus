@@ -9,7 +9,7 @@
       <div class="ul_list">
         <div class="ul_listIn">
           <ul class="ul_con" v-for="(item, index) in list" :key="index">
-            <li>{{item.gmtCreate.split(' ')[0]}}</li>
+            <li>{{item?.gmtCreate?.split(' ')[0] || ''}}</li>
             <li>{{item.code}}</li>
             <li>{{item.warninfo}}</li>
           </ul>

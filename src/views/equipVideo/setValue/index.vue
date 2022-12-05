@@ -81,9 +81,15 @@
             ></el-table-column>
             <el-table-column
                 align="center"
-                label="最小值"
+                label="普通最小值"
                 prop="min"
-                width="200"
+                width="150"
+            ></el-table-column>
+            <el-table-column
+                align="center"
+                label="严重最小值"
+                prop="minmin"
+                width="150"
             ></el-table-column>
             <el-table-column
                 align="center"
@@ -93,9 +99,15 @@
             ></el-table-column>
             <el-table-column
                 align="center"
-                label="最大值"
+                label="普通最大值"
                 prop="max"
-                width="200"
+                width="150"
+            ></el-table-column>
+            <el-table-column
+                align="center"
+                label="严重最大值"
+                prop="maxmax"
+                width="150"
             ></el-table-column>
             <el-table-column
                 align="center"

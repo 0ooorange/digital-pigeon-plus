@@ -29,8 +29,16 @@ import { ref } from 'vue'
 import store from '@/store'
 import { getPigeonShedInfo } from "@api/dataVisual/shed";
 
-const infos = ref({adultPigeonNum: "", code: "", name: "", youngPigeonNum: ""})
-getPigeonShedInfo(store.state.baseInfo.SHED_ID).then(res => {infos.value = res.data.data[0]})
+const infos = ref({
+  adultPigeonNum: "", 
+  code: "", 
+  name: "", 
+  youngPigeonNum: ""
+})
+getPigeonShedInfo(store.state.baseInfo.SHED_ID).then(res => {
+  if(res.data.data.length !== 0) {
+    infos.value = res.data.data[0]}
+})
 </script>
 
 <style lang="less" scoped>

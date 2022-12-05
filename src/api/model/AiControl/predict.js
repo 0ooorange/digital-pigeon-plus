@@ -13,4 +13,12 @@ import http from "@/utils/request";
 
 const url = '/digitalPigeon/predictionAi/api/v1/predict/'
 
-export const getPredict = (data = {}) => http.post(url,data);
+export const getPredict = (shed_id,algorithm,feature) => {
+    let data = {
+        algorithm,
+        shed_id,
+        feature
+    }
+    console.log(data,'参数')
+   return http.post(url,data)
+};

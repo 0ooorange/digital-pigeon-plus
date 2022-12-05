@@ -11,14 +11,14 @@
           </div>
         </el-col>
         <el-col :span="secondSpan" style="display:flex; ">
-          <div class="selectDivs">
+          <div class="selectDivs" v-if="selectShow">
             <span class="selectText">基地：</span>
             <el-select style="width: 150px" v-model="currBaseName" class="m-2" placeholder="Select" @change="currBaseChange">
-              <el-option v-for="item in bases" :key="item.id" :label="item.code" :value="item.code" />
+              <el-option v-for="item in bases" :key="item.id" :label="item.name" :value="item.name" />
             </el-select>
             <span class="selectText">鸽棚：</span>
             <el-select style="width: 150px" v-model="currShedCode" class="m-2" placeholder="Select" @change="currShedChange">
-              <el-option v-for="item in dovecotes" :key="item.id" :label="item.code" :value="item.code" />
+              <el-option v-for="item in sheds" :key="item.id" :label="item.code" :value="item.code" />
             </el-select>
             <span class="selectText">操作员：<span class="operatorCss">{{currOperator}}</span></span>
           </div>
@@ -78,7 +78,7 @@ import tool from '@/utils/tool'
 import router from '@/router'
 import store from '@/store'
 import { ref, computed, watch, nextTick } from 'vue'
-import { getBaseAndShed, getBaseInfoById, getShedByShedId } from '@api/bases/layout'
+import { getBreedBaseAndShed } from '@api/bases/login'
 
 export default {
   name: 'index',
@@ -113,35 +113,46 @@ export default {
     )
 
     // 基地和棚
+    const selectShow = ref(true)
+    const index = tool.data.get('CURR_MENU_INDEX')
+    if(index === 1 || index === 8 || index === 10) selectShow.value = false
     const bases = ref([])
-    const dovecotes = ref([])
+    const sheds = ref([])
+    const currBase = ref({})
+    const currShed = ref({})
     const currBaseName = ref('')
     const currShedCode = ref('')
     const currOperator = ref('')
-    let baseInfo = tool.data.get('USER_INFO')
-    let baseAndShed = () => {
-      getBaseAndShed(baseInfo.id).then((res) => {
-        let currInfo = ref(tool.data.get('CURR_INFO'))
-        let currBase = ref({})
-        let currShed = ref({})
-        currBase.value = currInfo.value ? currInfo.value.CURR_BASE : res.data.baseList[0]
-        currShed.value = currInfo.value ? currInfo.value.CURR_SHED : res.data.shedList[0]
-        currOperator.value = currInfo.value ? currInfo.value.CHARGE_NAME : res.data.userList[0].name
+    const currInfo = ref(tool.data.get('CURR_INFO'))
 
-        currInfo.value = {
-          CURR_BASE: currBase.value,
-          CURR_SHED: currShed.value,
-          CHARGE_NAME: currOperator.value,
-        }
-        tool.data.set('CURR_INFO', currInfo.value)
+    const currBaseId = ref('')
+    getBreedBaseAndShed().then(res => {
+      if(currInfo?.value?.CURR_BASE.id) {
+        currBaseId.value = currInfo.value.CURR_BASE.id
+      } else {
+        currBaseId.value = res.data.BaseList[0].id
+      }
+    })
+    getBreedBaseAndShed(currBaseId.value).then(res => {
+      // 判断是否采用默认情况
+      currBase.value = currInfo?.value?.CURR_BASE ? currInfo.value.CURR_BASE : res.data.BaseList[0]
+      currShed.value = currInfo?.value?.CURR_SHED ? currInfo.value.CURR_SHED : res.data.ShedList[0]
+      currOperator.value = currInfo?.value?.CHARGE_NAME ? currInfo.value.CHARGE_NAME : res.data.ShedList[0].userName
+      
+      // 存储当前信息
+      currInfo.value = {
+        CURR_BASE: currBase.value,
+        CURR_SHED: currShed.value,
+        CHARGE_NAME: currOperator.value,
+      }
+      tool.data.set('CURR_INFO', currInfo.value)
 
-        bases.value = res.data.baseList
-        dovecotes.value = res.data.shedList
-        currBaseName.value = currInfo.value.CURR_BASE.code
-        currShedCode.value = currInfo.value.CURR_SHED.code
-      })
-    }
-    baseAndShed()
+      // 设置展示数据
+      bases.value = res.data.BaseList
+      sheds.value = res.data.ShedList
+      currBaseName.value = currInfo.value.CURR_BASE.name
+      currShedCode.value = currInfo.value.CURR_SHED.code
+    })
 
     const nextMenu = ref([])
     const pmenu = ref({})
@@ -196,72 +207,63 @@ export default {
         path: '/navigator',
       })
     }
-    // 切换基地
-    const currBaseChange = async (e) => {
-      let currInfo = ref(tool.data.get('CURR_INFO'))
-      let currShed = ref({})
-      currShed.value = currInfo.value.CURR_SHED
-      currOperator.value = currInfo.value.CHARGE_NAME
-      bases.value.forEach((val) => {
-        if (val.code === e) {
-          currInfo.value = {
-            CURR_BASE: val,
-            CURR_SHED: currShed.value,
-            CHARGE_NAME: currOperator.value,
-          }
-          tool.data.set('CURR_INFO', currInfo.value)
-          return
-        }
-      })
-      let currBaseId = tool.data.get('CURR_INFO').CURR_BASE.id
-      let currShedId = tool.data.get('CURR_INFO').CURR_SHED.id
-      getBaseInfoById(currBaseId).then((res1) => {
-        getShedByShedId(currShedId).then((res2) => {
-          currInfo.value = {
-            CURR_BASE: res1.data.baseInfo,
-            CURR_SHED: res2.data.shed,
-            CHARGE_NAME: currOperator.value,
-          }
-          tool.data.set('CURR_INFO', currInfo.value)
-        })
-      })
 
-      menuFlag.value = false
-      baseAndShed()
-      nextTick(function () {
-        menuFlag.value = true
-      })
-    }
-    // 切换鸽棚
+    // 切换基地
     let menuFlag = ref(true)
-    const currShedChange = async (e) => {
-      let currInfo = ref(tool.data.get('CURR_INFO'))
-      let currBase = ref({})
-      currBase.value = currInfo.value.CURR_BASE
-      currOperator.value = currInfo.value.CHARGE_NAME
-      dovecotes.value.forEach((val) => {
-        if (val.code === e) {
-          currInfo.value = {
-            CURR_BASE: currBase.value,
-            CURR_SHED: val,
-            CHARGE_NAME: currOperator.value,
-          }
-          tool.data.set('CURR_INFO', currInfo.value)
-          return
+    const currBaseChange = e => {
+      // 筛选基地
+      bases.value.some((val) => {
+        if (val.name === e) {
+          currBase.value = val
+          return true
         }
       })
-      let currShedId = tool.data.get('CURR_INFO').CURR_SHED.id
-      getShedByShedId(currShedId).then((res) => {
+      // 获取shedList
+      const currBaseId = currBase.value.id
+      getBreedBaseAndShed(currBaseId).then(res => {
+        // 获取shedList、shed、currOperator
+        sheds.value = res.data?.ShedList
+        if(res.data?.ShedList.length !== 0) {
+          currShed.value = res.data?.ShedList[0]
+        } else {
+          currShed.value = {}
+        }
+        currOperator.value = currShed.value?.userName || '无'
+        // 设置currInfo
         currInfo.value = {
           CURR_BASE: currBase.value,
-          CURR_SHED: res.data.shed,
+          CURR_SHED: currShed.value,
           CHARGE_NAME: currOperator.value,
         }
         tool.data.set('CURR_INFO', currInfo.value)
+        // 设置展示数据
+        currBaseName.value = currInfo.value.CURR_BASE.name
+        currShedCode.value = currInfo.value.CURR_SHED.code || '暂无鸽棚'
+        // 刷新
+        menuFlag.value = false
+        nextTick(function () {
+          menuFlag.value = true
+        })
+      })      
+    }
+    // 切换鸽棚
+    const currShedChange = async (e) => {
+      // 筛选鸽棚
+      sheds.value.some((val) => {
+        if (val.code === e) {
+          currShed.value = val
+          return true
+        }
       })
-
+      // 设置currInfo最新信息
+      currInfo.value = {
+        CURR_BASE: currBase.value,
+        CURR_SHED: currShed.value,
+        CHARGE_NAME: currOperator.value,
+      }
+      tool.data.set('CURR_INFO', currInfo.value)
+      // 刷新
       menuFlag.value = false
-      baseAndShed()
       nextTick(function () {
         menuFlag.value = true
       })
@@ -280,11 +282,12 @@ export default {
       secondSpan,
       thirdSpan,
       bases,
-      dovecotes,
+      sheds,
       currBaseName,
       currShedCode,
       currOperator,
       smallLogo,
+      selectShow,
       currMenu,
       currBaseChange,
       currShedChange,

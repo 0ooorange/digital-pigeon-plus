@@ -25,7 +25,35 @@
     </el-card>
     <el-card shadow="never" class="right common">
       <div class="header">预测项</div>
+
       <div class="right--main">
+        <div>
+          <div class="right--label">
+            <span
+              style="
+                color: red;
+                margin-right: 5px;
+                font-weight: 700;
+                font-size: 18px;
+              "
+              >*</span
+            >
+            <span>预测算法:</span>
+          </div>
+          <el-select
+            class="right--option"
+            v-model="selectedAlgorith"
+            placeholder="请选择"
+            @change="selectAligorith"
+          >
+            <el-option
+              v-for="item in algorithmOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </div>
         <div class="right--label">
           <span
             style="
@@ -36,7 +64,7 @@
             "
             >*</span
           >
-          <span>选择预测内容:</span>
+          <span>预测:</span>
         </div>
         <el-select
           class="right--option"
@@ -65,41 +93,43 @@
         <div class="right--tip">
           <el-tag
             class="right--tip__tag"
-            color="#fef0f0"
-            style="color: #f15d5d"
+            color="#f0f2f5"
+            style="color: #909399"
             v-show="selectedArr.indexOf('0') != -1"
             >二氧化碳</el-tag
           >
           <el-tag
             class="right--tip__tag"
-            color="#F3EAFA"
-            style="color: #ab82ff"
+            color="#f0f2f5"
+            style="color: #909399"
             v-show="selectedArr.indexOf('1') != -1"
             >温度</el-tag
           >
           <el-tag
             class="right--tip__tag"
-            color="#edf4ed"
-            style="color: #548b54"
+            color="#f0f2f5"
+            style="color: #909399"
             v-show="selectedArr.indexOf('2') != -1"
             >湿度</el-tag
           >
           <el-tag
             class="right--tip__tag"
-            type="warning"
+            color="#f0f2f5"
+            style="color: #909399"
             v-show="selectedArr.indexOf('3') != -1"
             >光照强度</el-tag
           >
           <el-tag
             class="right--tip__tag"
-            type="success"
+            color="#f0f2f5"
+            style="color: #909399"
             v-show="selectedArr.indexOf('4') != -1"
             >PM2.5</el-tag
           >
           <el-tag
             class="right--tip__tag"
-            color="#fef0f0"
-            style="color: #f15d5d"
+            color="#f0f2f5"
+            style="color: #909399"
             v-show="selectedArr.indexOf('5') != -1"
             >PM10</el-tag
           >
@@ -113,28 +143,28 @@ import {
   defineComponent,
   ref,
   reactive,
-  computed,
-  getCurrentInstance,
+  //   computed,
+//   getCurrentInstance,
 } from "vue";
-import { dateFormat } from "@/hooks/dateFormat.js";
+// import { dateFormat } from "@/hooks/dateFormat.js";
 import ScEcharts from "@/components/scEcharts";
 import { ElMessage } from "element-plus";
 import { getPredict } from "@api/AiControl/predict";
-import { getCarbonDioxideData } from "@api/equipVideo/envForecast";
+// import { getCarbonDioxideData } from "@api/equipVideo/envForecast";
 export default defineComponent({
   name: "forecastCenter", // 预测中心
   components: {
     ScEcharts,
   },
   setup() {
-    const { proxy } = getCurrentInstance();
+    // const { proxy } = getCurrentInstance();
     //当前鸽棚鸽笼信息
-    const currShed = computed(() => {
-      return proxy.$store.state.baseInfo.SHED_ID;
-    });
+    // const currShed = computed(() => {
+    //   return proxy.$store.state.baseInfo.SHED_ID;
+    // });
 
-    //相同维度
-    let commonDimensions = ["dataname", "datavalue", "dataunit", "devicetime"];
+    // //相同维度
+    // let commonDimensions = ["dataname", "datavalue", "dataunit", "devicetime"];
 
     //相同y轴部分
     let commonY = {
@@ -164,10 +194,12 @@ export default defineComponent({
       type: "line",
       symbol: "none",
       smooth: true,
-      dimensions: ["time", "datavalue"],
-      encode: {
-        x: ["time"], // 表示维度 3、1、5 映射到 x 轴。
-        y: "datavalue", // 表示维度 2 映射到 y 轴。
+      lineStyle: {
+        width: 2,
+        // color: "#32cd32",
+        normal: {
+          color: "#32cd32",
+        },
       },
       connectNulls: true,
     };
@@ -191,26 +223,38 @@ export default defineComponent({
       xAxis: {
         // axisLabel:{},
         boundaryGap: false,
-        type: "category",
-        // name: "时间",
-
-        axisLabel: {
-          //x轴文字的配置
-          show: true,
-          interval: 0, //使x轴文字显示全
-          color: "#000",
-        },
-        axisTick: {
-          show: false,
-        },
-        // nameTextStyle: {
-        //     color: 'red'
-        // },
-        textStyle: {
-          fontSize: 50,
-          color: "red",
-          // fontWeight: "bold",
-        },
+        type: "time",
+        name: "时间",
+      },
+      legend: {
+        // top: "20%",
+        right: "5%",
+        // width: "50%",
+        data: [
+          {
+            name: "真实值",
+            // 强制设置图形为圆。
+            icon: "circle",
+            // 设置文本为红色
+            textStyle: {
+              color: "#000",
+            },
+            itemStyle: {
+              color: "#32cd32",
+            },
+          },
+          {
+            name: "预测值",
+            // 强制设置图形为圆。
+            icon: "circle",
+            textStyle: {
+              color: "#000",
+            },
+            itemStyle: {
+              color: "#6da2fe",
+            },
+          },
+        ],
       },
     };
 
@@ -220,11 +264,6 @@ export default defineComponent({
       type: "line",
       symbol: "none",
       smooth: true,
-      dimensions: ["time", "forcastValue"],
-      encode: {
-        x: ["time"],
-        y: "forcastValue",
-      },
       lineStyle: {
         width: 2,
         color: "#6495ED",
@@ -256,145 +295,49 @@ export default defineComponent({
 
     //二氧化碳的图表值
     let carbonDioxideYAxis = [{ ...commonY, name: "二氧化碳/ppm" }];
-    let carbonDioxideDataset = { dimensions: commonDimensions, source: [] };
+    // let carbonDioxideDataset = { dimensions: commonDimensions, source: [] };
     let carbonDioxideSeriesObject = {
       ...seriesObject,
-      lineStyle: {
-        width: 2,
-        color: "#f15d5d",
-      },
+      data: [], //原先数据
+
       connectNulls: true,
-    };
 
-    // let carbonDioxideOptionStatic = {
-    //     ...commomOption,
-    //                 legend: {
-    //         // top: "20%",
-    //         right: "5%",
-    //         // width: "50%",
-    //         data: [
-    //             {
-    //                 name: "真实值",
-    //                 // 强制设置图形为圆。
-    //                 icon: "circle",
-    //                 // 设置文本为红色
-    //                 textStyle: {
-    //                     color: "#000",
-    //                 },
-    //                 itemStyle: {
-    //                     color: "red",
-    //                 },
-    //             },
-    //             {
-    //                 name: "预测值",
-    //                 // 强制设置图形为圆。
-    //                 icon: "circle",
-    //                 textStyle: {
-    //                     color: "#000",
-    //                 },
-    //                 itemStyle: {
-    //                     color: "#6da2fe",
-    //                 },
-    //             },
-    //         ],
-    //     },
-    //     yAxis: carbonDioxideYAxis,
-    //     dataset: carbonDioxideDataset,
-    //     series: [carbonDioxideSeriesObject, commonPredictSeries],
-    //     tooltip: commonTooltip,
-    // };
-    let carbonDioxideOptionStatic = {
-      // ...commomOption,
-      textStyle: {
-        color: "#000",
-      },
-      visualMap: {
-        show: true,
-        type: "piecewise",
-        pieces: [
-          {
-            gt: 0,
-            lte: 200,
-            color: "green",
-          },
-          {
-            gt: 200,
-            color: "red",
-          },
-        ],
-        seriesIndex: 0,
-      },
-      xAxis: {
-        // axisLabel:{},
-        boundaryGap: false,
-        type: "category",
-        // name: "时间",
-
-        axisLabel: {
-          //x轴文字的配置
-          show: true,
-          interval: 0, //使x轴文字显示全
-          color: "#000",
-        },
-        axisTick: {
-          show: false,
-        },
-        // nameTextStyle: {
-        //     color: 'red'
-        // },
-        textStyle: {
-          fontSize: 50,
+      markLine: {
+        lineStyle: {
           color: "red",
-          // fontWeight: "bold",
         },
-      },
-      legend: {
-        // top: "20%",
-        right: "5%",
-        // width: "50%",
         data: [
           {
-            name: "真实值",
-            // 强制设置图形为圆。
-            icon: "circle",
-            // 设置文本为红色
-            textStyle: {
-              color: "#000",
-            },
-            itemStyle: {
-              color: "red",
-            },
+            name: "最小值",
+            type: "min",
+            yAxis: 400,
+            color: "red",
           },
           {
-            name: "预测值",
-            // 强制设置图形为圆。
-            icon: "circle",
-            textStyle: {
-              color: "#000",
-            },
-            itemStyle: {
-              color: "#6da2fe",
-            },
+            name: "最大值",
+            type: "max",
+            yAxis: 750,
           },
         ],
       },
-      yAxis: {
-        type: "value",
-      },
-      //   dataset: carbonDioxideDataset,
-      //   series: [carbonDioxideSeriesObject, commonPredictSeries],
-      series: [
-        {
-          name: "真实值",
-          type: "line",
-          data: [180, 185, 186, 201,205, 190, 195],
-        },
-        {
-          name: "预测值",
-          type: "line",
-          data: [220, 182, 191, 234, 290, 330, 310],
-        },
-      ],
+      //   visualMap: {//区间内控制显示颜色
+      //         top: 10,
+      //         right: 10,
+      //         show: true,
+      //         dimension: 1],
+      //         pieces: [{ min: 30, max: 50, color: 'red' }],
+      //         // outOfRange: {
+      //         //     symbol: 'rect',
+      //         //     symbolSize: [10, 10],
+      //         //     color:"red",
+      //         // }
+      //     },
+    };
+
+    let carbonDioxideOptionStatic = {
+      ...commomOption,
+      yAxis: carbonDioxideYAxis,
+      series: [carbonDioxideSeriesObject, { ...commonPredictSeries, data: [] }],
       tooltip: commonTooltip,
     };
     //二氧化碳
@@ -402,50 +345,38 @@ export default defineComponent({
 
     //温度的图表值
     let temperatureYAxis = [{ ...commonY, name: "空气温度/℃" }];
-    let temperatureDataset = { dimensions: commonDimensions, source: [] };
+    // let temperatureDataset = { dimensions: commonDimensions, source: [] };
     let temperatureSeriesObject = {
       ...seriesObject,
-      lineStyle: {
-        width: 2,
-        color: "#AB82FF",
+      data: [], //原先数据
+      connectNulls: true,
+
+      markLine: {
+        lineStyle: {
+          color: "red",
+        },
+        data: [
+          {
+            name: "最小值",
+            type: "min",
+            yAxis: 15,
+            color: "red",
+          },
+          {
+            name: "最大值",
+            type: "max",
+            yAxis: 35,
+          },
+        ],
       },
     };
 
     let temperatureOptionStatic = {
       ...commomOption,
-      legend: {
-        // top: "20%",
-        right: "5%",
-        // width: "50%",
-        data: [
-          {
-            name: "真实值",
-            // 强制设置图形为圆。
-            icon: "circle",
-            // 设置文本为红色
-            textStyle: {
-              color: "#000",
-            },
-            itemStyle: {
-              color: "#AB82FF",
-            },
-          },
-          {
-            name: "预测值",
-            // 强制设置图形为圆。
-            icon: "circle",
-            textStyle: {
-              color: "#000",
-            },
-            itemStyle: {
-              color: "#6da2fe",
-            },
-          },
-        ],
-      },
+
       yAxis: temperatureYAxis,
-      dataset: temperatureDataset,
-      series: [temperatureSeriesObject, commonPredictSeries],
+      //   dataset: temperatureDataset,
+      series: [temperatureSeriesObject, { ...commonPredictSeries, data: [] }],
       tooltip: commonTooltip,
     };
 
@@ -454,49 +385,36 @@ export default defineComponent({
 
     //湿度的图表值
     let humidityYAxis = [{ ...commonY, name: "空气湿度/%" }];
-    let humidityDataset = { dimensions: commonDimensions, source: [] };
+    // let humidityDataset = { dimensions: commonDimensions, source: [] };
     let humiditySeriesObject = {
       ...seriesObject,
-      lineStyle: {
-        width: 2,
-        color: "#548B54",
+      data: [], //原先数据
+      connectNulls: true,
+
+      markLine: {
+        lineStyle: {
+          color: "red",
+        },
+        data: [
+          {
+            name: "最小值",
+            type: "min",
+            yAxis: 35,
+            color: "red",
+          },
+          {
+            name: "最大值",
+            type: "max",
+            yAxis: 85,
+          },
+        ],
       },
     };
 
     let humidityOptionStatic = {
       ...commomOption,
-      legend: {
-        // top: "20%",
-        right: "5%",
-        // width: "50%",
-        data: [
-          {
-            name: "真实值",
-            // 强制设置图形为圆。
-            icon: "circle",
-            // 设置文本为红色
-            textStyle: {
-              color: "#000",
-            },
-            itemStyle: {
-              color: "#548B54",
-            },
-          },
-          {
-            name: "预测值",
-            // 强制设置图形为圆。
-            icon: "circle",
-            textStyle: {
-              color: "#000",
-            },
-            itemStyle: {
-              color: "#6da2fe",
-            },
-          },
-        ],
-      },
       yAxis: humidityYAxis,
-      dataset: humidityDataset,
+      //   dataset: humidityDataset,
       series: [humiditySeriesObject, commonPredictSeries],
       tooltip: commonTooltip,
     };
@@ -506,52 +424,39 @@ export default defineComponent({
 
     //光照强度的图表值
     let illuminationIntensityYAxis = [{ ...commonY, name: "光照强度/Lx" }];
-    let illuminationIntensityDataset = {
-      dimensions: commonDimensions,
-      source: [],
-    };
+    // let illuminationIntensityDataset = {
+    //   dimensions: commonDimensions,
+    //   source: [],
+    // };
     let illuminationIntensitySeriesObject = {
       ...seriesObject,
-      lineStyle: {
-        width: 2,
-        color: "#EEEE00",
+      data: [], //原先数据
+      connectNulls: true,
+
+      markLine: {
+        lineStyle: {
+          color: "red",
+        },
+        data: [
+          {
+            name: "最小值",
+            type: "min",
+            yAxis: 0,
+            color: "red",
+          },
+          {
+            name: "最大值",
+            type: "max",
+            yAxis: 50,
+          },
+        ],
       },
     };
 
     let illuminationIntensityOptionStatic = {
       ...commomOption,
-      legend: {
-        // top: "20%",
-        right: "5%",
-        // width: "50%",
-        data: [
-          {
-            name: "真实值",
-            // 强制设置图形为圆。
-            icon: "circle",
-            // 设置文本为红色
-            textStyle: {
-              color: "#000",
-            },
-            itemStyle: {
-              color: "#EEEE00",
-            },
-          },
-          {
-            name: "预测值",
-            // 强制设置图形为圆。
-            icon: "circle",
-            textStyle: {
-              color: "#000",
-            },
-            itemStyle: {
-              color: "#6da2fe",
-            },
-          },
-        ],
-      },
       yAxis: illuminationIntensityYAxis,
-      dataset: illuminationIntensityDataset,
+      //   dataset: illuminationIntensityDataset,
       series: [illuminationIntensitySeriesObject, commonPredictSeries],
       tooltip: commonTooltip,
     };
@@ -563,52 +468,39 @@ export default defineComponent({
 
     //PM2.5的图表值
     let PMYAxis = [{ ...commonY, name: "PM2.5/um" }];
-    let PMDataset = {
-      dimensions: commonDimensions,
-      source: [],
-    };
+    // let PMDataset = {
+    //   dimensions: commonDimensions,
+    //   source: [],
+    // };
     let PMSeriesObject = {
       ...seriesObject,
-      lineStyle: {
-        width: 2,
-        color: "#5ee59e",
+      data: [], //原先数据
+      connectNulls: true,
+
+      markLine: {
+        lineStyle: {
+          color: "red",
+        },
+        data: [
+          {
+            name: "最小值",
+            type: "min",
+            yAxis: 0,
+            color: "red",
+          },
+          {
+            name: "最大值",
+            type: "max",
+            yAxis: 600,
+          },
+        ],
       },
     };
 
     let PMOptionStatic = {
       ...commomOption,
-      legend: {
-        // top: "20%",
-        right: "5%",
-        // width: "50%",
-        data: [
-          {
-            name: "真实值",
-            // 强制设置图形为圆。
-            icon: "circle",
-            // 设置文本为红色
-            textStyle: {
-              color: "#000",
-            },
-            itemStyle: {
-              color: "#5ee59e",
-            },
-          },
-          {
-            name: "预测值",
-            // 强制设置图形为圆。
-            icon: "circle",
-            textStyle: {
-              color: "#000",
-            },
-            itemStyle: {
-              color: "#6da2fe",
-            },
-          },
-        ],
-      },
       yAxis: PMYAxis,
-      dataset: PMDataset,
+      //   dataset: PMDataset,
       series: [PMSeriesObject, commonPredictSeries],
       tooltip: commonTooltip,
     };
@@ -618,91 +510,105 @@ export default defineComponent({
 
     //PM10的图表值
     let PM10YAxis = [{ ...commonY, name: "PM10/μg/m3" }];
-    let PM10Dataset = {
-      dimensions: commonDimensions,
-      source: [],
-    };
+    // let PM10Dataset = {
+    //   dimensions: commonDimensions,
+    //   source: [],
+    // };
     let PM10SeriesObject = {
       ...seriesObject,
-      lineStyle: {
-        width: 2,
-        color: "#f15d5d",
+      //   lineStyle: {
+      //     width: 2,
+      //     color: "#f15d5d",
+      //   },
+      data: [], //原先数据
+      connectNulls: true,
+
+      markLine: {
+        lineStyle: {
+          color: "red",
+        },
+        data: [
+          {
+            name: "最小值",
+            type: "min",
+            yAxis: 0,
+            color: "red",
+          },
+          {
+            name: "最大值",
+            type: "max",
+            yAxis: 1000,
+          },
+        ],
       },
     };
 
     let PM10OptionStatic = {
       ...commomOption,
-      legend: {
-        // top: "20%",
-        right: "5%",
-        // width: "50%",
-        data: [
-          {
-            name: "真实值",
-            // 强制设置图形为圆。
-            icon: "circle",
-            // 设置文本为红色
-            textStyle: {
-              color: "#000",
-            },
-            itemStyle: {
-              color: "#f15d5d",
-            },
-          },
-          {
-            name: "预测值",
-            // 强制设置图形为圆。
-            icon: "circle",
-            textStyle: {
-              color: "#000",
-            },
-            itemStyle: {
-              color: "#6da2fe",
-            },
-          },
-        ],
-      },
+      //   legend: {
+      //     // top: "20%",
+      //     right: "5%",
+      //     // width: "50%",
+      //     data: [
+      //       {
+      //         name: "真实值",
+      //         // 强制设置图形为圆。
+      //         icon: "circle",
+      //         // 设置文本为红色
+      //         textStyle: {
+      //           color: "#000",
+      //         },
+      //         itemStyle: {
+      //           color: "#f15d5d",
+      //         },
+      //       },
+      //       {
+      //         name: "预测值",
+      //         // 强制设置图形为圆。
+      //         icon: "circle",
+      //         textStyle: {
+      //           color: "#000",
+      //         },
+      //         itemStyle: {
+      //           color: "#6da2fe",
+      //         },
+      //       },
+      //     ],
+      //   },
       yAxis: PM10YAxis,
-      dataset: PM10Dataset,
+      //   dataset: PM10Dataset,
       series: [PM10SeriesObject, commonPredictSeries],
       tooltip: commonTooltip,
     };
 
     //PM10
     const PM10Option = reactive(PM10OptionStatic);
-
     //当前日期
-    const nowTime = new Date();
+    // const nowTime = new Date();
 
     //调接口传的时间
     //这样拿到的时间都是当天的零点，如果不传直接拿，拿到的也会有现在的时分秒,而理解上需要结束时间当天的最后一秒
-    const endTime = ref(
-      new Date(
-        nowTime.getFullYear(),
-        nowTime.getMonth(),
-        nowTime.getDate(),
-        nowTime.getHours(),
-        nowTime.getMinutes(),
-        nowTime.getSeconds()
-      )
-    );
+    // const endTime = ref(
+    //   new Date(
+    //     nowTime.getFullYear(),
+    //     nowTime.getMonth(),
+    //     nowTime.getDate(),
+    //     nowTime.getHours(),
+    //     nowTime.getMinutes(),
+    //     nowTime.getSeconds()
+    //   )
+    // );
 
-    const startTime = ref(
-      new Date(
-        nowTime.getFullYear(),
-        nowTime.getMonth(),
-        nowTime.getDate(),
-        nowTime.getHours() - 2,
-        nowTime.getMinutes(),
-        nowTime.getSeconds()
-      )
-    );
-    //请求参数
-    let commonParams = {
-      start_time: proxy.$TOOL.dateFormat(startTime.value),
-      end_time: proxy.$TOOL.dateFormat(endTime.value),
-      shed_id: currShed.value,
-    };
+    // const startTime = ref(
+    //   new Date(
+    //     nowTime.getFullYear(),
+    //     nowTime.getMonth(),
+    //     nowTime.getDate(),
+    //     nowTime.getHours() - 2,
+    //     nowTime.getMinutes(),
+    //     nowTime.getSeconds()
+    //   )
+    // );
 
     //左边的结果
     const echartArray = reactive([
@@ -716,6 +622,7 @@ export default defineComponent({
     ]);
 
     //检测项
+    //预测项
     const selectedArr = ref(["0"]);
     const selectOptions = reactive([
       {
@@ -761,6 +668,35 @@ export default defineComponent({
         // changeSize: false,
       },
     ]);
+
+    //预测算法
+    const algorithmOptions = reactive([
+      {
+        value: "0",
+        label: "LSTM",
+      },
+      {
+        value: "1",
+        label: "XGBOOST",
+      },
+      {
+        value: "2",
+        label: "GRU",
+      },
+      {
+        value: "3",
+        label: "DT",
+      },
+      {
+        value: "4",
+        label: "BP",
+      },
+      {
+        value: "5",
+        label: "INFORMER",
+      },
+    ]);
+    const selectedAlgorith = ref("0");
 
     //六个echarts盒子
     const carbonDioxideRef = ref(null);
@@ -836,358 +772,495 @@ export default defineComponent({
       }
     };
 
+    //请求参数
+    // let commonParams = {
+    //   shed_id: currShed.value,
+    // };
+
+    const selectAligorith = function () {
+      getCarbonDioxideDataMethod();
+      console.log(algorithmOptions[selectedAlgorith.value].label);
+    };
+
     //获取环境数据
     const getCarbonDioxideDataMethod = async function () {
-      // console.log("参数", commonParams);
-      let CarbonDioxRes = await getCarbonDioxideData(commonParams, "二氧化碳");
-      console.log("二氧化碳请求结果", CarbonDioxRes);
-
-      let lastTime = null;
-      let protectTime = [];
-      let originTime = [];
-      let hasChangeTime = [];
-
-      if (CarbonDioxRes.code === 200) {
-        let data = CarbonDioxRes.data.data;
-        console.log(data, "时间");
-
-        if (data[data.length - 1]) {
-          let count = 0;
-          for (let i = data.length - 1; i >= 0; i--) {
-            if (count != 11) {
-              originTime.unshift(data[i].devicetime);
-            } else {
-              break;
-            }
+      let aligorith = algorithmOptions[selectedAlgorith.value].label;
+      let CarbonDioxRes = await getPredict(5, aligorith, "二氧化碳");
+      console.log(CarbonDioxRes, "结果");
+      if (CarbonDioxRes.success) {
+        let predictdata = CarbonDioxRes.predictdata;
+        let time = CarbonDioxRes.time;
+        let todaydata = CarbonDioxRes.todaydata;
+        let orignaiData = [];
+        let predictData = [];
+        let tempItem = "";
+        time.forEach((item, index) => {
+          tempItem = new Date(time[index]).getTime();
+          predictData.push(new Array(tempItem, predictdata[index]));
+          if (todaydata[index]) {
+            orignaiData.push(new Array(tempItem, todaydata[index]));
+          } else {
+            orignaiData.push(new Array());
           }
+        });
+        //    console.log(carbonDioxideOption.series[0].)
+        carbonDioxideOption.series[0].data = orignaiData;
+        carbonDioxideOption.series[1].data = predictData;
+      }
 
-          lastTime = data[data.length - 1] && data[data.length - 1].devicetime;
-          lastTime = new Date(lastTime);
-          for (let i = 0; i < 6; i++) {
-            lastTime = new Date(
-              lastTime.getFullYear(),
-              lastTime.getMonth(),
-              lastTime.getDate(),
-              lastTime.getHours(),
-              lastTime.getMinutes() + 10
-            );
-            protectTime.push(dateFormat(lastTime));
+      let temperatureRes = await getPredict(5, aligorith, "空气温度");
+      console.log(temperatureRes, "结果");
+      if (temperatureRes.success) {
+        let predictdata = temperatureRes.predictdata;
+        let time = temperatureRes.time;
+        let todaydata = temperatureRes.todaydata;
+        let orignaiData = [];
+        let predictData = [];
+        let tempItem = "";
+        time.forEach((item, index) => {
+          tempItem = new Date(time[index]).getTime();
+          predictData.push(new Array(tempItem, predictdata[index]));
+          if (todaydata[index]) {
+            orignaiData.push(new Array(tempItem, todaydata[index]));
+          } else {
+            orignaiData.push(new Array());
           }
-        }
-
-        console.log("预测时间数组", protectTime, originTime);
-        //获取预测的数据
-        let forcastValue = data.map((item) => {
-          return item.datavalue;
         });
-        console.log("预测的数据", forcastValue);
-
-        let carbonDioxideTemp = data.map((item) => {
-          item.time = item.devicetime.substring(10, 16);
-          item.color = "#f15d5d";
-          return item;
-        });
-        // console.log("数据处理", carbonDioxideTemp);
-
-        let predictPramse = {
-          feature: "CO2",
-          data: forcastValue,
-          target_length: 6,
-        };
-
-        let predictRes = await getPredict(predictPramse);
-        // console.log("预测结果11", predictRes);
-        if (predictRes.success) {
-          let carbonDioxidePredict = predictRes.output.map((item, index) => {
-            // console.log(item);
-            let temp = {
-              time: protectTime[index],
-              name: "预测值" + (index + 1),
-              dataunit: "ppm",
-              forcastValue: item,
-              color: "#1C86EE",
-            };
-            // console.log(temp);
-            return temp;
-          });
-          // console.log("处理后的数据", carbonDioxidePredict);
-          // let carbonDioxidePredict = [
-          //     // {
-          //     //     devicetime: "22:50",
-          //     //     dataunit: "ppm",
-          //     //     datavalue: 576,
-          //     //     color: "#1C86EE",
-          //     // },
-          //     // {
-          //     //     devicetime: "23:00",
-          //     //     dataunit: "ppm",
-          //     //     datavalue: 576,
-          //     //     color: "#1C86EE",
-          //     // },
-          //     {
-          //         time: "21:31",
-          //         dataunit: "ppm",
-          //         forcastValue: 686,
-          //         color: "#1C86EE",
-          //     },
-          //     {
-          //         time: "21:41",
-          //         dataunit: "ppm",
-          //         forcastValue: 614,
-          //         color: "#1C86EE",
-          //     },
-          //     {
-          //         time: "21:51",
-          //         dataunit: "ppm",
-          //         forcastValue: 606,
-          //         color: "#1C86EE",
-          //     },
-          //     {
-          //         time: "22:01",
-          //         dataunit: "ppm",
-          //         forcastValue: 580,
-          //         color: "#1C86EE",
-          //     },
-          //     {
-          //         time: "22:11",
-          //         dataunit: "ppm",
-          //         forcastValue: 536,
-          //         color: "#1C86EE",
-          //     },
-          // ];
-          //数据赋值
-          carbonDioxideOption.dataset.source = carbonDioxideTemp;
-          carbonDioxideOption.dataset.source.push(...carbonDioxidePredict);
-          // console.log(carbonDioxideOption,'配置')
-        }
+        //    console.log(carbonDioxideOption.series[0].)
+        temperatureOption.series[0].data = orignaiData;
+        temperatureOption.series[1].data = predictData;
       }
-      let temperatureRes = await getCarbonDioxideData(commonParams, "空气温度");
-      // console.log("空气温度请求结果", temperatureRes);
-      if (temperatureRes.code === 200) {
-        let data = temperatureRes.data.data;
-
-        //获取预测的数据
-        let forcastValue = data.map((item) => {
-          return item.datavalue;
+      let humidityRes = await getPredict(5, aligorith, "空气湿度");
+      console.log(humidityRes, "结果");
+      if (humidityRes.success) {
+        let predictdata = humidityRes.predictdata;
+        let time = humidityRes.time;
+        let todaydata = humidityRes.todaydata;
+        let orignaiData = [];
+        let predictData = [];
+        let tempItem = "";
+        time.forEach((item, index) => {
+          tempItem = new Date(time[index]).getTime();
+          predictData.push(new Array(tempItem, predictdata[index]));
+          if (todaydata[index]) {
+            orignaiData.push(new Array(tempItem, todaydata[index]));
+          } else {
+            orignaiData.push(new Array());
+          }
         });
-
-        // console.log("预测的数据", forcastValue);
-        let temperatureTemp = data.map((item) => {
-          item.time = item.devicetime.substring(10, 16);
-          item.color = "#f15d5d";
-          return item;
-        });
-        // console.log("数据处理", temperatureTemp);
-        let predictPramse = {
-          feature: "temperature",
-          data: forcastValue,
-          target_length: 6,
-        };
-
-        let predictRes = await getPredict(predictPramse);
-        // console.log("预测结果11", predictRes);
-        if (predictRes.success) {
-          let temperaturePredict = predictRes.output.map((item, index) => {
-            // console.log(item);
-            let temp = {
-              time: protectTime[index],
-              name: "预测值" + (index + 1),
-              dataunit: "ppm",
-              forcastValue: item,
-              color: "#1C86EE",
-            };
-            return temp;
-          });
-
-          //数据赋值
-          temperatureOption.dataset.source = temperatureTemp;
-          temperatureOption.dataset.source.push(...temperaturePredict);
-        }
-      }
-      // console.log("环境数据请求结果", temperatureRes);
-
-      let humidityRes = await getCarbonDioxideData(commonParams, "空气湿度");
-      if (humidityRes.code === 200) {
-        let data = humidityRes.data.data;
-
-        //获取预测的数据
-        let forcastValue = data.map((item) => {
-          return item.datavalue;
-        });
-        // console.log("预测的数据", forcastValue);
-
-        let humidityTemp = data.map((item) => {
-          item.time = item.devicetime.substring(10, 16);
-          item.color = "#f15d5d";
-          return item;
-        });
-        // console.log("数据处理", humidityTemp);
-        let predictPramse = {
-          feature: "humidity",
-          data: forcastValue,
-          target_length: 6,
-        };
-
-        let predictRes = await getPredict(predictPramse);
-        // console.log("预测结果11", predictRes);
-        if (predictRes.success) {
-          let humidityPredict = predictRes.output.map((item, index) => {
-            // console.log(item);
-            let temp = {
-              time: protectTime[index],
-              name: "预测值" + (index + 1),
-              dataunit: "ppm",
-              forcastValue: item,
-              color: "#1C86EE",
-            };
-            return temp;
-          });
-          //数据赋值
-          humidityOption.dataset.source = humidityTemp;
-          humidityOption.dataset.source.push(...humidityPredict);
-        }
-
-        //数据赋值
-        // console.log("空气湿度请求结果", humidityRes);
+        //    console.log(carbonDioxideOption.series[0].)
+        humidityOption.series[0].data = orignaiData;
+        humidityOption.series[1].data = predictData;
       }
 
-      //光照强度
-      let illuminationIntensityRes = await getCarbonDioxideData(
-        commonParams,
-        "光照强度"
-      );
-      if (illuminationIntensityRes.code === 200) {
-        let data = illuminationIntensityRes.data.data;
-        //获取预测的数据
-        let forcastValue = data.map((item) => {
-          return item.datavalue;
+      let illuminationIntensityRes = await getPredict(5, aligorith, "光照强度");
+      console.log(illuminationIntensityRes, "结果");
+      if (illuminationIntensityRes.success) {
+        let predictdata = illuminationIntensityRes.predictdata;
+        let time = illuminationIntensityRes.time;
+        let todaydata = illuminationIntensityRes.todaydata;
+        let orignaiData = [];
+        let predictData = [];
+        let tempItem = "";
+        time.forEach((item, index) => {
+          tempItem = new Date(time[index]).getTime();
+          predictData.push(new Array(tempItem, predictdata[index]));
+          if (todaydata[index]) {
+            orignaiData.push(new Array(tempItem, todaydata[index]));
+          } else {
+            orignaiData.push(new Array());
+          }
         });
-        // console.log("预测的数据", forcastValue);
-
-        let illuminationIntensityTemp = data.map((item) => {
-          item.time = item.devicetime.substring(10, 16);
-          item.color = "#f15d5d";
-          return item;
+        //    console.log(carbonDioxideOption.series[0].)
+        illuminationIntensityOption.series[0].data = orignaiData;
+        illuminationIntensityOption.series[1].data = predictData;
+      }
+      let PMRes = await getPredict(5, aligorith, "光照强度");
+      console.log(PMRes, "结果");
+      if (PMRes.success) {
+        let predictdata = PMRes.predictdata;
+        let time = PMRes.time;
+        let todaydata = PMRes.todaydata;
+        let orignaiData = [];
+        let predictData = [];
+        let tempItem = "";
+        time.forEach((item, index) => {
+          tempItem = new Date(time[index]).getTime();
+          predictData.push(new Array(tempItem, predictdata[index]));
+          if (todaydata[index]) {
+            orignaiData.push(new Array(tempItem, todaydata[index]));
+          } else {
+            orignaiData.push(new Array());
+          }
         });
-        // console.log("数据处理", illuminationIntensityTemp);
-
-        let predictPramse = {
-          feature: "Light_intensity",
-          data: forcastValue,
-          target_length: 6,
-        };
-
-        let predictRes = await getPredict(predictPramse);
-        if (predictRes.success) {
-          let illuminationIntensityPredict = predictRes.output.map(
-            (item, index) => {
-              // console.log(item);
-              let temp = {
-                time: protectTime[index],
-                name: "预测值" + (index + 1),
-                dataunit: "ppm",
-                forcastValue: item,
-                color: "#1C86EE",
-              };
-              return temp;
-            }
-          );
-          //数据赋值
-          illuminationIntensityOption.dataset.source =
-            illuminationIntensityTemp;
-          illuminationIntensityOption.dataset.source.push(
-            ...illuminationIntensityPredict
-          );
-        }
+        //    console.log(carbonDioxideOption.series[0].)
+        PMOption.series[0].data = orignaiData;
+        PMOption.series[1].data = predictData;
       }
 
-      //PM2.5
-      let PMRes = await getCarbonDioxideData(commonParams, "PM2.5");
-      // console.log("Pm2.5", PMRes);
-      if (PMRes.code === 200) {
-        let data = PMRes.data.data;
-        //获取预测的数据
-        let forcastValue = data.map((item) => {
-          return item.datavalue;
+      let PM10Res = await getPredict(5, aligorith, "光照强度");
+      console.log(PM10Res, "结果");
+      if (PM10Res.success) {
+        let predictdata = PM10Res.predictdata;
+        let time = PM10Res.time;
+        let todaydata = PM10Res.todaydata;
+        let orignaiData = [];
+        let predictData = [];
+        let tempItem = "";
+        time.forEach((item, index) => {
+          tempItem = new Date(time[index]).getTime();
+          predictData.push(new Array(tempItem, predictdata[index]));
+          if (todaydata[index]) {
+            orignaiData.push(new Array(tempItem, todaydata[index]));
+          } else {
+            orignaiData.push(new Array());
+          }
         });
-        // console.log("预测的数据", forcastValue);
-
-        let PMTemp = data.map((item) => {
-          item.time = item.devicetime.substring(10, 16);
-          item.color = "#f15d5d";
-          return item;
-        });
-        // console.log("数据处理", PMTemp);
-        let predictPramse = {
-          feature: "pm2.5",
-          data: forcastValue,
-          target_length: 6,
-        };
-
-        let predictRes = await getPredict(predictPramse);
-        // console.log("预测结果", predictRes);
-        if (predictRes.success) {
-          let PMPredict = predictRes.output.map((item, index) => {
-            // console.log(item);
-            let temp = {
-              time: protectTime[index],
-              name: "预测值" + (index + 1),
-              dataunit: "μg/m3",
-              forcastValue: item,
-              color: "#1C86EE",
-            };
-            return temp;
-          });
-          //数据赋值
-          PMOption.dataset.source = PMTemp;
-          PMOption.dataset.source.push(...PMPredict);
-          // console.log("PM2.5请求结果", PMRes);
-        }
-      }
-
-      //PM10
-      let PM10Res = await getCarbonDioxideData(commonParams, "PM10");
-      if (PM10Res.code === 200) {
-        let data = PM10Res.data.data;
-        //获取预测的数据
-        let forcastValue = data.map((item) => {
-          return item.datavalue;
-        });
-        // console.log("预测的数据", forcastValue);
-        let PM10Temp = data.map((item) => {
-          item.time = item.devicetime.substring(10, 16);
-          item.color = "#f15d5d";
-          return item;
-        });
-        // console.log("数据处理", PM10Temp);
-
-        let predictPramse = {
-          feature: "pm10",
-          data: forcastValue,
-          target_length: 6,
-        };
-
-        let predictRes = await getPredict(predictPramse);
-        // console.log("预测结果", predictRes);
-        if (predictRes.success) {
-          let PM10Predict = predictRes.output.map((item, index) => {
-            // console.log(item);
-            let temp = {
-              time: protectTime[index],
-              name: "预测值" + (index + 1),
-              dataunit: "μg/m3",
-              forcastValue: item,
-              color: "#1C86EE",
-            };
-            return temp;
-          });
-          //数据赋值
-          PM10Option.dataset.source = PM10Temp;
-          PM10Option.dataset.source.push(...PM10Predict);
-          // console.log("PM10请求结果", PM10Res);
-        }
+        //    console.log(carbonDioxideOption.series[0].)
+        PM10Option.series[0].data = orignaiData;
+        PM10Option.series[1].data = predictData;
       }
     };
+    // const getCarbonDioxideDataMethod = async function () {
+    //   // console.log("参数", commonParams);
+    //   let CarbonDioxRes = await getCarbonDioxideData(commonParams, "二氧化碳");
+    //   // console.log("二氧化碳请求结果", CarbonDioxRes);
+
+    //   let lastTime = null;
+    //   let protectTime = [];
+
+    //   if (CarbonDioxRes.code === 200) {
+    //     let data = CarbonDioxRes.data.data;
+    //     // console.log(data[data.length - 1], "时间");
+
+    //     if (data[data.length - 1]) {
+    //       lastTime = data[data.length - 1] && data[data.length - 1].devicetime;
+    //       lastTime = new Date(lastTime);
+    //       for (let i = 0; i < 6; i++) {
+    //         lastTime = new Date(
+    //           lastTime.getFullYear(),
+    //           lastTime.getMonth(),
+    //           lastTime.getDate(),
+    //           lastTime.getHours(),
+    //           lastTime.getMinutes() + 10
+    //         );
+    //         protectTime.push(dateFormat(lastTime).substring(10, 16));
+    //       }
+    //     }
+
+    //     // console.log("预测时间数组", protectTime);
+    //     //获取预测的数据
+    //     let forcastValue = data.map((item) => {
+    //       return item.datavalue;
+    //     });
+    //     // console.log("预测的数据", forcastValue);
+
+    //     let carbonDioxideTemp = data.map((item) => {
+    //       item.time = item.devicetime.substring(10, 16);
+    //       item.color = "#f15d5d";
+    //       return item;
+    //     });
+    //     // console.log("数据处理", carbonDioxideTemp);
+
+    //     let predictPramse = {
+    //       feature: "CO2",
+    //       data: forcastValue,
+    //       target_length: 6,
+    //     };
+
+    //     let predictRes = await getPredict(predictPramse);
+    //     // console.log("预测结果11", predictRes);
+    //     if (predictRes.success) {
+    //       let carbonDioxidePredict = predictRes.output.map((item, index) => {
+    //         // console.log(item);
+    //         let temp = {
+    //           time: protectTime[index],
+    //           name: "预测值" + (index + 1),
+    //           dataunit: "ppm",
+    //           forcastValue: item,
+    //           color: "#1C86EE",
+    //         };
+    //         // console.log(temp);
+    //         return temp;
+    //       });
+    //       // console.log("处理后的数据", carbonDioxidePredict);
+    //       // let carbonDioxidePredict = [
+    //       //     // {
+    //       //     //     devicetime: "22:50",
+    //       //     //     dataunit: "ppm",
+    //       //     //     datavalue: 576,
+    //       //     //     color: "#1C86EE",
+    //       //     // },
+    //       //     // {
+    //       //     //     devicetime: "23:00",
+    //       //     //     dataunit: "ppm",
+    //       //     //     datavalue: 576,
+    //       //     //     color: "#1C86EE",
+    //       //     // },
+    //       //     {
+    //       //         time: "21:31",
+    //       //         dataunit: "ppm",
+    //       //         forcastValue: 686,
+    //       //         color: "#1C86EE",
+    //       //     },
+    //       //     {
+    //       //         time: "21:41",
+    //       //         dataunit: "ppm",
+    //       //         forcastValue: 614,
+    //       //         color: "#1C86EE",
+    //       //     },
+    //       //     {
+    //       //         time: "21:51",
+    //       //         dataunit: "ppm",
+    //       //         forcastValue: 606,
+    //       //         color: "#1C86EE",
+    //       //     },
+    //       //     {
+    //       //         time: "22:01",
+    //       //         dataunit: "ppm",
+    //       //         forcastValue: 580,
+    //       //         color: "#1C86EE",
+    //       //     },
+    //       //     {
+    //       //         time: "22:11",
+    //       //         dataunit: "ppm",
+    //       //         forcastValue: 536,
+    //       //         color: "#1C86EE",
+    //       //     },
+    //       // ];
+    //       //数据赋值
+    //       carbonDioxideOption.dataset.source = carbonDioxideTemp;
+    //       carbonDioxideOption.dataset.source.push(...carbonDioxidePredict);
+    //       // console.log(carbonDioxideOption,'配置')
+    //     }
+    //   }
+    //   let temperatureRes = await getCarbonDioxideData(commonParams, "空气温度");
+    //   // console.log("空气温度请求结果", temperatureRes);
+    //   if (temperatureRes.code === 200) {
+    //     let data = temperatureRes.data.data;
+
+    //     //获取预测的数据
+    //     let forcastValue = data.map((item) => {
+    //       return item.datavalue;
+    //     });
+
+    //     // console.log("预测的数据", forcastValue);
+    //     let temperatureTemp = data.map((item) => {
+    //       item.time = item.devicetime.substring(10, 16);
+    //       item.color = "#f15d5d";
+    //       return item;
+    //     });
+    //     // console.log("数据处理", temperatureTemp);
+    //     let predictPramse = {
+    //       feature: "temperature",
+    //       data: forcastValue,
+    //       target_length: 6,
+    //     };
+
+    //     let predictRes = await getPredict(predictPramse);
+    //     // console.log("预测结果11", predictRes);
+    //     if (predictRes.success) {
+    //       let temperaturePredict = predictRes.output.map((item, index) => {
+    //         // console.log(item);
+    //         let temp = {
+    //           time: protectTime[index],
+    //           name: "预测值" + (index + 1),
+    //           dataunit: "ppm",
+    //           forcastValue: item,
+    //           color: "#1C86EE",
+    //         };
+    //         return temp;
+    //       });
+
+    //       //数据赋值
+    //       temperatureOption.dataset.source = temperatureTemp;
+    //       temperatureOption.dataset.source.push(...temperaturePredict);
+    //     }
+    //   }
+    //   // console.log("环境数据请求结果", temperatureRes);
+
+    //   let humidityRes = await getCarbonDioxideData(commonParams, "空气湿度");
+    //   if (humidityRes.code === 200) {
+    //     let data = humidityRes.data.data;
+
+    //     //获取预测的数据
+    //     let forcastValue = data.map((item) => {
+    //       return item.datavalue;
+    //     });
+    //     // console.log("预测的数据", forcastValue);
+
+    //     let humidityTemp = data.map((item) => {
+    //       item.time = item.devicetime.substring(10, 16);
+    //       item.color = "#f15d5d";
+    //       return item;
+    //     });
+    //     // console.log("数据处理", humidityTemp);
+    //     let predictPramse = {
+    //       feature: "humidity",
+    //       data: forcastValue,
+    //       target_length: 6,
+    //     };
+
+    //     let predictRes = await getPredict(predictPramse);
+    //     // console.log("预测结果11", predictRes);
+    //     if (predictRes.success) {
+    //       let humidityPredict = predictRes.output.map((item, index) => {
+    //         // console.log(item);
+    //         let temp = {
+    //           time: protectTime[index],
+    //           name: "预测值" + (index + 1),
+    //           dataunit: "ppm",
+    //           forcastValue: item,
+    //           color: "#1C86EE",
+    //         };
+    //         return temp;
+    //       });
+    //       //数据赋值
+    //       humidityOption.dataset.source = humidityTemp;
+    //       humidityOption.dataset.source.push(...humidityPredict);
+    //     }
+
+    //     //数据赋值
+    //     // console.log("空气湿度请求结果", humidityRes);
+    //   }
+
+    //   //光照强度
+    //   let illuminationIntensityRes = await getCarbonDioxideData(
+    //     commonParams,
+    //     "光照强度"
+    //   );
+    //   if (illuminationIntensityRes.code === 200) {
+    //     let data = illuminationIntensityRes.data.data;
+    //     //获取预测的数据
+    //     let forcastValue = data.map((item) => {
+    //       return item.datavalue;
+    //     });
+    //     // console.log("预测的数据", forcastValue);
+
+    //     let illuminationIntensityTemp = data.map((item) => {
+    //       item.time = item.devicetime.substring(10, 16);
+    //       item.color = "#f15d5d";
+    //       return item;
+    //     });
+    //     // console.log("数据处理", illuminationIntensityTemp);
+
+    //     let predictPramse = {
+    //       feature: "Light_intensity",
+    //       data: forcastValue,
+    //       target_length: 6,
+    //     };
+
+    //     let predictRes = await getPredict(predictPramse);
+    //     if (predictRes.success) {
+    //       let illuminationIntensityPredict = predictRes.output.map(
+    //         (item, index) => {
+    //           // console.log(item);
+    //           let temp = {
+    //             time: protectTime[index],
+    //             name: "预测值" + (index + 1),
+    //             dataunit: "ppm",
+    //             forcastValue: item,
+    //             color: "#1C86EE",
+    //           };
+    //           return temp;
+    //         }
+    //       );
+    //       //数据赋值
+    //       illuminationIntensityOption.dataset.source =
+    //         illuminationIntensityTemp;
+    //       illuminationIntensityOption.dataset.source.push(
+    //         ...illuminationIntensityPredict
+    //       );
+    //     }
+    //   }
+
+    //   //PM2.5
+    //   let PMRes = await getCarbonDioxideData(commonParams, "PM2.5");
+    //   // console.log("Pm2.5", PMRes);
+    //   if (PMRes.code === 200) {
+    //     let data = PMRes.data.data;
+    //     //获取预测的数据
+    //     let forcastValue = data.map((item) => {
+    //       return item.datavalue;
+    //     });
+    //     // console.log("预测的数据", forcastValue);
+
+    //     let PMTemp = data.map((item) => {
+    //       item.time = item.devicetime.substring(10, 16);
+    //       item.color = "#f15d5d";
+    //       return item;
+    //     });
+    //     // console.log("数据处理", PMTemp);
+    //     let predictPramse = {
+    //       feature: "pm2.5",
+    //       data: forcastValue,
+    //       target_length: 6,
+    //     };
+
+    //     let predictRes = await getPredict(predictPramse);
+    //     // console.log("预测结果", predictRes);
+    //     if (predictRes.success) {
+    //       let PMPredict = predictRes.output.map((item, index) => {
+    //         // console.log(item);
+    //         let temp = {
+    //           time: protectTime[index],
+    //           name: "预测值" + (index + 1),
+    //           dataunit: "μg/m3",
+    //           forcastValue: item,
+    //           color: "#1C86EE",
+    //         };
+    //         return temp;
+    //       });
+    //       //数据赋值
+    //       PMOption.dataset.source = PMTemp;
+    //       PMOption.dataset.source.push(...PMPredict);
+    //       // console.log("PM2.5请求结果", PMRes);
+    //     }
+    //   }
+
+    //   //PM10
+    //   let PM10Res = await getCarbonDioxideData(commonParams, "PM10");
+    //   if (PM10Res.code === 200) {
+    //     let data = PM10Res.data.data;
+    //     //获取预测的数据
+    //     let forcastValue = data.map((item) => {
+    //       return item.datavalue;
+    //     });
+    //     // console.log("预测的数据", forcastValue);
+    //     let PM10Temp = data.map((item) => {
+    //       item.time = item.devicetime.substring(10, 16);
+    //       item.color = "#f15d5d";
+    //       return item;
+    //     });
+    //     // console.log("数据处理", PM10Temp);
+
+    //     let predictPramse = {
+    //       feature: "pm10",
+    //       data: forcastValue,
+    //       target_length: 6,
+    //     };
+
+    //     let predictRes = await getPredict(predictPramse);
+    //     // console.log("预测结果", predictRes);
+    //     if (predictRes.success) {
+    //       let PM10Predict = predictRes.output.map((item, index) => {
+    //         // console.log(item);
+    //         let temp = {
+    //           time: protectTime[index],
+    //           name: "预测值" + (index + 1),
+    //           dataunit: "μg/m3",
+    //           forcastValue: item,
+    //           color: "#1C86EE",
+    //         };
+    //         return temp;
+    //       });
+    //       //数据赋值
+    //       PM10Option.dataset.source = PM10Temp;
+    //       PM10Option.dataset.source.push(...PM10Predict);
+    //       // console.log("PM10请求结果", PM10Res);
+    //     }
+    //   }
+    // };
 
     getCarbonDioxideDataMethod();
 
@@ -1203,8 +1276,11 @@ export default defineComponent({
       illuminationIntensityRef,
       PMRef,
       PM10Ref,
+      algorithmOptions,
+      selectedAlgorith,
       selectAll,
       changeSelect,
+      selectAligorith,
     };
   },
 });

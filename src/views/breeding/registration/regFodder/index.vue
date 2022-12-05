@@ -85,7 +85,6 @@
       v-model="addFodderdialog"
       width="30%"
       @close="addDialogClosed"
-      style="display: flex"
     >
       <el-form
         :model="addInfo"
