@@ -101,7 +101,9 @@ export default defineComponent({
     endTime = ref(endTime)
     dateVals.value = [startTime.value, endTime.value]
 
-    const shedId = tool.data.get('CURR_INFO').CURR_SHED.id
+    const shedId = queueMicrotask(()=>{
+      tool.data.get('CURR_INFO')?.CURR_SHED.id
+    })
 
     // 改变时间
     const isComponents = ref(true)

@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <span class="rightTop"><span>刘双印，欢迎您！</span>
+    <span class="rightTop"><span>{{userName}}，欢迎您！</span>
       <router-link to="/login">注销</router-link>
     </span>
     <circle-menu ref="ccMenu" :menus="menus"></circle-menu>
@@ -10,6 +10,7 @@
 <script>
 import tool from '../../../utils/tool'
 import CircleMenu from './components/circleMenu.vue'
+import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { getPersonalInfo } from '@api/bases/login'
 
@@ -114,8 +115,10 @@ export default {
     tool.data.set('CURR_MENU_INDEX', 0)
 
     // 获取基本信息
+    const userName = ref('')
     getPersonalInfo().then(res => {
         tool.data.set('USER_INFO', res.data?.user)
+        userName.value = res.data?.user.name
       }, err => {
         ElMessage.warning(err.message)
       }
@@ -123,6 +126,7 @@ export default {
 
     return {
       menus,
+      userName
     }
   },
 }
