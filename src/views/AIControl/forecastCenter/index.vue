@@ -144,7 +144,7 @@ import {
   ref,
   reactive,
   //   computed,
-//   getCurrentInstance,
+  //   getCurrentInstance,
 } from "vue";
 // import { dateFormat } from "@/hooks/dateFormat.js";
 import ScEcharts from "@/components/scEcharts";
@@ -197,9 +197,9 @@ export default defineComponent({
       lineStyle: {
         width: 2,
         // color: "#32cd32",
-        normal: {
-          color: "#32cd32",
-        },
+        // normal: {
+        //   color: "#32cd32",
+        // },
       },
       connectNulls: true,
     };
@@ -209,10 +209,7 @@ export default defineComponent({
       //位置
       position: function () {
         return { left: "50%", top: 40 };
-      },
-      formatter(params) {
-        return commomFormatter(params);
-      },
+      }
     };
 
     //相同的配置
@@ -266,33 +263,10 @@ export default defineComponent({
       smooth: true,
       lineStyle: {
         width: 2,
-        color: "#6495ED",
+        // color: "#6495ED",
       },
       connectNulls: true,
     };
-
-    // 图表相同的提示框配置函数
-    let commomFormatter = (params) => {
-      var result = "";
-      let value1 = "";
-      let value2 = "";
-      if (params[0].data.datavalue == undefined) {
-        value1 = params[0].data.forcastValue;
-      } else {
-        value1 = params[0].data.datavalue;
-      }
-      if (params[0].data.devicetime == undefined) {
-        value2 = params[0].data.time;
-      } else {
-        value2 = params[0].data.devicetime;
-      }
-      var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${params[0].data.color}"></span>`;
-      var textHtml = `<span style="font-weight: 700;">${value1}${params[0].data.dataunit} </span>`;
-      // console.log(params, "数据对象");
-      result += value2 + "</br>" + dotHtml + textHtml;
-      return result;
-    };
-
     //二氧化碳的图表值
     let carbonDioxideYAxis = [{ ...commonY, name: "二氧化碳/ppm" }];
     // let carbonDioxideDataset = { dimensions: commonDimensions, source: [] };
@@ -310,32 +284,38 @@ export default defineComponent({
           {
             name: "最小值",
             type: "min",
-            yAxis: 400,
+            yAxis: 800,
             color: "red",
           },
           {
             name: "最大值",
             type: "max",
-            yAxis: 750,
+            yAxis: 1000,
           },
         ],
-      },
-      //   visualMap: {//区间内控制显示颜色
-      //         top: 10,
-      //         right: 10,
-      //         show: true,
-      //         dimension: 1],
-      //         pieces: [{ min: 30, max: 50, color: 'red' }],
-      //         // outOfRange: {
-      //         //     symbol: 'rect',
-      //         //     symbolSize: [10, 10],
-      //         //     color:"red",
-      //         // }
-      //     },
+      }
     };
 
     let carbonDioxideOptionStatic = {
       ...commomOption,
+      visualMap: [{
+        show: false,
+        dimension: 1,
+        seriesIndex:0,//第一部分数据
+        pieces: [{ min: 800, max: 1000,color: "#32cd32" }],
+        outOfRange: {
+            color:'red',
+        },
+      },
+      {
+        show: false,
+        dimension: 1,
+        seriesIndex:1,//第一部分数据
+        pieces: [{min: 800, max: 1000 ,color:"#6da2fe"}],
+        outOfRange: {
+            color:'red',
+        },
+      }],
       yAxis: carbonDioxideYAxis,
       series: [carbonDioxideSeriesObject, { ...commonPredictSeries, data: [] }],
       tooltip: commonTooltip,
@@ -359,13 +339,13 @@ export default defineComponent({
           {
             name: "最小值",
             type: "min",
-            yAxis: 15,
+            yAxis: 10,
             color: "red",
           },
           {
             name: "最大值",
             type: "max",
-            yAxis: 35,
+            yAxis: 20,
           },
         ],
       },
@@ -378,6 +358,24 @@ export default defineComponent({
       //   dataset: temperatureDataset,
       series: [temperatureSeriesObject, { ...commonPredictSeries, data: [] }],
       tooltip: commonTooltip,
+      visualMap: [{
+        show: false,
+        dimension: 1,
+        seriesIndex:0,//第一部分数据
+        pieces: [{ min: 10, max: 20,color: "#32cd32" }],
+        outOfRange: {
+            color:'red',
+        },
+      },
+      {
+        show: false,
+        dimension: 1,
+        seriesIndex:1,//第一部分数据
+        pieces: [{min: 10, max: 20 ,color:"#6da2fe"}],
+        outOfRange: {
+            color:'red',
+        },
+      }],
     };
 
     //空气温度
@@ -399,7 +397,7 @@ export default defineComponent({
           {
             name: "最小值",
             type: "min",
-            yAxis: 35,
+            yAxis: 30,
             color: "red",
           },
           {
@@ -409,6 +407,7 @@ export default defineComponent({
           },
         ],
       },
+
     };
 
     let humidityOptionStatic = {
@@ -417,6 +416,24 @@ export default defineComponent({
       //   dataset: humidityDataset,
       series: [humiditySeriesObject, commonPredictSeries],
       tooltip: commonTooltip,
+      visualMap: [{
+        show: false,
+        dimension: 1,
+        seriesIndex:0,//第一部分数据
+        pieces: [{ min: 30, max: 85,color: "#32cd32" }],
+        outOfRange: {
+            color:'red',
+        },
+      },
+      {
+        show: false,
+        dimension: 1,
+        seriesIndex:1,//第一部分数据
+        pieces: [{min: 30, max: 85 ,color:"#6da2fe"}],
+        outOfRange: {
+            color:'red',
+        },
+      }],
     };
 
     //湿度
@@ -459,6 +476,24 @@ export default defineComponent({
       //   dataset: illuminationIntensityDataset,
       series: [illuminationIntensitySeriesObject, commonPredictSeries],
       tooltip: commonTooltip,
+      visualMap: [{
+        show: false,
+        dimension: 1,
+        seriesIndex:0,//第一部分数据
+        pieces: [{ min: 0, max: 160,color: "#32cd32" }],
+        outOfRange: {
+            color:'red',
+        },
+      },
+      {
+        show: false,
+        dimension: 1,
+        seriesIndex:1,//第一部分数据
+        pieces: [{min: 0, max: 160 ,color:"#6da2fe"}],
+        outOfRange: {
+            color:'red',
+        },
+      }],
     };
 
     //光照强度
@@ -503,6 +538,24 @@ export default defineComponent({
       //   dataset: PMDataset,
       series: [PMSeriesObject, commonPredictSeries],
       tooltip: commonTooltip,
+      visualMap: [{
+        show: false,
+        dimension: 1,
+        seriesIndex:0,//第一部分数据
+        pieces: [{ min: 0, max: 600,color: "#32cd32" }],
+        outOfRange: {
+            color:'red',
+        },
+      },
+      {
+        show: false,
+        dimension: 1,
+        seriesIndex:1,//第一部分数据
+        pieces: [{min: 0, max: 600 ,color:"#6da2fe"}],
+        outOfRange: {
+            color:'red',
+        },
+      }],
     };
 
     //PM10
@@ -545,40 +598,27 @@ export default defineComponent({
 
     let PM10OptionStatic = {
       ...commomOption,
-      //   legend: {
-      //     // top: "20%",
-      //     right: "5%",
-      //     // width: "50%",
-      //     data: [
-      //       {
-      //         name: "真实值",
-      //         // 强制设置图形为圆。
-      //         icon: "circle",
-      //         // 设置文本为红色
-      //         textStyle: {
-      //           color: "#000",
-      //         },
-      //         itemStyle: {
-      //           color: "#f15d5d",
-      //         },
-      //       },
-      //       {
-      //         name: "预测值",
-      //         // 强制设置图形为圆。
-      //         icon: "circle",
-      //         textStyle: {
-      //           color: "#000",
-      //         },
-      //         itemStyle: {
-      //           color: "#6da2fe",
-      //         },
-      //       },
-      //     ],
-      //   },
       yAxis: PM10YAxis,
-      //   dataset: PM10Dataset,
       series: [PM10SeriesObject, commonPredictSeries],
       tooltip: commonTooltip,
+      visualMap: [{
+        show: false,
+        dimension: 1,
+        seriesIndex:0,//第一部分数据
+        pieces: [{ min: 0, max: 1000,color: "#32cd32" }],
+        outOfRange: {
+            color:'red',
+        },
+      },
+      {
+        show: false,
+        dimension: 1,
+        seriesIndex:1,//第一部分数据
+        pieces: [{min: 0, max: 1000 ,color:"#6da2fe"}],
+        outOfRange: {
+            color:'red',
+        },
+      }],
     };
 
     //PM10
