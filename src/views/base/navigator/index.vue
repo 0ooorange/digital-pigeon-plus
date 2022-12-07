@@ -156,7 +156,7 @@ export default {
 		return {
 			...item,
 			...authItem,
-			auth: true
+			auth: !!authItem.children.length
 		}
 	  })
 	  .sort((a,b)=> a.sort - b.sort)
