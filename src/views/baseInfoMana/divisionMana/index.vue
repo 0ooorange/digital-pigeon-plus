@@ -5,33 +5,32 @@
       ref="table"
       row-key="id"
       :data="tableList"
-      requestMethods="post"
+      hidePagination
     >
       <el-table-column
         align="center"
         label="序号"
-        prop="serialNumber"
+        type="index"
         width="120"
-        sortable
       ></el-table-column>
       <el-table-column
         align="center"
         label="部门名称"
-        prop="departmentName"
+        prop="name"
         width="120"
         sortable
       ></el-table-column>
       <el-table-column
         align="center"
         label="负责人"
-        prop="principal"
+        prop="userName"
         width="120"
         sortable
       ></el-table-column>
       <el-table-column
         align="center"
         label="电话号码"
-        prop="telephone"
+        prop="phone"
         width="220"
         sortable
       ></el-table-column>
@@ -45,21 +44,21 @@
       <el-table-column
         align="center"
         label="车间/棚数量"
-        prop="boardNumber"
+        prop="shedNumber"
         width="160"
         sortable
       ></el-table-column>
       <el-table-column
         align="center"
         label="员工数量"
-        prop="staffNumber"
+        prop="employees"
         width="120"
         sortable
       ></el-table-column>
       <el-table-column
         align="center"
         label="介绍"
-        prop="introduction"
+        prop="description"
         show-overflow-tooltip
       >
         <template #default="scope">
@@ -88,56 +87,29 @@
 </template>
 
 <script>
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
+import { getDivisionListApi } from "@api/baseInformation/divisionMana";
 export default {
   name: "divisionMana", // 部门管理
 
   setup() {
+    onMounted(() => {
+      getData();
+    });
+
+    let serialNumber = reactive([]);
+
     //表格数据
     let tableList = reactive([]);
-    tableList = [
-      {
-        serialNumber: "1",
-        departmentName: "养殖部门",
-        principal: "小明",
-        telephone: "15760153427",
-        baseNumber: "3",
-        boardNumber: "40",
-        staffNumber: "30",
-        introduction:
-          "肉鸽养殖技术是指通过人工养殖的方法，运用各种学科措施来进行肉用鸽子的科学养殖与疾病防护等的一种技术手段",
-      },
-      {
-        serialNumber: "2",
-        departmentName: "屠宰部门",
-        principal: "王五",
-        telephone: "14436853497",
-        baseNumber: "2",
-        boardNumber: "10",
-        staffNumber: "15",
-        introduction: "这里是屠宰部门",
-      },
-      {
-        serialNumber: "3",
-        departmentName: "加工部门",
-        principal: "小红",
-        telephone: "16780127442",
-        baseNumber: "1",
-        boardNumber: "4",
-        staffNumber: "10",
-        introduction: "这里是加工部门",
-      },
-      {
-        serialNumber: "4",
-        departmentName: "物流部门",
-        principal: "小李",
-        telephone: "17834047468",
-        baseNumber: "1",
-        boardNumber: "2",
-        staffNumber: "10",
-        introduction: "这里是物流部门",
-      },
-    ];
+
+    async function getData() {
+      let res = await getDivisionListApi();
+      console.log(res.data.departments);
+      tableList.push(...res.data.departments);
+      for (var i = 0; i < tableList.values.length; i++) {
+        serialNumber.values[i] = i + 1;
+      }
+    }
 
     // 对话框
     const dialogDetail = ref(false);
@@ -145,12 +117,13 @@ export default {
     let dialogDetailContent = ref("");
 
     function showDetail(row) {
-      dialogDetailTitle.value = row.departmentName;
-      dialogDetailContent.value = row.introduction;
+      dialogDetailTitle.value = row.name;
+      dialogDetailContent.value = row.description;
       dialogDetail.value = true;
     }
 
     return {
+      serialNumber,
       tableList,
       dialogDetail,
       dialogDetailTitle,

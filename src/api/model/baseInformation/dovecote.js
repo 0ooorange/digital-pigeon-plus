@@ -1,61 +1,45 @@
+// 基础信息管理-养殖鸽棚管理
+
 import http from "@/utils/request";
-export const showPageApi =  {
-	url: `/digitalPigeon/ucenter/ucenter/new-user/getShedListByUserId`,
-	name: "通过用户id获取所有鸽棚信息",
-	get: async function (page) {
-		return await http.get(`${this.url}?current=${page.current}&size=${page.pageSize}&userId=1543954778680303600`);
-	},
-}
 
-export const getEditInfoApi =  {
-	url: `/digitalPigeon/ucenter/ucenter/shed/getShedByShedId`,
-	name: "获取编辑前信息",
-	get: async function (id) {
-		return await http.get(`${this.url}?shedId=${id}`);
-	},
-}
+// 获取鸽棚信息
+export const getShedListByBaseIdApi = (params) => http.post(`/digitalPigeon/information/WorkshopAndShedManagement/getShedListByBaseId?
+	baseId=${params.baseId}&
+	pageNum=${params.pageNum}&
+	pageSize=${params.pageSize}`
+)
 
-export const updateInfoApi =  {
-	url: `/digitalPigeon/ucenter/ucenter/shed/editShed`,
-	name: "更新(编辑)信息",
-	post: async function (data) {
-		return await http.post(`${this.url}`,data);
-	},
-}
+// 修改鸽棚信息
+export const updateShedByShedIdApi = (params) => http.post(`/digitalPigeon/information/WorkshopAndShedManagement/updateShedByShedId?
+	id=${params.id}&
+	cage_num=${params.cage_num}&
+	code=${params.code}&
+	column_num=${params.column_num}&
+	floor_num=${params.floor_num}&
+	if_take=${params.if_take}&
+	row_num=${params.row_num}&
+	take_hatch_perc=${params.take_hatch_perc}`
+)
 
+// 添加鸽棚
+export const addShedApi = (params) => http.post(`/digitalPigeon/information/WorkshopAndShedManagement/addShed?
+	base_id=${params.base_id}&
+	cage_num=${params.cage_num}&
+	code=${params.code}&
+	column_num=${params.column_num}&
+	floor_num=${params.floor_num}&
+	user_id=${params.user_id}
+	if_take=${params.if_take}&
+	row_num=${params.row_num}&
+	take_hatch_perc=${params.take_hatch_perc}`
+)
 
-export const selectUserApi =  {
-	url: `/digitalPigeon/ucenter/ucenter/new-user/getUserListByUserId`,
-	name: "获取鸽棚员工(分配管理员)",
-	get: async function () {
-		return await http.get(`${this.url}?current=1&size=10&userId=1543954778680303600`);
-	},
-}
+// 删除鸽棚信息
+export const deleteShedByIdApi = (params) => http.post(`/digitalPigeon/information/WorkshopAndShedManagement/deleteShedById?id=${params.id}`)
 
+// 选择基地下拉菜单(在鸽棚/基地中使用)
+export const getAllBaseApi = () => http.post(`/digitalPigeon/information/DropDownMenu/getAllBase`)
 
+// 选择员工下拉菜单(在鸽棚/基地中使用)
+export const getAllShedUserDropDownApi = () => http.post(`/digitalPigeon/information/DropDownMenu/getAllShedUser`)
 
-export const addAdminApi =  {
-	url: `/digitalPigeon/ucenter/ucenter/new-user-shed/addWorkerToShed`,
-	name: "给鸽棚添加管理员",
-	post: async function (ShedId,userId) {
-		return await http.post(`${this.url}?ShedId=${ShedId}&userId=${userId}`);
-	},
-}
-
-export const addShedApi =  {
-	url: `/digitalPigeon/ucenter/ucenter/shed/addShed`,
-	name: "添加鸽棚",
-	post: async function (data) {
-		return await http.post(`${this.url}`,data);
-	},
-}
-
-
-
-export const deletedoveApi =  {
-	url: `/digitalPigeon/ucenter/ucenter/shed/removeShed`,
-	name: "删除鸽棚",
-	post: async function (shedId) {
-		return await http.post(`${this.url}?shedId=${shedId}`);
-	},
-}

@@ -2,7 +2,14 @@
   <div>
     <div class="header">
       <el-button @click="showDetail('add')">添加鸽棚</el-button>
-      <el-button>选择基地</el-button>
+	  <el-dropdown trigger="click">
+			<el-button>{{ selectBase }}</el-button>
+			<template #dropdown>
+				<el-dropdown-menu>
+					<el-dropdown-item v-for="(item, key) in baseDropDownData" :key="key" @click="handleBaseId(item.id, item.name, 'form')">{{ item.name }}</el-dropdown-item>
+				</el-dropdown-menu>
+			</template>
+		</el-dropdown>
     </div>
 
     <scTable
@@ -10,47 +17,47 @@
       ref="table"
       row-key="id"
       :data="tableList"
-      requestMethods="post"
+	  hidePagination
     >
       <el-table-column
         align="center"
         label="序号"
-        prop="serialNumber"
+		type="index"
         width="80"
         sortable
       ></el-table-column>
       <el-table-column
         align="center"
         label="所属基地"
-        prop="baseBelong"
+        prop="baseName"
         width="110"
         sortable
       ></el-table-column>
       <el-table-column
         align="center"
         label="鸽棚编号"
-        prop="pigeonShedNum"
+        prop="code"
         width="110"
         sortable
       ></el-table-column>
       <el-table-column
         align="center"
         label="鸽笼数量"
-        prop="pigeonShedSum"
+        prop="cageNum"
         width="120"
         sortable
       ></el-table-column>
       <el-table-column
         align="center"
         label="管理人员"
-        prop="admin"
+        prop="username"
         width="140"
         sortable
       ></el-table-column>
       <el-table-column
         align="center"
         label="电话号码"
-        prop="telephone"
+        prop="phone"
         width="120"
         sortable
       ></el-table-column>
@@ -58,21 +65,21 @@
       <el-table-column
         align="center"
         label="行数"
-        prop="row"
+        prop="rowNum"
         width="120"
         sortable
       ></el-table-column>
       <el-table-column
         align="center"
         label="列数"
-        prop="colume"
+        prop="columnNum"
         width="100"
         sortable
       ></el-table-column>
       <el-table-column
         align="center"
         label="层数"
-        prop="floorSum"
+        prop="floorNum"
         width="100"
         sortable
       ></el-table-column>
@@ -97,6 +104,19 @@
         </template>
       </el-table-column>
     </scTable>
+	<div class="pagination">
+			<el-pagination
+			background
+			v-model:current-page="currentPage"
+      		v-model:page-size="pageSize"
+			:page-sizes="[5, 10, 20, 50]"
+			:small="true"
+			layout="total, sizes, prev, pager, next, jumper"
+			:total="total"
+			@size-change="handleSizeChange"
+			@current-change="handleCurrentChange"
+			/>
+	</div>
 
     <el-dialog
       v-model="dialogEditor"
@@ -106,7 +126,16 @@
     >
       <div class="dialogTitle">
 		修改鸽棚信息
-		<el-button>选择基地</el-button>
+		<div class="dialogTitle-select">
+			<el-dropdown trigger="click">
+				<el-button>{{ selectBase2 }}</el-button>
+				<template #dropdown>
+					<el-dropdown-menu>
+						<el-dropdown-item v-for="(item, key) in baseDropDownData2" :key="key" @click="handleBaseId(item.id, item.name, 'dialog')">{{ item.name }}</el-dropdown-item>
+					</el-dropdown-menu>
+				</template>
+			</el-dropdown>
+		</div>
 	  </div>
       <div class="baseInfo">
         <el-form
@@ -135,8 +164,7 @@
               placeholder="选择管理员"
               label-width="50px"
             >
-              <el-option label="小明" value="shanghai" />
-              <el-option label="小王" value="beijing" />
+              <el-option v-for="(item, key) in userDropDownData" :key="key" :label="item.name" :value="item.id" />
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -156,61 +184,35 @@
 </template>
 
 <script>
-import { reactive, ref } from "vue";
+import { getShedListByBaseIdApi,
+	// updateShedByShedIdApi, addShedApi, deleteShedByIdApi,
+	getAllBaseApi, getAllShedUserDropDownApi } from '@api/baseInformation/dovecote'
+import { onMounted, reactive, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 
 export default {
   name: "breedMana", // 养殖鸽棚管理
 
   setup() {
+	onMounted(() => {
+		getData()
+		getDropDown()
+	})
+
+	const selectBase = ref('选择基地')
+	const selectBase2 = ref('选择基地')
+	const total = ref(0)
+	const baseId = ref('')
+	const currentPage = ref(1)
+	const pageSize = ref(10)
+
+	// 下拉框数据
+	let baseDropDownData = reactive([])
+	let baseDropDownData2 = reactive([])
+	let userDropDownData = reactive([])
+
     //表格数据
     let tableList = reactive([]);
-    tableList = [
-      {
-        serialNumber: "1",
-        baseBelong: "本田养殖基地",
-        pigeonShedNum: "A01",
-        pigeonShedSum: "2208",
-        admin: "小明、小周",
-        telephone: "15760153427",
-        row: "8",
-        colume: "92",
-        floorSum: "3",
-      },
-      {
-        serialNumber: "1",
-        baseBelong: "本田养殖基地",
-        pigeonShedNum: "A01",
-        pigeonShedSum: "2208",
-        admin: "小明、小周",
-        telephone: "15760153427",
-        row: "8",
-        colume: "92",
-        floorSum: "3",
-      },
-      {
-        serialNumber: "1",
-        baseBelong: "本田养殖基地",
-        pigeonShedNum: "A01",
-        pigeonShedSum: "2208",
-        admin: "小明、小周",
-        telephone: "15760153427",
-        row: "8",
-        colume: "92",
-        floorSum: "3",
-      },
-      {
-        serialNumber: "1",
-        baseBelong: "本田养殖基地",
-        pigeonShedNum: "A01",
-        pigeonShedSum: "2208",
-        admin: "小明、小周",
-        telephone: "15760153427",
-        row: "8",
-        colume: "92",
-        floorSum: "3",
-      },
-    ];
 
     // 表单数据
     let FormData = reactive([]);
@@ -257,11 +259,41 @@ export default {
 		],
   	})
 
-    // 对话框
     let dialogFormType = "";
     const dialogEditor = ref(false);
 
-    function showDetail(type, row) {
+	async function getData() {
+		var params = {
+			baseId: baseId.value,
+			pageNum: currentPage.value,
+			pageSize: pageSize.value,
+		}
+		console.log(params)
+		let res = await getShedListByBaseIdApi(params)
+		console.log(res)
+		if (res.code == 200) {
+			total.value = Number(res.data.ShedList.total)
+			tableList.length = 0
+			tableList.push(...res.data.ShedList.records)
+		}
+	}
+	const handleSizeChange = () => {
+		getData()
+	}
+	const handleCurrentChange = () => {
+		getData()
+	}
+	const handleBaseId = (id, name, type) => {
+		baseId.value = id
+		if (type == 'form') {
+			selectBase.value = name
+			getData()
+		} else {
+			selectBase2.value = name
+		}
+	}
+
+	function showDetail(type, row) {
       console.log("操作按钮触发", row);
       dialogEditor.value = true;
       if (type == "editor") {
@@ -326,11 +358,31 @@ export default {
         });
     }
 
+	async function getDropDown() {
+		let res = await getAllBaseApi()
+		baseDropDownData.push(...res.data.breedBaseList)
+		baseDropDownData2.push(...res.data.breedBaseList)
+		let res2 = await getAllShedUserDropDownApi()
+		userDropDownData.push(...res2.data.userList)
+	}
+
+
     return {
+		selectBase,
+		selectBase2,
+		total,
+		currentPage,
+		pageSize,
+		baseDropDownData,
+		baseDropDownData2,
+		userDropDownData,
       tableList,
       FormData,
 	  rules,
       dialogEditor,
+	  handleSizeChange,
+	  handleCurrentChange,
+	  handleBaseId,
       showDetail,
       onSubmit,
       dataDelete,
@@ -379,12 +431,17 @@ export default {
   height: 420px;
 }
 .dialogTitle {
+	float: left;
   margin-bottom: 10px;
   padding-left: 30px;
   height: 50px;
   line-height: 50px;
   font-size: 18px;
   font-weight: 600;
+}
+.dialogTitle-select {
+	float: right;
+	padding: 10px;
 }
 .baseInfo {
   float: left;
@@ -396,6 +453,13 @@ export default {
   width: 100%;
 }
 /* #endregion */
+.pagination {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 15px;
+}
 </style>
 <style>
 /* 删除确认框样式 */

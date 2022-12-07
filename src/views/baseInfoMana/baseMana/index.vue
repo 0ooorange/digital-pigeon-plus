@@ -2,20 +2,31 @@
   <div>
     <div class="header">
       <el-button @click="showDetail('add')">添加基地</el-button>
-      <el-button>选择部门</el-button>
+      <el-dropdown trigger="click">
+        <el-button>{{ selectDivision }}</el-button>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item
+              v-for="(item, key) in divisionDropDownData"
+              :key="key"
+              @click="handleDepartmentId(item.id, item.name)"
+              >{{ item.name }}</el-dropdown-item
+            >
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </div>
-
     <scTable
       class="table"
       ref="table"
       row-key="id"
       :data="tableList"
-      requestMethods="post"
+      hidePagination
     >
       <el-table-column
         align="center"
         label="序号"
-        prop="serialNumber"
+        type="index"
         width="80"
         sortable
       ></el-table-column>
@@ -36,29 +47,22 @@
       <el-table-column
         align="center"
         label="负责人"
-        prop="principal"
+        prop="userName"
         width="90"
         sortable
       ></el-table-column>
       <el-table-column
         align="center"
         label="电话号码"
-        prop="telephone"
+        prop="phone"
         width="120"
         sortable
       ></el-table-column>
       <el-table-column
         align="center"
         label="车间/棚数量"
-        prop="boardNumber"
+        prop="shedNumber"
         width="140"
-        sortable
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="员工数量"
-        prop="staffNumber"
-        width="120"
         sortable
       ></el-table-column>
       <el-table-column
@@ -84,16 +88,26 @@
               @click="showDetail('editor', scope.row)"
               >编辑</el-button
             >
-            <el-button
-              type="danger"
-              plain
-              @click="dataDelete(scope.row)"
+            <el-button type="danger" plain @click="dataDelete(scope.row)"
               >删除</el-button
             >
           </div>
         </template>
       </el-table-column>
     </scTable>
+    <div class="pagination">
+      <el-pagination
+        background
+        v-model:current-page="currentPage"
+        v-model:page-size="pageSize"
+        :page-sizes="[5, 10, 20, 50]"
+        :small="true"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
     <el-dialog
       v-model="dialogEditor"
       :show-close="false"
@@ -105,23 +119,34 @@
           <el-form-item label="基地名称" prop="baseName">
             <el-input v-model="FormData.values.baseName" />
           </el-form-item>
-          <el-form-item label="所属部门" prop="departmentName">
+          <el-form-item label="基地编码" prop="code">
+            <el-input v-model="FormData.values.code" />
+          </el-form-item>
+          <el-form-item label="所属部门" prop="departmentId">
             <el-select
-              v-model="FormData.values.departmentName"
+              v-model="FormData.values.departmentId"
               placeholder="选择部门"
-              disabled
+              :disabled="disabledDivisionDropDown"
             >
-              <el-option label="部门1" value="shanghai" />
-              <el-option label="部门2" value="beijing" />
+              <el-option
+                v-for="(item, key) in divisionDropDownData"
+                :key="key"
+                :label="item.name"
+                :value="item.id"
+              />
             </el-select>
           </el-form-item>
-          <el-form-item label="负责人" prop="principal">
+          <el-form-item label="负责人" prop="userId">
             <el-select
-              v-model="FormData.values.principal"
+              v-model="FormData.values.userId"
               placeholder="选择负责人"
             >
-              <el-option label="负责人1" value="小红" />
-              <el-option label="负责人2" value="小明" />
+              <el-option
+                v-for="(item, key) in userDropDownData"
+                :key="key"
+                :label="item.name"
+                :value="item.id"
+              />
             </el-select>
           </el-form-item>
           <el-form-item label="规模" prop="scale">
@@ -135,19 +160,19 @@
               v-model="FormData.values.province"
               placeholder="选择省份"
             >
-              <el-option label="负责人1" value="小红" />
-              <el-option label="负责人2" value="小明" />
+              <el-option label="广东省" value="广东省" />
+              <el-option label="广西省" value="广西省" />
             </el-select>
           </el-form-item>
           <el-form-item label="城市" prop="city">
             <el-select v-model="FormData.values.city" placeholder="选择城市">
-              <el-option label="负责人1" value="小红" />
-              <el-option label="负责人2" value="小明" />
+              <el-option label="北京" value="北京" />
+              <el-option label="上海" value="上海" />
             </el-select>
           </el-form-item>
-          <el-form-item label="详细地址" prop="detailAddr">
+          <el-form-item label="详细地址" prop="address">
             <el-input
-              v-model="FormData.values.detailAddr"
+              v-model="FormData.values.address"
               type="textarea"
               rows="5"
               resize="none"
@@ -156,11 +181,11 @@
         </el-form>
       </div>
       <div class="otherInfo">
-        <div class="baseIntro">
+        <div class="introduction">
           <el-form label-position="top" :rules="rules">
-            <el-form-item label="基地简介" prop="baseIntro">
+            <el-form-item label="基地简介" prop="introduction">
               <el-input
-                v-model="FormData.values.baseIntro"
+                v-model="FormData.values.introduction"
                 type="textarea"
                 rows="8"
                 resize="none"
@@ -185,16 +210,10 @@
               </el-form-item>
               <el-form-item>
                 <div class="control-btn">
-                  <el-button
-                    type="primary"
-                    plain
-                    @click="onSubmit"
+                  <el-button type="primary" plain @click="onSubmit"
                     >确认</el-button
                   >
-                  <el-button
-                    @click="dialogEditor = false"
-                    >取消</el-button
-                  >
+                  <el-button @click="dialogEditor = false">取消</el-button>
                 </div>
               </el-form-item>
             </el-form>
@@ -206,7 +225,15 @@
 </template>
 
 <script>
-import { reactive, ref } from "vue";
+import {
+  getBaseInfoApi,
+  // editBaseInfoApi,
+  addBaseInfoApi,
+  deleteBaseByIdApi,
+  getDivisionDropDownApi,
+  getShedDropDownApi,
+} from "@api/baseInformation/baseInfoMana";
+import { onMounted, reactive, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import SCMap from "@/components/scMap";
 
@@ -216,69 +243,40 @@ export default {
   components: { SCMap },
 
   setup() {
-    //表格数据
+    onMounted(() => {
+      getData();
+      getDropDown();
+    });
+
+    const selectDivision = ref("选择部门");
+    const disabledDivisionDropDown = ref(false);
+    const total = ref(0);
+    const departmentId = ref("");
+    const currentPage = ref(1);
+    const pageSize = ref(10);
+
+    // 下拉框数据
+    let divisionDropDownData = reactive([]);
+    let userDropDownData = reactive([]);
+
+    // 表格数据
     let tableList = reactive([]);
-    tableList = [
-      {
-        serialNumber: "1",
-        departmentName: "养殖部门",
-        baseName: "本田基地",
-        principal: "小明",
-        telephone: "15760153427",
-        boardNumber: "15",
-        staffNumber: "15",
-        scale: "30万只",
-        area: "6000",
-      },
-      {
-        serialNumber: "2",
-        departmentName: "养殖部门",
-        baseName: "丰田基地",
-        principal: "小李",
-        telephone: "15453754427",
-        boardNumber: "14",
-        staffNumber: "14",
-        scale: "20万只",
-        area: "5000",
-      },
-      {
-        serialNumber: "3",
-        departmentName: "屠宰部门",
-        baseName: "牛牛基地",
-        principal: "小红",
-        telephone: "16033154427",
-        boardNumber: "0",
-        staffNumber: "10",
-        scale: "10万只",
-        area: "3000",
-      },
-      {
-        serialNumber: "4",
-        departmentName: "加工部门",
-        baseName: "大田基地",
-        principal: "小全",
-        telephone: "17015374234",
-        boardNumber: "2",
-        staffNumber: "8",
-        scale: "5万只",
-        area: "300",
-      },
-    ];
 
     // 表单数据
     let FormData = reactive([]);
     FormData.values = {
-      baseName: "",
-      departmentName: "",
-      principal: "",
-      scale: "",
+      address: "",
       area: "",
-      province: "",
+      baseName: "",
       city: "",
-      detailAddr: "",
-      baseIntro: "",
-      longitude: "",
+      code: "",
+      departmentId: "",
       latitude: "",
+      longitude: "",
+      province: "",
+      userId: "",
+      introduction: "",
+      scale: "",
     };
 
     const rules = reactive({
@@ -288,15 +286,22 @@ export default {
           message: "请输入基地名称",
         },
       ],
-      departmentName: [
-        {
-          required: false,
-        },
-      ],
-      principal: [
+      code: [
         {
           required: true,
-          message: "请输入负责人",
+          message: "请输入基地编码",
+        },
+      ],
+      departmentId: [
+        {
+          required: true,
+          message: "请选择所属部门",
+        },
+      ],
+      userId: [
+        {
+          required: true,
+          message: "请选择负责人",
         },
       ],
       scale: [
@@ -313,22 +318,22 @@ export default {
       province: [
         {
           required: true,
-          message: "请输入省份",
+          message: "请选择省份",
         },
       ],
       city: [
         {
           required: true,
-          message: "请输入城市",
+          message: "请选择城市",
         },
       ],
-      detailAddr: [
+      address: [
         {
           required: true,
           message: "请输入详细地址",
         },
       ],
-      baseIntro: [
+      introduction: [
         {
           required: false,
         },
@@ -347,25 +352,47 @@ export default {
       ],
     });
 
-    // 对话框
     let dialogFormType = "";
     const dialogEditor = ref(false);
 
+    async function getData() {
+      var params = {
+        departmentId: departmentId.value,
+        pageNum: currentPage.value,
+        pageSize: pageSize.value,
+      };
+      let res = await getBaseInfoApi(params);
+      if (res.code == 200) {
+        total.value = Number(res.data.total);
+        tableList.length = 0;
+        tableList.push(...res.data.baseList);
+      }
+    }
+    const handleSizeChange = () => {
+      getData();
+    };
+    const handleCurrentChange = () => {
+      getData();
+    };
+    const handleDepartmentId = (id, name) => {
+      departmentId.value = id;
+      selectDivision.value = name;
+      getData();
+    };
+
     function showDetail(type, row) {
-      console.log("操作按钮触发", row);
       dialogEditor.value = true;
       if (type == "editor") {
+        console.log("row", row);
+        disabledDivisionDropDown.value = true;
         dialogFormType = "editor";
         ElMessage("编辑对话框触发");
       } else {
         dialogFormType = "add";
-        ElMessage("添加对话框触发");
       }
     }
 
     function dataDelete(row) {
-      console.log("删除按钮触发", row);
-      ElMessage("删除按钮触发");
       ElMessageBox.confirm("是否删除", {
         customClass: "confirmBox",
         autofocus: false,
@@ -376,17 +403,23 @@ export default {
         center: true,
         showClose: false,
       })
-        .then(() => {
-          if (row.boardNumber > 0) {
+        .then(async () => {
+          if (row.shedNumber > 0) {
             ElMessage({
               type: "error",
               message: "提示：该基地下还存在有车间/棚，无法删除！",
             });
           } else {
-            ElMessage({
-              type: "success",
-              message: "删除成功",
-            });
+            console.log(row.id);
+            let res = await deleteBaseByIdApi({ baseId: row.id });
+            console.log(res);
+            if (res.code == 200) {
+              getData();
+              ElMessage({
+                type: "success",
+                message: "删除成功",
+              });
+            }
           }
         })
         .catch(() => {
@@ -397,31 +430,43 @@ export default {
         });
     }
 
-    function onSubmit() {
+    async function onSubmit() {
       console.log("submit!", FormData.values);
-
       if (
         FormData.values.baseName != "" &&
-        FormData.values.principal != "" &&
+        FormData.values.userId != "" &&
         FormData.values.area != "" &&
         FormData.values.province != "" &&
         FormData.values.city != "" &&
-        FormData.values.detailAddr != "" &&
+        FormData.values.address != "" &&
         FormData.values.longitude != "" &&
         FormData.values.latitude != ""
       ) {
         if (dialogFormType == "editor") {
+          // let res = await editBaseInfoApi(params)
+          // console.log(res)
+
+          //   ElMessage({
+          //     type: "success",
+          //     message: "编辑对话框提交",
+          //   });
           ElMessage({
-            type: "success",
-            message: "编辑对话框提交",
+            type: "error",
+            message: "功能修复中",
           });
         } else {
-          ElMessage({
-            type: "success",
-            message: "添加对话框提交",
-          });
+          console.log(FormData.values);
+          let res = await addBaseInfoApi(FormData.values);
+          console.log(res);
+          if (res.code == 200) {
+            ElMessage({
+              type: "success",
+              message: "添加成功！",
+            });
+            getData();
+            dialogEditor.value = false;
+          }
         }
-        dialogEditor.value = false;
       } else {
         ElMessage({
           type: "error",
@@ -430,11 +475,28 @@ export default {
       }
     }
 
+    async function getDropDown() {
+      let res = await getDivisionDropDownApi();
+      divisionDropDownData.push(...res.data.departments);
+      let res2 = await getShedDropDownApi();
+      userDropDownData.push(...res2.data.userList);
+    }
+
     return {
+      selectDivision,
+      disabledDivisionDropDown,
+      total,
+      currentPage,
+      pageSize,
+      divisionDropDownData,
+      userDropDownData,
       tableList,
       FormData,
       rules,
       dialogEditor,
+      handleSizeChange,
+      handleCurrentChange,
+      handleDepartmentId,
       showDetail,
       dataDelete,
       onSubmit,
@@ -485,7 +547,6 @@ export default {
 }
 .baseInfo {
   float: left;
-  padding-top: 10px;
   width: 370px;
 }
 .otherInfo {
@@ -495,7 +556,7 @@ export default {
   height: 500px;
   border-left: 2px solid rgb(138, 138, 138);
 
-  .baseIntro {
+  .introduction {
     width: 100%;
     height: 50%;
   }
@@ -522,6 +583,13 @@ export default {
   }
 }
 /* #endregion */
+.pagination {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 15px;
+}
 </style>
 <style>
 /* 删除确认框样式 */

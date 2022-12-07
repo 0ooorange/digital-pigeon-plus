@@ -1,52 +1,53 @@
+// 基础信息管理-人员管理
+
 import http from "@/utils/request";
-export const getUserInfoApi =  {
-	url: `/digitalPigeon/ucenter/ucenter/new-user/getUserListByUserId`,
-	name: "获取所有员工信息",
-	get: async function (page) {
-		// console.log("url", this.url);
-		return await http.get(`${this.url}?current=${page.current}&size=${page.pageSize}&userId=1543954778680303600`);
-	},
-}
 
-export const getEditInfo =  {
-	url: `/digitalPigeon/ucenter/ucenter/new-user/getInfoByWorkerId`,
-	name: "获取编辑用户前信息",
-	get: async function (userId) {
-		// console.log("url", this.url);
-		return await http.get(`${this.url}?userId=${userId}`);
-	},
-}
+// 通过token获取员工管理界面数据
+export const getEmployeeManagementInfoByTokenApi = (params) => http.post(`/digitalPigeon/information/UserManagement/getEmployeeManagementInfoByToken?
+	baseId=${params.baseId}&
+	departmentId=${params.departmentId}&
+	workshopId=${params.workshopId}&
+	pageNum=${params.pageNum}&
+	pageSize=${params.pageSize}`
+)
 
-export const updateEditInfo =  {
-	url: `/digitalPigeon/ucenter/ucenter/new-user/updateUserInfo`,
-	name: "更新用户信息",
-	post: async function (params) {
-		return await http.post(`${this.url}?id=${params.id}&name=${params.name}&phone=${params.phone}`);
-	},
-}
+// 通过部门id获取职位信息(在添加/修改员工时使用) (看后端怎么说)
+// export const getPositionInfoByDepartmentIdApi = (params) => http.post(`/digitalPigeon/information/UserManagement/getPositionInfoByDepartmentId?departmentId=${params.departmentId}`)
 
-export const getAllRole =  {
-	url: `/digitalPigeon/ucenter/ucenter/new-role/getAllRole`,
-	name: "获取所有角色",
-	get: async function () {
-		return await http.get(`${this.url}`);
-	},
-}
+// 通过员工id修改员工数据
+export const updataEmployeeManagementInfoByUserIdApi = (params) => http.post(`/digitalPigeon/information/UserManagement/updataEmployeeManagementInfoByUserId?
+	birth=${params.birth}&
+	phone=${params.phone}&
+	roleId=${params.roleId}&
+	sex=${params.sex}&
+	userId=${params.userId}&
+	userName=${params.userName}&
+	address=${params.address}&
+	introduce=${params.introduce}`
+)
 
-export const addEmployeeApi =  {
-	url: `/digitalPigeon/ucenter/ucenter/new-user/register`,
-	name: "添加员工",
-	post: async function (user) {
+// 通过员工ID删除员工
+export const deleteEmployeeByUserIdApi = (params) => http.post(`/digitalPigeon/information/UserManagement/deleteEmployeeByUserId?userId=${params.userId}`)
 
-		return await http.post(`${this.url}?employerId=1543954778680303600`,user);
-	},
-}
+// 添加用户
+export const addUserApi = (params) => http.post(`/digitalPigeon/information/UserManagement/AddUser?
+	birth=${params.birth}&
+	phone=${params.phone}&
+	roleId=${params.roleId}&
+	sex=${params.sex}&
+	userName=${params.userName}&
+	address=${params.address}&
+	introduce=${params.introduce}`
+)
 
-export const deleteUser =  {
-	url: `/digitalPigeon/ucenter/ucenter/new-user/deleteById`,
-	name: "删除用户信息",
-	get: async function (userId) {
-		// console.log("url", this.url);
-		return await http.get(`${this.url}?userId=${userId}`);
-	},
-}
+// 通过token获得部门下拉菜单
+export const getDepartmentsApi = () => http.post(`/digitalPigeon/information/DropDownMenu/getDepartments`)
+
+// 通过部门id获得基地下拉菜单
+export const getBasesByDepartmentIdApi = (params) => http.post(`/digitalPigeon/information/DropDownMenu/getBasesByDepartmentId?departmentId=${params.departmentId}`)
+
+// 通过基地id获得车间/鸽棚下拉菜单
+export const getPlantByBaseIdApi = (params) => http.post(`/digitalPigeon/information/DropDownMenu/getPlantByBaseId?baseId=${params.baseId}&departmentId=${params.departmentId}`)
+
+
+
