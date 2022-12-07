@@ -21,11 +21,15 @@
                     ></el-col>
                 </el-row>
                 <el-row :gutter="10">
-                    <el-col :span="8">
-                        <el-form-item label="最小值" :label-width="70">
+                    <el-col :span="7">
+                        <el-form-item label="普通最小值" :label-width="100">
                             <el-input v-model="form.min" /></el-form-item
                     ></el-col>
-                    <el-col :span="16">
+                    <el-col :span="7">
+                        <el-form-item label="严重最小值" :label-width="100">
+                            <el-input v-model="form.minmin" /></el-form-item
+                    ></el-col>
+                    <el-col :span="10">
                         <el-form-item label="预警信息" :label-width="70">
                             <el-input
                                 v-model="form.mininfo"
@@ -33,11 +37,15 @@
                     ></el-col>
                 </el-row>
                 <el-row :gutter="10">
-                    <el-col :span="8">
-                        <el-form-item label="最大值" :label-width="70">
+                    <el-col :span="7">
+                        <el-form-item label="普通最大值" :label-width="100">
                             <el-input v-model="form.max" /></el-form-item
                     ></el-col>
-                    <el-col :span="16">
+                    <el-col :span="7">
+                        <el-form-item label="严重最大值" :label-width="100">
+                            <el-input v-model="form.maxmax" /></el-form-item
+                    ></el-col>
+                    <el-col :span="10">
                         <el-form-item label="预警信息" :label-width="70">
                             <el-input
                                 v-model="form.maxinfo"
@@ -86,8 +94,10 @@ export default defineComponent({
             // console.log("cu", props.dialogForm.name);
             form.name = props.dialogForm.name;
             form.min = props.dialogForm.min;
+            form.minmin = props.dialogForm.minmin;
             form.mininfo = props.dialogForm.mininfo;
             form.max = props.dialogForm.max;
+            form.maxmax = props.dialogForm.maxmax;
             form.maxinfo = props.dialogForm.maxinfo;
             form.day = props.dialogForm.day;
             form.gmtCreate = props.dialogForm.gmtCreate;
@@ -115,8 +125,10 @@ export default defineComponent({
         const form = reactive({
             name: "",
             min: "",
+            minmin: "",
             mininfo: "",
             max: "",
+            maxmax: "",
             maxinfo: "",
             day: "",
             gmtCreate: "",
@@ -137,7 +149,7 @@ export default defineComponent({
                     break;
             }
             let res = await setThreshold(form);
-            // console.log("请求参数", form);
+            console.log("请求参数", form);
             // console.log("请求参数", res);
             dialogFormVisible.value = false;
 

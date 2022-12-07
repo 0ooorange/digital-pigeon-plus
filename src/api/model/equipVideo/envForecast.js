@@ -14,3 +14,4 @@ import http from "@/utils/request";
 //};
 const url  = '/digitalPigeon/environment/enviroment/sensordevice/getSensorByIDTypeTime'
 export const getCarbonDioxideData = (data = {},type = "") => http.post(url + '?start_time=' + data.start_time + '&end_time=' + data.end_time +  '&shed_id=1518124016571797507' + '&type=' + type)
+

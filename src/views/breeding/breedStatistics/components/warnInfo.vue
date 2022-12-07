@@ -19,19 +19,19 @@ const props = defineProps({shed_id: {type: String, require: true}, start_time: {
 const tableData = ref([])
 // 未查仔鸽笼
 getUnCheckPigeonCage(props.shed_id, dateFormat(props.start_time), dateFormat(props.end_time)).then(res => {
-  res.data.data.forEach(item => {
+  res.data?.data?.forEach(item => {
     tableData.value.push({id: item.id, pigeonnumber: item.codes, boardnumber: item.panelCode, noeggspumped: '', noeggschecked: '', nochildchecked: '✔️'})
   })
 })
 // 未查蛋鸽笼
 getUnCheckEgg(props.shed_id, dateFormat(props.start_time), dateFormat(props.end_time)).then(res => {
-  res.data.data.forEach(item => {
+  res.data?.data?.forEach(item => {
     tableData.value.push({id: item.id, pigeonnumber: item.codes, boardnumber: item.panelCode, noeggspumped: '', noeggschecked: '✔️', nochildchecked: ''})
   })
 })
 // 未抽蛋鸽笼
 getUnTakeEgg(props.shed_id, dateFormat(props.start_time), dateFormat(props.end_time)).then(res => {
-  res.data.data.forEach(item => {
+  res.data?.data?.forEach(item => {
     tableData.value.push({id: item.id, pigeonnumber: item.codes, boardnumber: item.panelCode, noeggspumped: '✔️', noeggschecked: '', nochildchecked: ''})
   })
 })
