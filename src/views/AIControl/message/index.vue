@@ -4,12 +4,7 @@
       <el-col :span="5">
         <div class="option">
           <div style="margin-right: 5px">选择基地:</div>
-          <el-select
-            v-model="baseValue"
-            class="m-2"
-            placeholder="选择基地"
-           
-          >
+          <el-select v-model="baseValue" class="m-2" placeholder="选择基地">
             <el-option
               v-for="item in baseOptions"
               :key="item.value"
@@ -22,12 +17,7 @@
       <el-col :span="5">
         <div class="option">
           <div style="margin-right: 5px">选择鸽棚:</div>
-          <el-select
-            v-model="devValue"
-            class="m-2"
-            placeholder="选择鸽棚"
-           
-          >
+          <el-select v-model="devValue" class="m-2" placeholder="选择鸽棚">
             <el-option
               v-for="item in devOptions"
               :key="item.value"
@@ -53,80 +43,97 @@
       </el-col>
     </el-row>
     <scTable
-            class="table"
-            ref="table"
-            row-key="id"
-            stripe
-       
-            :hidePagination="false"
-            highlightCurrentRow
-            :data="resultList"
-        >
-        <el-table-column
-                align="center"
-                label="序号"
-                prop="num"
-                width="180"
-            ></el-table-column>
-            <el-table-column
-                align="center"
-                label="预警类型"
-                prop="min"
-                width="150"
-            ></el-table-column>
-            <el-table-column
-                align="center"
-                label="发送时间"
-                prop="minmin"
-                width="150"
-            ></el-table-column>
-            <el-table-column
-                align="center"
-                label="接收人"
-                prop="mininfo"
-                width="260"
-            ></el-table-column>
-            <el-table-column
-                align="center"
-                label="电话号码"
-                prop="max"
-                width="150"
-            ></el-table-column>
-            <el-table-column
-                align="center"
-                label="基地"
-                prop="maxmax"
-                width="150"
-            ></el-table-column>
-            <el-table-column
-                align="center"
-                label="棚"
-                prop="maxinfo"
-                width="260"
-            ></el-table-column>
-            <el-table-column
-                align="center"
-                label="内容"
-                prop="info"
-                width="260"
-            ></el-table-column>
-            <el-table-column
-                align="center"
-                label="内容"
-                prop="weight"
-                width="200"
-            >
-                <template #default="scope">
-                    <el-button
-                        type="primary"
-                        plain
-                        icon="el-icon-edit"
-                        @click="editData(scope.row)"
-                        >详情</el-button
-                    >
-                </template></el-table-column
-            >
-        </scTable>
+      class="table"
+      ref="table"
+      row-key="id"
+      stripe
+      :hidePagination="false"
+      highlightCurrentRow
+      :data="resultList"
+    >
+      <el-table-column
+        align="center"
+        label="序号"
+        prop="num"
+        width="180"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="预警类型"
+        prop="min"
+        width="150"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="发送时间"
+        prop="minmin"
+        width="150"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="接收人"
+        prop="mininfo"
+        width="260"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="电话号码"
+        prop="max"
+        width="150"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="基地"
+        prop="maxmax"
+        width="150"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="棚"
+        prop="maxinfo"
+        width="260"
+      ></el-table-column>
+      <el-table-column align="center" label="操作" prop="weight" width="200">
+        <template #default="scope">
+          <el-button
+            type="primary"
+            plain
+            icon="el-icon-edit"
+            @click="editData(scope.row)"
+            >详情</el-button
+          >
+          <!-- <el-button
+                        size="mini"
+                        type="danger"
+                        icon="el-icon-delete"
+                        @click="removeOutcage(scope.row.id)"
+                        >删除</el-button
+                    > -->
+        </template></el-table-column
+      >
+    </scTable>
+
+    <!-- 弹框 -->
+    <el-dialog
+      v-model="dialogVisible"
+      title="短信详情"
+      width="30%"
+      :before-close="handleClose"
+    >
+    <p style="font-size: 18px;margin-bottom: 10px;">
+      【金绿鸽子有限公司】短信预警系统提示:
+    </p>
+    <p style="font-size: 16px;">
+      当前【A01基地】【B02棚】中【二氧化碳】在未来【10分钟】后会超过标准值【200ml】请注意!
+    </p>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button type="primary" @click="dialogVisible = false">
+            确认
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
  
@@ -142,7 +149,7 @@ export default defineComponent({
       {
         value: "0",
         label: "金绿基地",
-      }
+      },
     ]);
 
     //鸽棚下拉框
@@ -231,7 +238,7 @@ export default defineComponent({
         mininfo: "胜平",
         max: "13123451234",
         maxmax: "金绿基地",
-        maxinfo: "A01"
+        maxinfo: "A01",
       },
       {
         num: 2,
@@ -240,7 +247,7 @@ export default defineComponent({
         mininfo: "胜平",
         max: "13543211234",
         maxmax: "金绿基地",
-        maxinfo: "A01"
+        maxinfo: "A01",
       },
       {
         num: 3,
@@ -249,13 +256,16 @@ export default defineComponent({
         mininfo: "胜平",
         max: "13123454321",
         maxmax: "金绿基地",
-        maxinfo: "A01"
-      }
+        maxinfo: "A01",
+      },
     ]);
 
-    const editData = function() {
+    const editData = function () {
+      dialogVisible.value = true
+    };
 
-    }
+    const dialogVisible = ref(false);
+
     return {
       baseValue,
       baseOptions,
@@ -265,7 +275,8 @@ export default defineComponent({
       dateValue,
       resultList,
       visibleChange,
-      editData
+      editData,
+      dialogVisible
     };
   },
 });
