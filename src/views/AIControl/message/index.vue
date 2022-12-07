@@ -223,10 +223,10 @@ export default defineComponent({
       //     proxy.$TOOL.dateFormat(e[0]),
       //     proxy.$TOOL.dateFormat(e[1]).substring(0, 10) + " 23:59:59"
       // );
-      commonParams.start_time = proxy.$TOOL.dateFormat(e[0]);
-      commonParams.end_time =
-        proxy.$TOOL.dateFormat(e[1]).substring(0, 10) + " 23:59:59";
-      console.log("参数", commonParams);
+      // commonParams.start_time = proxy.$TOOL.dateFormat(e[0]);
+      // commonParams.end_time =
+      //   proxy.$TOOL.dateFormat(e[1]).substring(0, 10) + " 23:59:59";
+      // console.log("参数", commonParams);/
     };
 
     //表格
