@@ -1,31 +1,52 @@
+// 基础信息管理-基地管理
+
 import http from "@/utils/request";
-export const getBaseInfoApi =  {
-	url: `/digitalPigeon/ucenter/ucenter/pigeon-base/getAllPigeonBase`,
-	name: "获取所有基地信息",
-	get: async function () {
-		return await http.get(`${this.url}`);
-	},
-}
 
-export const getBaseById =  {
-	url: `/digitalPigeon/ucenter/ucenter/pigeon-base/getBaseInfoById`,
-	name: "根据id获取基地信息(编辑用)",
-	get: async function (id) {
-		return await http.get(`${this.url}?baseId=${id}`);
-	},
-}
+// 获取基地
+export const getBaseInfoApi = (params) => http.post(`/digitalPigeon/information/ArchitectureManagement/getBaseInformation?
+	departmentId=${params.departmentId}&
+	pageNum=${params.pageNum}&
+	pageSize=${params.pageSize}`
+);
 
-export const editBaseInfo =  {
-	url: `/digitalPigeon/ucenter/ucenter/pigeon-base/updateBaseInfo`,
-	name: "确定修改基地信息",
-	post: async function (data) {
-		return await http.post(`${this.url}`,data);
-	},
-}
-export const addBaseInfo =  {
-	url: `/digitalPigeon/ucenter/ucenter/pigeon-base/addPigeonBase`,
-	name: "新增基地信息",
-	post: async function (data) {
-		return await http.post(`${this.url}`,data);
-	},
-}
+// 更新基地（看后端怎么说）
+export const editBaseInfoApi = () => http.post(`/digitalPigeon/information/ArchitectureManagement/updataBaseInformation?
+	baseId=
+	address
+	area
+	baseName
+	city
+	code
+	introduction
+	latitude
+	longitude
+	province
+	scale
+	userId`
+)
+
+// 添加基地
+export const addBaseInfoApi = (params) => http.post(`/digitalPigeon/information/ArchitectureManagement/addBaseInformation?
+	address=${params.address}&
+	area=${params.area}&
+	baseName=${params.baseName}&
+	city=${params.city}&
+	code=${params.code}&
+	departmentId=${params.departmentId}&
+	introduction=${params.introduction}&
+	latitude=${params.latitude}&
+	longitude=${params.longitude}&
+	province=${params.province}&
+	scale=${params.scale}&
+	userId=${params.userId}`
+)
+
+// 删除基地
+export const deleteBaseByIdApi = (params) => http.post(`/digitalPigeon/information/ArchitectureManagement/deleteBaseById?baseId=${params.baseId}`)
+
+// 通过token获得部门下拉菜单
+export const getDivisionDropDownApi = () => http.post(`/digitalPigeon/information/DropDownMenu/getDepartments`)
+
+// 选择员工下拉菜单(在鸽棚/基地中使用)
+export const getShedDropDownApi = () => http.post(`/digitalPigeon/information/DropDownMenu/getAllShedUser`)
+
