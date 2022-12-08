@@ -28,7 +28,7 @@ export const addShedApi = (params) => http.post(`/digitalPigeon/information/Work
 	code=${params.code}&
 	column_num=${params.column_num}&
 	floor_num=${params.floor_num}&
-	user_id=${params.user_id}
+	user_id=${params.user_id}&
 	if_take=${params.if_take}&
 	row_num=${params.row_num}&
 	take_hatch_perc=${params.take_hatch_perc}`

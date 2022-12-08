@@ -9,20 +9,20 @@ export const getBaseInfoApi = (params) => http.post(`/digitalPigeon/information/
 	pageSize=${params.pageSize}`
 );
 
-// 更新基地（看后端怎么说）
-export const editBaseInfoApi = () => http.post(`/digitalPigeon/information/ArchitectureManagement/updataBaseInformation?
-	baseId=
-	address
-	area
-	baseName
-	city
-	code
-	introduction
-	latitude
-	longitude
-	province
-	scale
-	userId`
+// 更新基地
+export const editBaseInfoApi = (params) => http.post(`/digitalPigeon/information/ArchitectureManagement/updataBaseInformation?
+	baseId=${params.baseId}&
+	address=${params.address}&
+	area=${params.area}&
+	baseName=${params.baseName}&
+	city=${params.city}&
+	code=${params.code}&
+	introduction=${params.introduction}&
+	latitude=${params.latitude}&
+	longitude=${params.longitude}&
+	province=${params.province}&
+	scale=${params.scale}&
+	userId=${params.userId}`
 )
 
 // 添加基地

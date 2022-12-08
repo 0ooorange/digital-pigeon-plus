@@ -22,6 +22,7 @@
       row-key="id"
       :data="tableList"
       hidePagination
+	  stripe
     >
       <el-table-column
         align="center"
@@ -227,7 +228,7 @@
 <script>
 import {
   getBaseInfoApi,
-  // editBaseInfoApi,
+  editBaseInfoApi,
   addBaseInfoApi,
   deleteBaseByIdApi,
   getDivisionDropDownApi,
@@ -265,6 +266,7 @@ export default {
     // 表单数据
     let FormData = reactive([]);
     FormData.values = {
+		baseId: '',
       address: "",
       area: "",
       baseName: "",
@@ -284,24 +286,28 @@ export default {
         {
           required: true,
           message: "请输入基地名称",
+		  trigger: 'blur',
         },
       ],
       code: [
         {
           required: true,
           message: "请输入基地编码",
+		  trigger: 'blur',
         },
       ],
       departmentId: [
         {
           required: true,
           message: "请选择所属部门",
+		  trigger: 'blur',
         },
       ],
       userId: [
         {
           required: true,
           message: "请选择负责人",
+		  trigger: 'blur',
         },
       ],
       scale: [
@@ -313,24 +319,28 @@ export default {
         {
           required: true,
           message: "请输入面积",
+		  trigger: 'blur',
         },
       ],
       province: [
         {
           required: true,
           message: "请选择省份",
+		  trigger: 'blur',
         },
       ],
       city: [
         {
           required: true,
           message: "请选择城市",
+		  trigger: 'blur',
         },
       ],
       address: [
         {
           required: true,
           message: "请输入详细地址",
+		  trigger: 'blur',
         },
       ],
       introduction: [
@@ -342,12 +352,14 @@ export default {
         {
           required: true,
           message: "请输入经度",
+		  trigger: 'blur',
         },
       ],
       latitude: [
         {
           required: true,
           message: "请输入纬度",
+		  trigger: 'blur',
         },
       ],
     });
@@ -386,9 +398,22 @@ export default {
         console.log("row", row);
         disabledDivisionDropDown.value = true;
         dialogFormType = "editor";
-        ElMessage("编辑对话框触发");
+		FormData.values.baseId = row.id
+		FormData.values.address = row.detailedAddress
+		FormData.values.area = row.area
+		FormData.values.baseName = row.baseName
+		FormData.values.city = row.city
+		FormData.values.code = row.code
+		FormData.values.departmentId = row.departmentId
+		FormData.values.latitude = row.latitude
+		FormData.values.longitude = row.longitude
+		FormData.values.province = row.province
+		FormData.values.userId = row.userId
+		FormData.values.introduction = row.introduction
+		FormData.values.scale = row.scale
       } else {
         dialogFormType = "add";
+		Object.keys(FormData.values).forEach(key=>{FormData.values[key]=''})
       }
     }
 
@@ -433,27 +458,31 @@ export default {
     async function onSubmit() {
       console.log("submit!", FormData.values);
       if (
-        FormData.values.baseName != "" &&
-        FormData.values.userId != "" &&
-        FormData.values.area != "" &&
-        FormData.values.province != "" &&
-        FormData.values.city != "" &&
-        FormData.values.address != "" &&
-        FormData.values.longitude != "" &&
-        FormData.values.latitude != ""
+        FormData.values.baseName !== "" &&
+        FormData.values.userId !== "" &&
+        FormData.values.area !== "" &&
+        FormData.values.province !== "" &&
+        FormData.values.city !== "" &&
+        FormData.values.address !== "" &&
+        FormData.values.longitude !== "" &&
+        FormData.values.latitude !== ""
       ) {
         if (dialogFormType == "editor") {
-          // let res = await editBaseInfoApi(params)
-          // console.log(res)
-
-          //   ElMessage({
-          //     type: "success",
-          //     message: "编辑对话框提交",
-          //   });
-          ElMessage({
-            type: "error",
-            message: "功能修复中",
-          });
+          let res = await editBaseInfoApi(FormData.values)
+          console.log(res)
+		  if (res.code == 200) {
+			ElMessage({
+              type: "success",
+              message: res.message,
+            });
+			getData()
+			dialogEditor.value = false;
+		  } else {
+			ElMessage({
+              type: "error",
+              message: res.message,
+            });
+		  }
         } else {
           console.log(FormData.values);
           let res = await addBaseInfoApi(FormData.values);
@@ -465,7 +494,12 @@ export default {
             });
             getData();
             dialogEditor.value = false;
-          }
+          } else {
+			ElMessage({
+              type: "error",
+              message: res.message,
+            });
+		  }
         }
       } else {
         ElMessage({
