@@ -28,7 +28,7 @@ export default {
 			state.CURR_INFO = currInfo;
 		},
 		setShedId(state, currShedId) {
-			state.CURR_INFO = currShedId;
+			state.SHED_ID = currShedId;
 		}
 	},
 };

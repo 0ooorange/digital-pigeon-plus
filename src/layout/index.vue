@@ -78,7 +78,7 @@ import tool from '@/utils/tool'
 import router from '@/router'
 import store from '@/store'
 import { ref, computed, watch, nextTick } from 'vue'
-import { getBreedBaseAndShed } from '@api/bases/login'
+import { getBreedBaseAndShed, getBreedBaseAndShed_0 } from '@api/bases/login'
 
 export default {
   name: 'index',
@@ -120,13 +120,15 @@ export default {
     const sheds = ref([])
     const currBase = ref({})
     const currShed = ref({})
+    const currShedId = ref('')
     const currBaseName = ref('')
     const currShedCode = ref('')
     const currOperator = ref('')
     const currInfo = ref(tool.data.get('CURR_INFO'))
 
     const currBaseId = ref('')
-    getBreedBaseAndShed().then(res => {
+    getBreedBaseAndShed_0().then(res => {
+      console.log(res, 12366)
       if(currInfo?.value?.CURR_BASE.id) {
         currBaseId.value = currInfo.value.CURR_BASE.id
       } else {
@@ -146,6 +148,9 @@ export default {
         CHARGE_NAME: currOperator.value,
       }
       tool.data.set('CURR_INFO', currInfo.value)
+      currShedId.value = currShed.value.id
+      store.commit('setShedId', currShed.value.id)
+      console.log('CURR_INFO setted~~~')
 
       // 设置展示数据
       bases.value = res.data.BaseList
@@ -283,6 +288,7 @@ export default {
       thirdSpan,
       bases,
       sheds,
+      currShedId,
       currBaseName,
       currShedCode,
       currOperator,
