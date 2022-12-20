@@ -113,7 +113,6 @@ export default {
     ]
     tool.data.set('IS_GET_ROUTER', false)
     tool.data.set('CURR_MENU_INDEX', 0)
-
     // 获取基本信息
     const userName = ref('')
     getPersonalInfo().then(res => {
