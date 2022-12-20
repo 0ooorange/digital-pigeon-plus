@@ -12,7 +12,7 @@ export default {
 		// 当前信息
 		CURR_INFO: tool.data.get('CURR_INFO') || {},
 		// 鸽棚编号
-		SHED_ID: tool.data.get('CURR_INFO') && tool.data.get('CURR_INFO').CURR_SHED.id || ''
+		SHED_ID: tool.data.get('CURR_INFO') && tool.data.get('CURR_INFO').CURR_SHED.id !== '' ? tool.data.get('CURR_INFO').CURR_SHED.id : '1518124016571797507'
 	},
 	mutations: {
 		setUserInfo(state, userInfo) {
