@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <span class="rightTop">
-	  <span>刘双印，欢迎您！</span>
+      <span>刘双印，欢迎您！</span>
       <router-link to="/login">注销</router-link>
     </span>
     <circle-menu ref="ccMenu" :menus="menus"></circle-menu>
@@ -17,17 +17,7 @@ import { getPersonalInfo, getUserMenu } from '@api/bases/login'
 
 const allMenus = [
   {
-	id: "1",
-    index: 0,
-    name: '养殖系统',
-    system: 'breeding',
-    icon: 'nav_yangzhi',
-    size: '',
-    path: '/breeding/breedStatistics'
-  },
-
-  {
-    index: 1,
+    id: 67,
     name: '环境监控',
     system: 'equipVideo',
     icon: 'nav_video',
@@ -35,8 +25,7 @@ const allMenus = [
     path: '/equipVideo/envForecast'
   },
   {
-	id: "11",
-    index: 2,
+    id: '11',
     name: '产品溯源',
     system: 'toSource',
     icon: 'nav_block',
@@ -44,32 +33,28 @@ const allMenus = [
     path: '/toSource/traceSource'
   },
   {
-	id: "10",
-    index: 3,
+    id: '10',
     name: '屠宰系统',
     icon: 'nav_jiagong',
     size: '',
     path: '#'
   },
   {
-	id: "9",
-    index: 4,
+    id: '9',
     name: '加工销售',
     icon: 'nav_jiagong',
     size: '',
     path: '#'
   },
   {
-	id: "8",
-    index: 5,
+    id: '8',
     name: '物流管理',
     icon: 'nav_wuliu',
     size: '',
     path: '#'
   },
   {
-	id: "7",
-    index: 6,
+    id: '7',
     name: '种鸽质量检测',
     icon: 'nav_ai',
     size: '',
@@ -77,16 +62,14 @@ const allMenus = [
   },
 
   {
-	id: "6",
-    index: 7,
+    id: '6',
     name: '电商平台',
     icon: 'nav_jiagong',
     size: '',
     path: '#'
   },
   {
-	id: "5",
-    index: 8,
+    id: '5',
     name: '基础信息管理',
     icon: 'nav_info',
     system: 'baseInfoMana',
@@ -94,16 +77,14 @@ const allMenus = [
     path: '/baseInfoMana/personalInfo'
   },
   {
-	id: "4",
-    index: 9,
+    id: '4',
     name: '认养管理',
     icon: 'nav_info',
     size: '',
     path: '#'
   },
   {
-	id: "3",
-    index: 10,
+    id: '3',
     name: 'AI+精准管控',
     system: 'AIControl',
     icon: 'nav_ai',
@@ -111,12 +92,19 @@ const allMenus = [
     path: '/AIControl/actRcognition/clear'
   },
   {
-	id: "2",
-    index: 11,
+    id: '2',
     name: '可视化界面',
     icon: 'nav_see',
     size: '',
     path: '/dataVisual'
+  },
+  {
+    id: '1',
+    name: '养殖系统',
+    system: 'breeding',
+    icon: 'nav_yangzhi',
+    size: '',
+    path: '/breeding/breedStatistics'
   }
 ]
 
@@ -126,7 +114,7 @@ export default {
   setup() {
     tool.data.set('IS_GET_ROUTER', false)
     tool.data.set('CURR_MENU_INDEX', 0)
-	const menus = ref(tool.data.get('CIRCLE_MENU') || allMenus)
+    const menus = ref(tool.data.get('CIRCLE_MENU') || allMenus)
     // 获取基本信息
     getPersonalInfo().then(
       (res) => {
@@ -139,29 +127,29 @@ export default {
     // 获取菜单（不同用户不同菜单）
     getUserMenu().then((res) => {
       const authMenu = res.data?.value?.children || []
-	  // 存一下映射
-	  const idMapMenuItem = {}
-	  for(const item of authMenu){
-		idMapMenuItem[item.id] = item
-	  }
-	  // 后端返回的数据合并到总的菜单
-	  menus.value = allMenus
-	  .map(item =>{
-		const { id } = item
-		const authItem = idMapMenuItem[id]
-		if(!authItem){
-			return item
-		}
-		delete authItem.icon
-		return {
-			...item,
-			...authItem,
-			auth: !!authItem.children.length
-		}
-	  })
-	  .sort((a,b)=> a.sort - b.sort)
+      // 存一下映射
+      const idMapMenuItem = {}
+      for (const item of authMenu) {
+        idMapMenuItem[item.id] = item
+      }
+      // 后端返回的数据合并到总的菜单
+      menus.value = allMenus
+        .map((item) => {
+          const { id } = item
+          const authItem = idMapMenuItem[id]
+          if (!authItem) {
+            return item
+          }
+          delete authItem.icon
+          return {
+            ...item,
+            ...authItem,
+            auth: !!authItem.children.length
+          }
+        })
+        .sort((a, b) => a.sort - b.sort)
 
-	  tool.data.set('CIRCLE_MENU', menus.value)
+      tool.data.set('CIRCLE_MENU', menus.value)
     })
 
     return {
