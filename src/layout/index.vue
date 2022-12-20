@@ -120,7 +120,6 @@ export default {
     const sheds = ref([])
     const currBase = ref({})
     const currShed = ref({})
-    const currShedId = ref('')
     const currBaseName = ref('')
     const currShedCode = ref('')
     const currOperator = ref('')
@@ -147,9 +146,11 @@ export default {
         CURR_SHED: currShed.value,
         CHARGE_NAME: currOperator.value,
       }
+      
+      // 存储数据
       tool.data.set('CURR_INFO', currInfo.value)
-      currShedId.value = currShed.value.id
       store.commit('setShedId', currShed.value.id)
+      store.commit('setCurrInfo', currInfo.value)
       console.log('CURR_INFO setted~~~')
 
       // 设置展示数据
@@ -240,7 +241,10 @@ export default {
           CURR_SHED: currShed.value,
           CHARGE_NAME: currOperator.value,
         }
+        // 存储数据
         tool.data.set('CURR_INFO', currInfo.value)
+        store.commit('setShedId', currShed.value.id)
+        store.commit('setCurrInfo', currInfo.value)
         // 设置展示数据
         currBaseName.value = currInfo.value.CURR_BASE.name
         currShedCode.value = currInfo.value.CURR_SHED.code || '暂无鸽棚'
@@ -266,7 +270,10 @@ export default {
         CURR_SHED: currShed.value,
         CHARGE_NAME: currOperator.value,
       }
+      // 存储数据
       tool.data.set('CURR_INFO', currInfo.value)
+      store.commit('setShedId', currShed.value.id)
+      store.commit('setCurrInfo', currInfo.value)
       // 刷新
       menuFlag.value = false
       nextTick(function () {
@@ -288,7 +295,6 @@ export default {
       thirdSpan,
       bases,
       sheds,
-      currShedId,
       currBaseName,
       currShedCode,
       currOperator,

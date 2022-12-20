@@ -4,10 +4,16 @@ import http from "@/utils/request"
 const baseUrl = '/digitalPigeon/breed/breed/breedstatistic/breedstatistic-pigeon-cage-state-entity'
 
 // 卡片———根据鸽棚ID查询成鸽对数
-export const getNumberOfParents = (shed_id) => http.get(`${baseUrl}/getNumberOfParents/${shed_id}`)
+export const getNumberOfParents = (shed_id) => {
+  console.log(shed_id)
+  return http.get(`${baseUrl}/getNumberOfParents/${shed_id}`)
+}
 
 // 卡片———根据鸽棚ID查询幼鸽数
-export const getNumberOfChildren = (shed_id) => http.get(`${baseUrl}/getNumberOfChildren/${shed_id}`)
+export const getNumberOfChildren = (shed_id) => {
+  console.log(shed_id)
+  return http.get(`${baseUrl}/getNumberOfChildren/${shed_id}`)
+} 
 
 // 卡片———根据鸽棚ID和起止日期统计抽蛋数量
 export const getNumOfTakeEgg = (shed_id, start_time, end_time) => http.get(`${baseUrl}/getNumOfTakeEgg/${shed_id}/${start_time}/${end_time}`)
