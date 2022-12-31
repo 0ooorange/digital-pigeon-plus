@@ -114,10 +114,12 @@ export default {
     tool.data.set('IS_GET_ROUTER', false)
     tool.data.set('CURR_MENU_INDEX', 0)
     const menus = ref(tool.data.get('CIRCLE_MENU') || allMenus)
+    const userName = ref('')
     // 获取基本信息
     getPersonalInfo().then(
       (res) => {
         tool.data.set('USER_INFO', res.data?.user)
+        userName.value = res.data?.user.name
       },
       (err) => {
         ElMessage.warning(err.message)
@@ -152,7 +154,8 @@ export default {
     })
 
     return {
-      menus
+      menus,
+      userName
     }
   }
 }
