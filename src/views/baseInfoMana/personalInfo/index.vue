@@ -5,7 +5,7 @@
       <div class="personalInfo-edit">
         <!-- 图片 -->
         <div class="personalInfo-edit-img">
-          <img :src="personalData.values.avatar" alt="" />
+          <img :src="personalData.values.avatar" alt="" width="120"/>
         </div>
         <span>{{ personalData.values.name }}</span>
         <!-- 操作按钮 -->

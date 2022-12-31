@@ -6,6 +6,7 @@
       row-key="id"
       :data="tableList"
       hidePagination
+	  stripe
     >
       <el-table-column
         align="center"
@@ -149,9 +150,8 @@ export default {
 :deep .dialogDetail {
   padding: 20px;
   width: 380px;
-  background-color: #fdf6ec;
-  border: 2px solid #f3d19e;
-  border-radius: 20px;
+  border: 1px solid rgb(14, 14, 14);
+  border-radius: 10px;
 }
 :deep .el-dialog__body {
   margin: 0 30px;

@@ -11,9 +11,6 @@ export const getEmployeeManagementInfoByTokenApi = (params) => http.post(`/digit
 	pageSize=${params.pageSize}`
 )
 
-// 通过部门id获取职位信息(在添加/修改员工时使用) (看后端怎么说)
-// export const getPositionInfoByDepartmentIdApi = (params) => http.post(`/digitalPigeon/information/UserManagement/getPositionInfoByDepartmentId?departmentId=${params.departmentId}`)
-
 // 通过员工id修改员工数据
 export const updataEmployeeManagementInfoByUserIdApi = (params) => http.post(`/digitalPigeon/information/UserManagement/updataEmployeeManagementInfoByUserId?
 	birth=${params.birth}&
@@ -49,5 +46,7 @@ export const getBasesByDepartmentIdApi = (params) => http.post(`/digitalPigeon/i
 // 通过基地id获得车间/鸽棚下拉菜单
 export const getPlantByBaseIdApi = (params) => http.post(`/digitalPigeon/information/DropDownMenu/getPlantByBaseId?baseId=${params.baseId}&departmentId=${params.departmentId}`)
 
+// 通过部门id获取职位信息(在添加/修改员工时使用)
+export const getPositionInfoByDepartmentIdApi = (params) => http.post(`/digitalPigeon/information/UserManagement/getPositionInfoByDepartmentId?departmentId=${params.departmentId}`)
 
 
