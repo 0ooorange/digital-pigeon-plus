@@ -458,6 +458,9 @@ export default defineComponent({
 <style scoped lang="scss">
 .top {
     margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    width: 50%;
 }
 // .timeContent {
 //     .timeContent--main {
