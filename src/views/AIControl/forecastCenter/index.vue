@@ -169,6 +169,7 @@ export default defineComponent({
     //相同y轴部分
     let commonY = {
       type: "value",
+      scale:true,
       nameGap: 20, //坐标轴名称与坐标轴之间的距离
 
       splitLine: {

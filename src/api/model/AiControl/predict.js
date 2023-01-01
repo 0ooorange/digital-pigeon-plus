@@ -11,7 +11,7 @@ import http from "@/utils/request";
 //	}
 //};
 
-const url = '/digitalPigeon/predictionAi/api/v1/predict/'
+const url = '/digitalPigeon/predictionAi/api/v1/predict'
 
 export const getPredict = (shed_id,algorithm,feature) => {
     let data = {
