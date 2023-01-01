@@ -78,7 +78,7 @@ import tool from '@/utils/tool'
 import router from '@/router'
 import store from '@/store'
 import { ref, computed, watch, nextTick } from 'vue'
-import { getBreedBaseAndShed } from '@api/bases/login'
+import { getBreedBaseAndShed, getBreedBaseAndShed_0 } from '@api/bases/login'
 
 export default {
   name: 'index',
@@ -126,7 +126,8 @@ export default {
     const currInfo = ref(tool.data.get('CURR_INFO'))
 
     const currBaseId = ref('')
-    getBreedBaseAndShed().then(res => {
+    getBreedBaseAndShed_0().then(res => {
+      console.log(res, 12366)
       if(currInfo?.value?.CURR_BASE.id) {
         currBaseId.value = currInfo.value.CURR_BASE.id
       } else {
@@ -145,7 +146,12 @@ export default {
         CURR_SHED: currShed.value,
         CHARGE_NAME: currOperator.value,
       }
+      
+      // 存储数据
       tool.data.set('CURR_INFO', currInfo.value)
+      store.commit('setShedId', currShed.value.id)
+      store.commit('setCurrInfo', currInfo.value)
+      console.log('CURR_INFO setted~~~')
 
       // 设置展示数据
       bases.value = res.data.BaseList
@@ -235,7 +241,10 @@ export default {
           CURR_SHED: currShed.value,
           CHARGE_NAME: currOperator.value,
         }
+        // 存储数据
         tool.data.set('CURR_INFO', currInfo.value)
+        store.commit('setShedId', currShed.value.id)
+        store.commit('setCurrInfo', currInfo.value)
         // 设置展示数据
         currBaseName.value = currInfo.value.CURR_BASE.name
         currShedCode.value = currInfo.value.CURR_SHED.code || '暂无鸽棚'
@@ -261,7 +270,10 @@ export default {
         CURR_SHED: currShed.value,
         CHARGE_NAME: currOperator.value,
       }
+      // 存储数据
       tool.data.set('CURR_INFO', currInfo.value)
+      store.commit('setShedId', currShed.value.id)
+      store.commit('setCurrInfo', currInfo.value)
       // 刷新
       menuFlag.value = false
       nextTick(function () {

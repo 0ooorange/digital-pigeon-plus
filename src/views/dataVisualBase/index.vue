@@ -165,7 +165,10 @@ export default {
         CURR_SHED: currShed.value,
         CHARGE_NAME: currOperator.value,
       }
+      // 存储数据
       tool.data.set('CURR_INFO', currInfo.value)
+      store.commit('setShedId', currShed.value.id)
+      store.commit('setCurrInfo', currInfo.value)
       // 设置展示信息
       sheds.value = res.data.ShedList
     })

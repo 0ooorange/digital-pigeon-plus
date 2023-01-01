@@ -38,7 +38,6 @@
 <script>
 import { ref, defineComponent, nextTick } from 'vue'
 import store from '@/store'
-import tool from '@/utils/tool'
 
 import WarnInfo from './components/warnInfo.vue'
 import AddFodder from './components/addFodder.vue'
@@ -101,7 +100,8 @@ export default defineComponent({
     endTime = ref(endTime)
     dateVals.value = [startTime.value, endTime.value]
 
-    const shedId = tool.data.get('CURR_INFO')?.CURR_SHED?.id
+    const shedId = store.state.baseInfo.SHED_ID;
+    console.log('shedId getting~~~', shedId)
 
     // 改变时间
     const isComponents = ref(true)
@@ -111,6 +111,7 @@ export default defineComponent({
         isComponents.value = true
       })
     }
+    dateChange()
 
     return {
       baseid,
@@ -120,7 +121,7 @@ export default defineComponent({
       endTime,
       isComponents,
       dateChange,
-      shedId,
+      shedId
     }
   },
 })

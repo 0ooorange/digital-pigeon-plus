@@ -14,3 +14,5 @@ export const getUserMenu = () => http.post(`/digitalPigeon/login/getAuthority/ge
 
 // 根据TOKEN获取基地和棚
 export const getBreedBaseAndShed = (data) => http.post(`/digitalPigeon/login/getAuthority/getBreedBaseAndShedByToken?baseId=${data}`)
+export const getBreedBaseAndShed_0 = () => http.post(`/digitalPigeon/login/getAuthority/getBreedBaseAndShedByToken`)
+

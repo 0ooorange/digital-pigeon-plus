@@ -239,46 +239,35 @@ export default {
 			component: "equipVideo/setValue/index",
 		},
 		{
-			name: "eauipManage",
+			name: "breeding",
 			path: "/equipVideo/equipManage",
 			meta: {
-				title: "设备管理",
+				title: "养殖设备管理",
 				icon: "el-icon-histogram",
 				type: "menu",
 			},
 			children: [
 				{
-					name: "breeding",
-					path: "/equipVideo/equipManage/breeding",
+					name: "doveBoard",
+					path: "/equipVideo/equipManage/doveBoard",
 					meta: {
-						title: "养殖设备管理",
+						title: "鸽板管理",
 						icon: "el-icon-histogram",
 						type: "menu",
 					},
-					children: [
-						{
-							name: "doveBoard",
-							path: "/equipVideo/equipManage/breeding/doveBoard",
-							meta: {
-								title: "鸽板管理",
-								icon: "el-icon-histogram",
-								type: "menu",
-							},
-							component:
-								"equipVideo/equipManage/breeding/doveBoard/index",
-						},
-						{
-							name: "tagManage",
-							path: "/equipVideo/equipManage/breeding/tagManage",
-							meta: {
-								title: "标签管理",
-								icon: "el-icon-histogram",
-								type: "menu",
-							},
-							component:
-								"equipVideo/equipManage/breeding/tagManage/index",
-						},
-					],
+					component:
+						"equipVideo/equipManage/doveBoard/index",
+				},
+				{
+					name: "tagManage",
+					path: "/equipVideo/equipManage/tagManage",
+					meta: {
+						title: "标签管理",
+						icon: "el-icon-histogram",
+						type: "menu",
+					},
+					component:
+						"equipVideo/equipManage/tagManage/index",
 				},
 			],
 		},
@@ -357,7 +346,7 @@ export default {
 					},
 					component: "AIControl/actRcognition/feed/index",
 				},
-			]
+			],
 		},
 		{
 			name: "forecastCenter",
@@ -512,8 +501,7 @@ export default {
 						icon: "el-icon-histogram",
 						type: "menu",
 					},
-					component:
-								"baseInfoMana/workshopMana/breedMana/index",
+					component: "baseInfoMana/workshopMana/breedMana/index",
 				},
 				{
 					name: "slaughterMana",
@@ -523,8 +511,7 @@ export default {
 						icon: "el-icon-histogram",
 						type: "menu",
 					},
-					component:
-								"baseInfoMana/workshopMana/slaughterMana/index",
+					component: "baseInfoMana/workshopMana/slaughterMana/index",
 				},
 				{
 					name: "processMana",
@@ -534,8 +521,7 @@ export default {
 						icon: "el-icon-histogram",
 						type: "menu",
 					},
-					component:
-								"baseInfoMana/workshopMana/processMana/index",
+					component: "baseInfoMana/workshopMana/processMana/index",
 				},
 				{
 					name: "fodderMana",
@@ -545,8 +531,7 @@ export default {
 						icon: "el-icon-histogram",
 						type: "menu",
 					},
-					component:
-								"baseInfoMana/workshopMana/fodderMana/index",
+					component: "baseInfoMana/workshopMana/fodderMana/index",
 				},
 			],
 		},
@@ -569,7 +554,7 @@ export default {
 						type: "menu",
 					},
 					component:
-								"baseInfoMana/personnelAllocation/personnelMana/index",
+						"baseInfoMana/personnelAllocation/personnelMana/index",
 				},
 				{
 					name: "authorityMana",
@@ -580,9 +565,8 @@ export default {
 						type: "menu",
 					},
 					component:
-								"baseInfoMana/personnelAllocation/authorityMana/index",
+						"baseInfoMana/personnelAllocation/authorityMana/index",
 				},
-
 			],
 		},
 	],
