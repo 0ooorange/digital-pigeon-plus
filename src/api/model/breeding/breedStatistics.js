@@ -49,5 +49,5 @@ export const getUnTakeEgg = (shed_id, start_time, end_time) => http.get(`${baseU
 export const getSensorByIDTypeTime = (shed_id, type, start_time, end_time) => http.post(`/digitalPigeon/environment/enviroment/sensordevice/getSensorByIDTypeTime?shed_id=${shed_id}&type=${type}&start_time=${start_time}&end_time=${end_time}`)
 
 // 根据鸽棚ID和起止时间查询环境预警信息
-export const getWarningByID = (shed_id, start_time, end_time) => http.post(`/digitalPigeon/environment/enviroment/new-warning/getWarningByID?start_time=${start_time}&end_time=${end_time}&shedid=${shed_id}`)
+export const getWarningByID = (shed_id, start_time, end_time) => http.post(`/digitalPigeon/environment/enviroment/new-warning/getWarningByID?end_time=${end_time}&shed_id=${shed_id}&start_time=${start_time}`)
 
