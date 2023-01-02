@@ -3,14 +3,14 @@
     <div class="biaoge_listIn">
       <ul class="ul_title">
         <li>时间</li>
-        <li>地点</li>
+        <li>数值</li>
         <li>预警信息</li>
       </ul>
       <div class="ul_list">
         <div class="ul_listIn">
           <ul class="ul_con" v-for="(item, index) in list" :key="index">
             <li>{{item?.gmtCreate?.split(' ')[0] || ''}}</li>
-            <li>{{item.code}}</li>
+            <li>{{item.value}}</li>
             <li>{{item.warninfo}}</li>
           </ul>
         </div>
