@@ -6,7 +6,7 @@
       row-key="id"
       :data="tableList"
       hidePagination
-	  stripe
+      stripe
     >
       <el-table-column
         align="center"
@@ -98,17 +98,21 @@ export default {
       getData();
     });
 
-    let serialNumber = reactive([]);
-
     //表格数据
     let tableList = reactive([]);
 
     async function getData() {
       let res = await getDivisionListApi();
-      console.log(res.data.departments);
-      tableList.push(...res.data.departments);
-      for (var i = 0; i < tableList.values.length; i++) {
-        serialNumber.values[i] = i + 1;
+      if (res.code == 200) {
+        tableList.length = 0;
+        tableList.push(...res.data.departments);
+        tableList.forEach((elem) => {
+          let objKeys = Object.keys(elem);
+          let objValues = Object.values(elem);
+          for (var i = 0; i < objKeys.length; i++) {
+            elem[objKeys[i]] = objValues[i] || "暂无";
+          }
+        });
       }
     }
 
@@ -124,7 +128,6 @@ export default {
     }
 
     return {
-      serialNumber,
       tableList,
       dialogDetail,
       dialogDetailTitle,

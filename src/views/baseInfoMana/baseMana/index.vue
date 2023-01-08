@@ -1039,6 +1039,13 @@ export default {
         total.value = Number(res.data.total);
         tableList.length = 0;
         tableList.push(...res.data.baseList);
+        tableList.forEach((elem) => {
+          let objKeys = Object.keys(elem);
+          let objValues = Object.values(elem);
+          for (var i = 0; i < objKeys.length; i++) {
+            elem[objKeys[i]] = objValues[i] || "暂无";
+          }
+        });
       }
     }
     const handleSizeChange = () => {

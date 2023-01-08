@@ -422,16 +422,6 @@ export default {
           trigger: "blur",
         },
       ],
-      // unitBelong: [
-      // 	{
-      // 		required: false,
-      // 	}
-      // ],
-      // boardBelong: [
-      // 	{
-      // 		required: false,
-      // 	}
-      // ],
       roleId: [
         {
           required: true,
@@ -463,6 +453,13 @@ export default {
         tableList.length = 0;
         tableList.push(...res.data.userList.records);
         tableList.forEach((elem) => (elem.sex = elem.sex == 1 ? "男" : "女"));
+        tableList.forEach((elem) => {
+          let objKeys = Object.keys(elem);
+          let objValues = Object.values(elem);
+          for (var i = 0; i < objKeys.length; i++) {
+            elem[objKeys[i]] = objValues[i] || "暂无";
+          }
+        });
       }
     }
     const handleSizeChange = () => {
@@ -510,7 +507,9 @@ export default {
         getPositionInfoByDepartmentId();
       } else {
         dialogFormType = "add";
-		Object.keys(FormData.values).forEach(key=>{FormData.values[key]=''})
+        Object.keys(FormData.values).forEach((key) => {
+          FormData.values[key] = "";
+        });
       }
       dialogEditor.value = true;
       getData();
@@ -715,12 +714,15 @@ export default {
   height: 50px;
   line-height: 30px;
 }
+.header .el-dropdown {
+  margin-left: 10px;
+}
+/* 按钮样式 */
+/* #region */
 .header button {
   width: 100px;
   height: 40px;
 }
-/* 按钮样式 */
-/* #region */
 .control-btn {
   margin: 0 auto;
 }
