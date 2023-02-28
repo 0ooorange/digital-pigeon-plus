@@ -1,8 +1,8 @@
 <template>
     <div class="container">
-        <div class="left">
+        <!-- <div class="left">
             <Left />
-        </div>
+        </div> -->
         <!-- 视频列表 -->
         <div class="center">
             <Center @changeIndex="changeIndex" />
