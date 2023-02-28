@@ -153,9 +153,12 @@ export default {
         }else{
           bases.value = []
         }
-      }).catch((error) => {
+      }).catch(() => {
         bases.value = [];
       });
+      // }).catch((error) => {
+      //   bases.value = [];
+      // });
     };
     const getPlantData = async (id1,id2) => {
       // 车间/棚
@@ -169,9 +172,12 @@ export default {
         } else {
           sheds.value = [];
         }
-      }).catch((error) => {
+      }).catch(() => {
         sheds.value = [];
       });
+      // }).catch((error) => {
+      //   sheds.value = [];
+      // });
     };
     
     // 通过部门idcall基地api
