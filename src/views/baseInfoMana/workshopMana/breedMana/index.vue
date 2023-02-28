@@ -134,7 +134,7 @@
         修改或添加鸽棚信息
         <div class="dialogTitle-select">
           <el-dropdown trigger="click">
-            <el-button>{{ selectBase2 }}</el-button>
+            <el-button type="primary" plain class="dialog-top-btn">{{ selectBase2 }}</el-button>
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item
@@ -226,7 +226,7 @@ export default {
     });
 
     const selectBase = ref("选择基地");
-    const selectBase2 = ref("选择基地");
+    const selectBase2 = ref("请选择基地");
     const total = ref(0);
     const baseId = ref("");
     const currentPage = ref(1);
@@ -313,6 +313,13 @@ export default {
         total.value = Number(res.data.ShedList.total);
         tableList.length = 0;
         tableList.push(...res.data.ShedList.records);
+        tableList.forEach((elem) => {
+          let objKeys = Object.keys(elem);
+          let objValues = Object.values(elem);
+          for (var i = 0; i < objKeys.length; i++) {
+            elem[objKeys[i]] = objValues[i] || "暂无";
+          }
+        });
       }
     }
     const handleSizeChange = () => {
@@ -348,7 +355,9 @@ export default {
         FormData.values.take_hatch_perc = row.takeHatchPerc;
       } else {
         dialogFormType = "add";
-		Object.keys(FormData.values).forEach(key=>{FormData.values[key]=''})
+        Object.keys(FormData.values).forEach((key) => {
+          FormData.values[key] = "";
+        });
       }
     }
 
@@ -481,6 +490,9 @@ export default {
 }
 /* 按钮样式 */
 /* #region */
+.dialog-top-btn {
+	width: 150px;
+}
 .control-btn {
   margin: 0 auto;
 }
