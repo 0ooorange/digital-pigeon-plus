@@ -169,6 +169,7 @@ export default defineComponent({
     //相同y轴部分
     let commonY = {
       type: "value",
+      scale:true,
       nameGap: 20, //坐标轴名称与坐标轴之间的距离
 
       splitLine: {
@@ -251,6 +252,17 @@ export default defineComponent({
               color: "#6da2fe",
             },
           },
+          {
+            name: "异常",
+            // 强制设置图形为圆。
+            icon: "circle",
+            textStyle: {
+              color: "#000",
+            },
+            itemStyle: {
+              color: "red",
+            },
+          },
         ],
       },
     };
@@ -267,6 +279,17 @@ export default defineComponent({
       },
       connectNulls: true,
     };
+    let another = {
+      name: "异常",
+      type: "line",
+      symbol: "none",
+      smooth: true,
+      lineStyle: {
+        width: 2,
+        // color: "#6495ED",
+      },
+      connectNulls: true,
+    }
     //二氧化碳的图表值
     let carbonDioxideYAxis = [{ ...commonY, name: "二氧化碳/ppm" }];
     // let carbonDioxideDataset = { dimensions: commonDimensions, source: [] };
@@ -276,24 +299,24 @@ export default defineComponent({
 
       connectNulls: true,
 
-      markLine: {
-        lineStyle: {
-          color: "red",
-        },
-        data: [
-          {
-            name: "最小值",
-            type: "min",
-            yAxis: 800,
-            color: "red",
-          },
-          {
-            name: "最大值",
-            type: "max",
-            yAxis: 1000,
-          },
-        ],
-      }
+      // markLine: {
+      //   lineStyle: {
+      //     color: "red",
+      //   },
+      //   data: [
+      //     {
+      //       name: "最小值",
+      //       type: "min",
+      //       yAxis: 800,
+      //       color: "red",
+      //     },
+      //     {
+      //       name: "最大值",
+      //       type: "max",
+      //       yAxis: 1000,
+      //     },
+      //   ],
+      // }
     };
 
     let carbonDioxideOptionStatic = {
@@ -317,7 +340,7 @@ export default defineComponent({
         },
       }],
       yAxis: carbonDioxideYAxis,
-      series: [carbonDioxideSeriesObject, { ...commonPredictSeries, data: [] }],
+      series: [carbonDioxideSeriesObject, { ...commonPredictSeries, data: [] },{...another,data:[]}],
       tooltip: commonTooltip,
     };
     //二氧化碳
@@ -331,24 +354,24 @@ export default defineComponent({
       data: [], //原先数据
       connectNulls: true,
 
-      markLine: {
-        lineStyle: {
-          color: "red",
-        },
-        data: [
-          {
-            name: "最小值",
-            type: "min",
-            yAxis: 10,
-            color: "red",
-          },
-          {
-            name: "最大值",
-            type: "max",
-            yAxis: 20,
-          },
-        ],
-      },
+      // markLine: {
+      //   lineStyle: {
+      //     color: "red",
+      //   },
+      //   data: [
+      //     {
+      //       name: "最小值",
+      //       type: "min",
+      //       yAxis: 10,
+      //       color: "red",
+      //     },
+      //     {
+      //       name: "最大值",
+      //       type: "max",
+      //       yAxis: 20,
+      //     },
+      //   ],
+      // },
     };
 
     let temperatureOptionStatic = {
@@ -389,24 +412,24 @@ export default defineComponent({
       data: [], //原先数据
       connectNulls: true,
 
-      markLine: {
-        lineStyle: {
-          color: "red",
-        },
-        data: [
-          {
-            name: "最小值",
-            type: "min",
-            yAxis: 30,
-            color: "red",
-          },
-          {
-            name: "最大值",
-            type: "max",
-            yAxis: 85,
-          },
-        ],
-      },
+      // markLine: {
+      //   lineStyle: {
+      //     color: "red",
+      //   },
+      //   data: [
+      //     {
+      //       name: "最小值",
+      //       type: "min",
+      //       yAxis: 30,
+      //       color: "red",
+      //     },
+      //     {
+      //       name: "最大值",
+      //       type: "max",
+      //       yAxis: 85,
+      //     },
+      //   ],
+      // },
 
     };
 
@@ -414,7 +437,7 @@ export default defineComponent({
       ...commomOption,
       yAxis: humidityYAxis,
       //   dataset: humidityDataset,
-      series: [humiditySeriesObject, commonPredictSeries],
+      series: [humiditySeriesObject, commonPredictSeries,{...another,data:[]}],
       tooltip: commonTooltip,
       visualMap: [{
         show: false,
@@ -450,31 +473,31 @@ export default defineComponent({
       data: [], //原先数据
       connectNulls: true,
 
-      markLine: {
-        lineStyle: {
-          color: "red",
-        },
-        data: [
-          {
-            name: "最小值",
-            type: "min",
-            yAxis: 0,
-            color: "red",
-          },
-          {
-            name: "最大值",
-            type: "max",
-            yAxis: 50,
-          },
-        ],
-      },
+      // markLine: {
+      //   lineStyle: {
+      //     color: "red",
+      //   },
+      //   data: [
+      //     {
+      //       name: "最小值",
+      //       type: "min",
+      //       yAxis: 0,
+      //       color: "red",
+      //     },
+      //     {
+      //       name: "最大值",
+      //       type: "max",
+      //       yAxis: 50,
+      //     },
+      //   ],
+      // },
     };
 
     let illuminationIntensityOptionStatic = {
       ...commomOption,
       yAxis: illuminationIntensityYAxis,
       //   dataset: illuminationIntensityDataset,
-      series: [illuminationIntensitySeriesObject, commonPredictSeries],
+      series: [illuminationIntensitySeriesObject, commonPredictSeries,{...another,data:[]}],
       tooltip: commonTooltip,
       visualMap: [{
         show: false,
@@ -512,31 +535,31 @@ export default defineComponent({
       data: [], //原先数据
       connectNulls: true,
 
-      markLine: {
-        lineStyle: {
-          color: "red",
-        },
-        data: [
-          {
-            name: "最小值",
-            type: "min",
-            yAxis: 0,
-            color: "red",
-          },
-          {
-            name: "最大值",
-            type: "max",
-            yAxis: 600,
-          },
-        ],
-      },
+      // markLine: {
+      //   lineStyle: {
+      //     color: "red",
+      //   },
+      //   data: [
+      //     {
+      //       name: "最小值",
+      //       type: "min",
+      //       yAxis: 0,
+      //       color: "red",
+      //     },
+      //     {
+      //       name: "最大值",
+      //       type: "max",
+      //       yAxis: 600,
+      //     },
+      //   ],
+      // },
     };
 
     let PMOptionStatic = {
       ...commomOption,
       yAxis: PMYAxis,
       //   dataset: PMDataset,
-      series: [PMSeriesObject, commonPredictSeries],
+      series: [PMSeriesObject, commonPredictSeries,{...another,data:[]},{...another,data:[]}],
       tooltip: commonTooltip,
       visualMap: [{
         show: false,
@@ -576,30 +599,30 @@ export default defineComponent({
       data: [], //原先数据
       connectNulls: true,
 
-      markLine: {
-        lineStyle: {
-          color: "red",
-        },
-        data: [
-          {
-            name: "最小值",
-            type: "min",
-            yAxis: 0,
-            color: "red",
-          },
-          {
-            name: "最大值",
-            type: "max",
-            yAxis: 1000,
-          },
-        ],
-      },
+      // markLine: {
+      //   lineStyle: {
+      //     color: "red",
+      //   },
+      //   data: [
+      //     {
+      //       name: "最小值",
+      //       type: "min",
+      //       yAxis: 0,
+      //       color: "red",
+      //     },
+      //     {
+      //       name: "最大值",
+      //       type: "max",
+      //       yAxis: 1000,
+      //     },
+      //   ],
+      // },
     };
 
     let PM10OptionStatic = {
       ...commomOption,
       yAxis: PM10YAxis,
-      series: [PM10SeriesObject, commonPredictSeries],
+      series: [PM10SeriesObject, commonPredictSeries,{...another,data:[]}],
       tooltip: commonTooltip,
       visualMap: [{
         show: false,
@@ -819,14 +842,14 @@ export default defineComponent({
 
     const selectAligorith = function () {
       getCarbonDioxideDataMethod();
-      console.log(algorithmOptions[selectedAlgorith.value].label);
+      // console.log(algorithmOptions[selectedAlgorith.value].label);
     };
 
     //获取环境数据
     const getCarbonDioxideDataMethod = async function () {
       let aligorith = algorithmOptions[selectedAlgorith.value].label;
       let CarbonDioxRes = await getPredict(5, aligorith, "二氧化碳");
-      console.log(CarbonDioxRes, "结果");
+      // console.log(CarbonDioxRes, "结果");
       if (CarbonDioxRes.success) {
         let predictdata = CarbonDioxRes.predictdata;
         let time = CarbonDioxRes.time;
@@ -849,7 +872,7 @@ export default defineComponent({
       }
 
       let temperatureRes = await getPredict(5, aligorith, "空气温度");
-      console.log(temperatureRes, "结果");
+      // console.log(temperatureRes, "结果");
       if (temperatureRes.success) {
         let predictdata = temperatureRes.predictdata;
         let time = temperatureRes.time;
@@ -871,7 +894,7 @@ export default defineComponent({
         temperatureOption.series[1].data = predictData;
       }
       let humidityRes = await getPredict(5, aligorith, "空气湿度");
-      console.log(humidityRes, "结果");
+      // console.log(humidityRes, "结果");
       if (humidityRes.success) {
         let predictdata = humidityRes.predictdata;
         let time = humidityRes.time;
@@ -894,7 +917,7 @@ export default defineComponent({
       }
 
       let illuminationIntensityRes = await getPredict(5, aligorith, "光照强度");
-      console.log(illuminationIntensityRes, "结果");
+      // console.log(illuminationIntensityRes, "结果");
       if (illuminationIntensityRes.success) {
         let predictdata = illuminationIntensityRes.predictdata;
         let time = illuminationIntensityRes.time;
@@ -916,7 +939,7 @@ export default defineComponent({
         illuminationIntensityOption.series[1].data = predictData;
       }
       let PMRes = await getPredict(5, aligorith, "光照强度");
-      console.log(PMRes, "结果");
+      // console.log(PMRes, "结果");
       if (PMRes.success) {
         let predictdata = PMRes.predictdata;
         let time = PMRes.time;
@@ -939,7 +962,7 @@ export default defineComponent({
       }
 
       let PM10Res = await getPredict(5, aligorith, "光照强度");
-      console.log(PM10Res, "结果");
+      // console.log(PM10Res, "结果");
       if (PM10Res.success) {
         let predictdata = PM10Res.predictdata;
         let time = PM10Res.time;
