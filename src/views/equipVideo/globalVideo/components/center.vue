@@ -17,7 +17,7 @@
         <template #header>
           <span>{{ '摄像头' + (index + 1) }}</span>
         </template>
-        <iframe class="video" :src="item" allow="autoplay" frameBorder="0" allowfullscreen="true"/>
+        <iframe class="video" :src="item" allow="autoplay" scrolling="no" frameBorder="0" allowfullscreen="true"/>
         <!-- <video class="video" controls autoplay muted loop>
           <source :src="item.url" type="video/mp4" />
           <source :src="item.url" type="video/quicktime" />
@@ -149,7 +149,7 @@ const videoChange = ({ id }, i) => {
     }
     .video {
       width: 100%;
-      height: 100%;
+      height: 190px;
     }
     .add-video {
       width: 100%;
