@@ -275,6 +275,7 @@ export default defineComponent({
       smooth: true,
       lineStyle: {
         width: 2,
+        type: "dashed"
         // color: "#6495ED",
       },
       connectNulls: true,
