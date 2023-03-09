@@ -79,8 +79,9 @@ const allMenus = [
     id: '4',
     name: '认养管理',
     icon: 'nav_info',
+    system: 'adoption',
     size: '',
-    path: '#'
+    path: '/adoption/home'
   },
   {
     id: '3',

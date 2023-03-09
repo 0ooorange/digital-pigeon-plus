@@ -40,6 +40,11 @@ module.exports = {
 			// 	// 	"^/images": "/images",
 			// 	// },
 			// },
+			// 认养模块
+			// "/adoption": {
+			// 	target: "http://localhost:8505/api",
+			// 	ws: true,
+			// },
 		},
 	},
 	chainWebpack: (config) => {

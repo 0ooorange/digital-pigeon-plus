@@ -36,6 +36,11 @@ const routes = [
 		component: Layout,
 	},
 	{
+		name: "adoption",
+		path: "/adoption",
+		component: Layout,
+	},
+	{
 		path: "/login",
 		component: () =>
 			import(/* webpackChunkName: "login-chunk" */ "@/views/base/login"),
@@ -86,7 +91,7 @@ const routes = [
 		meta: {
 			title: "鸽棚可视化",
 		},
-	},
+	}
 ];
 
 export default routes;

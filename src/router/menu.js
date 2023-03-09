@@ -570,4 +570,195 @@ export default {
 			],
 		},
 	],
+	//认养管理菜单设置
+	adoption: [
+		{
+			name: "home",
+			path: "/adoption/home",
+			meta: {
+				title: "销售统计",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			component: "adoption/home/index",
+		},
+		{
+			name: "user",
+			path: "/adoption/user",
+			meta: {
+				title: "用户管理",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			children: [
+				{
+					name: "user",
+					path: "/adoption/user/user",
+					meta: {
+						title: "用户信息管理",
+						icon: "el-icon-histogram",
+						type: "menu"
+					},
+					component: "adoption/user/user/index"
+				}, {
+					name: "address",
+					path: "/adoption/user/address",
+					meta: {
+						title: "用户地址管理",
+						icon: "el-icon-histogram",
+						type: "menu"
+					},
+					component: "adoption/user/address/index"
+				}
+			]
+		},
+		{
+			name: "adoption",
+			path: "/adoption/adoption",
+			meta: {
+				title: "认养管理",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			children: [
+				{
+					name: "assign",
+					path: "/adoption/adoption/assign",
+					meta: {
+						title: "鸽笼分配",
+						icon: "el-icon-histogram",
+						type: "menu"
+					},
+					component: "adoption/adoption/assign/index"
+				}, {
+					name: "points",
+					path: "/adoption/adoption/points",
+					meta: {
+						title: "积分管理",
+						icon: "el-icon-histogram",
+						type: "menu"
+					},
+					component: "adoption/adoption/points/index"
+				},{
+					name: "userEgg",
+					path: "/adoption/adoption/userEgg",
+					meta: {
+						title: "用户鸽蛋管理",
+						icon: "el-icon-histogram",
+						type: "menu"
+					},
+					component: "adoption/adoption/userEgg/index"
+				},{
+					name:"userSquab",
+					path:"/adoption/adoption/userSquab",
+					meta:{
+						title:"用户乳鸽管理",
+						icon:"el-icon-histogram",
+						type:"menu"
+					},
+					component: "adoption/adoption/userSquab/index"
+				}
+			]
+		},
+		{
+			name: "shop",
+			path: "/adoption/shop",
+			meta: {
+				title: "商城管理",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			children: [
+				{
+					name: "goods",
+					path: "/adoption/shop/goods",
+					meta: {
+						title: "商品管理",
+						icon: "el-icon-histogram",
+						type: "menu"
+					},
+					component: "adoption/shop/goods/index"
+				}, {
+					name: "goodsCategory",
+					path: "/adoption/shop/goodsCategory",
+					meta: {
+						title: "商品分类管理",
+						icon: "el-icon-histogram",
+						type: "menu"
+					},
+					component: "adoption/shop/goodsCategory/index"
+				},
+			]
+		},
+		{
+			name: "miniProgram",
+			path: "/adoption/miniProgram",
+			meta: {
+				title: "小程序管理",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			children: [
+				{
+					name: "swiper",
+					path: "/adoption/miniProgram/swiper",
+					meta: {
+						title: "轮播图管理",
+						icon: "el-icon-histogram",
+						type: "menu"
+					},
+					component: "adoption/miniProgram/swiper/index"
+				}, {
+					name: "science",
+					path: "/adoption/miniProgram/science",
+					meta: {
+						title: "科普信息管理",
+						icon: "el-icon-histogram",
+						type: "menu"
+					},
+					component: "adoption/miniProgram/science/index"
+				},
+				{
+					name: "scienceCategory",
+					path: "/adoption/miniProgram/scienceCategory",
+					meta: {
+						title: "科普分类管理",
+						icon: "el-icon-histogram",
+						type: "menu"
+					},
+					component: "adoption/miniProgram/scienceCategory/index"
+				},
+			]
+		},
+		{
+			name: "order",
+			path: "/adoption/order",
+			meta: {
+				title: "订单管理",
+				icon: "el-icon-histogram",
+				type: "menu",
+			},
+			children: [
+				{
+					name: "adoptionOrder",
+					path: "/adoption/order/adoptionOrder",
+					meta: {
+						title: "认养订单管理",
+						icon: "el-icon-histogram",
+						type: "menu"
+					},
+					component: "adoption/order/adoptionOrder/index"
+				}, {
+					name: "dispatchOrder",
+					path: "/adoption/order/dispatchOrder",
+					meta: {
+						title: "发货订单管理",
+						icon: "el-icon-histogram",
+						type: "menu"
+					},
+					component: "adoption/order/dispatchOrder/index"
+				}
+			]
+		}
+	]
 };

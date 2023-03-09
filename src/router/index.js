@@ -298,7 +298,7 @@ router.sc_getMenu = () => {
 							component: "breeding/registration/reWeighAllot/index",
 						},
 					],
-				},
+				}
 			],
 		},
 		{},
